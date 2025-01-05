@@ -1,101 +1,242 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState, useRef } from 'react';
+import { toPng } from 'html-to-image';
+import { QRCodeSVG } from 'qrcode.react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+
+const CreateCard = () => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [largeDescription, setLargeDescription] = useState('');
+  const [image, setImage] = useState('');
+  const [qrUrl, setQrUrl] = useState('');
+  const [logo, setLogo] = useState('');
+  const [price, setPrice] = useState('');
+  const [currency, setCurrency] = useState('USD');
+  const [includeBottomPart, setIncludeBottomPart] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'main' | 'logo') => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (type === 'main') {
+          setImage(event.target?.result as string);
+        } else {
+          setLogo(event.target?.result as string);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const generateImage = async () => {
+    if (!cardRef.current) return;
+    setIsLoading(true);
+    try {
+      const content = cardRef.current;
+      const dataUrl = await toPng(content, {
+        quality: 4,
+        pixelRatio: 4,
+      });
+      const link = document.createElement('a');
+      link.download = `${title}-card.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-4">
+      <div className="max-w-4xl mx-auto bg-white  rounded-lg shadow-lg p-6">
+        <h1 className="text-3xl font-bold mb-6 text-center text-stone-950">Create Your Card</h1>
+        <div className="space-y-6">
+          <div>
+            <label className="block text-stone-950 mb-2">Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter title"
+              className="w-full p-2 rounded-lg border border-slate-300  bg-white  text-slate-900 "
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              title="Enter description"
+              placeholder="Enter description"
+              className="w-full p-2 rounded-lg border border-slate-300  bg-white  text-slate-900 "
+            />
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">Large Description</label>
+            <textarea
+              value={largeDescription}
+              onChange={(e) => setLargeDescription(e.target.value)}
+              title="Enter large description"
+              placeholder="Enter large description"
+              className="w-full p-2 rounded-lg border border-slate-300  bg-white  text-slate-900 "
+            />
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">Main Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageChange(e, 'main')}
+              title="Upload Image"
+              className="w-full p-2 rounded-lg border border-slate-300  bg-white  text-slate-900 "
+            />
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">Logo</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageChange(e, 'logo')}
+              title="Upload Logo"
+              className="w-full p-2 rounded-lg border border-slate-300  bg-white  text-slate-900 "
+            />
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">QR Code URL</label>
+            <input
+              type="text"
+              value={qrUrl}
+              onChange={(e) => setQrUrl(e.target.value)}
+              placeholder="Enter URL for QR Code"
+              className="w-full p-2 rounded-lg border border-slate-300  bg-white  text-slate-900 "
+            />
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">Price</label>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Enter price"
+                className="w-full p-2 rounded-lg border border-slate-300  bg-white  text-slate-900 "
+              />
+              <select
+                title="Select currency"
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="p-2 rounded-lg border border-slate-300  bg-white  text-slate-900 "
+              >
+                <option value="USD">USD</option>
+                <option value="NGN">NGN</option>
+                <option value="">None</option>
+                <option value="GHS">GHS</option>
+                <option value="EUR">EUR</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <label className="block text-stone-950 mb-2 mr-4">Include Bottom Part</label>
+            <input
+              type="checkbox"
+              checked={includeBottomPart}
+              onChange={(e) => setIncludeBottomPart(e.target.checked)}
+              title="Include Bottom Part"
+              placeholder="Include Bottom Part"
+              className="w-6 h-6 rounded-lg border border-slate-300  bg-white  text-slate-900 "
+            />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <div className="text-center mt-6">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={generateImage}
+            className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Generating...' : 'Generate Card'}
+          </motion.button>
+        </div>
+      </div>
+
+      <div className="mt-12">
+        <motion.div
+          ref={cardRef}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="bg-white rounded-3xl shadow-2xl overflow-hidden"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {/* Card Hero */}
+          <div className="relative h-[400px]">
+            {image && (
+              <Image
+                src={image}
+                alt={title}
+                fill
+                className="object-cover transition-transform duration-700"
+                priority
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+            <div className="absolute top-2 right-2 flex flex-col space-y-2">
+              {logo && (
+                <Image
+                  src={logo}
+                  alt="Logo"
+                  width={50}
+                  height={50}
+                  className="rounded-full border border-white shadow-lg"
+                />
+              )}
+              {qrUrl && <QRCodeSVG value={qrUrl} size={50} />}
+            </div>
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="absolute bottom-0 p-4 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent"
+            >
+              <h1 className="text-4xl md:text-6xl font-mono text-white mb-2 tracking-tight">{title}</h1>
+              <p className="text-xl md:text-2xl text-white/80 max-w-3xl font-light">{description}</p>
+              <p className="text-lg md:text-xl text-white/80 font-semibold mt-2">
+              {currency} {price} 
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Content Section */}
+          {includeBottomPart && (
+            <div className="p-4 space-y-4">
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="prose dark:prose-invert max-w-none"
+              >
+                <h2 className="text-2xl md:text-3xl mb-2">Description</h2>
+                <blockquote className="text-slate-600 border-l-4border-slate-200 p-2 bg-stone-300/15 ">
+                  {largeDescription}
+                </blockquote>
+              </motion.div>
+              <div className=" text-xs  text-stone-300">
+            Adisa Made It
+          </div>
+            </div>
+          )}
+
+          {/* Watermark */}
+          
+        </motion.div>
+      </div>
     </div>
   );
-}
+};
+
+export default CreateCard;
