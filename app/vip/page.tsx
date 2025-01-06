@@ -517,7 +517,7 @@ const CreateCard = () => {
               />
             ) : (
               <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <p className="text-gray-400">No image uploaded</p>
+                <p className="text-stone-950">No image uploaded</p>
               </div>
             )}
 
@@ -560,36 +560,65 @@ const CreateCard = () => {
             <div className={`p-6 ${selectedVariant === 'product' ? 'bg-white/95' : ''}`}>
               {/* Product Variant */}
               {selectedVariant === 'product' && (
-                <div className="space-y-4 text-gray-800">
+                <div className="space-y-6 bg-white/95 p-8 rounded-2xl shadow-lg">
                   <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-2xl font-bold">{title}</h3>
-                      <p className="text-xl font-semibold text-blue-600">{currency} {price}</p>
+                    <div className="space-y-3">
+                      <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
+                      <p className="text-2xl font-semibold bg-blue-50 text-blue-600 px-4 py-2 rounded-xl inline-block">
+                        {currency} {price}
+                      </p>
                     </div>
-                    {qrUrl && <QRCodeSVG value={qrUrl} size={80} className="bg-white p-2 rounded-lg" />}
+                    {qrUrl && (
+                      <div className="bg-white p-3 rounded-xl shadow-md">
+                        <QRCodeSVG value={qrUrl} size={80} />
+                      </div>
+                    )}
                   </div>
                   <div className="prose max-w-none">
-                    <p className="text-gray-600 whitespace-pre-line">{largeDescription}</p>
+                    <p className="text-lg text-stone-950 leading-relaxed">{description}</p>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl">
+                      <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
+                      <p className="text-stone-950 whitespace-pre-line">{largeDescription}</p>
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* Event Variant */}
               {selectedVariant === 'event' && (
-                <div className="bg-white/90 p-6 rounded-lg space-y-4">
-                  <div className="flex justify-between">
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-bold text-purple-900">{eventType}</h3>
-                      <div className="space-y-1 text-gray-700">
-                        <p>📅 {new Date(eventDate).toLocaleString()}</p>
-                        <p>📍 {eventLocation}</p>
+                <div className="bg-white/95 p-8 rounded-2xl shadow-lg space-y-6">
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-4">
+                      <h3 className="text-3xl font-bold text-purple-900">{title}</h3>
+                      <div className="space-y-3">
+                        <p className="flex items-center text-lg text-stone-950">
+                          <span className="bg-purple-50 p-2 rounded-lg mr-3">📅</span>
+                          {new Date(eventDate).toLocaleString()}
+                        </p>
+                        <p className="flex items-center text-lg text-stone-950">
+                          <span className="bg-purple-50 p-2 rounded-lg mr-3">📍</span>
+                          {eventLocation}
+                        </p>
+                        {price && (
+                          <p className="flex items-center text-lg text-stone-950">
+                            <span className="bg-purple-50 p-2 rounded-lg mr-3">💰</span>
+                            {currency} {price}
+                          </p>
+                        )}
                       </div>
                     </div>
                     {qrUrl && (
-                      <div className="text-center">
-                        <QRCodeSVG value={qrUrl} size={80} className="bg-white p-2 rounded-lg" />
-                        <p className="text-xs mt-1">Scan to verify</p>
+                      <div className="text-center bg-white p-4 rounded-xl shadow-md">
+                        <QRCodeSVG value={qrUrl} size={100} />
+                        <p className="text-sm text-stone-950 mt-2">Scan to verify</p>
                       </div>
+                    )}
+                  </div>
+                  <div className="bg-purple-50 p-6 rounded-xl">
+                    <h4 className="text-xl font-semibold text-purple-900 mb-3">Event Details</h4>
+                    <p className="text-stone-950 whitespace-pre-line">{description}</p>
+                    {largeDescription && (
+                      <div className="mt-4 text-stone-950">{largeDescription}</div>
                     )}
                   </div>
                 </div>
@@ -600,11 +629,11 @@ const CreateCard = () => {
                 <div className="bg-white p-6 rounded-lg space-y-4">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-800">
+                      <h3 className="text-xl font-bold text-stone-950">
                         {selectedVariant === 'receipt' ? 'Receipt' : 'Invoice'} #{invoiceNumber}
                       </h3>
-                      <p className="text-sm text-gray-500">Date: {new Date().toLocaleDateString()}</p>
-                      {dueDate && <p className="text-sm text-gray-500">Due: {dueDate}</p>}
+                      <p className="text-sm text-stone-950">Date: {new Date().toLocaleDateString()}</p>
+                      {dueDate && <p className="text-sm text-stone-950">Due: {dueDate}</p>}
                     </div>
                     {qrUrl && <QRCodeSVG value={qrUrl} size={60} className="bg-white p-1 rounded-lg" />}
                   </div>
@@ -618,8 +647,8 @@ const CreateCard = () => {
                         transition={{ delay: i * 0.1 }}
                         className="flex justify-between items-center p-4 backdrop-blur-md bg-white/5 rounded-2xl mb-2 hover:bg-white/10 transition-all duration-300"
                       >
-                        <span className="text-gray-200 font-medium">{item.description}</span>
-                        <span className="text-gray-100 font-semibold">
+                        <span className="text-stone-950 font-medium">{item.description}</span>
+                        <span className="text-stone-950 font-semibold">
                           {currency} {item.amount.toFixed(2)}
                         </span>
                       </motion.div>
@@ -630,7 +659,7 @@ const CreateCard = () => {
                         <motion.div 
                           initial={{ y: 10, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
-                          className="flex justify-between text-gray-300 mb-2"
+                          className="flex justify-between text-stone-950 mb-2"
                         >
                           <span>Tax ({taxRate}%)</span>
                           <span>{currency} {(items.reduce((sum, item) => sum + item.amount, 0) * (taxRate / 100)).toFixed(2)}</span>
@@ -640,7 +669,7 @@ const CreateCard = () => {
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="flex justify-between font-bold text-white text-xl mt-2 bg-white/5 p-4 rounded-2xl backdrop-blur-lg"
+                        className="flex justify-between font-bold text-stone-950 text-xl mt-2 bg-white/5 p-4 rounded-2xl backdrop-blur-lg"
                       >
                         <span>Total</span>
                         <span>
