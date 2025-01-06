@@ -19,7 +19,7 @@ const cardVariants = {
   },
   product: {
     gradient: "bg-gradient-to-br from-slate-800 to-slate-900",
-    titleFont: "font-serif",
+    titleFont: "font-sans",
     layout: "product"
   },
   invoice: {
@@ -482,7 +482,7 @@ const CreateCard = () => {
       </div>
 
       {/* Add responsive card container */}
-      <div className="mt-12 max-w-md mx-auto lg:max-w-4xl">
+      <div className="mt-12 max-w-5xl mx-auto lg:max-w-4xl">
         <motion.div
           ref={cardRef}
           initial={{ opacity: 0, y: 20 }}
@@ -685,7 +685,7 @@ const CreateCard = () => {
         </motion.div>
 
         {/* Add modern call-to-action buttons */}
-        <div className="flex justify-center gap-4 mt-8">
+        {/* <div className="flex justify-center gap-4 mt-8">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -701,7 +701,7 @@ const CreateCard = () => {
           >
             {isLoading ? 'Generating...' : 'Download Card'}
           </motion.button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
