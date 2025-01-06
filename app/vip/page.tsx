@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
@@ -72,6 +72,58 @@ const CreateCard = () => {
   type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    if (password === '3090') {
+      setIsAuthenticated(true);
+      // Optional: Save to localStorage to persist login
+      localStorage.setItem('isAuth', 'true');
+    } else {
+      alert('Incorrect password');
+    }
+  };
+
+  useEffect(() => {
+    const auth = localStorage.getItem('isAuth');
+    if (auth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full m-4"
+        >
+          <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">Enter Password</h1>
+          <div className="space-y-4">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              className="w-full p-3 rounded-lg border border-gray-300"
+              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+            />
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleLogin}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            >
+              Access Card Creator
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'main' | 'logo') => {
     if (e.target.files && e.target.files[0]) {
@@ -604,19 +656,15 @@ const CreateCard = () => {
                       <p className="text-stone-950 whitespace-pre-line">{largeDescription}</p>
                       
                     </div>
-                    
                   </div>
-                  <div className="mt-4 flex justify-end">
-                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
-                      Kardify Me+
-                    </div>
-                  </div>
+                  
                 </div>
+                
               )}
 
               {/* Event Variant */}
               {selectedVariant === 'event' && (
-                <div className="bg-white/95 p-4 rounded-2xl shadow-lg">
+                <div className="bg-white/95 p-4 pt-6 rounded-2xl shadow-lg space-y-6">
                   <div className="flex justify-between items-start">
                     <div className="space-y-4">
                       <h3 className="text-3xl font-bold text-purple-900">{title}</h3>
@@ -650,11 +698,6 @@ const CreateCard = () => {
                     {largeDescription && (
                       <div className="mt-4 text-stone-950">{largeDescription}</div>
                     )}
-                  </div>
-                  <div className="mt-4 flex justify-end">
-                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-purple-600 text-white">
-                      Kardify Me+
-                    </div>
                   </div>
                 </div>
               )}
@@ -711,11 +754,6 @@ const CreateCard = () => {
                           {currency} {(items.reduce((sum, item) => sum + item.amount, 0) * (1 + taxRate / 100)).toFixed(2)}
                         </span>
                       </motion.div>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex justify-end">
-                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-blue-600 text-white">
-                      Kardify Me+
                     </div>
                   </div>
                 </div>
