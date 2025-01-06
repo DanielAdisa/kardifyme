@@ -657,14 +657,17 @@ const CreateCard = () => {
                       
                     </div>
                   </div>
-                  
+                  <div className="mt-4 flex justify-end">
+                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
+                      Kardify Me+
+                    </div>
+                  </div>
                 </div>
-                
               )}
 
               {/* Event Variant */}
               {selectedVariant === 'event' && (
-                <div className="bg-white/95 p-4 pt-6 rounded-2xl shadow-lg space-y-6">
+                <div className="bg-white/95 p-4 rounded-2xl shadow-lg">
                   <div className="flex justify-between items-start">
                     <div className="space-y-4">
                       <h3 className="text-3xl font-bold text-purple-900">{title}</h3>
@@ -698,6 +701,11 @@ const CreateCard = () => {
                     {largeDescription && (
                       <div className="mt-4 text-stone-950">{largeDescription}</div>
                     )}
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-purple-600 text-white">
+                      Kardify Me+
+                    </div>
                   </div>
                 </div>
               )}
@@ -754,6 +762,11 @@ const CreateCard = () => {
                           {currency} {(items.reduce((sum, item) => sum + item.amount, 0) * (1 + taxRate / 100)).toFixed(2)}
                         </span>
                       </motion.div>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-blue-600 text-white">
+                      Kardify Me+
                     </div>
                   </div>
                 </div>
