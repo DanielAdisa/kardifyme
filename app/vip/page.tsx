@@ -4,6 +4,7 @@ import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import place from "@/public/12.jpg"
 
 // Update card variants
 const cardVariants = {
@@ -470,14 +471,14 @@ const CreateCard = () => {
           >
             {isLoading ? 'Generating...' : 'Generate Card'}
           </motion.button>
-          <motion.button
+          {/* <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handlePrint}
             className="bg-gray-600 text-white px-6 py-3 rounded-full hover:bg-gray-700 transition-all duration-300"
           >
             Print Page
-          </motion.button>
+          </motion.button> */}
         </div>
       </div>
 
@@ -490,34 +491,46 @@ const CreateCard = () => {
           transition={{ duration: 0.5 }}
           className={`
             ${cardVariants[selectedVariant]?.gradient} 
-            rounded-[32px] 
+            rounded-[20px] 
             shadow-[0_8px_32px_rgba(0,0,0,0.15)] 
             backdrop-blur-xl 
             overflow-hidden 
             w-full
-            border border-white/10
           `}
         >
           {/* Card Hero with responsive height */}
-          <div className="relative w-full h-[250px] sm:h-[300px] md:h-[400px]">
+          <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px]">
             {image ? (
-              <Image
-                src={image}
-                alt={title}
-                fill
-                className={`object-cover transition-transform duration-700 ${
-                  selectedVariant === 'event' ? 'opacity-80' : ''
-                }`}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                priority
-                onError={(e) => {
-                  console.error('Image failed to load');
-                  e.currentTarget.src = '/placeholder.jpg'; // Add a placeholder image
-                }}
-              />
+                <Image
+    src={image || place } // Set default image
+    alt={title || 'Card Image'}
+    fill
+    className={`object-cover transition-transform duration-700 ${
+      selectedVariant === 'event' ? 'opacity-80' : ''
+    }`}
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    priority
+    onError={(e) => {
+      console.error('Image failed to load');
+      e.currentTarget.src = '/12.jpg';
+    }}
+  />
             ) : (
               <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <p className="text-stone-950">No image uploaded</p>
+                <Image
+    src={place || place } // Set default image
+    alt={title || 'Card Image'}
+    fill
+    className={`object-cover transition-transform duration-700 ${
+      selectedVariant === 'event' ? 'opacity-80' : ''
+    }`}
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    priority
+    onError={(e) => {
+      console.error('Image failed to load');
+      e.currentTarget.src = '/12.jpg';
+    }}
+  />
               </div>
             )}
 
@@ -527,7 +540,7 @@ const CreateCard = () => {
               animate={{ y: 0, opacity: 1 }}
               className="absolute bottom-0 p-4 sm:p-6 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent"
             >
-              <h1 className={`text-2xl sm:text-4xl md:text-6xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
+              <h1 className={`text-xl  md:text-6xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
                 {title || 'Untitled'}
               </h1>
               <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl font-light line-clamp-2 sm:line-clamp-none">
