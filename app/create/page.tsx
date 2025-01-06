@@ -5,6 +5,7 @@ import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import pic from "@/public/12.jpg"
 
 const cardVariants = {
   business: {
@@ -317,7 +318,7 @@ const CreateCard = () => {
         >
           <div className="relative h-[400px]">
             <Image
-              src="/business-card.jpg"
+              src={pic}
               alt="Business Card"
               fill
               className="object-cover"
@@ -352,7 +353,7 @@ const CreateCard = () => {
         >
           <div className="relative h-[400px]">
             <Image
-              src="/event-ticket.jpg"
+              src={pic}
               alt="Event Ticket"
               fill
               className="object-cover opacity-80"
@@ -380,8 +381,8 @@ const CreateCard = () => {
         >
           <div className="relative h-[400px]">
             <Image
-              src="/product-showcase.jpg"
-              alt="Product"
+              src={pic}
+              alt='ss'
               fill
               className="object-cover"
               priority
