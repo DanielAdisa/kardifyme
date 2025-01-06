@@ -221,12 +221,12 @@ const CreateCard = () => {
                 className="prose dark:prose-invert max-w-none"
               >
                 <h2 className="text-2xl md:text-3xl mb-2">Description</h2>
-                <blockquote className="text-slate-600 border-l-4border-slate-200 p-2 bg-stone-300/15 ">
+                <div className="text-slate-600 border-l-4border-slate-200 p-2 bg-stone-300/15 ">
                   {largeDescription}
-                </blockquote>
+                </div>
               </motion.div>
-              <div className=" text-xs  text-stone-300">
-            Adisa Made It
+              <div className=" text-xs bg-stone-300 w-fit px-1.5 rounded-full py-1  text-stone-50">
+            Adisa Made It+ 
           </div>
             </div>
           )}
