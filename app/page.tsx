@@ -42,10 +42,10 @@ const LandingPage = () => {
             </Link>
           </motion.div>
         </div>
-        <div
+        {/* <div
           aria-hidden="true"
           className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"
-        />
+        /> */}
       </section>
 
       {/* Features Section */}
