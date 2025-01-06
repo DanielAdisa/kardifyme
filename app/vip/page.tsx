@@ -131,7 +131,7 @@ const CreateCard = () => {
         <h1 className="text-3xl font-bold mb-6 text-center text-stone-950">Create Your Card</h1>
         <div className="space-y-6">
           {/* Other Inputs */}
-          
+
           {/* Select Card Type */}
           <div>
             <label className="block text-stone-950 mb-2">Card Type</label>
@@ -149,7 +149,7 @@ const CreateCard = () => {
               <option value="einvoice">E-Invoice</option>
             </select>
           </div>
-          
+
           {/* Conditional Inputs based on Variant */}
           {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
             <div className="space-y-4">
@@ -260,6 +260,8 @@ const CreateCard = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
               />
             </div>
             <div>
@@ -268,6 +270,8 @@ const CreateCard = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the description"
+                placeholder="Enter a description"
               />
             </div>
             
@@ -353,6 +357,8 @@ const CreateCard = () => {
                     value={invoiceNumber}
                     onChange={(e) => setInvoiceNumber(e.target.value)}
                     className="w-full p-2 rounded-lg border border-slate-300"
+                    title="Enter invoice number"
+                    placeholder="Invoice Number"
                   />
                 </div>
                 <div>
@@ -431,6 +437,8 @@ const CreateCard = () => {
                 type="file"
                 onChange={(e) => handleImageChange(e, 'main')}
                 className="w-full p-2 rounded-lg border border-slate-300"
+                title="Upload an image"
+                placeholder="Upload an image"
               />
             </div>
             <div>
@@ -439,6 +447,8 @@ const CreateCard = () => {
                 type="file"
                 onChange={(e) => handleImageChange(e, 'logo')}
                 className="w-full p-2 rounded-lg border border-slate-300"
+                title="Upload a logo"
+                placeholder="Upload a logo"
               />
             </div>
             <div>
@@ -570,14 +580,14 @@ const CreateCard = () => {
 
           {/* Update the card content section */}
           {showBottomPart && (
-            <div className={`p-6 ${selectedVariant === 'product' ? 'bg-white/95' : ''}`}>
+            <div className={`p-3 ${selectedVariant === 'product' ? 'bg-white/95' : ''}`}>
               {/* Product Variant */}
               {selectedVariant === 'product' && (
-                <div className="space-y-6 bg-white/95 p-8 rounded-2xl shadow-lg">
+                <div className="space-y-6 bg-white/95 p-4 rounded-2xl shadow-lg">
                   <div className="flex justify-between items-start">
                     <div className="space-y-3">
                       <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
-                      <p className="text-2xl font-semibold bg-blue-50 text-blue-600 px-4 py-2 rounded-xl inline-block">
+                      <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-4 py-2 rounded-full inline-block">
                         {currency} {price}
                       </p>
                     </div>
@@ -589,7 +599,7 @@ const CreateCard = () => {
                   </div>
                   <div className="prose max-w-none">
                     <p className="text-lg text-stone-950 leading-relaxed">{description}</p>
-                    <div className="mt-6 bg-gray-50 p-6 rounded-xl">
+                    <div className="mt-6 bg-gray-50 p-4 rounded-xl">
                       <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
                       <p className="text-stone-950 whitespace-pre-line">{largeDescription}</p>
                     </div>
@@ -599,7 +609,7 @@ const CreateCard = () => {
 
               {/* Event Variant */}
               {selectedVariant === 'event' && (
-                <div className="bg-white/95 p-8 rounded-2xl shadow-lg space-y-6">
+                <div className="bg-white/95 p-4 pt-6 rounded-2xl shadow-lg space-y-6">
                   <div className="flex justify-between items-start">
                     <div className="space-y-4">
                       <h3 className="text-3xl font-bold text-purple-900">{title}</h3>
@@ -627,7 +637,7 @@ const CreateCard = () => {
                       </div>
                     )}
                   </div>
-                  <div className="bg-purple-50 p-6 rounded-xl">
+                  <div className="bg-purple-50 p-4 rounded-xl">
                     <h4 className="text-xl font-semibold text-purple-900 mb-3">Event Details</h4>
                     <p className="text-stone-950 whitespace-pre-line">{description}</p>
                     {largeDescription && (
@@ -639,7 +649,7 @@ const CreateCard = () => {
 
               {/* Invoice/Receipt/E-Invoice Variants */}
               {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
-                <div className="bg-white p-6 rounded-lg space-y-4">
+                <div className="bg-white p-4 rounded-lg space-y-4">
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-xl font-bold text-stone-950">
@@ -666,7 +676,7 @@ const CreateCard = () => {
                         </span>
                       </motion.div>
                     ))}
-                    
+
                     <div className="border-t border-white/10 pt-4 mt-6">
                       {taxRate > 0 && (
                         <motion.div 
