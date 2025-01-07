@@ -88,24 +88,36 @@ const [ingredients, setIngredients] = useState([{ item: '', amount: '' }]);
 const [instructions, setInstructions] = useState([{ step: '' }]);
 const [difficulty, setDifficulty] = useState('medium');
 const [chefTips, setChefTips] = useState('');
+const [profilePicture, setProfilePicture] = useState('');
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
 
+  const CURRENT_PASSWORD = '4090';
+  const PASSWORD_VERSION = '2'; // Increment this version whenever the password changes
+  
+  // Update handleLogin to check password version
   const handleLogin = () => {
-    if (password === '3090') {
+    if (password === CURRENT_PASSWORD) {
       setIsAuthenticated(true);
-      // Optional: Save to localStorage to persist login
+      // Save to localStorage to persist login with version
       localStorage.setItem('isAuth', 'true');
+      localStorage.setItem('passwordVersion', PASSWORD_VERSION);
     } else {
       alert('Incorrect password');
     }
   };
-
+  
+  // Add effect to check stored auth and version
   useEffect(() => {
     const auth = localStorage.getItem('isAuth');
-    if (auth === 'true') {
+    const storedVersion = localStorage.getItem('passwordVersion');
+    if (auth === 'true' && storedVersion === PASSWORD_VERSION) {
       setIsAuthenticated(true);
+    } else {
+      // Clear auth if version mismatch
+      localStorage.removeItem('isAuth');
+      localStorage.removeItem('passwordVersion');
     }
   }, []);
 
@@ -200,6 +212,16 @@ const [chefTips, setChefTips] = useState('');
       currency: currency,
       minimumFractionDigits: 0,
     }).format(value);
+  };
+
+  const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setProfilePicture(event.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
 
   return (
@@ -756,6 +778,18 @@ const [chefTips, setChefTips] = useState('');
                 className="w-full p-2 rounded-lg border border-slate-300"
               />
             </div>
+            <div className="space-y-6">
+    <div>
+      <label className="block text-stone-950 mb-2">Profile Picture</label>
+      <input
+        type="file"
+        onChange={handleProfilePictureChange}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        title="Upload a profile picture"
+        placeholder="Upload a profile picture"
+      />
+    </div>
+  </div>
             <div className="flex items-center gap-2 mb-4">
               <label className="text-stone-950">Show Bottom Section</label>
               <input
