@@ -777,6 +777,15 @@ const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }])
                     className="w-full p-2 rounded-lg border border-slate-300"
                   />
                 </div>
+                <div>
+      <label className="block text-stone-950 mb-2 font-medium">Event Details</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
+        placeholder="Enter flyer details, features, or event information"
+      />
+    </div>
               </>
             )}
 
