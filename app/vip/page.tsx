@@ -344,6 +344,15 @@ const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }])
                       className="w-full p-2 rounded-lg border border-slate-300"
                     />
                   </div>
+                  <div>
+      <label className="block text-stone-950 mb-2 font-medium">Invoice Details</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
+        placeholder="Enter flyer details, features, or event information"
+      />
+    </div>
                 </>
               )}
               <div>
@@ -1344,6 +1353,9 @@ const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }])
                   </div>
 
                   <div className="space-y-2">
+                    {largeDescription && (
+                  <div className="mt-4 text-stone-950 whitespace-pre-line">{largeDescription}</div>
+                )}
                     {items.map((item, i) => (
                       <motion.div
                         key={i}
