@@ -337,7 +337,7 @@ const CreateCard = () => {
             </div>
             
             {/* Product specific fields */}
-            {selectedVariant === 'product' && (
+            {(selectedVariant === 'product' || selectedVariant === 'business') && (
               <>
                 <div>
                   <label className="block text-stone-950 mb-2">Price</label>
@@ -673,6 +673,30 @@ const CreateCard = () => {
                   </div>
                 </div>
               )}
+               {/* Business Variant */}
+    {selectedVariant === 'business' && (
+      <div className="space-y-6 bg-white/95 p-4 rounded-2xl shadow-lg">
+        <div className="flex justify-between items-start">
+          <div className="space-y-3">
+            <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
+            <p className="text-xl font-medium text-stone-950">{description}</p>
+          </div>
+          {qrUrl && (
+            <div className="bg-white p-2 rounded-xl shadow-md">
+              <QRCodeSVG value={qrUrl} size={80} />
+            </div>
+          )}
+        </div>
+        <div className="prose max-w-full">
+          <p className="text-lg text-stone-950 whitespace-pre-line leading-relaxed">{largeDescription}</p>
+        </div>
+        <div className="mt-4 flex justify-end">
+          <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
+            Kardify Me+
+          </div>
+        </div>
+      </div>
+    )}
 
               {/* Event Variant */}
               {selectedVariant === 'event' && (
@@ -708,7 +732,7 @@ const CreateCard = () => {
                     <h4 className="text-xl font-semibold text-purple-900 mb-3">Event Details</h4>
                     <p className="text-stone-950 whitespace-pre-line">{description}</p>
                     {largeDescription && (
-                      <div className="mt-4 text-stone-950">{largeDescription}</div>
+                      <div className="mt-4 text-stone-950 whitespace-pre-line">{largeDescription}</div>
                     )}
                   </div>
                   <div className="mt-4 flex justify-end">
