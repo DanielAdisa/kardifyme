@@ -42,6 +42,11 @@ const cardVariants = {
     gradient: "bg-gradient-to-br from-yellow-500 to-red-500",
     titleFont: "font-serif",
     layout: "flyer"
+  },
+  recipe: {
+    gradient: "bg-gradient-to-br from-emerald-500 to-teal-700",
+    titleFont: "font-serif",
+    layout: "recipe"
   }
 };
 
@@ -74,9 +79,15 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
+  const [cookingTime, setCookingTime] = useState('');
+const [servings, setServings] = useState('');
+const [ingredients, setIngredients] = useState([{ item: '', amount: '' }]);
+const [instructions, setInstructions] = useState([{ step: '' }]);
+const [difficulty, setDifficulty] = useState('medium');
+const [chefTips, setChefTips] = useState('');
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -214,6 +225,7 @@ const CreateCard = () => {
               <option value="receipt">Receipt</option>
               <option value="einvoice">E-Invoice</option>
               <option value="flyer">E-Flyer</option>
+              <option value="recipe">E-Recipe</option>
             </select>
           </div>
 
@@ -407,6 +419,129 @@ const CreateCard = () => {
           accept="image/*"
         />
       </div>
+    </div>
+  </div>
+)}
+
+{/* Recipe Input Fields */}
+{selectedVariant === 'recipe' && (
+  <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Cooking Time (mins)</label>
+        <input
+          type="number"
+          value={cookingTime}
+          onChange={(e) => setCookingTime(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
+          placeholder="45"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Servings</label>
+        <input
+          type="number"
+          value={servings}
+          onChange={(e) => setServings(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
+          placeholder="4"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Difficulty</label>
+        <select
+          value={difficulty}
+          onChange={(e) => setDifficulty(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
+        >
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Ingredients</label>
+      {ingredients.map((ing, index) => (
+        <div key={index} className="flex gap-2 mb-2">
+          <input
+            type="text"
+            value={ing.item}
+            onChange={(e) => {
+              const newIngs = [...ingredients];
+              newIngs[index].item = e.target.value;
+              setIngredients(newIngs);
+            }}
+            className="flex-1 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder="Ingredient"
+          />
+          <input
+            type="text"
+            value={ing.amount}
+            onChange={(e) => {
+              const newIngs = [...ingredients];
+              newIngs[index].amount = e.target.value;
+              setIngredients(newIngs);
+            }}
+            className="w-32 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder="Amount"
+          />
+          <button
+            onClick={() => setIngredients(ingredients.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={() => setIngredients([...ingredients, { item: '', amount: '' }])}
+        className="text-emerald-600 hover:text-emerald-700"
+      >
+        + Add Ingredient
+      </button>
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Instructions</label>
+      {instructions.map((inst, index) => (
+        <div key={index} className="flex gap-2 mb-2">
+          <input
+            type="text"
+            value={inst.step}
+            onChange={(e) => {
+              const newInst = [...instructions];
+              newInst[index].step = e.target.value;
+              setInstructions(newInst);
+            }}
+            className="flex-1 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder={`Step ${index + 1}`}
+          />
+          <button
+            onClick={() => setInstructions(instructions.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={() => setInstructions([...instructions, { step: '' }])}
+        className="text-emerald-600 hover:text-emerald-700"
+      >
+        + Add Step
+      </button>
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Chef's Tips</label>
+      <textarea
+        value={chefTips}
+        onChange={(e) => setChefTips(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 min-h-[100px]"
+        placeholder="Share your cooking tips..."
+      />
     </div>
   </div>
 )}
@@ -821,9 +956,9 @@ const CreateCard = () => {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 md:w-1/5 w-full">
           {qrUrl && (
-            <div className="bg-white/95 p-4 rounded-2xl shadow-lg backdrop-blur-md">
+            <div className="bg-white/95 p-4 flex-col items-center justify-center rounded-2xl shadow-lg backdrop-blur-md">
               <QRCodeSVG value={qrUrl} size={120} />
               <p className="text-sm text-center mt-2 text-gray-600 font-medium">Scan for details</p>
             </div>
@@ -832,7 +967,7 @@ const CreateCard = () => {
           {price && !isNaN(parseFloat(price)) && (
             <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl text-center">
               <p className="text-sm text-gray-500 mb-1">Price</p>
-              <p className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent">
+              <p className="text-xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent">
                 {formatCurrency(parseFloat(price), currency)}
               </p>
             </div>
@@ -853,6 +988,93 @@ const CreateCard = () => {
         )}
         <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md text-white text-sm font-medium">
           Created with Kardify
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Recipe Display */}
+{selectedVariant === 'recipe' && (
+  <div className="relative bg-gradient-to-br from-emerald-500 to-teal-700 p-8 rounded-3xl shadow-2xl overflow-hidden">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-black/10"></div>
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
+    
+    <div className="relative z-10">
+      <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex-1 space-y-6">
+          <div>
+            <h3 className="text-5xl font-serif text-white mb-4">{title || 'Recipe Name'}</h3>
+            <div className="flex gap-4 text-white/90">
+              <span className="flex items-center gap-2">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+                </svg>
+                {cookingTime} mins
+              </span>
+              <span className="flex items-center gap-2">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                </svg>
+                Serves {servings}
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
+            <h4 className="text-xl font-semibold text-white mb-4">Ingredients</h4>
+            <ul className="space-y-2 text-white/90">
+              {ingredients.map((ing, idx) => (
+                <li key={idx} className="flex justify-between">
+                  <span>{ing.item}</span>
+                  <span className="text-white/70">{ing.amount}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
+            <h4 className="text-xl font-semibold text-white mb-4">Instructions</h4>
+            <ol className="space-y-4 text-white/90 list-decimal list-inside">
+              {instructions.map((inst, idx) => (
+                <li key={idx}>{inst.step}</li>
+              ))}
+            </ol>
+          </div>
+
+          {chefTips && (
+            <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl">
+              <p className="text-white/90 italic">💡 Chef's Tip: {chefTips}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="md:w-1/3 space-y-6">
+          {image && (
+            <div className="rounded-2xl overflow-hidden shadow-lg">
+              <Image src={image} alt={title} width={400} height={300} className="object-cover" />
+            </div>
+          )}
+          
+          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl">
+            <div className="text-center">
+              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-sm font-medium">
+                {difficulty.toUpperCase()}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8 flex justify-between items-center">
+        {logo && (
+          <div className="relative w-16 h-16">
+            <Image src={logo} alt="Logo" fill className="rounded-full object-cover border-2 border-white/50" />
+          </div>
+        )}
+        <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
+          Kardify Recipe
         </div>
       </div>
     </div>
