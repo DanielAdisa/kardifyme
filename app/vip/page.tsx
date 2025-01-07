@@ -24,7 +24,7 @@ const cardVariants = {
     layout: "product"
   },
   invoice: {
-    gradient: "backdrop-blur-2xl bg-stone-600/20 ",
+    gradient: "backdrop-blur-2xl bg-stone-600/30 ",
     titleFont: "font-sans",
     layout: "invoice"
   },
@@ -570,7 +570,7 @@ const CreateCard = () => {
           `}
         >
           {/* Card Hero with responsive height */}
-          <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px]">
+          <div className="relative w-full h-[300px] sm:h-[300px] md:h-[400px]">
             {image ? (
                 <Image
     src={image || place } // Set default image
@@ -614,8 +614,11 @@ const CreateCard = () => {
               <h1 className={`text-xl  md:text-6xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
                 {title || 'Untitled'}
               </h1>
-              <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl font-light line-clamp-2 sm:line-clamp-none">
+              <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl whitespace-pre-line font-light ">
                 {description}
+              </p>
+              <p className="text-base font-semibold absolute right-2 bottom-4 bg-stone-50/30 text-stone-50/80 px-2 py-1 rounded-full inline-block">
+                        {formatCurrency(parseFloat(price), currency)}
               </p>
             </motion.div>
 
@@ -675,11 +678,11 @@ const CreateCard = () => {
               )}
                {/* Business Variant */}
     {selectedVariant === 'business' && (
-      <div className="space-y-4 bg-white/40 p-4 rounded-2xl shadow-lg">
+      <div className="space-y-4 bg-white/40 test p-4 rounded-2xl shadow-lg">
         <div className="flex justify-between items-start">
           <div className="space-y-3">
             <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
-            <p className="text-xl font-medium text-stone-950">{description}</p>
+            <p className="text-xl font-medium whitespace-pre-line text-stone-950">{description}</p>
           </div>
           {qrUrl && (
             <div className="bg-white p-2 rounded-xl shadow-md">
@@ -687,6 +690,7 @@ const CreateCard = () => {
             </div>
           )}
         </div>
+        
         <div className="prose max-w-full">
           <p className="text-lg text-stone-950 whitespace-pre-line leading-relaxed">{largeDescription}</p>
         </div>
