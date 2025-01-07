@@ -9,12 +9,12 @@ import place from "@/public/12.jpg"
 // Update card variants
 const cardVariants = {
   business: {
-    gradient: "bg-gradient-to-br from-slate-900 to-blue-900",
+    gradient: "bg-white/40",
     titleFont: "font-mono",
     layout: "business"
   },
   event: {
-    gradient: "bg-gradient-to-br from-purple-500 to-pink-500",
+    gradient: "bg-gradient-to-br from-blue-500 to-pink-500",
     titleFont: "font-bold",
     layout: "ticket"
   },
@@ -675,7 +675,7 @@ const CreateCard = () => {
               )}
                {/* Business Variant */}
     {selectedVariant === 'business' && (
-      <div className="space-y-6 bg-white/95 p-4 rounded-2xl shadow-lg">
+      <div className="space-y-4 bg-white/40 p-4 rounded-2xl shadow-lg">
         <div className="flex justify-between items-start">
           <div className="space-y-3">
             <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
