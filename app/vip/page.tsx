@@ -104,7 +104,7 @@ const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }])
   const [password, setPassword] = useState('');
 
   const CURRENT_PASSWORD = '4090';
-  const PASSWORD_VERSION = '2'; // Increment this version whenever the password changes
+  const PASSWORD_VERSION = '3'; // Increment this version whenever the password changes
   
   // Update handleLogin to check password version
   const handleLogin = () => {
