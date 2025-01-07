@@ -1433,7 +1433,7 @@ const [contractValue, setContractValue] = useState('');
             </div>
           )}
           <div className="text-sm text-blue-200">
-            <p>Document ID: {contractAddress}</p>
+            <p>Document ID: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
             <p>Created: {new Date(contractDate).toLocaleDateString()}</p>
           </div>
         </div>
