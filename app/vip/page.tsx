@@ -37,6 +37,11 @@ const cardVariants = {
     gradient: "bg-gradient-to-tl from-orange-500 to-purple-700",
     titleFont: "font-sans",
     layout: "einvoice"
+  },
+  flyer: {
+    gradient: "bg-gradient-to-br from-yellow-500 to-red-500",
+    titleFont: "font-serif",
+    layout: "flyer"
   }
 };
 
@@ -69,7 +74,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -208,6 +213,7 @@ const CreateCard = () => {
               <option value="invoice">Invoice</option>
               <option value="receipt">Receipt</option>
               <option value="einvoice">E-Invoice</option>
+              <option value="flyer">E-Flyer</option>
             </select>
           </div>
 
@@ -697,6 +703,31 @@ const CreateCard = () => {
           <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed">{largeDescription}</p>
         </div>
         
+      </div>
+    )}
+
+    {/* Flyer Variant */}
+    {selectedVariant === 'flyer' && (
+      <div className="space-y-6 bg-white/95 p-4 rounded-2xl shadow-lg">
+        <div className="flex justify-between items-start">
+          <div className="space-y-3">
+            <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
+            <p className="text-xl font-medium text-stone-950">{description}</p>
+          </div>
+          {qrUrl && (
+            <div className="bg-white p-3 rounded-xl shadow-md">
+              <QRCodeSVG value={qrUrl} size={80} />
+            </div>
+          )}
+        </div>
+        <div className="prose max-w-none">
+          <p className="text-lg text-stone-950 leading-relaxed">{largeDescription}</p>
+        </div>
+        {/* <div className="mt-4 flex justify-end">
+          <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
+            Kardify Me+
+          </div>
+        </div> */}
       </div>
     )}
 
