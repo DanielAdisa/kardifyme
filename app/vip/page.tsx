@@ -99,9 +99,18 @@ const [network, setNetwork] = useState('Ethereum');
 const [contractType, setContractType] = useState('ERC20');
 const [validUntil, setValidUntil] = useState('');
 const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }]);
+const [witnesses, setWitnesses] = useState([{ name: '', signature: '' }]);
+const [party1Name, setParty1Name] = useState('');
+const [party2Name, setParty2Name] = useState('');
+const [party1Sign, setParty1Sign] = useState('');
+const [party2Sign, setParty2Sign] = useState('');
+const [contractTerms, setContractTerms] = useState('');
+const [contractDate, setContractDate] = useState('');
+const [contractValue, setContractValue] = useState('');
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+
 
   const CURRENT_PASSWORD = '4090';
   const PASSWORD_VERSION = '3'; // Increment this version whenever the password changes
@@ -589,85 +598,142 @@ const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }])
 )}
 
 
-{selectedVariant === 'contract' && (
+{selectedVariant === "contract" && (
   <div className="space-y-6">
+    {/* Contract Details */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <label className="block text-stone-950 mb-2 font-medium">Contract Address</label>
+        <label className="block text-stone-950 mb-2 font-medium">Contract Title</label>
         <input
           type="text"
-          value={contractAddress}
-          onChange={(e) => setContractAddress(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 font-mono"
-          placeholder="0x..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+          placeholder="Enter contract title"
         />
       </div>
       <div>
-        <label className="block text-stone-950 mb-2 font-medium">Network</label>
-        <select
-          value={network}
-          onChange={(e) => setNetwork(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300"
-        >
-          <option value="Ethereum">Ethereum</option>
-          <option value="Polygon">Polygon</option>
-          <option value="BSC">BSC</option>
-        </select>
-      </div>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Contract Type</label>
-        <select
-          value={contractType}
-          onChange={(e) => setContractType(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300"
-        >
-          <option value="ERC20">ERC20</option>
-          <option value="ERC721">ERC721</option>
-          <option value="ERC1155">ERC1155</option>
-        </select>
-      </div>
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Valid Until</label>
+        <label className="block text-stone-950 mb-2 font-medium">Contract Date</label>
         <input
           type="date"
-          value={validUntil}
-          onChange={(e) => setValidUntil(e.target.value)}
+          value={contractDate}
+          onChange={(e) => setContractDate(e.target.value)}
           className="w-full p-3 rounded-xl border border-slate-300"
         />
       </div>
     </div>
 
+    {/* Party Information */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Party 1 Name</label>
+        <input
+          type="text"
+          value={party1Name}
+          onChange={(e) => setParty1Name(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+          placeholder="Enter party 1 name"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Party 2 Name</label>
+        <input
+          type="text"
+          value={party2Name}
+          onChange={(e) => setParty2Name(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+          placeholder="Enter party 2 name"
+        />
+      </div>
+    </div>
+
+    {/* Signatures */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Party 1 Signature</label>
+        <input
+          type="text"
+          value={party1Sign}
+          onChange={(e) => setParty1Sign(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 font-mono"
+          placeholder="Digital signature"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Party 2 Signature</label>
+        <input
+          type="text"
+          value={party2Sign}
+          onChange={(e) => setParty2Sign(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 font-mono"
+          placeholder="Digital signature"
+        />
+      </div>
+    </div>
+
+    {/* Contract Terms */}
     <div>
-      <label className="block text-stone-950 mb-2 font-medium">Contract Details</label>
-      {contractDetails.map((detail, index) => (
-        <div key={index} className="flex gap-2 mb-2">
+      <label className="block text-stone-950 mb-2 font-medium">Contract Terms</label>
+      <textarea
+        value={contractTerms}
+        onChange={(e) => setContractTerms(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 min-h-[200px]"
+        placeholder="Enter contract terms and conditions..."
+      />
+    </div>
+    <div>
+  <label className="block text-stone-950 mb-2 font-medium">Contract Value</label>
+  <div className="flex gap-2">
+    <input
+      type="number"
+      value={contractValue}
+      onChange={(e) => setContractValue(e.target.value)}
+      className="flex-1 p-3 rounded-xl border border-slate-300"
+      placeholder="Enter contract value"
+    />
+    <select
+      value={currency}
+      onChange={(e) => setCurrency(e.target.value)}
+      className="w-32 p-3 rounded-xl border border-slate-300"
+    >
+      {currencyOptions.map(option => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
+
+    {/* Witnesses */}
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Witnesses</label>
+      {witnesses.map((witness, idx) => (
+        <div key={idx} className="flex gap-2 mb-2">
           <input
             type="text"
-            value={detail.key}
+            value={witness.name}
             onChange={(e) => {
-              const newDetails = [...contractDetails];
-              newDetails[index].key = e.target.value;
-              setContractDetails(newDetails);
+              const newWitnesses = [...witnesses];
+              newWitnesses[idx].name = e.target.value;
+              setWitnesses(newWitnesses);
             }}
             className="flex-1 p-3 rounded-xl border border-slate-300"
-            placeholder="Key"
+            placeholder="Witness name"
           />
           <input
             type="text"
-            value={detail.value}
+            value={witness.signature}
             onChange={(e) => {
-              const newDetails = [...contractDetails];
-              newDetails[index].value = e.target.value;
-              setContractDetails(newDetails);
+              const newWitnesses = [...witnesses];
+              newWitnesses[idx].signature = e.target.value;
+              setWitnesses(newWitnesses);
             }}
-            className="flex-1 p-3 rounded-xl border border-slate-300"
-            placeholder="Value"
+            className="flex-1 p-3 rounded-xl border border-slate-300 font-mono"
+            placeholder="Witness signature"
           />
           <button
-            onClick={() => setContractDetails(contractDetails.filter((_, i) => i !== index))}
+            onClick={() => setWitnesses(witnesses.filter((_, i) => i !== idx))}
             className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
           >
             ×
@@ -675,15 +741,25 @@ const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }])
         </div>
       ))}
       <button
-        onClick={() => setContractDetails([...contractDetails, { key: '', value: '' }])}
+        onClick={() => setWitnesses([...witnesses, { name: '', signature: '' }])}
         className="text-blue-600 hover:text-blue-700"
       >
-        + Add Detail
+        + Add Witness
       </button>
+    </div>
+
+    {/* Valid Until */}
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Valid Until</label>
+      <input
+        type="date"
+        value={validUntil}
+        onChange={(e) => setValidUntil(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300"
+      />
     </div>
   </div>
 )}
-
 
 
           {/* Base form fields for all variants */}
@@ -1245,59 +1321,128 @@ const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }])
 
 {/* Add contract card display */}
 {selectedVariant === 'contract' && (
-  <div className="relative bg-gradient-to-br from-blue-900 to-indigo-900 p-8 rounded-3xl shadow-2xl overflow-hidden">
-    <div className="absolute inset-0 bg-grid-white/10 bg-[size:20px_20px]"></div>
+  <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-8 rounded-3xl shadow-2xl overflow-hidden">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-grid-white/10"></div>
+    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
     
-    <div className="relative z-10 space-y-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-4xl font-bold text-white mb-2">{title || 'Smart Contract'}</h3>
-          <p className="text-xl text-blue-200">{description}</p>
+    <div className="relative z-10 space-y-8">
+      {/* Header with Official Seal */}
+      <div className="text-center border-b border-white/20 pb-6">
+        <div className="flex justify-center mb-4">
+          {logo && (
+            <div className="relative w-20 h-20">
+              <Image src={logo} alt="Official Seal" fill className="rounded-full object-cover border-2 border-white/50" />
+            </div>
+          )}
         </div>
-        {qrUrl && (
-          <div className="bg-white/95 p-4 rounded-xl shadow-lg">
-            <QRCodeSVG value={qrUrl} size={80} />
-          </div>
-        )}
+        <h2 className="text-4xl font-serif text-white mb-2">{title || 'Contract Agreement'}</h2>
+        <div className="flex justify-center gap-4 text-sm text-blue-200">
+          <p>Ref: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
+          <p>|</p>
+          <p>Date: {new Date(contractDate).toLocaleDateString()}</p>
+        </div>
       </div>
 
-      <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl space-y-4">
-        <div className="flex items-center space-x-2 text-blue-200">
-          <span className="font-mono">{contractAddress}</span>
-          <span className="px-2 py-1 bg-blue-500/20 rounded-full text-sm">{network}</span>
+      {/* Parties Section with Enhanced Design */}
+      <div className="grid grid-cols-2 gap-8">
+        {[
+          { title: 'Party 1', name: party1Name, sign: party1Sign },
+          { title: 'Party 2', name: party2Name, sign: party2Sign }
+        ].map((party, idx) => (
+          <div key={idx} className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+            <h3 className="text-xl text-white mb-4">{party.title}</h3>
+            <div className="space-y-4">
+              <div className="bg-white/5 p-4 rounded-xl">
+                <p className="text-sm text-blue-200">Full Name</p>
+                <p className="text-lg text-white font-medium">{party.name}</p>
+              </div>
+              {party.sign && (
+                <div className="bg-white/5 p-4 rounded-xl">
+                  <p className="text-sm text-blue-200">Digital Signature</p>
+                  <div className="mt-2 font-mono text-white/90 text-sm p-2 bg-white/5 rounded-lg">
+                    {party.sign}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Terms and Conditions with Enhanced Readability */}
+      <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+        <h3 className="text-xl text-white mb-4">Terms and Conditions</h3>
+        <div className="prose prose-invert max-w-none">
+          <div className="bg-white/5 p-6 rounded-xl">
+            <p className="text-blue-200 whitespace-pre-line leading-relaxed">{contractTerms}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Contract Details with Icons */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white/10 p-4 rounded-xl border border-white/10">
+          <div className="flex items-center gap-2 mb-2">
+            <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-sm text-blue-200">Contract Value</p>
+          </div>
+          <p className="text-lg text-white font-medium">{formatCurrency(parseFloat(contractValue), currency)}</p>
+        </div>
+        <div className="bg-white/10 p-4 rounded-xl border border-white/10">
+          <div className="flex items-center gap-2 mb-2">
+            <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <p className="text-sm text-blue-200">Valid Until</p>
+          </div>
+          <p className="text-lg text-white font-medium">{new Date(validUntil).toLocaleDateString()}</p>
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white/5 p-4 rounded-xl">
-            <p className="text-sm text-blue-200">Contract Type</p>
-            <p className="text-lg text-white">{contractType}</p>
-          </div>
-          <div className="bg-white/5 p-4 rounded-xl">
-            <p className="text-sm text-blue-200">Valid Until</p>
-            <p className="text-lg text-white">{new Date(validUntil).toLocaleDateString()}</p>
-          </div>
-        </div>
+      </div>
 
-        <div className="space-y-2">
-          {contractDetails.map((detail, idx) => (
-            <div key={idx} className="flex justify-between py-2 border-b border-white/10">
-              <span className="text-blue-200">{detail.key}</span>
-              <span className="text-white font-mono">{detail.value}</span>
+      {/* Witnesses with Enhanced Layout */}
+      <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+        <h3 className="text-xl text-white mb-4">Witnesses</h3>
+        <div className="grid grid-cols-2 gap-4">
+          {witnesses.map((witness, idx) => (
+            <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/5">
+              <div className="flex items-center gap-2 mb-2">
+                <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <p className="text-blue-200">{witness.name}</p>
+              </div>
+              <div className="font-mono text-white/90 text-sm mt-2 p-2 bg-white/5 rounded-lg">
+                {witness.signature}
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="flex justify-between items-center">
-        <div className="px-4 py-2 bg-white/10 rounded-xl">
-          <p className="text-sm text-blue-200">Created with</p>
-          <p className="text-white font-medium">Kardify Contract</p>
-        </div>
-        {logo && (
-          <div className="relative w-16 h-16">
-            <Image src={logo} alt="Logo" fill className="rounded-full object-cover" />
+      {/* Footer with Enhanced Security Features */}
+      <div className="flex justify-between items-center pt-6 border-t border-white/20">
+        <div className="flex items-center gap-4">
+          {qrUrl && (
+            <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+              <QRCodeSVG value={qrUrl} size={40} />
+              <p className="text-xs text-center mt-1 text-blue-900">Verify</p>
+            </div>
+          )}
+          <div className="text-sm text-blue-200">
+            <p>Document ID: {contractAddress}</p>
+            <p>Created: {new Date(contractDate).toLocaleDateString()}</p>
           </div>
-        )}
+        </div>
+        <div className="flex items-center gap-2">
+          <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+          <span className="text-sm font-medium text-emerald-400">Secured by Kardify</span>
+        </div>
       </div>
     </div>
   </div>
