@@ -24,17 +24,17 @@ const cardVariants = {
     layout: "product"
   },
   invoice: {
-    gradient: "bg-gradient-to-br from-gray-100 to-white",
+    gradient: "backdrop-blur-2xl bg-stone-600/20 ",
     titleFont: "font-sans",
     layout: "invoice"
   },
   receipt: {
-    gradient: "bg-white",
+    gradient: "backdrop-blur-2xl bg-white/20 ",
     titleFont: "font-mono",
     layout: "receipt"
   },
   einvoice: {
-    gradient: "bg-gradient-to-br from-green-500 to-green-700",
+    gradient: "bg-gradient-to-tl from-orange-500 to-purple-700",
     titleFont: "font-sans",
     layout: "einvoice"
   }
