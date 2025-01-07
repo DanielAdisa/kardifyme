@@ -666,11 +666,11 @@ const CreateCard = () => {
                       
                     </div>
                   </div>
-                  <div className="mt-4 flex justify-end">
+                  {/* <div className="mt-4 flex justify-end">
                     <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
                       Kardify Me+
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )}
                {/* Business Variant */}
@@ -690,11 +690,7 @@ const CreateCard = () => {
         <div className="prose max-w-full">
           <p className="text-lg text-stone-950 whitespace-pre-line leading-relaxed">{largeDescription}</p>
         </div>
-        <div className="mt-4 flex justify-end">
-          <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
-            Kardify Me+
-          </div>
-        </div>
+        
       </div>
     )}
 
@@ -728,18 +724,18 @@ const CreateCard = () => {
                       </div>
                     )}
                   </div>
-                  <div className="bg-purple-50 p-4 rounded-xl">
+                  <div className="bg-purple-100 p-4 rounded-xl">
                     <h4 className="text-xl font-semibold text-purple-900 mb-3">Event Details</h4>
                     <p className="text-stone-950 whitespace-pre-line">{description}</p>
                     {largeDescription && (
                       <div className="mt-4 text-stone-950 whitespace-pre-line">{largeDescription}</div>
                     )}
                   </div>
-                  <div className="mt-4 flex justify-end">
+                  {/* <div className="mt-4 flex justify-end">
                     <div className="text-xs w-fit px-2 py-1 rounded-full bg-purple-600 text-white">
                       Kardify Me+
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )}
 
@@ -797,15 +793,22 @@ const CreateCard = () => {
                       </motion.div>
                     </div>
                   </div>
-                  <div className="mt-4 flex justify-end">
+                  {/* <div className="mt-4 flex justify-end">
                     <div className="text-xs w-fit px-2 py-1 rounded-full bg-blue-600 text-white">
                       Kardify Me+
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )}
+              <div className="mt-4 flex justify-end">
+          <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800/40 text-stone-50">
+            Kardify Me+
+          </div>
+        </div>
             </div>
+            
           )}
+          
         </motion.div>
 
         {/* Add modern call-to-action buttons */}
