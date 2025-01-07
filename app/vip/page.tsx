@@ -318,6 +318,100 @@ const CreateCard = () => {
             </div>
           )}
 
+{/* Flyer Input Fields */}
+{selectedVariant === 'flyer' && (
+  <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Title</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          placeholder="Enter eye-catching title"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Tagline</label>
+        <input
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          placeholder="Add a captivating tagline"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Main Content</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
+        placeholder="Enter flyer details, features, or event information"
+      />
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Price</label>
+        <div className="flex gap-2">
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+            placeholder="Enter price"
+          />
+          <select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            className="w-32 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          >
+            {currencyOptions.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">QR Code URL</label>
+        <input
+          type="url"
+          value={qrUrl}
+          onChange={(e) => setQrUrl(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          placeholder="Enter URL for QR code"
+        />
+      </div>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Upload Image</label>
+        <input
+          type="file"
+          onChange={(e) => handleImageChange(e, 'main')}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          accept="image/*"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Upload Logo</label>
+        <input
+          type="file"
+          onChange={(e) => handleImageChange(e, 'logo')}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          accept="image/*"
+        />
+      </div>
+    </div>
+  </div>
+)}
+
+
           {/* Base form fields for all variants */}
           <div className="space-y-6">
             <div>
@@ -343,7 +437,7 @@ const CreateCard = () => {
             </div>
             
             {/* Product specific fields */}
-            {(selectedVariant === 'product' || selectedVariant === 'business') && (
+            {(selectedVariant === 'product' || selectedVariant === 'business' ) && (
               <>
                 <div>
                   <label className="block text-stone-950 mb-2">Price</label>
@@ -706,31 +800,64 @@ const CreateCard = () => {
       </div>
     )}
 
-    {/* Flyer Variant */}
-    {selectedVariant === 'flyer' && (
-      <div className="space-y-6 bg-white/95 p-4 rounded-2xl shadow-lg">
-        <div className="flex justify-between items-start">
-          <div className="space-y-3">
-            <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
-            <p className="text-xl font-medium text-stone-950">{description}</p>
+{/* Flyer Display */}
+{selectedVariant === 'flyer' && (
+  <div className="relative bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 p-8 rounded-3xl shadow-2xl overflow-hidden">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-black/10"></div>
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
+    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+    
+    <div className="relative z-10">
+      <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+        <div className="space-y-6 flex-1">
+          <div>
+            <h3 className="text-6xl font-black text-white mb-4 leading-tight">{title || 'Your Event Title'}</h3>
+            <p className="text-3xl font-medium text-white/90">{description || 'Add a compelling description'}</p>
           </div>
+          
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl text-white mt-8">
+            <p className="text-xl leading-relaxed whitespace-pre-line">{largeDescription || 'Enter event details here'}</p>
+          </div>
+        </div>
+
+        <div className="space-y-6">
           {qrUrl && (
-            <div className="bg-white p-3 rounded-xl shadow-md">
-              <QRCodeSVG value={qrUrl} size={80} />
+            <div className="bg-white/95 p-4 rounded-2xl shadow-lg backdrop-blur-md">
+              <QRCodeSVG value={qrUrl} size={120} />
+              <p className="text-sm text-center mt-2 text-gray-600 font-medium">Scan for details</p>
+            </div>
+          )}
+          
+          {price && !isNaN(parseFloat(price)) && (
+            <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl text-center">
+              <p className="text-sm text-gray-500 mb-1">Price</p>
+              <p className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent">
+                {formatCurrency(parseFloat(price), currency)}
+              </p>
             </div>
           )}
         </div>
-        <div className="prose max-w-none">
-          <p className="text-lg text-stone-950 leading-relaxed">{largeDescription}</p>
-        </div>
-        {/* <div className="mt-4 flex justify-end">
-          <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
-            Kardify Me+
-          </div>
-        </div> */}
       </div>
-    )}
 
+      <div className="mt-8 flex justify-between items-center">
+        {logo && (
+          <div className="relative w-20 h-20">
+            <Image 
+              src={logo} 
+              alt="Logo" 
+              fill 
+              className="rounded-xl object-cover border-2 border-white/50 shadow-lg" 
+            />
+          </div>
+        )}
+        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md text-white text-sm font-medium">
+          Created with Kardify
+        </div>
+      </div>
+    </div>
+  </div>
+)}
               {/* Event Variant */}
               {selectedVariant === 'event' && (
                 <div className="bg-white/95 p-4 rounded-2xl shadow-lg">
