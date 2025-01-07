@@ -8,9 +8,12 @@ const Header = () => (
         <Link href="/" className="font-bold text-2xl text-blue-600">
           KardifyMe
         </Link>
-        <div className="hidden md:flex space-x-8">
-          <Link href="/create" className="text-gray-700 hover:text-blue-600">
+        <div className=" md:flex text-sm items-center justify-between space-x-4 md:space-x-8">
+          <Link href="/create" className="text-stone-800 hover:text-blue-600">
             Create Card
+          </Link>
+          <Link href="/vip" className="text-stone-800 hover:text-blue-600">
+            Advanced Cards
           </Link>
           {/* <Link href="/templates" className="text-gray-700 hover:text-blue-600">
             Templates
