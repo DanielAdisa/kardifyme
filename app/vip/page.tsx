@@ -40,12 +40,12 @@ const cardVariants = {
   },
   flyer: {
     gradient: "bg-gradient-to-br from-yellow-500 to-red-500",
-    titleFont: "font-serif",
+    titleFont: "font-sans",
     layout: "flyer"
   },
   recipe: {
     gradient: "bg-gradient-to-br from-emerald-500 to-teal-700",
-    titleFont: "font-serif",
+    titleFont: "font-mono",
     layout: "recipe"
   }
 };
@@ -996,16 +996,16 @@ const [chefTips, setChefTips] = useState('');
 
 {/* Recipe Display */}
 {selectedVariant === 'recipe' && (
-  <div className="relative bg-gradient-to-br from-emerald-500 to-teal-700 p-8 rounded-3xl shadow-2xl overflow-hidden">
+  <div className="relative bg-gradient-to-br from-emerald-500 to-orange-700 p-4 rounded-[10px] shadow-2xl overflow-hidden">
     {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-black/10"></div>
+    {/* <div className="absolute inset-0 bg-black/10"></div>
     <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
-    
+     */}
     <div className="relative z-10">
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="flex-1 space-y-6">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex-1 space-y-4">
           <div>
-            <h3 className="text-5xl font-serif text-white mb-4">{title || 'Recipe Name'}</h3>
+            <h3 className="text-3xl font-mono text-white mb-4">{title || 'Recipe Name'}</h3>
             <div className="flex gap-4 text-white/90">
               <span className="flex items-center gap-2">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -1022,8 +1022,8 @@ const [chefTips, setChefTips] = useState('');
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
-            <h4 className="text-xl font-semibold text-white mb-4">Ingredients</h4>
+          <div className="bg-white/10 backdrop-blur-md p-3 rounded-[10px]">
+            <h4 className="text-xl font-semibold text-white mb-2">Ingredients</h4>
             <ul className="space-y-2 text-white/90">
               {ingredients.map((ing, idx) => (
                 <li key={idx} className="flex justify-between">
@@ -1034,9 +1034,9 @@ const [chefTips, setChefTips] = useState('');
             </ul>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
-            <h4 className="text-xl font-semibold text-white mb-4">Instructions</h4>
-            <ol className="space-y-4 text-white/90 list-decimal list-inside">
+          <div className="bg-white/10 backdrop-blur-md p-3 rounded-[10px]">
+            <h4 className="text-xl font-semibold text-white mb-2">Instructions</h4>
+            <ol className="space-y-2 text-white/90 list-decimal list-inside">
               {instructions.map((inst, idx) => (
                 <li key={idx}>{inst.step}</li>
               ))}
@@ -1044,22 +1044,22 @@ const [chefTips, setChefTips] = useState('');
           </div>
 
           {chefTips && (
-            <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl">
+            <div className="bg-white/20 backdrop-blur-md p-3 rounded-[10px]">
               <p className="text-white/90 italic">💡 Chef's Tip: {chefTips}</p>
             </div>
           )}
         </div>
 
-        <div className="md:w-1/3 space-y-6">
+        <div className="md:w-1/3 space-y-3">
           {image && (
-            <div className="rounded-2xl overflow-hidden shadow-lg">
+            <div className="rounded-[10px] overflow-hidden shadow-lg">
               <Image src={image} alt={title} width={400} height={300} className="object-cover" />
             </div>
           )}
           
-          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl">
+          <div className="bg-white/95 backdrop-blur-md p-4 rounded-[10px]">
             <div className="text-center">
-              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-sm font-medium">
+              <span className="px-3 py-1 rounded-xl bg-emerald-200 text-emerald-800 text-sm font-medium">
                 {difficulty.toUpperCase()}
               </span>
             </div>
