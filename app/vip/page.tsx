@@ -1321,12 +1321,12 @@ const [contractValue, setContractValue] = useState('');
 
 {/* Add contract card display */}
 {selectedVariant === 'contract' && (
-  <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-8 rounded-3xl shadow-2xl overflow-hidden">
+  <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-4 rounded-3xl shadow-2xl overflow-hidden">
     {/* Decorative Elements */}
     <div className="absolute inset-0 bg-grid-white/10"></div>
     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
     
-    <div className="relative z-10 space-y-8">
+    <div className="relative z-10 space-y-4">
       {/* Header with Official Seal */}
       <div className="text-center border-b border-white/20 pb-6">
         <div className="flex justify-center mb-4">
@@ -1337,7 +1337,7 @@ const [contractValue, setContractValue] = useState('');
           )}
         </div>
         <h2 className="text-4xl font-serif text-white mb-2">{title || 'Contract Agreement'}</h2>
-        <div className="flex justify-center gap-4 text-sm text-blue-200">
+        <div className="flex justify-center gap-2 text-sm text-blue-200">
           <p>Ref: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
           <p>|</p>
           <p>Date: {new Date(contractDate).toLocaleDateString()}</p>
@@ -1345,20 +1345,20 @@ const [contractValue, setContractValue] = useState('');
       </div>
 
       {/* Parties Section with Enhanced Design */}
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-4">
         {[
           { title: 'Party 1', name: party1Name, sign: party1Sign },
           { title: 'Party 2', name: party2Name, sign: party2Sign }
         ].map((party, idx) => (
-          <div key={idx} className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
-            <h3 className="text-xl text-white mb-4">{party.title}</h3>
-            <div className="space-y-4">
-              <div className="bg-white/5 p-4 rounded-xl">
+          <div key={idx} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+            <h3 className="text-base text-white mb-4">{party.title}</h3>
+            <div className="space-y-2">
+              <div className="bg-white/5 p-3 rounded-xl">
                 <p className="text-sm text-blue-200">Full Name</p>
                 <p className="text-lg text-white font-medium">{party.name}</p>
               </div>
               {party.sign && (
-                <div className="bg-white/5 p-4 rounded-xl">
+                <div className="bg-white/5 p-3 rounded-xl">
                   <p className="text-sm text-blue-200">Digital Signature</p>
                   <div className="mt-2 font-mono text-white/90 text-sm p-2 bg-white/5 rounded-lg">
                     {party.sign}
@@ -1371,7 +1371,7 @@ const [contractValue, setContractValue] = useState('');
       </div>
 
       {/* Terms and Conditions with Enhanced Readability */}
-      <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+      <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
         <h3 className="text-xl text-white mb-4">Terms and Conditions</h3>
         <div className="prose prose-invert max-w-none">
           <div className="bg-white/5 p-6 rounded-xl">
@@ -1381,32 +1381,32 @@ const [contractValue, setContractValue] = useState('');
       </div>
 
       {/* Contract Details with Icons */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white/10 p-4 rounded-xl border border-white/10">
+      <div className="grid grid-cols-2 gap-2">
+        <div className="bg-white/10 p-3 rounded-xl border border-white/10">
           <div className="flex items-center gap-2 mb-2">
             <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p className="text-sm text-blue-200">Contract Value</p>
+            <p className="text-base text-blue-200">Contract Value</p>
           </div>
-          <p className="text-lg text-white font-medium">{formatCurrency(parseFloat(contractValue), currency)}</p>
+          <p className="text-xl text-white font-medium">{formatCurrency(parseFloat(contractValue), currency)}</p>
         </div>
-        <div className="bg-white/10 p-4 rounded-xl border border-white/10">
+        <div className="bg-white/10 p-3 rounded-xl border border-white/10">
           <div className="flex items-center gap-2 mb-2">
             <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-sm text-blue-200">Valid Until</p>
+            <p className="text-base text-blue-200">Valid Until</p>
           </div>
-          <p className="text-lg text-white font-medium">{new Date(validUntil).toLocaleDateString()}</p>
+          <p className="text-xl text-white font-medium">{new Date(validUntil).toLocaleDateString()}</p>
         </div>
         
       </div>
 
       {/* Witnesses with Enhanced Layout */}
-      <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+      <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
         <h3 className="text-xl text-white mb-4">Witnesses</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-2">
           {witnesses.map((witness, idx) => (
             <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/5">
               <div className="flex items-center gap-2 mb-2">
@@ -1424,7 +1424,7 @@ const [contractValue, setContractValue] = useState('');
       </div>
 
       {/* Footer with Enhanced Security Features */}
-      <div className="flex justify-between items-center pt-6 border-t border-white/20">
+      <div className="flex justify-between items-center pt-3 border-t border-white/20">
         <div className="flex items-center gap-4">
           {qrUrl && (
             <div className="bg-white/95 p-2 rounded-xl shadow-lg">
