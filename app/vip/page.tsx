@@ -146,8 +146,8 @@ const CreateCard = () => {
     try {
       const content = cardRef.current;
       const dataUrl = await toPng(content, {
-        quality: 4,
-        pixelRatio: window.devicePixelRatio || 1,
+        quality: 10,
+        pixelRatio: window.devicePixelRatio || 10,
         width: content.offsetWidth,
         height: content.offsetHeight,
         style: {
@@ -175,6 +175,15 @@ const CreateCard = () => {
     window.print();
     document.body.innerHTML = originalContent;
     window.location.reload();
+  };
+
+  // Utility function to format currency
+  const formatCurrency = (value: number, currency: string) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 0,
+    }).format(value);
   };
 
   return (
@@ -640,7 +649,7 @@ const CreateCard = () => {
                     <div className="space-y-3">
                       <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
                       <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-4 py-2 rounded-full inline-block">
-                        {currency} {price}
+                        {formatCurrency(parseFloat(price), currency)}
                       </p>
                     </div>
                     {qrUrl && (
@@ -683,7 +692,7 @@ const CreateCard = () => {
                         {price && (
                           <p className="flex items-center text-lg text-stone-950">
                             <span className="bg-purple-50 p-2 rounded-lg mr-3">💰</span>
-                            {currency} {price}
+                            {formatCurrency(parseFloat(price), currency)}
                           </p>
                         )}
                       </div>
@@ -735,7 +744,7 @@ const CreateCard = () => {
                       >
                         <span className="text-stone-950 font-medium">{item.description}</span>
                         <span className="text-stone-950 font-semibold">
-                          {currency} {item.amount.toFixed(2)}
+                          {formatCurrency(item.amount, currency)}
                         </span>
                       </motion.div>
                     ))}
@@ -748,18 +757,18 @@ const CreateCard = () => {
                           className="flex justify-between text-stone-950 mb-2"
                         >
                           <span>Tax ({taxRate}%)</span>
-                          <span>{currency} {(items.reduce((sum, item) => sum + item.amount, 0) * (taxRate / 100)).toFixed(2)}</span>
+                          <span>{formatCurrency(items.reduce((sum, item) => sum + item.amount, 0) * (taxRate / 100), currency)}</span>
                         </motion.div>
                       )}
                       <motion.div 
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="flex justify-between font-bold text-stone-950 text-xl mt-2 bg-white/5 p-4 rounded-2xl backdrop-blur-lg"
+                        className="flex justify-between font-bold text-stone-950 text-xl mt-2 bg-white p-4 rounded-2xl shadow-md"
                       >
                         <span>Total</span>
                         <span>
-                          {currency} {(items.reduce((sum, item) => sum + item.amount, 0) * (1 + taxRate / 100)).toFixed(2)}
+                          {formatCurrency(items.reduce((sum, item) => sum + item.amount, 0) * (1 + taxRate / 100), currency)}
                         </span>
                       </motion.div>
                     </div>

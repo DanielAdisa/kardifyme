@@ -151,9 +151,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-gray-800 text-gray-400 text-center">
-        <p>© 2025 KardifyMe. All rights reserved.</p>
-      </footer>
+
     </div>
   );
 };
