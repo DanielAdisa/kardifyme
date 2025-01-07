@@ -47,6 +47,11 @@ const cardVariants = {
     gradient: "bg-gradient-to-br from-emerald-500 to-teal-700",
     titleFont: "font-mono",
     layout: "recipe"
+  },
+  contract: {
+    gradient: "bg-gradient-to-br from-blue-900 to-indigo-900",
+    titleFont: "font-mono",
+    layout: "contract"
   }
 };
 
@@ -79,7 +84,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -89,6 +94,11 @@ const [instructions, setInstructions] = useState([{ step: '' }]);
 const [difficulty, setDifficulty] = useState('medium');
 const [chefTips, setChefTips] = useState('');
 const [profilePicture, setProfilePicture] = useState('');
+const [contractAddress, setContractAddress] = useState('');
+const [network, setNetwork] = useState('Ethereum');
+const [contractType, setContractType] = useState('ERC20');
+const [validUntil, setValidUntil] = useState('');
+const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }]);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -118,7 +128,7 @@ const [profilePicture, setProfilePicture] = useState('');
       // Clear auth if version mismatch
       localStorage.removeItem('isAuth');
       localStorage.removeItem('passwordVersion');
-    }
+    } 
   }, []);
 
   if (!isAuthenticated) {
@@ -248,6 +258,7 @@ const [profilePicture, setProfilePicture] = useState('');
               <option value="einvoice">E-Invoice</option>
               <option value="flyer">E-Flyer</option>
               <option value="recipe">E-Recipe</option>
+              <option value="contract">E-Contract</option>
             </select>
           </div>
 
@@ -567,6 +578,103 @@ const [profilePicture, setProfilePicture] = useState('');
     </div>
   </div>
 )}
+
+
+{selectedVariant === 'contract' && (
+  <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Contract Address</label>
+        <input
+          type="text"
+          value={contractAddress}
+          onChange={(e) => setContractAddress(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 font-mono"
+          placeholder="0x..."
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Network</label>
+        <select
+          value={network}
+          onChange={(e) => setNetwork(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+        >
+          <option value="Ethereum">Ethereum</option>
+          <option value="Polygon">Polygon</option>
+          <option value="BSC">BSC</option>
+        </select>
+      </div>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Contract Type</label>
+        <select
+          value={contractType}
+          onChange={(e) => setContractType(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+        >
+          <option value="ERC20">ERC20</option>
+          <option value="ERC721">ERC721</option>
+          <option value="ERC1155">ERC1155</option>
+        </select>
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Valid Until</label>
+        <input
+          type="date"
+          value={validUntil}
+          onChange={(e) => setValidUntil(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Contract Details</label>
+      {contractDetails.map((detail, index) => (
+        <div key={index} className="flex gap-2 mb-2">
+          <input
+            type="text"
+            value={detail.key}
+            onChange={(e) => {
+              const newDetails = [...contractDetails];
+              newDetails[index].key = e.target.value;
+              setContractDetails(newDetails);
+            }}
+            className="flex-1 p-3 rounded-xl border border-slate-300"
+            placeholder="Key"
+          />
+          <input
+            type="text"
+            value={detail.value}
+            onChange={(e) => {
+              const newDetails = [...contractDetails];
+              newDetails[index].value = e.target.value;
+              setContractDetails(newDetails);
+            }}
+            className="flex-1 p-3 rounded-xl border border-slate-300"
+            placeholder="Value"
+          />
+          <button
+            onClick={() => setContractDetails(contractDetails.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={() => setContractDetails([...contractDetails, { key: '', value: '' }])}
+        className="text-blue-600 hover:text-blue-700"
+      >
+        + Add Detail
+      </button>
+    </div>
+  </div>
+)}
+
 
 
           {/* Base form fields for all variants */}
@@ -1110,6 +1218,68 @@ const [profilePicture, setProfilePicture] = useState('');
         <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
           Kardify Recipe
         </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+{/* Add contract card display */}
+{selectedVariant === 'contract' && (
+  <div className="relative bg-gradient-to-br from-blue-900 to-indigo-900 p-8 rounded-3xl shadow-2xl overflow-hidden">
+    <div className="absolute inset-0 bg-grid-white/10 bg-[size:20px_20px]"></div>
+    
+    <div className="relative z-10 space-y-6">
+      <div className="flex justify-between items-start">
+        <div>
+          <h3 className="text-4xl font-bold text-white mb-2">{title || 'Smart Contract'}</h3>
+          <p className="text-xl text-blue-200">{description}</p>
+        </div>
+        {qrUrl && (
+          <div className="bg-white/95 p-4 rounded-xl shadow-lg">
+            <QRCodeSVG value={qrUrl} size={80} />
+          </div>
+        )}
+      </div>
+
+      <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl space-y-4">
+        <div className="flex items-center space-x-2 text-blue-200">
+          <span className="font-mono">{contractAddress}</span>
+          <span className="px-2 py-1 bg-blue-500/20 rounded-full text-sm">{network}</span>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white/5 p-4 rounded-xl">
+            <p className="text-sm text-blue-200">Contract Type</p>
+            <p className="text-lg text-white">{contractType}</p>
+          </div>
+          <div className="bg-white/5 p-4 rounded-xl">
+            <p className="text-sm text-blue-200">Valid Until</p>
+            <p className="text-lg text-white">{new Date(validUntil).toLocaleDateString()}</p>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          {contractDetails.map((detail, idx) => (
+            <div key={idx} className="flex justify-between py-2 border-b border-white/10">
+              <span className="text-blue-200">{detail.key}</span>
+              <span className="text-white font-mono">{detail.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center">
+        <div className="px-4 py-2 bg-white/10 rounded-xl">
+          <p className="text-sm text-blue-200">Created with</p>
+          <p className="text-white font-medium">Kardify Contract</p>
+        </div>
+        {logo && (
+          <div className="relative w-16 h-16">
+            <Image src={logo} alt="Logo" fill className="rounded-full object-cover" />
+          </div>
+        )}
       </div>
     </div>
   </div>
