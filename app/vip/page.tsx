@@ -177,6 +177,20 @@ const saveSignature = (
       alert('Incorrect password');
     }
   };
+
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return 'bg-green-200 text-green-800';
+      case 'medium':
+        return 'bg-yellow-200 text-yellow-800';
+      case 'hard':
+        return 'bg-red-200 text-red-800';
+      default:
+        return 'bg-gray-200 text-gray-800';
+    }
+  };
+  
   
 
   
@@ -1416,7 +1430,7 @@ const saveSignature = (
     
     <div className="relative z-10 space-y-4">
       {/* Header */}
-      <div className="text-center border-b border-white/20 pb-6">
+      <div className="text-center border-b border-white/20 pb-4">
         <h2 className="text-4xl font-mono text-white mb-2">{title || 'Recipe Name'}</h2>
         <div className="flex justify-center gap-4 text-white/90">
           <span className="flex items-center gap-2">
@@ -1435,7 +1449,7 @@ const saveSignature = (
       </div>
 
       {/* Ingredients */}
-      <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
+      <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
         <h3 className="text-xl font-semibold text-white mb-4">Ingredients</h3>
         <ul className="space-y-2 text-white/90">
           {ingredients.map((ing, idx) => (
@@ -1448,7 +1462,7 @@ const saveSignature = (
       </div>
 
       {/* Instructions */}
-      <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
+      <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
         <h3 className="text-xl font-semibold text-white mb-4">Instructions</h3>
         <ol className="space-y-2 text-white/90 list-decimal list-inside">
           {instructions.map((inst, idx) => (
@@ -1474,15 +1488,15 @@ const saveSignature = (
         
         <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl">
           <div className="text-center">
-            <span className="px-3 py-1 rounded-xl bg-emerald-200 text-emerald-800 text-sm font-medium">
-              {difficulty.toUpperCase()}
-            </span>
+          <span className={`px-3 py-1 rounded-xl text-sm font-medium ${getDifficultyColor(difficulty)}`}>
+  {difficulty.toUpperCase()}
+</span>
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="mt-8 flex justify-between items-center">
+      <div className="mt-4 flex justify-between items-center">
         {logo && (
           <div className="relative w-16 h-16">
             <Image src={logo} alt="Logo" fill className="rounded-full object-cover border-2 border-white/50" />
