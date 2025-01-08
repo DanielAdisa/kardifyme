@@ -1886,8 +1886,8 @@ const saveSignature = (
             <Image src={logo} alt="Logo" fill className="object-contain" />
           </div>
         )}
-        <div className="text-right">
-          <h3 className="text-sm font-semibold text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
+        <div className="text-center w-full">
+          <h3 className="text-sm font-semibold w-full text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
           <p className="text-xs text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
         </div>
       </div>
