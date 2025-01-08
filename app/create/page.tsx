@@ -9,28 +9,33 @@ import pic from "@/public/12.jpg";
 
 const cardVariants = {
   business: {
-    gradient: "bg-gradient-to-br from-slate-900 to-blue-900",
+    gradient: "bg-gradient-to-br from-slate-900 via-blue-800 to-slate-900",
+    hoverGradient: "hover:from-slate-800 hover:via-blue-700 hover:to-slate-800",
     titleFont: "font-mono",
     layout: "business"
   },
   event: {
-    gradient: "bg-gradient-to-br from-purple-500 to-pink-500",
+    gradient: "bg-gradient-to-br from-fuchsia-600 via-pink-500 to-purple-600", 
+    hoverGradient: "hover:from-fuchsia-500 hover:via-pink-400 hover:to-purple-500",
     titleFont: "font-bold",
     layout: "ticket"
   },
   product: {
-    gradient: "bg-gradient-to-br from-slate-800 to-slate-900",
+    gradient: "bg-gradient-to-br from-emerald-600 via-teal-500 to-cyan-600",
+    hoverGradient: "hover:from-emerald-500 hover:via-teal-400 hover:to-cyan-500", 
     titleFont: "font-serif",
     layout: "product"
   },
   vip: {
-    gradient: "bg-gradient-to-br from-gold to-yellow-500",
+    gradient: "bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-500",
+    hoverGradient: "hover:from-amber-300 hover:via-yellow-400 hover:to-orange-400",
     titleFont: "font-extrabold",
     layout: "vip"
   },
   premium: {
-    gradient: "bg-gradient-to-br from-black to-gray-800",
-    titleFont: "font-light",
+    gradient: "bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900",
+    hoverGradient: "hover:from-gray-800 hover:via-slate-700 hover:to-gray-800",
+    titleFont: "font-light", 
     layout: "premium"
   }
 };
@@ -43,7 +48,7 @@ const CreateCard = () => {
   const [qrUrl, setQrUrl] = useState('');
   const [logo, setLogo] = useState('');
   const [price, setPrice] = useState('');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('₦');
   const [includeBottomPart, setIncludeBottomPart] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   type VariantType = 'business' | 'event' | 'product' | 'vip' | 'premium';
@@ -63,6 +68,18 @@ const CreateCard = () => {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+  
+
+  const formattedPrice = price
+  ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0, 
+    maximumFractionDigits: 4  })
+      .formatToParts(Number(price))
+      .map((part) =>
+        part.type === 'currency' ? currency : part.value
+      )
+      .join('')
+  : '';
+
 
   const generateImage = async () => {
     if (!cardRef.current) return;
@@ -91,115 +108,115 @@ const CreateCard = () => {
           Create Your Card
         </h1>
         <div className="space-y-8">
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Title</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter title"
-              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-            />
-          </div>
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              title="Enter description"
-              placeholder="Enter description"
-              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none min-h-[120px] resize-none"
-            />
-          </div>
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Large Description</label>
-            <textarea
-              value={largeDescription}
-              onChange={(e) => setLargeDescription(e.target.value)}
-              title="Enter large description"
-              placeholder="Enter large description"
-              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none min-h-[120px] resize-none"
-            />
-          </div>
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Main Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageChange(e, 'main')}
-              title="Upload Image"
-              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-            />
-          </div>
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Logo</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageChange(e, 'logo')}
-              title="Upload Logo"
-              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-            />
-          </div>
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">QR Code URL</label>
-            <input
-              type="text"
-              value={qrUrl}
-              onChange={(e) => setQrUrl(e.target.value)}
-              placeholder="Enter URL for QR Code"
-              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-            />
-          </div>
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Price</label>
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                placeholder="Enter price"
-                className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-              />
-              <select
-                title="Select currency"
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-              >
-                <option value="USD">USD</option>
-                <option value="NGN">NGN</option>
-                <option value="GHS">GHS</option>
-                <option value="EUR">EUR</option>
-              </select>
-            </div>
-          </div>
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Include Bottom Part</label>
-            <input
-              type="checkbox"
-              checked={includeBottomPart}
-              onChange={(e) => setIncludeBottomPart(e.target.checked)}
-              title="Include Bottom Part"
-              className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="relative group space-y-2">
-            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Card Type</label>
-            <select
-              title="Select card type"
-              value={selectedVariant}
-              onChange={(e) => setSelectedVariant(e.target.value as VariantType)}
-              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-            >
-              <option value="business">Business Card</option>
-              <option value="event">Event Ticket</option>
-              <option value="product">Product Showcase</option>
-              <option value="vip">VIP Pass</option>
-              <option value="premium">Premium Card</option>
-            </select>
-          </div>
-        </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Title</label>
+    <input
+      type="text"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      placeholder="Enter title"
+      className="w-full px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none shadow-sm"
+    />
+  </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Description</label>
+    <textarea
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+      title="Enter description"
+      placeholder="Enter description"
+      className="w-full px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none min-h-[120px] resize-none shadow-sm"
+    />
+  </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Large Description</label>
+    <textarea
+      value={largeDescription}
+      onChange={(e) => setLargeDescription(e.target.value)}
+      title="Enter large description"
+      placeholder="Enter large description"
+      className="w-full px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none min-h-[120px] resize-none shadow-sm"
+    />
+  </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Main Image</label>
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => handleImageChange(e, 'main')}
+      title="Upload Image"
+      className="w-full px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none shadow-sm"
+    />
+  </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Logo</label>
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => handleImageChange(e, 'logo')}
+      title="Upload Logo"
+      className="w-full px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none shadow-sm"
+    />
+  </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">QR Code URL</label>
+    <input
+      type="text"
+      value={qrUrl}
+      onChange={(e) => setQrUrl(e.target.value)}
+      placeholder="Enter URL for QR Code"
+      className="w-full px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none shadow-sm"
+    />
+  </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Price</label>
+    <div className="flex space-x-2">
+      <input
+        type="text"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        placeholder="Enter price"
+        className="w-full px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none shadow-sm"
+      />
+      <select
+        title="Select currency"
+        value={currency}
+        onChange={(e) => setCurrency(e.target.value)}
+        className="px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none shadow-sm"
+      >
+        <option value="$">$</option>
+        <option value="₦">₦</option>
+        <option value="£">£</option>
+        <option value="€">€</option>
+      </select>
+    </div>
+  </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Include Bottom Part</label>
+    <input
+      type="checkbox"
+      checked={includeBottomPart}
+      onChange={(e) => setIncludeBottomPart(e.target.checked)}
+      title="Include Bottom Part"
+      className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
+  <div className="relative group space-y-2">
+    <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Card Type</label>
+    <select
+      title="Select card type"
+      value={selectedVariant}
+      onChange={(e) => setSelectedVariant(e.target.value as VariantType)}
+      className="w-full px-4 py-3.5 bg-white/70 backdrop-blur-md border border-slate-300 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none shadow-sm"
+    >
+      <option value="business">Business Card</option>
+      <option value="event">Event Ticket</option>
+      <option value="product">Product Showcase</option>
+      <option value="vip">VIP Pass</option>
+      <option value="premium">Premium Card</option>
+    </select>
+  </div>
+</div>
         <div className="text-center mt-6">
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -221,7 +238,7 @@ const CreateCard = () => {
           className={`${cardVariants[selectedVariant]?.gradient} rounded-3xl shadow-2xl overflow-hidden`}
         >
           {/* Card Hero */}
-          <div className="relative h-[400px]">
+          <div className="relative h-[250px]">
             {image && (
               <Image
                 src={image}
@@ -261,19 +278,19 @@ const CreateCard = () => {
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className={`absolute bottom-0 p-6 w-full ${selectedVariant === 'event' ? 'bg-gradient-to-t from-purple-900/90 to-transparent' : 'bg-gradient-to-t from-black/80 via-black/50 to-transparent'}`}
+              className={`absolute bottom-0 pb-4 p-3 w-full ${selectedVariant === 'event' ? 'bg-gradient-to-t from-purple-900/90 to-transparent' : 'bg-gradient-to-t from-black/80 via-black/50 to-transparent'}`}
             >
-              <h1 className={`text-4xl md:text-6xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
+              <h1 className={`text-4xl md:text-3xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
                 {title}
               </h1>
-              <p className="text-xl md:text-2xl text-white/80 max-w-3xl font-light">
+              <p className="text-xl md:text-xl text-white/80 max-w-3xl font-light">
                 {description}
               </p>
               {price && (
-                <p className={`text-lg md:text-xl font-semibold mt-2 ${selectedVariant === 'product' ? 'bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full inline-block' : 'text-white/80'}`}>
-                  {currency} {price}
-                </p>
-              )}
+  <p className={`text-sm md:text-xl font-semibold mt-2 w-fit ${selectedVariant === 'product' ? 'bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full inline-block' : 'bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full inline-bloc'}`}>
+    {formattedPrice}
+  </p>
+)}
             </motion.div>
           </div>
 
@@ -286,13 +303,29 @@ const CreateCard = () => {
                 transition={{ delay: 0.3 }}
                 className="prose dark:prose-invert max-w-none"
               >
-                <h2 className="text-2xl md:text-3xl mb-2">Description</h2>
-                <div className="text-slate-600 border-l-4 border-slate-200 p-2 bg-stone-300/15">
+                <div className="flex items-center justify-between">
+  <h2 className="text-2xl md:text-3xl mb-2">Description</h2>
+  {price && (
+    <p className={`text-lg md:text-xl font-semibold mt-2 ${selectedVariant === 'product' ? 'bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full inline-block' : 'text-white/80'}`}>
+      {formattedPrice}
+    </p>
+  )}
+</div>
+                <div className="text-slate-600 border-l-4 whitespace-pre-line border-slate-200 p-2 bg-stone-300/15">
                   {largeDescription}
                 </div>
               </motion.div>
-              <div className={`text-xs w-fit px-1.5 rounded-full py-1 ${selectedVariant === 'product' ? 'bg-slate-800 text-white' : 'bg-stone-300 text-stone-50'}`}>
-                Adisa Made It+
+
+              <div className=" flex items-center justify-end w-full">
+              {qrUrl && (
+                <div className={`${selectedVariant === 'product' ? 'bg-white/90 p-2 rounded-lg' : ''}`}>
+                  <QRCodeSVG value={qrUrl} size={80} />
+                </div>
+              )}
+              </div>
+
+              <div className={`text-xs w-full  text-center px-1.5 rounded-full py-1 ${selectedVariant === 'product' ? 'bg-slate-800 text-white' : 'bg-stone-300 text-stone-950'}`}>
+                KardifyMe
               </div>
             </div>
           )}
@@ -301,142 +334,69 @@ const CreateCard = () => {
 
       {/* Card Variants Section */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 mt-12">
-        {/* Business Card Variant */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          whileHover={{ y: -5 }}
-          className={`bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer ${selectedVariant === 'business' ? 'ring-4 ring-blue-500' : ''}`}
-          onClick={() => setSelectedVariant('business')}
-        >
-          <div className="relative h-[400px]">
-            <Image
-              src={pic}
-              alt="Business Card"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-            <div className="absolute top-4 right-4">
+        {Object.entries(cardVariants).map(([variant, styles]) => (
+          <motion.div
+            key={variant}
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            whileHover={{ 
+              y: -5,
+              transition: { duration: 0.2 }
+            }}
+            className={`
+              relative group overflow-hidden
+              bg-gradient-to-br ${styles.gradient}
+              hover:${styles.hoverGradient}
+              rounded-3xl shadow-xl cursor-pointer
+              transition-all duration-300
+              ${selectedVariant === variant ? 'ring-4 ring-blue-500 scale-105' : ''}
+            `}
+            onClick={() => setSelectedVariant(variant as VariantType)}
+          >
+            <div className="relative h-[400px]">
               <Image
-                src="/company-logo.png"
-                alt="Company Logo"
-                width={50}
-                height={50}
-                className="rounded-full border-2 border-white shadow-lg"
+                src={pic}
+                alt={variant}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                priority
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+              
+              {/* Variant-specific overlays */}
+              {variant === 'vip' && (
+                <div className="absolute top-4 right-4 bg-yellow-500/20 backdrop-blur-sm p-3 rounded-full">
+                  <span className="text-yellow-300 font-bold">VIP</span>
+                </div>
+              )}
+
+              {variant === 'premium' && (
+                <div className="absolute top-4 left-4 bg-white/10 backdrop-blur-sm px-4 py-1 rounded-full">
+                  <span className="text-white/90 font-light tracking-wider">PREMIUM</span>
+                </div>
+              )}
+
+              <motion.div 
+                className="absolute bottom-0 p-6 w-full"
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+              >
+                <h3 className={`text-3xl ${styles.titleFont} text-white mb-2 tracking-tight`}>
+                  {variant.charAt(0).toUpperCase() + variant.slice(1)}
+                </h3>
+                <p className="text-lg text-white/80">
+                  Premium {variant.charAt(0).toUpperCase() + variant.slice(1)} Template
+                </p>
+                <div className="flex items-center gap-2 mt-4">
+                  <div className="h-1 w-12 bg-white/30 rounded-full" />
+                  <div className="h-1 w-8 bg-white/20 rounded-full" />
+                  <div className="h-1 w-4 bg-white/10 rounded-full" />
+                </div>
+              </motion.div>
             </div>
-            <motion.div className="absolute bottom-0 p-6 w-full">
-              <h3 className="text-4xl font-mono text-white mb-2">John Smith</h3>
-              <p className="text-xl text-white/80">Senior Developer</p>
-              <p className="text-lg text-white/90 mt-2">Tech Solutions Inc.</p>
-            </motion.div>
-          </div>
-        </motion.div>
-
-         {/* Event Ticket Variant */}
-         <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          whileHover={{ y: -5 }}
-          transition={{ delay: 0.2 }}
-          className={`bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl shadow-xl overflow-hidden cursor-pointer ${selectedVariant === 'event' ? 'ring-4 ring-blue-500' : ''}`}
-          onClick={() => setSelectedVariant('event')}
-        >
-          <div className="relative h-[400px]">
-            <Image
-              src={pic}
-              alt="Event Ticket"
-              fill
-              className="object-cover opacity-80"
-              priority
-            />
-            <div className="absolute top-4 right-4">
-              <QRCodeSVG value="https://event-ticket.com" size={50} />
-            </div>
-            <motion.div className="absolute bottom-0 p-6 w-full">
-              <h3 className="text-4xl font-bold text-white mb-2">TechConf 2024</h3>
-              <p className="text-xl text-white/90">VIP Access Pass</p>
-              <p className="text-lg text-white mt-2">$999</p>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Product Showcase Variant */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          whileHover={{ y: -5 }}
-          transition={{ delay: 0.4 }}
-          className={`bg-gradient-to-br from-slate-900 to-blue-900 rounded-3xl shadow-xl overflow-hidden cursor-pointer ${selectedVariant === 'product' ? 'ring-4 ring-blue-500' : ''}`}
-          onClick={() => setSelectedVariant('product')}
-        >
-          <div className="relative h-[400px]">
-            <Image
-              src={pic}
-              alt="Product Showcase"
-              fill
-              className="object-cover"
-              priority
-            />
-            <motion.div className="absolute bottom-0 p-6 w-full">
-              <h3 className="text-4xl font-serif text-white mb-2">Premium Watch</h3>
-              <p className="text-xl text-white/90">Limited Edition Collection</p>
-              <p className="text-lg text-white font-semibold mt-2">$1,299</p>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* VIP Pass Variant */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          whileHover={{ y: -5 }}
-          transition={{ delay: 0.6 }}
-          className={`bg-gradient-to-br from-gold to-yellow-500 rounded-3xl shadow-xl overflow-hidden cursor-pointer ${selectedVariant === 'vip' ? 'ring-4 ring-blue-500' : ''}`}
-          onClick={() => setSelectedVariant('vip')}
-        >
-          <div className="relative h-[400px]">
-            <Image
-              src={pic}
-              alt="VIP Pass"
-              fill
-              className="object-cover"
-              priority
-            />
-            <motion.div className="absolute bottom-0 p-6 w-full">
-              <h3 className="text-4xl font-extrabold text-white mb-2">VIP Access</h3>
-              <p className="text-xl text-white/90">Exclusive Event</p>
-              <p className="text-lg text-white font-semibold mt-2">$2,499</p>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Premium Card Variant */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          whileHover={{ y: -5 }}
-          transition={{ delay: 0.8 }}
-          className={`bg-gradient-to-br from-black to-gray-800 rounded-3xl shadow-xl overflow-hidden cursor-pointer ${selectedVariant === 'premium' ? 'ring-4 ring-blue-500' : ''}`}
-          onClick={() => setSelectedVariant('premium')}
-        >
-          <div className="relative h-[400px]">
-            <Image
-              src={pic}
-              alt="Premium Card"
-              fill
-              className="object-cover"
-              priority
-            />
-            <motion.div className="absolute bottom-0 p-6 w-full">
-              <h3 className="text-4xl font-light text-white mb-2">Premium Membership</h3>
-              <p className="text-xl text-white/90">Exclusive Benefits</p>
-              <p className="text-lg text-white font-semibold mt-2">$3,999</p>
-            </motion.div>
-          </div>
-        </motion.div>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
