@@ -474,6 +474,7 @@ const saveSignature = (
                       className="w-32 p-2 rounded-lg border border-slate-300"
                     />
                     <button
+                      title="Delete item"
                       onClick={() => {
                         const newItems = items.filter((_, i) => i !== index);
                         setItems(newItems);
@@ -1377,6 +1378,7 @@ const saveSignature = (
       <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden">
         <Image src={image} alt="Uploaded" fill className="object-cover" />
         <button
+          title="Delete main image"
           onClick={() => handleDeleteImage('main')}
           className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
         >
