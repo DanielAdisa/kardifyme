@@ -1579,743 +1579,746 @@ const saveSignature = (
 
           {/* Update the card content section */}
           {showBottomPart && (
-            <div className={`p-1 ${selectedVariant === 'product' ? 'bg-white/95' : ''}`}>
-              {/* Product Variant */}
-              {selectedVariant === 'product' && (
-                <div className="space-y-4 bg-white/95 p-4 rounded-2xl shadow-lg">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-3">
-                      <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
-                      <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-4 py-2 rounded-full inline-block">
-                        {formatCurrency(parseFloat(price), currency)}
-                      </p>
-                    </div>
-                    {qrUrl && (
-                      <div className="bg-white p-3 rounded-xl shadow-md">
-                        <QRCodeSVG value={qrUrl} size={80} />
-                      </div>
-                    )}
-                  </div>
-                  <div className="prose max-w-none">
-                    <p className="text-lg text-stone-950 leading-relaxed">{description}</p>
-                    <div className="mt-6 bg-gray-50 p-4 rounded-xl">
-                      <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
-                      <p className="text-stone-950 whitespace-pre-line">{largeDescription}</p>
-                      
-                    </div>
-                  </div>
-                  {/* <div className="mt-4 flex justify-end">
-                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
-                      Kardify Me+
-                    </div>
-                  </div> */}
+            <div className={`p-2 ${selectedVariant === 'product' ? 'bg-white/95' : ''}`}>
+    {/* Product Variant */}
+        {selectedVariant === 'product' && (
+          <div className="space-y-4 bg-white/95 p-4 rounded-2xl rounded-b-md shadow-lg">
+            <div className="flex justify-between items-start">
+              <div className="space-y-3">
+                <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
+                <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-4 py-2 rounded-full inline-block">
+                  {formatCurrency(parseFloat(price), currency)}
+                </p>
+              </div>
+              {qrUrl && (
+                <div className="bg-white p-3 rounded-xl shadow-md">
+                  <QRCodeSVG value={qrUrl} size={80} />
                 </div>
               )}
-               {/* Business Variant */}
-    {selectedVariant === 'business' && (
-      <div className="space-y-4 bg-white/40 test p-4 rounded-2xl shadow-lg">
-        <div className="flex justify-between items-start">
-          <div className="space-y-3">
-            <h3 className="text-3xl font-bold text-stone-50">{title}</h3>
-            <p className="text-xl font-medium whitespace-pre-line text-stone-50">{description}</p>
-          </div>
-          {qrUrl && (
-            <div className="bg-white p-2 rounded-xl shadow-md">
-              <QRCodeSVG value={qrUrl} size={80} />
             </div>
-          )}
-        </div>
-        
-        <div className="prose max-w-full">
-          <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed">{largeDescription}</p>
-        </div>
-        
-      </div>
-    )}
-
-{/* Flyer Display */}
-{selectedVariant === 'flyer' && (
-  <div className="relative bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 p-8 rounded-3xl shadow-2xl overflow-hidden">
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-black/10"></div>
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
-    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-    
-    <div className="relative z-10">
-      <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-        <div className="space-y-6 flex-1">
-          <div>
-            <h3 className="text-6xl font-black text-white mb-4 leading-tight">{title || 'Your Event Title'}</h3>
-            <p className="text-3xl font-medium text-white/90">{description || 'Add a compelling description'}</p>
-          </div>
-          
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl text-white mt-8">
-            <p className="text-xl leading-relaxed whitespace-pre-line">{largeDescription || 'Enter event details here'}</p>
-          </div>
-        </div>
-
-        <div className="space-y-6 md:w-1/5 w-full">
-          {qrUrl && (
-            <div className="bg-white/95 p-4 flex-col items-center justify-center rounded-2xl shadow-lg backdrop-blur-md">
-              <QRCodeSVG value={qrUrl} size={120} />
-              <p className="text-sm text-center mt-2 text-gray-600 font-medium">Scan for details</p>
+            <div className="prose max-w-none">
+              <p className="text-lg text-stone-950 leading-relaxed">{description}</p>
+              <div className="mt-6 bg-gray-50 p-4 rounded-xl">
+                <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
+                <p className="text-stone-950 whitespace-pre-line">{largeDescription}</p>
+                
+              </div>
             </div>
-          )}
-          
-          {price && !isNaN(parseFloat(price)) && (
-            <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl text-center">
-              <p className="text-sm text-gray-500 mb-1">Price</p>
-              <p className="text-xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent">
-                {formatCurrency(parseFloat(price), currency)}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="mt-8 flex justify-between items-center">
-        {logo && (
-          <div className="relative w-20 h-20">
-            <Image 
-              src={logo} 
-              alt="Logo" 
-              fill 
-              className="rounded-xl object-cover border-2 border-white/50 shadow-lg" 
-            />
+            {/* <div className="mt-4 flex justify-end">
+              <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
+                Kardify Me+
+              </div>
+            </div> */}
           </div>
         )}
-        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md text-white text-sm font-medium">
-          Created with Kardify
-        </div>
-      </div>
-    </div>
-  </div>
-)}
 
-{/* Budget Display */}
-{selectedVariant === 'budget' && (
-  <div className="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 p-4 rounded-2xl shadow-xl overflow-hidden">
-    {/* Subtle Background Elements */}
-    <div className="absolute inset-0 bg-grid-gray-600/10 z-0"></div>
-    <div className="absolute -top-20 -right-20 w-60 h-60 bg-teal-500/20 rounded-full blur-3xl z-0"></div>
-    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-500/20 rounded-full blur-3xl z-0"></div>
-
-    <div className="relative z-10 space-y-4">
-      {/* Header Section */}
-      <div className="text-center border-b border-gray-600/20 pb-4">
-        <h2 className="text-2xl md:text-3xl font-semibold text-teal-300">
-          {title || 'Monthly Budget'}
-        </h2>
-        <p className="text-sm md:text-base text-gray-400">{budgetState.monthYear}</p>
-        <div className="mt-2 text-xl md:text-2xl font-bold text-teal-100">
-          {formatCurrency(budgetState.totalBudget, budgetState.currency)}
-        </div>
-      </div>
-
-      {/* Budget Categories */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {budgetState.categories.map((category) => (
-          <div
-            key={category.id}
-            className="bg-gray-700 p-3 rounded-lg shadow-sm border border-gray-600"
-          >
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-base md:text-lg font-medium text-teal-200">
-                {category.name}
-              </h3>
-              <span className="text-sm text-gray-300">
-                {formatCurrency(category.amount, budgetState.currency)}
-              </span>
+    {/* Business Variant */}
+      {selectedVariant === 'business' && (
+        <div className="space-y-4 bg-white/40 test rounded-b-md p-4 rounded-2xl shadow-lg">
+          <div className="flex justify-between items-start">
+            <div className="space-y-3">
+              <h3 className="text-3xl font-bold text-stone-50">{title}</h3>
+              <p className="text-xl font-medium whitespace-pre-line text-stone-50">{description}</p>
             </div>
-            <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-teal-400 rounded-full"
-                style={{
-                  width: `${(category.amount / budgetState.totalBudget) * 100}%`,
-                }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Summary Section */}
-      <div className="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-600">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm md:text-base text-gray-400">Total Spent</span>
-          <span className="text-sm md:text-base text-teal-200 font-medium">
-            {formatCurrency(
-              budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
-              budgetState.currency
+            {qrUrl && (
+              <div className="bg-white p-2 rounded-xl shadow-md">
+                <QRCodeSVG value={qrUrl} size={80} />
+              </div>
             )}
-          </span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-sm md:text-base text-gray-400">Remaining</span>
-          <span className="text-sm md:text-base text-teal-200 font-medium">
-            {formatCurrency(
-              budgetState.totalBudget -
-                budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
-              budgetState.currency
-            )}
-          </span>
-        </div>
-      </div>
-
-      {/* Footer Section */}
-      <div className="flex justify-between items-center pt-3 border-t border-gray-600/20">
-        {logo && (
-          <div className="relative w-12 h-12">
-            <Image
-              src={logo}
-              alt="Logo"
-              fill
-              className="rounded-full object-cover border-2 border-gray-500"
-            />
           </div>
-        )}
-        <div className="text-sm text-gray-400">
-          <p>Plan your expenses wisely</p>
-          <p className="text-teal-300 font-medium">Powered by Kardify</p>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
-{/* Recipe Display */}
-{selectedVariant === 'recipe' && (
-  <div className="relative bg-gradient-to-br from-emerald-500 to-orange-700 p-3 rounded-3xl shadow-2xl overflow-hidden">
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-black/10"></div>
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
-    
-    <div className="relative z-10 space-y-4">
-      {/* Header */}
-      <div className="text-center border-b border-white/20 pb-4">
-        <h2 className="text-4xl font-mono text-white mb-2">{title || 'Recipe Name'}</h2>
-        <div className="flex justify-center gap-4 text-white/90">
-          <span className="flex items-center gap-2">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
-            </svg>
-            {cookingTime} mins
-          </span>
-          <span className="flex items-center gap-2">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-            </svg>
-            Serves {servings}
-          </span>
-        </div>
-      </div>
-
-      {/* Ingredients */}
-      <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
-        <h3 className="text-xl font-semibold text-white mb-4">Ingredients</h3>
-        <ul className="space-y-2 text-white/90">
-          {ingredients.map((ing, idx) => (
-            <li key={idx} className="flex justify-between">
-              <span>{ing.item}</span>
-              <span className="text-white/70">{ing.amount}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Instructions */}
-      <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
-        <h3 className="text-xl font-semibold text-white mb-4">Instructions</h3>
-        <ol className="space-y-2 text-white/90 list-decimal list-inside">
-          {instructions.map((inst, idx) => (
-            <li key={idx}>{inst.step}</li>
-          ))}
-        </ol>
-      </div>
-
-      {/* Chef's Tips */}
-      {chefTips && (
-        <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl">
-          <p className="text-white/90 italic">💡 Chef's Tip: {chefTips}</p>
+          
+          <div className="prose max-w-full">
+            <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed">{largeDescription}</p>
+          </div>
+          
         </div>
       )}
 
-      {/* Image and Difficulty */}
-      <div className="md:w-1/3 space-y-6">
-        {image && (
-          <div className="rounded-2xl overflow-hidden shadow-lg">
-            <Image src={image} alt={title} width={300} height={300} className=" w-full h-[200px] object-cover object-top" />
-          </div>
-        )}
-        
-        <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl">
-          <div className="text-center">
-            <span className={`px-3 py-1 rounded-xl text-sm font-medium ${getDifficultyColor(difficulty)}`}>
-  {difficulty.toUpperCase()}
-</span>
-          </div>
-        </div>
-      </div>
+    {/* Flyer Display */}
+      {selectedVariant === 'flyer' && (
+        <div className="relative bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 p-4 rounded-b-md rounded-2xl shadow-2xl overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute inset-0 bg-black/10"></div>
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+          
+          <div className="relative z-10">
+            <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+              <div className="space-y-6 flex-1">
+                <div>
+                  <h3 className="text-6xl font-black text-white mb-4 leading-tight">{title || 'Your Event Title'}</h3>
+                  <p className="text-3xl font-medium text-white/90">{description || 'Add a compelling description'}</p>
+                </div>
+                
+                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl text-white mt-8">
+                  <p className="text-xl leading-relaxed whitespace-pre-line">{largeDescription || 'Enter event details here'}</p>
+                </div>
+              </div>
 
-      {/* Footer */}
-      <div className="mt-4 flex justify-between items-center">
-        {logo && (
-          <div className="relative w-16 h-16">
-            <Image src={logo} alt="Logo" fill className="rounded-full object-cover border-2 border-white/50" />
-          </div>
-        )}
-        <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
-          Kardify Recipe
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
-
-{/* idcard Display */}
-{selectedVariant === 'idCard' && showIDCard && (
-  <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl shadow-2xl border border-slate-700/30 max-w-3xl mx-auto overflow-hidden">
-    {/* Background Decorations */}
-    <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
-    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-full blur-2xl"></div>
-    <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-gradient-to-tr from-slate-700/30 to-transparent rounded-full blur-3xl"></div>
-
-    {/* Card Content */}
-    <div className="relative z-10 space-y-4">
-      {/* Header */}
-      <div className=' flex justify-center items-center w-full'>
-      <div className="flex items-center">
-        {logo && (
-          <div className="relative w-16 h-16">
-            <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
-          </div>
-        )}
-        <div className="">
-          <h3 className="text-sm font-semibold text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
-          <p className="text-xs text-center text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
-        </div>
-      </div>
-      </div>   
-      {/* Main Details Section */}
-      <div className="flex gap-4">
-        {/* Left Column: Personal Info */}
-        <div className="flex-1 space-y-4">
-          {/* Name & Department */}
-          <div className="space-y-1">
-            <h2 className="text-2xl font-semibold text-white">{idCardDetails.name || 'Full Name'}</h2>
-            <p className="text-lg text-indigo-300">{idCardDetails.department || 'Department'}</p>
-          </div>
-
-          {/* Additional Details */}
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="space-y-1">
-              <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">ID Number</p>
-              <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+              <div className="space-y-6 md:w-1/5 w-full">
+                {qrUrl && (
+                  <div className="bg-white/95 p-4 flex-col items-center justify-center rounded-2xl shadow-lg backdrop-blur-md">
+                    <QRCodeSVG value={qrUrl} size={120} />
+                    <p className="text-sm text-center mt-2 text-gray-600 font-medium">Scan for details</p>
+                  </div>
+                )}
+                
+                {price && !isNaN(parseFloat(price)) && (
+                  <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl text-center">
+                    <p className="text-sm text-gray-500 mb-1">Price</p>
+                    <p className="text-xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent">
+                      {formatCurrency(parseFloat(price), currency)}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">Issue Date</p>
-              <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">Expiry Date</p>
-              <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
-            </div>
-          </div>
-        </div>
 
-        {/* Right Column: Photo & QR Code */}
-        <div className="flex flex-col items-center gap-4">
-          {/* Profile Picture */}
-          <div className="relative w-[110px] h-[150px] rounded-xl overflow-hidden border-2 border-slate-700/50 shadow-2xl">
-            {idCardDetails.photo ? (
-              <Image src={idCardDetails.photo} alt="Profile" fill className="object-cover" />
-            ) : (
-              <div className="flex items-center justify-center h-full bg-slate-800 text-slate-400">
-                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            <div className="mt-8 flex justify-between items-center">
+              {logo && (
+                <div className="relative w-20 h-20">
+                  <Image 
+                    src={logo} 
+                    alt="Logo" 
+                    fill 
+                    className="rounded-xl object-cover border-2 border-white/50 shadow-lg" 
                   />
-                </svg>
-              </div>
-            )}
-          </div>
-
-          {/* QR Code */}
-          {qrUrl && (
-            <div className="bg-white/90 p-2 rounded-lg shadow-xl">
-              <QRCodeSVG value={qrUrl} size={90} />
+                </div>
+              )}
+              {/* <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md text-white text-sm font-medium">
+                Created with Kardify
+              </div> */}
             </div>
-          )}
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="pt-6 border-t border-slate-700/50">
-        <div className="flex justify-between items-center">
-          {/* Signature Placeholder */}
-          <div className="space-y-1">
-            <p className="text-xs text-slate-400">Authorized Signature</p>
-            <div className="h-8 w-40 border-b border-slate-600"></div>
-          </div>
-
-          {/* Footer Tag */}
-          <div className="px-2 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
-            <p className="text-xs text-slate-400">Powered by Kardify</p>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
 
-{/* Add contract card display */}
-{selectedVariant === 'contract' && (
-  <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-4 rounded-3xl shadow-2xl overflow-hidden">
-    {/* Decorative Elements */}
-    <div className="absolute z-10 inset-0 bg-grid-white/10"></div>
-    <div className="absolute z-10 top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
-    
-    <div className="relative z-10 space-y-4">
-      {/* Header with Official Seal */}
-      <div className="text-center border-b border-white/20 pb-6">
-        <div className="flex justify-center mb-4">
-          {logo && (
-            <div className="relative w-20 h-20">
-              <Image src={logo} alt="Official Seal" fill className="rounded-full object-cover border-2 border-white/50" />
-            </div>
-          )}
-        </div>
-        <h2 className="text-4xl font-serif text-white mb-2">{title || 'Contract Agreement'}</h2>
-        <div className="flex justify-center gap-2 text-sm text-blue-200">
-          <p>Ref: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
-          <p>|</p>
-          <p>Date: {new Date(contractDate).toLocaleDateString()}</p>
-        </div>
-      </div>
+    {/* Budget Display */}
+      {selectedVariant === 'budget' && (
+        <div className="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 p-4 rounded-b-md rounded-2xl shadow-xl overflow-hidden">
+          {/* Subtle Background Elements */}
+          <div className="absolute inset-0 bg-grid-gray-600/10 z-0"></div>
+          <div className="absolute -top-20 -right-20 w-60 h-60 bg-teal-500/20 rounded-full blur-3xl z-0"></div>
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-500/20 rounded-full blur-3xl z-0"></div>
 
-      {/* Parties Section with Enhanced Design */}
-      <div className="grid grid-cols-1 gap-4">
-        {[
-          { title: 'Party 1', name: party1Name, sign: party1Signature },
-          { title: 'Party 2', name: party2Name, sign: party2Signature }
-        ].map((party, idx) => (
-          <div key={idx} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
-            <h3 className="text-base text-white mb-4">{party.title}</h3>
-            <div className="space-y-2">
-              <div className="bg-white/5 p-3 rounded-xl">
-                <p className="text-sm text-blue-200">Full Name</p>
-                <p className="text-lg text-white font-medium">{party.name}</p>
+          <div className="relative z-10 space-y-4">
+            {/* Header Section */}
+            <div className="text-center border-b border-gray-600/20 pb-4">
+              <h2 className="text-2xl md:text-3xl font-semibold text-teal-300">
+                {title || 'Monthly Budget'}
+              </h2>
+              <p className="text-sm md:text-base text-gray-400">{budgetState.monthYear}</p>
+              <div className="mt-2 text-xl md:text-2xl font-bold text-teal-100">
+                {formatCurrency(budgetState.totalBudget, budgetState.currency)}
               </div>
-              {party.sign && (
-                <div className="bg-white/5 p-3 rounded-xl">
-                  <p className="text-sm text-blue-200">Digital Signature</p>
-                  <div className="mt-2 bg-white/5 rounded-lg overflow-hidden">
-                    <img 
-                      src={party.sign} 
-                      alt={`${party.title} Signature`}
-                      className="w-full h-20 object-contain"
+            </div>
+
+            {/* Budget Categories */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {budgetState.categories.map((category) => (
+                <div
+                  key={category.id}
+                  className="bg-gray-700 p-3 rounded-lg shadow-sm border border-gray-600"
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-base md:text-lg font-medium text-teal-200">
+                      {category.name}
+                    </h3>
+                    <span className="text-sm text-gray-300">
+                      {formatCurrency(category.amount, budgetState.currency)}
+                    </span>
+                  </div>
+                  <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-teal-400 rounded-full"
+                      style={{
+                        width: `${(category.amount / budgetState.totalBudget) * 100}%`,
+                      }}
                     />
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Summary Section */}
+            <div className="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-600">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm md:text-base text-gray-400">Total Spent</span>
+                <span className="text-sm md:text-base text-teal-200 font-medium">
+                  {formatCurrency(
+                    budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
+                    budgetState.currency
+                  )}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm md:text-base text-gray-400">Remaining</span>
+                <span className="text-sm md:text-base text-teal-200 font-medium">
+                  {formatCurrency(
+                    budgetState.totalBudget -
+                      budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
+                    budgetState.currency
+                  )}
+                </span>
+              </div>
+            </div>
+
+            {/* Footer Section */}
+            <div className="flex justify-between items-center pt-3 border-t border-gray-600/20">
+              {logo && (
+                <div className="relative w-12 h-12">
+                  <Image
+                    src={logo}
+                    alt="Logo"
+                    fill
+                    className="rounded-full object-cover border-2 border-gray-500"
+                  />
+                </div>
               )}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Terms and Conditions with Enhanced Readability */}
-      <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
-        <h3 className="text-xl text-white mb-4">Terms and Conditions</h3>
-        <div className="prose prose-invert max-w-none">
-          <div className="bg-white/5 p-6 rounded-xl">
-            <p className="text-blue-200 whitespace-pre-line leading-relaxed">{contractTerms}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Contract Details with Icons */}
-      <div className="grid grid-cols-2 gap-2">
-        <div className="bg-white/10 p-3 rounded-xl border border-white/10">
-          <div className="flex items-center gap-2 mb-2">
-            <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-base text-blue-200">Contract Value</p>
-          </div>
-          <p className="text-xl text-white font-medium">{formatCurrency(parseFloat(contractValue), currency)}</p>
-        </div>
-        <div className="bg-white/10 p-3 rounded-xl border border-white/10">
-          <div className="flex items-center gap-2 mb-2">
-            <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p className="text-base text-blue-200">Valid Until</p>
-          </div>
-          <p className="text-xl text-white font-medium">{new Date(validUntil).toLocaleDateString()}</p>
-        </div>
-      </div>
-
-      {/* Witnesses with Enhanced Layout */}
-      <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
-        <h3 className="text-xl text-white mb-4">Witnesses</h3>
-        <div className="grid grid-cols-2 gap-2">
-          {witnesses.map((witness, idx) => (
-            <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/5">
-              <div className="flex items-center gap-2 mb-2">
-                <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <p className="text-blue-200">{witness.name}</p>
-              </div>
-              <div className="font-mono text-white/90 text-sm mt-2 p-2 bg-white/5 rounded-lg">
-                {witness.signature}
+              <div className="text-sm text-gray-400">
+                <p>Plan your expenses wisely</p>
+                <p className="text-teal-300 font-medium">Powered by Kardify</p>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Footer with Enhanced Security Features */}
-      <div className="flex justify-between items-center pt-3 border-t border-white/20">
-        <div className="flex items-center gap-4">
-          {qrUrl && (
-            <div className="bg-white/95 p-2 rounded-xl shadow-lg">
-              <QRCodeSVG value={qrUrl} size={40} />
-              <p className="text-xs text-center mt-1 text-blue-900">Verify</p>
-            </div>
-          )}
-          <div className="text-sm text-blue-200">
-            <p>Document ID: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
-            <p>Created: {new Date(contractDate).toLocaleDateString()}</p>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-          </svg>
-          <span className="text-sm font-medium text-emerald-400">Secured by Kardify</span>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
-
-{/* Add birthday card display */}
-{selectedVariant === "birthday" && (
-  <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-10 rounded-3xl shadow-2xl overflow-hidden animate-gradient-x">
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
-    <div className="absolute -top-28 -right-28 w-[28rem] h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
-    <div className="absolute -bottom-28 -left-28 w-[28rem] h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
-    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-
-    <div className="relative z-10 space-y-10">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
-          {wishType || "Happy Birthday!"}
-        </h2>
-        <p className="text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
-          {celebrantName || "Dear Friend"}
-        </p>
-        {age && (
-          <p className="text-3xl text-white/90 drop-shadow-lg">
-            on your {age}
-            <sup>th</sup> Birthday!
-          </p>
-        )}
-      </div>
-
-      {/* Main Image */}
-      {image && (
-        <div className="relative mx-auto w-72 h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
-          <Image
-            src={image}
-            alt="Birthday Memory"
-            fill
-            className="object-cover"
-          />
         </div>
       )}
 
-      {/* Countdown Timer */}
-      <div className="text-center">
-        <p className="text-xl text-white/80">Your next birthday is in:</p>
-        <p className="text-4xl font-bold text-white tracking-wide">
-          {calculateDaysUntilNextBirthday(age)}
-        </p>
-      </div>
-
-      {/* Message */}
-      <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-lg">
-        <p className="text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
-          {message ||
-            "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
-        </p>
-      </div>
-
-      {/* Social Media Share */}
-      <div className="text-center space-x-4">
-        <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-          Share on Facebook
-        </button>
-        <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-          Tweet
-        </button>
-        <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-          Share on Instagram
-        </button>
-      </div>
-
-      {/* Footer */}
-      <div className="flex justify-between items-center pt-6">
-        <div className="flex items-center gap-4">
-          {logo && (
-            <div className="relative w-16 h-16 hover:scale-110 transition-transform duration-300">
-              <Image
-                src={logo}
-                alt="Logo"
-                fill
-                className="rounded-full object-cover border-2 border-white/50"
-              />
+    {/* Recipe Display */}
+      {selectedVariant === 'recipe' && (
+        <div className="relative bg-gradient-to-br from-emerald-500 to-orange-700 p-3 rounded-2xl rounded-b-md shadow-2xl overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute inset-0 bg-black/10"></div>
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
+          
+          <div className="relative z-10 space-y-4">
+            {/* Header */}
+            <div className="text-center border-b border-white/20 pb-4">
+              <h2 className="text-4xl font-mono text-white mb-2">{title || 'Recipe Name'}</h2>
+              <div className="flex justify-center gap-4 text-white/90">
+                <span className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+                  </svg>
+                  {cookingTime} mins
+                </span>
+                <span className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                  </svg>
+                  Serves {servings}
+                </span>
+              </div>
             </div>
-          )}
-          {qrUrl && (
-            <div className="bg-white/95 p-2 rounded-xl shadow-lg">
-              <QRCodeSVG value={qrUrl} size={48} />
+
+            {/* Ingredients */}
+            <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
+              <h3 className="text-xl font-semibold text-white mb-4">Ingredients</h3>
+              <ul className="space-y-2 text-white/90">
+                {ingredients.map((ing, idx) => (
+                  <li key={idx} className="flex justify-between">
+                    <span>{ing.item}</span>
+                    <span className="text-white/70">{ing.amount}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          )}
-        </div>
-        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md">
-          Celebrate with Kardify 🎉
-        </div>
-      </div>
-    </div>
-  </div>
-)}
 
+            {/* Instructions */}
+            <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
+              <h3 className="text-xl font-semibold text-white mb-4">Instructions</h3>
+              <ol className="space-y-2 text-white/90 list-decimal list-inside">
+                {instructions.map((inst, idx) => (
+                  <li key={idx}>{inst.step}</li>
+                ))}
+              </ol>
+            </div>
 
-              {/* Event Variant */}
-              {selectedVariant === 'event' && (
-                <div className="bg-white/95 p-4 rounded-2xl shadow-lg">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-4">
-                      <h3 className="text-3xl font-bold text-purple-900">{title}</h3>
-                      <div className="space-y-3">
-                        <p className="flex items-center text-lg text-stone-950">
-                          <span className="bg-purple-50 p-2 rounded-lg mr-3">📅</span>
-                          {new Date(eventDate).toLocaleString()}
-                        </p>
-                        <p className="flex items-center text-lg text-stone-950">
-                          <span className="bg-purple-50 p-2 rounded-lg mr-3">📍</span>
-                          {eventLocation}
-                        </p>
-                        {price && (
-                          <p className="flex items-center text-lg text-stone-950">
-                            <span className="bg-purple-50 p-2 rounded-lg mr-3">💰</span>
-                            {formatCurrency(parseFloat(price), currency)}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    {qrUrl && (
-                      <div className="text-center bg-white p-4 rounded-xl shadow-md">
-                        <QRCodeSVG value={qrUrl} size={100} />
-                        <p className="text-sm text-stone-950 mt-2">Scan to verify</p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="bg-purple-100 p-4 rounded-xl">
-                    <h4 className="text-xl font-semibold text-purple-900 mb-3">Event Details</h4>
-                    <p className="text-stone-950 whitespace-pre-line">{description}</p>
-                    {largeDescription && (
-                      <div className="mt-4 text-stone-950 whitespace-pre-line">{largeDescription}</div>
-                    )}
-                  </div>
-                  {/* <div className="mt-4 flex justify-end">
-                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-purple-600 text-white">
-                      Kardify Me+
-                    </div>
-                  </div> */}
+            {/* Chef's Tips */}
+            {chefTips && (
+              <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl">
+                <p className="text-white/90 italic">💡 Chef's Tip: {chefTips}</p>
+              </div>
+            )}
+
+            {/* Image and Difficulty */}
+            <div className="md:w-1/3 space-y-6">
+              {image && (
+                <div className="rounded-2xl overflow-hidden shadow-lg">
+                  <Image src={image} alt={title} width={300} height={300} className=" w-full h-[200px] object-cover object-top" />
                 </div>
               )}
+              
+              <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl">
+                <div className="text-center">
+                  <span className={`px-3 py-1 rounded-xl text-sm font-medium ${getDifficultyColor(difficulty)}`}>
+        {difficulty.toUpperCase()}
+      </span>
+                </div>
+              </div>
+            </div>
 
-              {/* Invoice/Receipt/E-Invoice Variants */}
-              {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
-                <div className="bg-white p-4 rounded-lg space-y-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-bold text-stone-950">
-                        {selectedVariant === 'receipt' ? 'Receipt' : 'Invoice'} #{invoiceNumber}
-                      </h3>
-                      <p className="text-sm text-stone-950">Date: {new Date().toLocaleDateString()}</p>
-                      {dueDate && <p className="text-sm text-stone-950">Due: {dueDate}</p>}
-                    </div>
-                    {qrUrl && <QRCodeSVG value={qrUrl} size={60} className="bg-white p-1 rounded-lg" />}
-                  </div>
-
-                  <div className="space-y-2">
-                    {largeDescription && (
-                  <div className="mt-4 text-stone-950 whitespace-pre-line">{largeDescription}</div>
-                )}
-                    {items.map((item, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="flex justify-between items-center p-4 backdrop-blur-md bg-white/5 rounded-2xl mb-2 hover:bg-white/10 transition-all duration-300"
-                      >
-                        <span className="text-stone-950 font-medium">{item.description}</span>
-                        <span className="text-stone-950 font-semibold">
-                          {formatCurrency(item.amount, currency)}
-                        </span>
-                      </motion.div>
-                    ))}
-
-                    <div className="border-t border-white/10 pt-4 mt-6">
-                      {taxRate > 0 && (
-                        <motion.div 
-                          initial={{ y: 10, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          className="flex justify-between text-stone-950 mb-2"
-                        >
-                          <span>Tax ({taxRate}%)</span>
-                          <span>{formatCurrency(items.reduce((sum, item) => sum + item.amount, 0) * (taxRate / 100), currency)}</span>
-                        </motion.div>
-                      )}
-                      <motion.div 
-                        initial={{ y: 10, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="flex justify-between font-bold text-stone-950 text-xl mt-2 bg-white p-4 rounded-2xl shadow-md"
-                      >
-                        <span>Total</span>
-                        <span>
-                          {formatCurrency(items.reduce((sum, item) => sum + item.amount, 0) * (1 + taxRate / 100), currency)}
-                        </span>
-                      </motion.div>
-                    </div>
-                  </div>
-                  {/* <div className="mt-4 flex justify-end">
-                    <div className="text-xs w-fit px-2 py-1 rounded-full bg-blue-600 text-white">
-                      Kardify Me+
-                    </div>
-                  </div> */}
+            {/* Footer */}
+            <div className="mt-4 flex justify-between items-center">
+              {logo && (
+                <div className="relative w-16 h-16">
+                  <Image src={logo} alt="Logo" fill className="rounded-full object-cover border-2 border-white/50" />
                 </div>
               )}
-              <div className="mt-2 flex justify-end">
-          <div className="text-xs  w-full text-center rounded-b-2xl px-2 py-1 rounded-md bg-slate-800/40 text-stone-50">
-            Kardify Me+
+              <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
+                Kardify Recipe
+              </div>
+            </div>
           </div>
         </div>
+      )}
+
+
+    {/* idcard Display */}
+      {selectedVariant === 'idCard' && showIDCard && (
+        <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl rounded-b-md shadow-2xl border border-slate-700/30 max-w-3xl mx-auto overflow-hidden">
+          {/* Background Decorations */}
+          <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-gradient-to-tr from-slate-700/30 to-transparent rounded-full blur-3xl"></div>
+
+          {/* Card Content */}
+          <div className="relative z-10 space-y-4">
+            {/* Header */}
+            <div className=' flex justify-center items-center w-full'>
+            <div className="flex items-center">
+              {logo && (
+                <div className="relative w-16 h-16">
+                  <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
+                </div>
+              )}
+              <div className="">
+                <h3 className="text-sm font-semibold text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
+                <p className="text-xs text-center text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+              </div>
             </div>
-            
+            </div>   
+            {/* Main Details Section */}
+            <div className="flex gap-4">
+              {/* Left Column: Personal Info */}
+              <div className="flex-1 space-y-4">
+                {/* Name & Department */}
+                <div className="space-y-1">
+                  <h2 className="text-2xl font-semibold text-white">{idCardDetails.name || 'Full Name'}</h2>
+                  <p className="text-lg text-indigo-300">{idCardDetails.department || 'Department'}</p>
+                </div>
+
+                {/* Additional Details */}
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="space-y-1">
+                    <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">ID Number</p>
+                    <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">Issue Date</p>
+                    <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">Expiry Date</p>
+                    <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Photo & QR Code */}
+              <div className="flex flex-col items-center gap-4">
+                {/* Profile Picture */}
+                <div className="relative w-[110px] h-[150px] rounded-xl overflow-hidden border-2 border-slate-700/50 shadow-2xl">
+                  {idCardDetails.photo ? (
+                    <Image src={idCardDetails.photo} alt="Profile" fill className="object-cover" />
+                  ) : (
+                    <div className="flex items-center justify-center h-full bg-slate-800 text-slate-400">
+                      <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+
+                {/* QR Code */}
+                {qrUrl && (
+                  <div className="bg-white/90 p-2 rounded-lg shadow-xl">
+                    <QRCodeSVG value={qrUrl} size={90} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="pt-6 border-t border-slate-700/50">
+              <div className="flex justify-between items-center">
+                {/* Signature Placeholder */}
+                <div className="space-y-1">
+                  <p className="text-xs text-slate-400">Authorized Signature</p>
+                  <div className="h-8 w-40 border-b border-slate-600"></div>
+                </div>
+
+                {/* Footer Tag */}
+                <div className="px-2 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
+                  <p className="text-xs text-slate-400">Powered by Kardify</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+    {/* Add contract card display */}
+      {selectedVariant === 'contract' && (
+        <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-3 rounded-2xl rounded-b-md shadow-2xl overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute z-10 inset-0 bg-grid-white/10"></div>
+          <div className="absolute z-10 top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+          
+          <div className="relative z-10 space-y-4">
+            {/* Header with Official Seal */}
+            <div className="text-center border-b border-white/20 pb-6">
+              <div className="flex justify-center mb-4">
+                {logo && (
+                  <div className="relative w-20 h-20">
+                    <Image src={logo} alt="Official Seal" fill className="rounded-full object-cover border-2 border-white/50" />
+                  </div>
+                )}
+              </div>
+              <h2 className="text-4xl font-serif text-white mb-2">{title || 'Contract Agreement'}</h2>
+              <div className="flex justify-center gap-2 text-sm text-blue-200">
+                <p>Ref: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
+                <p>|</p>
+                <p>Date: {new Date(contractDate).toLocaleDateString()}</p>
+              </div>
+            </div>
+
+            {/* Parties Section with Enhanced Design */}
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { title: 'Party 1', name: party1Name, sign: party1Signature },
+                { title: 'Party 2', name: party2Name, sign: party2Signature }
+              ].map((party, idx) => (
+                <div key={idx} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                  <h3 className="text-base text-white mb-4">{party.title}</h3>
+                  <div className="space-y-2">
+                    <div className="bg-white/5 p-3 rounded-xl">
+                      <p className="text-sm text-blue-200">Full Name</p>
+                      <p className="text-lg text-white font-medium">{party.name}</p>
+                    </div>
+                    {party.sign && (
+                      <div className="bg-white/5 p-3 rounded-xl">
+                        <p className="text-sm text-blue-200">Digital Signature</p>
+                        <div className="mt-2 bg-white/5 rounded-lg overflow-hidden">
+                          <img 
+                            src={party.sign} 
+                            alt={`${party.title} Signature`}
+                            className="w-full h-20 object-contain"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Terms and Conditions with Enhanced Readability */}
+            <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+              <h3 className="text-xl text-white mb-4">Terms and Conditions</h3>
+              <div className="prose prose-invert max-w-none">
+                <div className="bg-white/5 p-6 rounded-xl">
+                  <p className="text-blue-200 whitespace-pre-line leading-relaxed">{contractTerms}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Contract Details with Icons */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-white/10 p-3 rounded-xl border border-white/10">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-base text-blue-200">Contract Value</p>
+                </div>
+                <p className="text-xl text-white font-medium">{formatCurrency(parseFloat(contractValue), currency)}</p>
+              </div>
+              <div className="bg-white/10 p-3 rounded-xl border border-white/10">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-base text-blue-200">Valid Until</p>
+                </div>
+                <p className="text-xl text-white font-medium">{new Date(validUntil).toLocaleDateString()}</p>
+              </div>
+            </div>
+
+            {/* Witnesses with Enhanced Layout */}
+            <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+              <h3 className="text-xl text-white mb-4">Witnesses</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {witnesses.map((witness, idx) => (
+                  <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <p className="text-blue-200">{witness.name}</p>
+                    </div>
+                    <div className="font-mono text-white/90 text-sm mt-2 p-2 bg-white/5 rounded-lg">
+                      {witness.signature}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer with Enhanced Security Features */}
+            <div className="flex justify-between items-center pt-3 border-t border-white/20">
+              <div className="flex items-center gap-4">
+                {qrUrl && (
+                  <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+                    <QRCodeSVG value={qrUrl} size={40} />
+                    <p className="text-xs text-center mt-1 text-blue-900">Verify</p>
+                  </div>
+                )}
+                <div className="text-sm text-blue-200">
+                  <p>Document ID: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
+                  <p>Created: {new Date(contractDate).toLocaleDateString()}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm font-medium text-emerald-400">Secured by Kardify</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+    {/* Add birthday card display */}
+      {selectedVariant === "birthday" && (
+        <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4 rounded-2xl shadow-2xl rounded-b-md overflow-hidden animate-gradient-x">
+          {/* Decorative Elements */}
+          <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
+          <div className="absolute -top-28 -right-28 w-[28rem] h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-28 -left-28 w-[28rem] h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+
+          <div className="relative z-10 space-y-10">
+            {/* Header */}
+            <div className="text-center">
+              <h2 className="text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
+                {wishType || "Happy Birthday!"}
+              </h2>
+              <p className="text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
+                {celebrantName || "Dear Friend"}
+              </p>
+              {age && (
+                <p className="text-3xl text-white/90 drop-shadow-lg">
+                  on your {age}
+                  <sup>th</sup> Birthday!
+                </p>
+              )}
+            </div>
+
+            {/* Main Image */}
+            {image && (
+              <div className="relative mx-auto w-72 h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
+                <Image
+                  src={image}
+                  alt="Birthday Memory"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+
+            {/* Countdown Timer */}
+            <div className="text-center">
+              <p className="text-xl text-white/80">Your next birthday is in:</p>
+              <p className="text-4xl font-bold text-white tracking-wide">
+                {calculateDaysUntilNextBirthday(age)}
+              </p>
+            </div>
+
+            {/* Message */}
+            <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-lg">
+              <p className="text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
+                {message ||
+                  "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
+              </p>
+            </div>
+
+            {/* Social Media Share */}
+            <div className="text-center space-x-4">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+                Share on Facebook
+              </button>
+              <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+                Tweet
+              </button>
+              <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+                Share on Instagram
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="flex justify-between items-center pt-6">
+              <div className="flex items-center gap-4">
+                {logo && (
+                  <div className="relative w-16 h-16 hover:scale-110 transition-transform duration-300">
+                    <Image
+                      src={logo}
+                      alt="Logo"
+                      fill
+                      className="rounded-full object-cover border-2 border-white/50"
+                    />
+                  </div>
+                )}
+                {qrUrl && (
+                  <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+                    <QRCodeSVG value={qrUrl} size={48} />
+                  </div>
+                )}
+              </div>
+              <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md">
+                Celebrate with Kardify 🎉
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+    {/* Event Variant */}
+      {selectedVariant === 'event' && (
+        <div className="bg-white/95 p-4 rounded-2xl rounded-b-md shadow-lg">
+          <div className="flex justify-between items-start">
+            <div className="space-y-4">
+              <h3 className="text-3xl font-bold text-purple-900">{title}</h3>
+              <div className="space-y-3">
+                <p className="flex items-center text-lg text-stone-950">
+                  <span className="bg-purple-50 p-2 rounded-lg mr-3">📅</span>
+                  {new Date(eventDate).toLocaleString()}
+                </p>
+                <p className="flex items-center text-lg text-stone-950">
+                  <span className="bg-purple-50 p-2 rounded-lg mr-3">📍</span>
+                  {eventLocation}
+                </p>
+                {price && (
+                  <p className="flex items-center text-lg text-stone-950">
+                    <span className="bg-purple-50 p-2 rounded-lg mr-3">💰</span>
+                    {formatCurrency(parseFloat(price), currency)}
+                  </p>
+                )}
+              </div>
+            </div>
+            {qrUrl && (
+              <div className="text-center bg-white p-3 rounded-xl shadow-md">
+                <QRCodeSVG value={qrUrl} size={80} />
+                <p className="text-sm text-stone-950 mt-2">Scan to verify</p>
+              </div>
+            )}
+          </div>
+          <div className="bg-purple-100 p-4 rounded-xl">
+            <h4 className="text-xl font-semibold text-purple-900 mb-3">Event Details</h4>
+            <p className="text-stone-950 whitespace-pre-line">{description}</p>
+            {largeDescription && (
+              <div className="mt-4 text-stone-950 whitespace-pre-line">{largeDescription}</div>
+            )}
+          </div>
+          {/* <div className="mt-4 flex justify-end">
+            <div className="text-xs w-fit px-2 py-1 rounded-full bg-purple-600 text-white">
+              Kardify Me+
+            </div>
+          </div> */}
+        </div>
+      )}
+
+    {/* Invoice/Receipt/E-Invoice Variants */}
+      {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
+        <div className="bg-white p-4 rounded-b-md rounded-2xl space-y-4">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="text-xl font-bold text-stone-950">
+                {selectedVariant === 'receipt' ? 'Receipt' : 'Invoice'} #{invoiceNumber}
+              </h3>
+              <p className="text-sm text-stone-950">Date: {new Date().toLocaleDateString()}</p>
+              {dueDate && <p className="text-sm text-stone-950">Due: {dueDate}</p>}
+            </div>
+            {qrUrl && <QRCodeSVG value={qrUrl} size={60} className="bg-white p-1 rounded-lg" />}
+          </div>
+
+          <div className="space-y-2">
+            {largeDescription && (
+          <div className="mt-4 text-stone-950 whitespace-pre-line">{largeDescription}</div>
+        )}
+            {items.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: i * 0.1 }}
+                className="flex justify-between items-center p-4 backdrop-blur-md bg-white/5 rounded-2xl mb-2 hover:bg-white/10 transition-all duration-300"
+              >
+                <span className="text-stone-950 font-medium">{item.description}</span>
+                <span className="text-stone-950 font-semibold">
+                  {formatCurrency(item.amount, currency)}
+                </span>
+              </motion.div>
+            ))}
+
+            <div className="border-t border-white/10 pt-4 mt-6">
+              {taxRate > 0 && (
+                <motion.div 
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  className="flex justify-between text-stone-950 mb-2"
+                >
+                  <span>Tax ({taxRate}%)</span>
+                  <span>{formatCurrency(items.reduce((sum, item) => sum + item.amount, 0) * (taxRate / 100), currency)}</span>
+                </motion.div>
+              )}
+              <motion.div 
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="flex justify-between font-bold text-stone-950 text-xl mt-2 bg-white p-4 rounded-2xl shadow-md"
+              >
+                <span>Total</span>
+                <span>
+                  {formatCurrency(items.reduce((sum, item) => sum + item.amount, 0) * (1 + taxRate / 100), currency)}
+                </span>
+              </motion.div>
+            </div>
+          </div>
+          {/* <div className="mt-4 flex justify-end">
+            <div className="text-xs w-fit px-2 py-1 rounded-full bg-blue-600 text-white">
+              Kardify Me+
+            </div>
+          </div> */}
+        </div>
+      )}
+
+    {/* Footer */}
+      <div className="mt-2 flex justify-end">
+      <div className="text-xs  w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50">
+        KardifyMe+
+      </div>
+      </div>
+      </div>
+        
           )}
           
         </motion.div>
