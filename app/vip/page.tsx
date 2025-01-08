@@ -5,6 +5,8 @@ import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import place from "@/public/12.jpg"
+import SignatureCanvas from 'react-signature-canvas';
+
 
 // Update card variants
 const cardVariants = {
@@ -110,6 +112,37 @@ const [contractValue, setContractValue] = useState('');
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+  const [party1Signature, setParty1Signature] = useState('');
+const [party2Signature, setParty2Signature] = useState('');
+
+// Refs for signature canvases
+const party1SigCanvas = useRef(null);
+const party2SigCanvas = useRef(null);
+
+// Function to clear signature
+interface SignatureCanvasRef {
+  clear: () => void;
+}
+
+const clearSignature = (sigCanvas: React.RefObject<SignatureCanvasRef>): void => {
+  sigCanvas.current?.clear();
+};
+
+interface SignatureCanvasData {
+  current: {
+    getTrimmedCanvas: () => HTMLCanvasElement;
+  };
+}
+
+type SetSignatureFunction = (signature: string) => void;
+
+const saveSignature = (
+  sigCanvas: SignatureCanvasData, 
+  setSignature: SetSignatureFunction
+): void => {
+  setSignature(sigCanvas.current.getTrimmedCanvas().toDataURL('image/png'));
+};
+
 
 
   const CURRENT_PASSWORD = '4090';
@@ -126,6 +159,8 @@ const [contractValue, setContractValue] = useState('');
       alert('Incorrect password');
     }
   };
+  
+
   
   // Add effect to check stored auth and version
   useEffect(() => {
@@ -598,7 +633,7 @@ const [contractValue, setContractValue] = useState('');
 )}
 
 
-{selectedVariant === "contract" && (
+{selectedVariant === 'contract' && (
   <div className="space-y-6">
     {/* Contract Details */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -651,23 +686,47 @@ const [contractValue, setContractValue] = useState('');
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Party 1 Signature</label>
-        <input
-          type="text"
-          value={party1Sign}
-          onChange={(e) => setParty1Sign(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 font-mono"
-          placeholder="Digital signature"
+        <SignatureCanvas
+          ref={party1SigCanvas}
+          penColor="black"
+          canvasProps={{ className: 'w-full h-32 border border-slate-300 rounded-xl' }}
         />
+        <div className="flex gap-2 mt-2">
+          <button
+            onClick={() => clearSignature(party1SigCanvas)}
+            className="p-2 bg-red-500 text-white rounded-lg"
+          >
+            Clear
+          </button>
+          <button
+            onClick={() => saveSignature(party1SigCanvas, setParty1Signature)}
+            className="p-2 bg-green-500 text-white rounded-lg"
+          >
+            Save
+          </button>
+        </div>
       </div>
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Party 2 Signature</label>
-        <input
-          type="text"
-          value={party2Sign}
-          onChange={(e) => setParty2Sign(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 font-mono"
-          placeholder="Digital signature"
+        <SignatureCanvas
+          ref={party2SigCanvas}
+          penColor="black"
+          canvasProps={{ className: 'w-full h-32 border border-slate-300 rounded-xl' }}
         />
+        <div className="flex gap-2 mt-2">
+          <button
+            onClick={() => clearSignature(party2SigCanvas)}
+            className="p-2 bg-red-500 text-white rounded-lg"
+          >
+            Clear
+          </button>
+          <button
+            onClick={() => saveSignature(party2SigCanvas, setParty2Signature)}
+            className="p-2 bg-green-500 text-white rounded-lg"
+          >
+            Save
+          </button>
+        </div>
       </div>
     </div>
 
@@ -681,29 +740,6 @@ const [contractValue, setContractValue] = useState('');
         placeholder="Enter contract terms and conditions..."
       />
     </div>
-    <div>
-  <label className="block text-stone-950 mb-2 font-medium">Contract Value</label>
-  <div className="flex gap-2">
-    <input
-      type="number"
-      value={contractValue}
-      onChange={(e) => setContractValue(e.target.value)}
-      className="flex-1 p-3 rounded-xl border border-slate-300"
-      placeholder="Enter contract value"
-    />
-    <select
-      value={currency}
-      onChange={(e) => setCurrency(e.target.value)}
-      className="w-32 p-3 rounded-xl border border-slate-300"
-    >
-      {currencyOptions.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
 
     {/* Witnesses */}
     <div>
@@ -1347,8 +1383,8 @@ const [contractValue, setContractValue] = useState('');
       {/* Parties Section with Enhanced Design */}
       <div className="grid grid-cols-1 gap-4">
         {[
-          { title: 'Party 1', name: party1Name, sign: party1Sign },
-          { title: 'Party 2', name: party2Name, sign: party2Sign }
+          { title: 'Party 1', name: party1Name, sign: party1Signature },
+          { title: 'Party 2', name: party2Name, sign: party2Signature }
         ].map((party, idx) => (
           <div key={idx} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
             <h3 className="text-base text-white mb-4">{party.title}</h3>
@@ -1360,8 +1396,12 @@ const [contractValue, setContractValue] = useState('');
               {party.sign && (
                 <div className="bg-white/5 p-3 rounded-xl">
                   <p className="text-sm text-blue-200">Digital Signature</p>
-                  <div className="mt-2 font-mono text-white/90 text-sm p-2 bg-white/5 rounded-lg">
-                    {party.sign}
+                  <div className="mt-2 bg-white/5 rounded-lg overflow-hidden">
+                    <img 
+                      src={party.sign} 
+                      alt={`${party.title} Signature`}
+                      className="w-full h-20 object-contain"
+                    />
                   </div>
                 </div>
               )}
@@ -1400,7 +1440,6 @@ const [contractValue, setContractValue] = useState('');
           </div>
           <p className="text-xl text-white font-medium">{new Date(validUntil).toLocaleDateString()}</p>
         </div>
-        
       </div>
 
       {/* Witnesses with Enhanced Layout */}
