@@ -29,14 +29,18 @@ interface BudgetCategory {
 // Update card variants
 const cardVariants = {
   business: {
-    gradient: "bg-white/40",
-    titleFont: "font-mono",
-    layout: "business"
+    templates: {
+      modern: 'bg-white/40',
+      classic: 'bg-stone-100/40',
+      minimal: 'bg-slate-50/40'
+    }
   },
   event: {
-    gradient: "bg-gradient-to-br from-blue-500 to-pink-500",
-    titleFont: "font-bold",
-    layout: "ticket"
+    templates: {
+      classic: 'bg-gradient-to-br from-blue-500 to-pink-500',
+      bold: 'bg-gradient-to-br from-purple-600 to-red-500',
+      elegant: 'bg-gradient-to-br from-indigo-500 to-pink-500'
+    }
   },
   product: {
     gradient: "bg-gradient-to-br from-slate-800 to-slate-900",
@@ -171,6 +175,53 @@ const [budgetState, setBudgetState] = useState<BudgetState>({
   monthYear: new Date().toISOString().slice(0, 7),
   currency: 'USD'
 });
+
+// Add after existing state declarations
+const [cardColor, setCardColor] = useState({
+  business: '#ffffff',
+  event: '#ff5733',
+  product: '#33ff57',
+  invoice: '#3357ff',
+  receipt: '#ffffff',
+  einvoice: '#ff33f5',
+  flyer: '#f5ff33',
+  recipe: '#33fff5',
+  contract: '#ffffff',
+  birthday: '#ff33a8',
+  budget: '#33ffa8',
+  idCard: '#ffffff'
+});
+
+const [selectedTemplate, setSelectedTemplate] = useState({
+  business: 'modern',
+  event: 'classic',
+  product: 'minimal',
+  invoice: 'professional',
+  receipt: 'simple',
+  einvoice: 'digital',
+  flyer: 'bold',
+  recipe: 'elegant',
+  contract: 'formal',
+  birthday: 'fun',
+  budget: 'clean',
+  idCard: 'standard'
+});
+
+const templateOptions = {
+  business: ['modern', 'classic', 'minimal'],
+  event: ['classic', 'bold', 'elegant'],
+  product: ['minimal', 'showcase', 'grid'],
+  invoice: ['professional', 'simple', 'detailed'],
+  receipt: ['simple', 'detailed', 'compact'],
+  einvoice: ['digital', 'modern', 'classic'],
+  flyer: ['bold', 'creative', 'minimal'],
+  recipe: ['elegant', 'modern', 'classic'],
+  contract: ['formal', 'modern', 'simple'],
+  birthday: ['fun', 'elegant', 'minimal'],
+  budget: ['clean', 'detailed', 'visual'],
+  idCard: ['standard', 'modern', 'minimal']
+};
+
 
 
 const handleDeleteImage = (type: 'main' | 'logo') => {
@@ -433,6 +484,40 @@ const baseLabelStyles = `
         {/* input fields */}
         <div className="space-y-4">
           {/* Other Inputs */}
+
+          // Add this inside the form component, before the variant-specific inputs
+<div className="space-y-4 p-4 bg-white/5 rounded-xl">
+  <div>
+    <label className="block text-sm font-medium text-slate-700">Card Color</label>
+    <input
+      type="color"
+      value={cardColor[selectedVariant]}
+      onChange={(e) => setCardColor({
+        ...cardColor,
+        [selectedVariant]: e.target.value
+      })}
+      className="w-full h-10 rounded-lg mt-1"
+    />
+  </div>
+  
+  <div>
+    <label className="block text-sm font-medium text-slate-700">Template Style</label>
+    <select
+      value={selectedTemplate[selectedVariant]}
+      onChange={(e) => setSelectedTemplate({
+        ...selectedTemplate,
+        [selectedVariant]: e.target.value
+      })}
+      className="w-full p-2 rounded-lg border mt-1"
+    >
+      {templateOptions[selectedVariant].map((template) => (
+        <option key={template} value={template}>
+          {template.charAt(0).toUpperCase() + template.slice(1)}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
 
           {/* Select Card Type */}
 
@@ -1649,20 +1734,25 @@ const baseLabelStyles = `
 
       {/* Add responsive card container */}
       <div className="mt-12 max-w-5xl mx-auto lg:max-w-4xl">
-        <motion.div
-          ref={cardRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className={`
-            ${cardVariants[selectedVariant]?.gradient} 
-            rounded-[20px] 
-            shadow-[0_8px_32px_rgba(0,0,0,0.15)] 
-            backdrop-blur-xl 
-            overflow-hidden 
-            w-full
-          `}
-        >
+      <motion.div
+  ref={cardRef}
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+  className={`
+    ${cardVariants[selectedVariant]?.layout} 
+    rounded-[20px] 
+    shadow-[0_8px_32px_rgba(0,0,0,0.15)] 
+    backdrop-blur-xl 
+    overflow-hidden 
+    w-full
+    transition-all duration-300
+  `}
+  style={{
+    backgroundColor: cardColor[selectedVariant],
+    backgroundImage: `linear-gradient(to bottom right, ${cardColor[selectedVariant]}dd, ${cardColor[selectedVariant]}99)`
+  }}
+>
           {/* Card Hero with responsive height */}
           {showTopPart && (
   <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px]">
