@@ -1266,77 +1266,79 @@ const saveSignature = (
 
 {/* Recipe Display */}
 {selectedVariant === 'recipe' && (
-  <div className="relative bg-gradient-to-br from-emerald-500 to-orange-700 p-4 rounded-[10px] shadow-2xl overflow-hidden">
+  <div className="relative bg-gradient-to-br from-emerald-500 to-orange-700 p-3 rounded-3xl shadow-2xl overflow-hidden">
     {/* Decorative Elements */}
-    {/* <div className="absolute inset-0 bg-black/10"></div>
+    <div className="absolute inset-0 bg-black/10"></div>
     <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
-     */}
-    <div className="relative z-10">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1 space-y-4">
-          <div>
-            <h3 className="text-3xl font-mono text-white mb-4">{title || 'Recipe Name'}</h3>
-            <div className="flex gap-4 text-white/90">
-              <span className="flex items-center gap-2">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
-                </svg>
-                {cookingTime} mins
-              </span>
-              <span className="flex items-center gap-2">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-                </svg>
-                Serves {servings}
-              </span>
-            </div>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md p-3 rounded-[10px]">
-            <h4 className="text-xl font-semibold text-white mb-2">Ingredients</h4>
-            <ul className="space-y-2 text-white/90">
-              {ingredients.map((ing, idx) => (
-                <li key={idx} className="flex justify-between">
-                  <span>{ing.item}</span>
-                  <span className="text-white/70">{ing.amount}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md p-3 rounded-[10px]">
-            <h4 className="text-xl font-semibold text-white mb-2">Instructions</h4>
-            <ol className="space-y-2 text-white/90 list-decimal list-inside">
-              {instructions.map((inst, idx) => (
-                <li key={idx}>{inst.step}</li>
-              ))}
-            </ol>
-          </div>
-
-          {chefTips && (
-            <div className="bg-white/20 backdrop-blur-md p-3 rounded-[10px]">
-              <p className="text-white/90 italic">💡 Chef's Tip: {chefTips}</p>
-            </div>
-          )}
+    
+    <div className="relative z-10 space-y-4">
+      {/* Header */}
+      <div className="text-center border-b border-white/20 pb-6">
+        <h2 className="text-4xl font-mono text-white mb-2">{title || 'Recipe Name'}</h2>
+        <div className="flex justify-center gap-4 text-white/90">
+          <span className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+            </svg>
+            {cookingTime} mins
+          </span>
+          <span className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+            </svg>
+            Serves {servings}
+          </span>
         </div>
+      </div>
 
-        <div className="md:w-1/3 space-y-3">
-          {image && (
-            <div className="rounded-[10px] overflow-hidden shadow-lg">
-              <Image src={image} alt={title} width={400} height={300} className="object-cover" />
-            </div>
-          )}
-          
-          <div className="bg-white/95 backdrop-blur-md p-4 rounded-[10px]">
-            <div className="text-center">
-              <span className="px-3 py-1 rounded-xl bg-emerald-200 text-emerald-800 text-sm font-medium">
-                {difficulty.toUpperCase()}
-              </span>
-            </div>
+      {/* Ingredients */}
+      <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
+        <h3 className="text-xl font-semibold text-white mb-4">Ingredients</h3>
+        <ul className="space-y-2 text-white/90">
+          {ingredients.map((ing, idx) => (
+            <li key={idx} className="flex justify-between">
+              <span>{ing.item}</span>
+              <span className="text-white/70">{ing.amount}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Instructions */}
+      <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
+        <h3 className="text-xl font-semibold text-white mb-4">Instructions</h3>
+        <ol className="space-y-2 text-white/90 list-decimal list-inside">
+          {instructions.map((inst, idx) => (
+            <li key={idx}>{inst.step}</li>
+          ))}
+        </ol>
+      </div>
+
+      {/* Chef's Tips */}
+      {chefTips && (
+        <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl">
+          <p className="text-white/90 italic">💡 Chef's Tip: {chefTips}</p>
+        </div>
+      )}
+
+      {/* Image and Difficulty */}
+      <div className="md:w-1/3 space-y-6">
+        {image && (
+          <div className="rounded-2xl overflow-hidden shadow-lg">
+            <Image src={image} alt={title} width={400} height={300} className="object-cover" />
+          </div>
+        )}
+        
+        <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl">
+          <div className="text-center">
+            <span className="px-3 py-1 rounded-xl bg-emerald-200 text-emerald-800 text-sm font-medium">
+              {difficulty.toUpperCase()}
+            </span>
           </div>
         </div>
       </div>
 
+      {/* Footer */}
       <div className="mt-8 flex justify-between items-center">
         {logo && (
           <div className="relative w-16 h-16">
