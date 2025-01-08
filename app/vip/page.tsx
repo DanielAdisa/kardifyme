@@ -1233,7 +1233,7 @@ const saveSignature = (
                   </div>
                 </div>
                 <div>
-                  <label className="block text-stone-950 mb-2">Product Features</label>
+                  <label className="block text-stone-950 mb-2">Detailed Description </label>
                   <textarea
                     value={largeDescription}
                     onChange={(e) => setLargeDescription(e.target.value)}
@@ -1373,7 +1373,7 @@ const saveSignature = (
 
             {/* Common fields for all variants */}
             <div>
-  <label className="block text-stone-950 mb-2">Upload Image</label>
+  <label className="block text-stone-950 mb-2">Upload Hero Image</label>
   <div className="space-y-2">
     {image && (
       <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden">
@@ -1399,7 +1399,7 @@ const saveSignature = (
 </div>
 
 <div>
-  <label className="block text-stone-950 mb-2">Upload Logo</label>
+  <label className="block text-stone-950 mb-2">Upload Your Logo</label>
   <div className="space-y-2">
     {logo && (
       <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden">
@@ -1463,24 +1463,22 @@ const saveSignature = (
 </div>
           </div>
         </div>
-        <div className="text-center mt-6 space-x-4">
+        <div className="flex justify-center gap-4 mt-8">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={generateImage}
-            className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300"
+            className="
+              bg-gradient-to-r from-blue-600 to-blue-700
+              text-white px-8 py-4 rounded-2xl
+              font-medium shadow-lg shadow-blue-500/25
+              hover:shadow-blue-500/40 transition-all duration-300
+              disabled:opacity-50 disabled:cursor-not-allowed
+            "
             disabled={isLoading}
           >
-            {isLoading ? 'Generating...' : 'Generate Card'}
+            {isLoading ? 'Generating...' : 'Download Card'}
           </motion.button>
-          {/* <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handlePrint}
-            className="bg-gray-600 text-white px-6 py-3 rounded-full hover:bg-gray-700 transition-all duration-300"
-          >
-            Print Page
-          </motion.button> */}
         </div>
       </div>
 
@@ -1876,7 +1874,7 @@ const saveSignature = (
 
     {/* idcard Display */}
       {selectedVariant === 'idCard' && showIDCard && (
-        <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl rounded-b-md shadow-2xl border border-slate-700/30 max-w-3xl mx-auto overflow-hidden">
+        <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl rounded-b-md shadow-2xl border border-slate-700/30 max-w-full mx-auto overflow-hidden">
           {/* Background Decorations */}
           <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-full blur-2xl"></div>
@@ -2314,7 +2312,7 @@ const saveSignature = (
     {/* Footer */}
       <div className="mt-2 flex justify-end">
       <div className="text-xs  w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50">
-        KardifyMe+
+       Powered by KardifyMe+
       </div>
       </div>
       </div>
