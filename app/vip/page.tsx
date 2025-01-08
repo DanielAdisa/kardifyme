@@ -1636,7 +1636,7 @@ const saveSignature = (
 
     {/* Flyer Display */}
       {selectedVariant === 'flyer' && (
-        <div className="relative bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 p-4 rounded-b-md rounded-2xl shadow-2xl overflow-hidden">
+        <div className="relative bg-gradient-to-br pb-0 from-orange-500 via-pink-500 to-purple-600 p-4 rounded-b-md rounded-2xl shadow-2xl overflow-hidden">
           {/* Decorative Elements */}
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
@@ -1695,7 +1695,7 @@ const saveSignature = (
 
     {/* Budget Display */}
       {selectedVariant === 'budget' && (
-        <div className="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 p-4 rounded-b-md rounded-2xl shadow-xl overflow-hidden">
+        <div className="relative bg-gradient-to-br pb-0 from-gray-800 via-gray-700 to-gray-900 p-2 rounded-b-md rounded-2xl shadow-xl overflow-hidden">
           {/* Subtle Background Elements */}
           <div className="absolute inset-0 bg-grid-gray-600/10 z-0"></div>
           <div className="absolute -top-20 -right-20 w-60 h-60 bg-teal-500/20 rounded-full blur-3xl z-0"></div>
@@ -1775,7 +1775,7 @@ const saveSignature = (
                   />
                 </div>
               )}
-              <div className="text-sm text-gray-400">
+              <div className="text-sm pb-1.5 text-gray-400">
                 <p>Plan your expenses wisely</p>
                 <p className="text-teal-300 font-medium">Powered by Kardify</p>
               </div>
@@ -1786,7 +1786,7 @@ const saveSignature = (
 
     {/* Recipe Display */}
       {selectedVariant === 'recipe' && (
-        <div className="relative bg-gradient-to-br from-emerald-500 to-orange-700 p-3 rounded-2xl rounded-b-md shadow-2xl overflow-hidden">
+        <div className="relative bg-gradient-to-br from-emerald-500 to-orange-700 p-3 rounded-2xl rounded-b-md pb-0 shadow-2xl overflow-hidden">
           {/* Decorative Elements */}
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
@@ -1849,9 +1849,9 @@ const saveSignature = (
                 </div>
               )}
               
-              <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl">
+              <div className="bg-white/50 backdrop-blur-md p-4 rounded-lg">
                 <div className="text-center">
-                  <span className={`px-3 py-1 rounded-xl text-sm font-medium ${getDifficultyColor(difficulty)}`}>
+                  <span className={`px-2 py-1 rounded-md text-sm font-medium ${getDifficultyColor(difficulty)}`}>
         {difficulty.toUpperCase()}
       </span>
                 </div>
@@ -1865,9 +1865,9 @@ const saveSignature = (
                   <Image src={logo} alt="Logo" fill className="rounded-full object-cover border-2 border-white/50" />
                 </div>
               )}
-              <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
+              {/* <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
                 Kardify Recipe
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
