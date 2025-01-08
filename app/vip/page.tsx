@@ -1881,43 +1881,44 @@ const saveSignature = (
     <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-gradient-to-tr from-slate-700/30 to-transparent rounded-full blur-3xl"></div>
 
     {/* Card Content */}
-    <div className="relative z-10 space-y-8">
+    <div className="relative z-10 space-y-4">
       {/* Header */}
-      <div className="flex justify-between items-start">
+      <div className=' flex justify-center items-center w-full'>
+      <div className="flex items-center">
         {logo && (
           <div className="relative w-16 h-16">
-            <Image src={logo} alt="Logo" fill className="object-contain" />
+            <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
           </div>
         )}
-        <div className="text-center w-full">
-          <h3 className="text-sm font-semibold w-full text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
-          <p className="text-xs text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+        <div className="">
+          <h3 className="text-sm font-semibold text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
+          <p className="text-xs text-center text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
         </div>
       </div>
-
+      </div>   
       {/* Main Details Section */}
-      <div className="flex gap-8">
+      <div className="flex gap-4">
         {/* Left Column: Personal Info */}
-        <div className="flex-1 space-y-6">
+        <div className="flex-1 space-y-4">
           {/* Name & Department */}
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold text-white">{idCardDetails.name || 'Full Name'}</h2>
+            <h2 className="text-2xl font-semibold text-white">{idCardDetails.name || 'Full Name'}</h2>
             <p className="text-lg text-indigo-300">{idCardDetails.department || 'Department'}</p>
           </div>
 
           {/* Additional Details */}
-          <div className="grid grid-cols-2 gap-6 text-sm">
+          <div className="grid grid-cols-1 gap-4 text-sm">
             <div className="space-y-1">
-              <p className="text-slate-400">ID Number</p>
-              <p className="font-medium text-white">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+              <p className="text-stone-50/80  text-[11px] text-center p-0.5 rounded-xl font-semibold">ID Number</p>
+              <p className="font-medium text-stone-50/90 bg-slate-800 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-slate-400">Issue Date</p>
-              <p className="font-medium text-white">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
+              <p className="text-stone-50/80  text-[11px] text-center p-0.5 rounded-xl font-semibold">Issue Date</p>
+              <p className="font-medium text-stone-50/90 bg-slate-800 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-slate-400">Expiry Date</p>
-              <p className="font-medium text-white">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+              <p className="text-stone-50/80  text-[11px] text-center p-0.5 rounded-xl font-semibold">Expiry Date</p>
+              <p className="font-medium text-stone-50/90 bg-slate-800 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
             </div>
           </div>
         </div>
@@ -1925,7 +1926,7 @@ const saveSignature = (
         {/* Right Column: Photo & QR Code */}
         <div className="flex flex-col items-center gap-4">
           {/* Profile Picture */}
-          <div className="relative w-32 h-40 rounded-xl overflow-hidden border-4 border-slate-700/50 shadow-2xl">
+          <div className="relative w-[110px] h-[150px] rounded-xl overflow-hidden border-2 border-slate-700/50 shadow-2xl">
             {idCardDetails.photo ? (
               <Image src={idCardDetails.photo} alt="Profile" fill className="object-cover" />
             ) : (
@@ -1945,7 +1946,7 @@ const saveSignature = (
           {/* QR Code */}
           {qrUrl && (
             <div className="bg-white/90 p-2 rounded-lg shadow-xl">
-              <QRCodeSVG value={qrUrl} size={80} />
+              <QRCodeSVG value={qrUrl} size={90} />
             </div>
           )}
         </div>
@@ -1961,7 +1962,7 @@ const saveSignature = (
           </div>
 
           {/* Footer Tag */}
-          <div className="px-3 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
+          <div className="px-2 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
             <p className="text-xs text-slate-400">Powered by Kardify</p>
           </div>
         </div>
