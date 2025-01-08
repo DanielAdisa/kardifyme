@@ -532,6 +532,8 @@ const baseLabelStyles = `
       </div>
     </div>
 
+    
+
           {/* Conditional Inputs based on Variant */}
           {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
             <div className="space-y-4">
@@ -1544,7 +1546,33 @@ const baseLabelStyles = `
       />
     </div>
   </div>
-            <div className="flex items-center gap-2 mb-4">
+
+{/* Checkbox Example */}
+<div className={baseWrapperStyles}>
+      <label className={baseLabelStyles}>Show Sections</label>
+      <div className="flex items-center gap-4">
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showTopPart}
+            onChange={(e) => setShowTopPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700">Show Top Section</span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showBottomPart}
+            onChange={(e) => setShowBottomPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700">Show Bottom Section</span>
+        </label>
+      </div>
+    </div>
+
+            {/* <div className="flex items-center gap-2 mb-4">
               <label className="text-stone-950">Show Bottom Section</label>
               <input
                 type="checkbox"
@@ -1553,6 +1581,8 @@ const baseLabelStyles = `
                 className="w-4 h-4"
               />
             </div>
+
+
             <div className="flex items-center gap-2 mb-4">
   <label className="text-stone-950">Show Top Section</label>
   <input
@@ -1561,7 +1591,7 @@ const baseLabelStyles = `
     onChange={(e) => setShowTopPart(e.target.checked)}
     className="w-4 h-4"
   />
-</div>
+</div> */}
           </div>
         </div>
 
