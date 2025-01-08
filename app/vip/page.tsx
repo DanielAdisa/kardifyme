@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import place from "@/public/12.jpg"
 import SignatureCanvas from 'react-signature-canvas';
+import type ReactSignatureCanvas from 'react-signature-canvas';
+
 
 
 // Update card variants
@@ -115,32 +117,28 @@ const [contractValue, setContractValue] = useState('');
   const [party1Signature, setParty1Signature] = useState('');
 const [party2Signature, setParty2Signature] = useState('');
 
+// Import the type from react-signature-canvas
+
 // Refs for signature canvases
-const party1SigCanvas = useRef(null);
-const party2SigCanvas = useRef(null);
+const party1SigCanvas = useRef<ReactSignatureCanvas>(null);
+const party2SigCanvas = useRef<ReactSignatureCanvas>(null);
 
 // Function to clear signature
-interface SignatureCanvasRef {
-  clear: () => void;
-}
-
-const clearSignature = (sigCanvas: React.RefObject<SignatureCanvasRef>): void => {
-  sigCanvas.current?.clear();
+const clearSignature = (sigCanvas: React.RefObject<ReactSignatureCanvas | null>): void => {
+  if (sigCanvas.current) {
+    sigCanvas.current.clear();
+  }
 };
-
-interface SignatureCanvasData {
-  current: {
-    getTrimmedCanvas: () => HTMLCanvasElement;
-  };
-}
 
 type SetSignatureFunction = (signature: string) => void;
 
 const saveSignature = (
-  sigCanvas: SignatureCanvasData, 
+  sigCanvas: React.RefObject<ReactSignatureCanvas | null>, 
   setSignature: SetSignatureFunction
 ): void => {
-  setSignature(sigCanvas.current.getTrimmedCanvas().toDataURL('image/png'));
+  if (sigCanvas.current) {
+    setSignature(sigCanvas.current.getTrimmedCanvas().toDataURL('image/png'));
+  }
 };
 
 
