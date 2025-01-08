@@ -143,6 +143,7 @@ const [wishType, setWishType] = useState('Happy Birthday');
 const [budgetCategories, setBudgetCategories] = useState([{ category: '', amount: 0 }]);
 const [totalBudget, setTotalBudget] = useState(0);
 const [remainingBudget, setRemainingBudget] = useState(0);
+const [showTopPart, setShowTopPart] = useState(true);
 
 
 
@@ -1345,6 +1346,15 @@ const saveSignature = (
                 className="w-4 h-4"
               />
             </div>
+            <div className="flex items-center gap-2 mb-4">
+  <label className="text-stone-950">Show Top Section</label>
+  <input
+    type="checkbox"
+    checked={showTopPart}
+    onChange={(e) => setShowTopPart(e.target.checked)}
+    className="w-4 h-4"
+  />
+</div>
           </div>
         </div>
         <div className="text-center mt-6 space-x-4">
@@ -1385,79 +1395,81 @@ const saveSignature = (
           `}
         >
           {/* Card Hero with responsive height */}
-          <div className="relative w-full h-[250px] sm:h-[250px] md:h-[300px]">
-            {image ? (
-                <Image
-    src={image || place } // Set default image
-    alt={title || 'Card Image'}
-    fill
-    className={`object-cover transition-transform duration-700 ${
-      selectedVariant === 'event' ? 'opacity-80' : ''
-    }`}
-    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    priority
-    onError={(e) => {
-      console.error('Image failed to load');
-      e.currentTarget.src = '/12.jpg';
-    }}
-  />
-            ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <Image
-    src={place || place } // Set default image
-    alt={title || 'Card Image'}
-    fill
-    className={`object-cover transition-transform duration-700 ${
-      selectedVariant === 'event' ? 'opacity-80' : ''
-    }`}
-    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    priority
-    onError={(e) => {
-      console.error('Image failed to load');
-      e.currentTarget.src = '/12.jpg';
-    }}
-  />
-              </div>
-            )}
+          {showTopPart && (
+  <div className="relative w-full h-[250px] sm:h-[250px] md:h-[300px]">
+    {image ? (
+      <Image
+        src={image || place} // Set default image
+        alt={title || 'Card Image'}
+        fill
+        className={`object-cover transition-transform duration-700 ${
+          selectedVariant === 'event' ? 'opacity-80' : ''
+        }`}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        priority
+        onError={(e) => {
+          console.error('Image failed to load');
+          e.currentTarget.src = '/12.jpg';
+        }}
+      />
+    ) : (
+      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+        <Image
+          src={place || place} // Set default image
+          alt={title || 'Card Image'}
+          fill
+          className={`object-cover transition-transform duration-700 ${
+            selectedVariant === 'event' ? 'opacity-80' : ''
+          }`}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority
+          onError={(e) => {
+            console.error('Image failed to load');
+            e.currentTarget.src = '/12.jpg';
+          }}
+        />
+      </div>
+    )}
 
-            {/* Responsive text sizing */}
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              className="absolute bottom-0 p-4 sm:p-6 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent"
-            >
-              <h1 className={`text-xl  md:text-6xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
-                {title || 'Untitled'}
-              </h1>
-              <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl whitespace-pre-line font-light ">
-                {description}
-              </p>
-                {price && !isNaN(parseFloat(price)) && (
-                    <p className="text-base font-semibold absolute right-2 bottom-4 bg-stone-50/30 text-stone-50/80 px-2 py-1 rounded-full inline-block">
-                         {formatCurrency(parseFloat(price), currency)}
-                    </p>
-                )}
-            </motion.div>
+    {/* Responsive text sizing */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="absolute bottom-0 p-4 sm:p-6 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent"
+    >
+      <h1 className={`text-xl md:text-6xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
+        {title || 'Untitled'}
+      </h1>
+      <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl whitespace-pre-line font-light ">
+        {description}
+      </p>
+      {price && !isNaN(parseFloat(price)) && (
+        <p className="text-base font-semibold absolute right-2 bottom-4 bg-stone-50/30 text-stone-50/80 px-2 py-1 rounded-full inline-block">
+          {formatCurrency(parseFloat(price), currency)}
+        </p>
+      )}
+    </motion.div>
 
-            {/* Responsive logo and QR positioning */}
-            <div className="absolute top-2 right-2 flex flex-col space-y-2 scale-75 sm:scale-100">
-              {logo && (
-                <div className="relative w-12 h-12 sm:w-[50px] sm:h-[50px]">
-                  <Image
-                    src={logo}
-                    alt="Logo"
-                    fill
-                    className="rounded-full border border-white shadow-lg object-cover"
-                  />
-                </div>
-              )}
-              {qrUrl && (
-                <div className="bg-white/90 p-1 rounded-lg">
-                  <QRCodeSVG value={qrUrl} size={40} className="sm:w-[50px] sm:h-[50px]" />
-                </div>
-              )}
-            </div>
-          </div>
+    {/* Responsive logo and QR positioning */}
+    <div className="absolute top-2 right-2 flex flex-col space-y-2 scale-75 sm:scale-100">
+      {logo && (
+        <div className="relative w-12 h-12 sm:w-[50px] sm:h-[50px]">
+          <Image
+            src={logo}
+            alt="Logo"
+            fill
+            className="rounded-full border border-white shadow-lg object-cover"
+          />
+        </div>
+      )}
+      {qrUrl && (
+        <div className="bg-white/90 p-1 rounded-lg">
+          <QRCodeSVG value={qrUrl} size={40} className="sm:w-[50px] sm:h-[50px]" />
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
           {/* Update the card content section */}
           {showBottomPart && (
