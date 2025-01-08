@@ -12,6 +12,20 @@ import { ethers } from 'ethers';
 
 
 
+// Define BudgetState interface
+interface BudgetState {
+  totalBudget: number;
+  categories: BudgetCategory[];
+  monthYear: string;
+  currency: string;
+}
+
+interface BudgetCategory {
+  id: string;
+  name: string;
+  amount: number;
+}
+
 // Update card variants
 const cardVariants = {
   business: {
@@ -63,17 +77,21 @@ const cardVariants = {
     gradient: "bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500",
     titleFont: "font-serif",
     layout: "birthday"
+  },
+  budget: {
+    gradient: "bg-gradient-to-br from-green-500 via-teal-500 to-blue-500",
+    titleFont: "font-serif",
+    layout: "budget"
   }
 };
 
 // Add currency options
 const currencyOptions = [
-  { value: 'USD', label: 'USD' },
-  { value: 'EUR', label: 'EUR' },
-  { value: 'GBP', label: 'GBP' },
-  { value: 'NGN', label: 'NGN' },
-  { value: 'GHS', label: 'GHS' },
-  { value: 'KES', label: 'KES' }
+  { value: 'USD', label: 'US Dollar ($)' },
+  { value: 'EUR', label: 'Euro (€)' },
+  { value: 'GBP', label: 'British Pound (£)' },
+  { value: 'JPY', label: 'Japanese Yen (¥)' },
+  { value: 'NGN', label: 'Nigerian Naira (₦)' }
 ];
 
 const CreateCard = () => {
@@ -95,7 +113,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -122,12 +140,23 @@ const [celebrantName, setCelebrantName] = useState('');
 const [age, setAge] = useState('');
 const [message, setMessage] = useState('');
 const [wishType, setWishType] = useState('Happy Birthday');
+const [budgetCategories, setBudgetCategories] = useState([{ category: '', amount: 0 }]);
+const [totalBudget, setTotalBudget] = useState(0);
+const [remainingBudget, setRemainingBudget] = useState(0);
+
 
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [party1Signature, setParty1Signature] = useState('');
 const [party2Signature, setParty2Signature] = useState('');
+
+const [budgetState, setBudgetState] = useState<BudgetState>({
+  totalBudget: 0,
+  categories: [],
+  monthYear: new Date().toISOString().slice(0, 7),
+  currency: 'USD'
+});
 
 
 const handleDeleteImage = (type: 'main' | 'logo') => {
@@ -195,6 +224,8 @@ const saveSignature = (
 
     return colorMap[difficulty.toLowerCase()] || colorMap.default;
   };
+
+  
   
   
 
@@ -380,6 +411,7 @@ const saveSignature = (
               <option value="recipe">E-Recipe</option>
               <option value="contract">E-Contract</option>
               <option value="birthday">Birthday</option>
+              <option value="budget">E-Budget</option>
             </select>
           </div>
 
@@ -582,6 +614,102 @@ const saveSignature = (
           accept="image/*"
         />
       </div>
+    </div>
+  </div>
+)}
+
+{/* Budget Input Field */}
+{selectedVariant === 'budget' && (
+  <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Month & Year</label>
+        <input
+          type="month"
+          value={budgetState.monthYear}
+          onChange={(e) => setBudgetState({...budgetState, monthYear: e.target.value})}
+          className="w-full p-3 rounded-xl border border-slate-300"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Currency</label>
+        <select
+          value={budgetState.currency}
+          onChange={(e) => setBudgetState({...budgetState, currency: e.target.value})}
+          className="w-full p-3 rounded-xl border border-slate-300"
+        >
+          {currencyOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Total Budget</label>
+      <input
+        type="number"
+        value={budgetState.totalBudget}
+        onChange={(e) => setBudgetState({...budgetState, totalBudget: parseFloat(e.target.value)})}
+        className="w-full p-3 rounded-xl border border-slate-300"
+        placeholder="Enter total budget"
+      />
+    </div>
+
+    <div className="space-y-4">
+      <label className="block text-stone-950 mb-2 font-medium">Budget Categories</label>
+      {budgetState.categories.map((category, index) => (
+        <div key={category.id} className="flex gap-2">
+          <input
+            type="text"
+            value={category.name}
+            onChange={(e) => {
+              const newCategories = [...budgetState.categories];
+              newCategories[index].name = e.target.value;
+              setBudgetState({...budgetState, categories: newCategories});
+            }}
+            className="flex-1 p-3 rounded-xl border border-slate-300"
+            placeholder="Category name"
+          />
+          <input
+            type="number"
+            value={category.amount}
+            onChange={(e) => {
+              const newCategories = [...budgetState.categories];
+              newCategories[index].amount = parseFloat(e.target.value);
+              setBudgetState({...budgetState, categories: newCategories});
+            }}
+            className="w-32 p-3 rounded-xl border border-slate-300"
+            placeholder="Amount"
+          />
+          <button
+            onClick={() => {
+              const newCategories = budgetState.categories.filter((_, i) => i !== index);
+              setBudgetState({...budgetState, categories: newCategories});
+            }}
+            className="p-3 text-red-500 hover:bg-red-50 rounded-xl"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={() => {
+          setBudgetState({
+            ...budgetState,
+            categories: [
+              ...budgetState.categories,
+              { id: crypto.randomUUID(), name: '', amount: 0 }
+            ]
+          });
+        }}
+        className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
+      >
+        Add Category
+      </button>
     </div>
   </div>
 )}
@@ -1420,6 +1548,86 @@ const saveSignature = (
         )}
         <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md text-white text-sm font-medium">
           Created with Kardify
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Budget Display */}
+{selectedVariant === 'budget' && (
+  <div className="relative bg-gradient-to-br from-green-500 via-teal-500 to-blue-500 p-8 rounded-3xl shadow-2xl overflow-hidden">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-grid-white/10"></div>
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
+    
+    <div className="relative z-10 space-y-8">
+      {/* Header */}
+      <div className="text-center border-b border-white/20 pb-6">
+        <h2 className="text-4xl font-serif text-white mb-2">{title || 'Monthly Budget'}</h2>
+        <p className="text-xl text-white/90">{budgetState.monthYear}</p>
+        <div className="mt-4 text-3xl font-bold text-white">
+          {formatCurrency(budgetState.totalBudget, budgetState.currency)}
+        </div>
+      </div>
+
+      {/* Categories Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {budgetState.categories.map((category) => (
+          <div key={category.id} className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="text-lg font-medium text-white">{category.name}</h3>
+              <span className="text-white/90">{formatCurrency(category.amount, budgetState.currency)}</span>
+            </div>
+            <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-white/60 rounded-full"
+                style={{
+                  width: `${(category.amount / budgetState.totalBudget) * 100}%`
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Summary Section */}
+      <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-white/90">Total Spent</span>
+          <span className="text-white font-medium">
+            {formatCurrency(
+              budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
+              budgetState.currency
+            )}
+          </span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-white/90">Remaining</span>
+          <span className="text-white font-medium">
+            {formatCurrency(
+              budgetState.totalBudget - 
+              budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
+              budgetState.currency
+            )}
+          </span>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex justify-between items-center pt-4 border-t border-white/20">
+        {logo && (
+          <div className="relative w-16 h-16">
+            <Image 
+              src={logo} 
+              alt="Logo" 
+              fill 
+              className="rounded-full object-cover border-2 border-white/50" 
+            />
+          </div>
+        )}
+        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
+          Kardify Budget Planner
         </div>
       </div>
     </div>
