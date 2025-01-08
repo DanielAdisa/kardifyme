@@ -1488,7 +1488,7 @@ const saveSignature = (
         
         <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl">
           <div className="text-center">
-          <span className={`px-3 py-1 rounded-xl text-sm font-medium ${getDifficultyColor(difficulty)}`}>
+            <span className={`px-3 py-1 rounded-xl text-sm font-medium ${getDifficultyColor(difficulty)}`}>
   {difficulty.toUpperCase()}
 </span>
           </div>
