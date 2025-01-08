@@ -799,6 +799,7 @@ const saveSignature = (
           <input
             type="file"
             onChange={(e) => {
+              if (!e.target.files) return;
               const file = e.target.files[0];
               if (file) {
                 const reader = new FileReader();
