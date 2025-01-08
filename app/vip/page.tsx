@@ -30,70 +30,232 @@ interface BudgetCategory {
 const cardVariants = {
   business: {
     templates: {
-      modern: 'bg-white/40',
-      classic: 'bg-stone-100/40',
-      minimal: 'bg-slate-50/40'
-    },
-    layout: 'business'
+      modern: {
+        background: 'bg-white',
+        font: 'font-sans',
+        layout: 'p-2'
+      },
+      classic: {
+        background: 'bg-stone-100',
+        font: 'font-serif',
+        layout: 'p-1.5'
+      },
+      minimal: {
+        background: 'bg-slate-50',
+        font: 'font-mono',
+        layout: 'p-0'
+      }
+    }
   },
   event: {
     templates: {
-      classic: 'bg-gradient-to-br from-blue-500 to-pink-500',
-      bold: 'bg-gradient-to-br from-purple-600 to-red-500',
-      elegant: 'bg-gradient-to-br from-indigo-500 to-pink-500'
-    },
-    layout: 'event'
+      classic: {
+        background: 'bg-gradient-to-br from-blue-500 to-pink-500',
+        font: 'font-sans',
+        layout: 'p-2'
+      },
+      bold: {
+        background: 'bg-gradient-to-br from-purple-600 to-red-500',
+        font: 'font-bold',
+        layout: 'p-1.5'
+      },
+      elegant: {
+        background: 'bg-gradient-to-br from-indigo-500 to-pink-500',
+        font: 'font-serif',
+        layout: 'p-0'
+      }
+    }
   },
   product: {
-    gradient: "bg-gradient-to-br from-slate-800 to-slate-900",
-    titleFont: "font-sans",
-    layout: "product"
+    templates: {
+      showcase: {
+        background: 'bg-gradient-to-br from-slate-800 to-slate-900',
+        font: 'font-sans',
+        layout: 'p-2'
+      },
+      grid: {
+        background: 'bg-gradient-to-br from-gray-700 to-gray-800',
+        font: 'font-mono',
+        layout: 'p-1.5'
+      },
+      minimal: {
+        background: 'bg-gradient-to-br from-slate-600 to-slate-700',
+        font: 'font-serif',
+        layout: 'p-0'
+      }
+    }
   },
   invoice: {
-    gradient: "backdrop-blur-2xl bg-stone-600/30 ",
-    titleFont: "font-sans",
-    layout: "invoice"
+    templates: {
+      professional: {
+        background: 'backdrop-blur-2xl bg-stone-600/30',
+        font: 'font-sans',
+        layout: 'p-2'
+      },
+      simple: {
+        background: 'bg-stone-500/30',
+        font: 'font-mono',
+        layout: 'p-1.5'
+      },
+      detailed: {
+        background: 'bg-stone-400/30',
+        font: 'font-serif',
+        layout: 'p-0'
+      }
+    }
   },
   receipt: {
-    gradient: "backdrop-blur-2xl bg-white/20 ",
-    titleFont: "font-mono",
-    layout: "receipt"
+    templates: {
+      simple: {
+        background: 'backdrop-blur-2xl bg-white/20',
+        font: 'font-mono',
+        layout: 'p-2'
+      },
+      detailed: {
+        background: 'bg-white/30',
+        font: 'font-sans',
+        layout: 'p-1.5'
+      },
+      compact: {
+        background: 'bg-white/40',
+        font: 'font-serif',
+       layout: 'p-0'
+      }
+    }
   },
   einvoice: {
-    gradient: "bg-gradient-to-tl from-orange-500 to-purple-700",
-    titleFont: "font-sans",
-    layout: "einvoice"
+    templates: {
+      digital: {
+        background: 'bg-gradient-to-tl from-orange-500 to-purple-700',
+        font: 'font-sans',
+        layout: 'p-2'
+      },
+      modern: {
+        background: 'bg-gradient-to-tl from-orange-400 to-purple-600',
+        font: 'font-mono',
+        layout: 'p-1.5'
+      },
+      classic: {
+        background: 'bg-gradient-to-tl from-orange-300 to-purple-500',
+        font: 'font-serif',
+        layout: 'p-0'
+      }
+    }
   },
   flyer: {
-    gradient: "bg-gradient-to-br from-yellow-500 to-red-500",
-    titleFont: "font-sans",
-    layout: "flyer"
+    templates: {
+      bold: {
+        background: 'bg-gradient-to-br from-yellow-500 to-red-500',
+        font: 'font-sans',
+        layout: 'p-2'
+      },
+      creative: {
+        background: 'bg-gradient-to-br from-yellow-400 to-red-400',
+        font: 'font-mono',
+        layout: 'p-1.5'
+      },
+      minimal: {
+        background: 'bg-gradient-to-br from-yellow-300 to-red-300',
+        font: 'font-serif',
+       layout: 'p-0'
+      }
+    }
   },
   recipe: {
-    gradient: "bg-gradient-to-br from-emerald-500 to-teal-700",
-    titleFont: "font-mono",
-    layout: "recipe"
+    templates: {
+      elegant: {
+        background: 'bg-gradient-to-br from-emerald-500 to-teal-700',
+        font: 'font-mono',
+        layout: 'p-2'
+      },
+      modern: {
+        background: 'bg-gradient-to-br from-emerald-400 to-teal-600',
+        font: 'font-sans',
+        layout: 'p-1.5'
+      },
+      classic: {
+        background: 'bg-gradient-to-br from-emerald-300 to-teal-500',
+        font: 'font-serif',
+        layout: 'p-0'
+      }
+    }
   },
   contract: {
-    gradient: "bg-gradient-to-br from-blue-900 to-indigo-900",
-    titleFont: "font-mono",
-    layout: "contract"
+    templates: {
+      formal: {
+        background: 'bg-gradient-to-br from-blue-900 to-indigo-900',
+        font: 'font-mono',
+        layout: 'p-2'
+      },
+      modern: {
+        background: 'bg-gradient-to-br from-blue-800 to-indigo-800',
+        font: 'font-sans',
+        layout: 'p-1.5'
+      },
+      simple: {
+        background: 'bg-gradient-to-br from-blue-700 to-indigo-700',
+        font: 'font-serif',
+       layout: 'p-0'
+      }
+    }
   },
   birthday: {
-    gradient: "bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500",
-    titleFont: "font-serif",
-    layout: "birthday"
+    templates: {
+      fun: {
+        background: 'bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500',
+        font: 'font-serif',
+        layout: 'p-2'
+      },
+      elegant: {
+        background: 'bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400',
+        font: 'font-sans',
+        layout: 'p-1.5'
+      },
+      minimal: {
+        background: 'bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300',
+        font: 'font-mono',
+        layout: 'p-0'
+      }
+    }
   },
   budget: {
-    gradient: "bg-gradient-to-br from-green-500 via-teal-500 to-blue-500",
-    titleFont: "font-serif",
-    layout: "budget"
+    templates: {
+      clean: {
+        background: 'bg-gradient-to-br from-green-500 via-teal-500 to-blue-500',
+        font: 'font-serif',
+        layout: 'p-2'
+      },
+      detailed: {
+        background: 'bg-gradient-to-br from-green-400 via-teal-400 to-blue-400',
+        font: 'font-sans',
+        layout: 'p-1.5'
+      },
+      visual: {
+        background: 'bg-gradient-to-br from-green-300 via-teal-300 to-blue-300',
+        font: 'font-mono',
+        layout: 'p-0'
+      }
+    }
   },
   idCard: {
-    gradient: "backdrop-blur-2xl bg-white/20 ",
-    titleFont: "font-mono",
-    layout: "receipt"
-  },
+    templates: {
+      standard: {
+        background: 'backdrop-blur-2xl bg-white/20',
+        font: 'font-mono',
+        layout: 'p-2'
+      },
+      modern: {
+        background: 'bg-white/30',
+        font: 'font-sans',
+        layout: 'p-1.5'
+      },
+      minimal: {
+        background: 'bg-white/40',
+        font: 'font-serif',
+        layout: 'p-0'
+      }
+    }
+  }
 };
 
 // Add currency options
@@ -436,6 +598,34 @@ const baseLabelStyles = `
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+
+  const TemplateSelector = () => (
+    <div className="space-y-4 mb-6">
+      <select
+        value={selectedTemplate[selectedVariant]}
+        onChange={(e) => setSelectedTemplate({
+          ...selectedTemplate,
+          [selectedVariant]: e.target.value
+        })}
+        className="w-full p-2 rounded-lg border"
+      >
+        {Object.keys(cardVariants[selectedVariant].templates).map((template) => (
+          <option key={template} value={template}>
+            {template.charAt(0).toUpperCase() + template.slice(1)}
+          </option>
+        ))}
+      </select>
+      <input
+        type="color"
+        value={cardColor[selectedVariant]}
+        onChange={(e) => setCardColor({
+          ...cardColor,
+          [selectedVariant]: e.target.value
+        })}
+        className="w-full h-10 rounded-lg"
+      />
+    </div>
+  );
 
   function calculateDaysUntilNextBirthday(age: string): React.ReactNode {
     // If no age provided, return placeholder text
@@ -1380,6 +1570,7 @@ const baseLabelStyles = `
 
           {/* Base form fields for all variants */}
           <div className="space-y-6">
+          {/* <TemplateSelector /> */}
             <div>
               <label className="block text-stone-950 mb-2">Title</label>
               <input
@@ -1747,28 +1938,31 @@ const baseLabelStyles = `
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.5 }}
   className={`
-    ${cardVariants[selectedVariant]?.layout} 
+    ${'templates' in (cardVariants[selectedVariant] as any) 
+      ? (cardVariants[selectedVariant] as any)?.templates[selectedTemplate[selectedVariant]]?.background
+      : (cardVariants[selectedVariant] as any)?.gradient}
+    ${'templates' in (cardVariants[selectedVariant] as any) ? (cardVariants[selectedVariant] as any)?.templates[selectedTemplate[selectedVariant]]?.font : ''}
+    ${'templates' in cardVariants[selectedVariant] ? (cardVariants[selectedVariant] as any)?.templates[selectedTemplate[selectedVariant]]?.layout : ''}
     rounded-[20px] 
     shadow-[0_8px_32px_rgba(0,0,0,0.15)] 
     backdrop-blur-xl 
     overflow-hidden 
     w-full
-    transition-all duration-300
+    transition-colors duration-300
   `}
   style={{
     backgroundColor: cardColor[selectedVariant],
-    backgroundImage: `linear-gradient(to bottom right, ${cardColor[selectedVariant]}dd, ${cardColor[selectedVariant]}99)`
   }}
 >
           {/* Card Hero with responsive height */}
           {showTopPart && (
-  <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px]">
+  <div className="relative rounded-xl w-full h-[200px] sm:h-[250px] md:h-[300px]">
     {image ? (
       <Image
         src={image || place} // Set default image
         alt={title || 'Card Image'}
         fill
-        className={`object-cover transition-transform duration-700 ${
+        className={`object-cover rounded-2xl transition-transform duration-700 ${
           selectedVariant === 'event' ? 'opacity-80' : ''
         }`}
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -1779,12 +1973,12 @@ const baseLabelStyles = `
         }}
       />
     ) : (
-      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+      <div className="w-full h-full rounded-2xl bg-gray-200 flex items-center justify-center">
         <Image
           src={place || place} // Set default image
           alt={title || 'Card Image'}
           fill
-          className={`object-cover transition-transform duration-700 ${
+          className={`object-cover rounded-xl transition-transform duration-700 ${
             selectedVariant === 'event' ? 'opacity-80' : ''
           }`}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
