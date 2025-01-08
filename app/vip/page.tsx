@@ -178,17 +178,22 @@ const saveSignature = (
     }
   };
 
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty.toLowerCase()) {
-      case 'easy':
-        return 'bg-green-200 text-green-800';
-      case 'medium':
-        return 'bg-yellow-200 text-yellow-800';
-      case 'hard':
-        return 'bg-red-200 text-red-800';
-      default:
-        return 'bg-gray-200 text-gray-800';
-    }
+  interface DifficultyColorMap {
+    easy: string;
+    medium: string;
+    hard: string;
+    [key: string]: string; // For default case
+  }
+
+  const getDifficultyColor = (difficulty: string): string => {
+    const colorMap: DifficultyColorMap = {
+      easy: 'bg-green-200 text-green-800',
+      medium: 'bg-yellow-200 text-yellow-800',
+      hard: 'bg-red-200 text-red-800',
+      default: 'bg-gray-200 text-gray-800'
+    };
+
+    return colorMap[difficulty.toLowerCase()] || colorMap.default;
   };
   
   
