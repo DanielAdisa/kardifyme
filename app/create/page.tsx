@@ -5,7 +5,7 @@ import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import pic from "@/public/12.jpg"
+import pic from "@/public/12.jpg";
 
 const cardVariants = {
   business: {
@@ -22,6 +22,16 @@ const cardVariants = {
     gradient: "bg-gradient-to-br from-slate-800 to-slate-900",
     titleFont: "font-serif",
     layout: "product"
+  },
+  vip: {
+    gradient: "bg-gradient-to-br from-gold to-yellow-500",
+    titleFont: "font-extrabold",
+    layout: "vip"
+  },
+  premium: {
+    gradient: "bg-gradient-to-br from-black to-gray-800",
+    titleFont: "font-light",
+    layout: "premium"
   }
 };
 
@@ -36,7 +46,7 @@ const CreateCard = () => {
   const [currency, setCurrency] = useState('USD');
   const [includeBottomPart, setIncludeBottomPart] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  type VariantType = 'business' | 'event' | 'product';
+  type VariantType = 'business' | 'event' | 'product' | 'vip' | 'premium';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -76,115 +86,117 @@ const CreateCard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-3xl font-bold mb-6 text-center text-stone-950">Create Your Card</h1>
-        <div className="space-y-6">
-          <div>
-            <label className="block text-stone-950 mb-2">Title</label>
+      <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8">
+        <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+          Create Your Card
+        </h1>
+        <div className="space-y-8">
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Title</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter title"
-              className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Description</label>
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               title="Enter description"
               placeholder="Enter description"
-              className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none min-h-[120px] resize-none"
             />
           </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Large Description</label>
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Large Description</label>
             <textarea
               value={largeDescription}
               onChange={(e) => setLargeDescription(e.target.value)}
               title="Enter large description"
               placeholder="Enter large description"
-              className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none min-h-[120px] resize-none"
             />
           </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Main Image</label>
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Main Image</label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => handleImageChange(e, 'main')}
               title="Upload Image"
-              className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Logo</label>
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Logo</label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => handleImageChange(e, 'logo')}
               title="Upload Logo"
-              className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-stone-950 mb-2">QR Code URL</label>
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">QR Code URL</label>
             <input
               type="text"
               value={qrUrl}
               onChange={(e) => setQrUrl(e.target.value)}
               placeholder="Enter URL for QR Code"
-              className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Price</label>
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Price</label>
             <div className="flex space-x-2">
               <input
                 type="text"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Enter price"
-                className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+                className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
               />
               <select
                 title="Select currency"
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+                className="px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
               >
                 <option value="USD">USD</option>
                 <option value="NGN">NGN</option>
-                <option value="">None</option>
                 <option value="GHS">GHS</option>
                 <option value="EUR">EUR</option>
               </select>
             </div>
           </div>
-          <div className="flex items-center">
-            <label className="block text-stone-950 mb-2 mr-4">Include Bottom Part</label>
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Include Bottom Part</label>
             <input
               type="checkbox"
               checked={includeBottomPart}
               onChange={(e) => setIncludeBottomPart(e.target.checked)}
               title="Include Bottom Part"
-              placeholder="Include Bottom Part"
-              className="w-6 h-6 rounded-lg border border-slate-300 bg-white text-slate-900"
+              className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Card Type</label>
+          <div className="relative group space-y-2">
+            <label className="block text-sm font-medium text-slate-700 transition-all duration-200 mb-1 group-hover:text-slate-900 group-focus-within:text-blue-600">Card Type</label>
             <select
               title="Select card type"
               value={selectedVariant}
               onChange={(e) => setSelectedVariant(e.target.value as VariantType)}
-              className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+              className="w-full px-4 py-3.5 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 transition-all duration-200 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
             >
               <option value="business">Business Card</option>
               <option value="event">Event Ticket</option>
               <option value="product">Product Showcase</option>
+              <option value="vip">VIP Pass</option>
+              <option value="premium">Premium Card</option>
             </select>
           </div>
         </div>
@@ -193,7 +205,7 @@ const CreateCard = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={generateImage}
-            className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-2xl font-medium shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
             {isLoading ? 'Generating...' : 'Generate Card'}
@@ -215,9 +227,7 @@ const CreateCard = () => {
                 src={image}
                 alt={title}
                 fill
-                className={`object-cover transition-transform duration-700 ${
-                  selectedVariant === 'event' ? 'opacity-80' : ''
-                }`}
+                className={`object-cover transition-transform duration-700 ${selectedVariant === 'event' ? 'opacity-80' : ''}`}
                 priority
               />
             )}
@@ -238,15 +248,11 @@ const CreateCard = () => {
                   alt="Logo"
                   width={50}
                   height={50}
-                  className={`rounded-full border border-white shadow-lg ${
-                    selectedVariant === 'product' ? 'bg-white/90' : ''
-                  }`}
+                  className={`rounded-full border border-white shadow-lg ${selectedVariant === 'product' ? 'bg-white/90' : ''}`}
                 />
               )}
               {qrUrl && (
-                <div className={`${
-                  selectedVariant === 'event' ? 'bg-white/90 p-2 rounded-lg' : ''
-                }`}>
+                <div className={`${selectedVariant === 'event' ? 'bg-white/90 p-2 rounded-lg' : ''}`}>
                   <QRCodeSVG value={qrUrl} size={50} />
                 </div>
               )}
@@ -255,11 +261,8 @@ const CreateCard = () => {
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className={`absolute bottom-0 p-6 w-full ${
-                selectedVariant === 'event' 
-                  ? 'bg-gradient-to-t from-purple-900/90 to-transparent'
-                  : 'bg-gradient-to-t from-black/80 via-black/50 to-transparent'
-              }`}>
+              className={`absolute bottom-0 p-6 w-full ${selectedVariant === 'event' ? 'bg-gradient-to-t from-purple-900/90 to-transparent' : 'bg-gradient-to-t from-black/80 via-black/50 to-transparent'}`}
+            >
               <h1 className={`text-4xl md:text-6xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
                 {title}
               </h1>
@@ -267,11 +270,7 @@ const CreateCard = () => {
                 {description}
               </p>
               {price && (
-                <p className={`text-lg md:text-xl font-semibold mt-2 ${
-                  selectedVariant === 'product' 
-                    ? 'bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full inline-block'
-                    : 'text-white/80'
-                }`}>
+                <p className={`text-lg md:text-xl font-semibold mt-2 ${selectedVariant === 'product' ? 'bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full inline-block' : 'text-white/80'}`}>
                   {currency} {price}
                 </p>
               )}
@@ -280,9 +279,7 @@ const CreateCard = () => {
 
           {/* Content Section - Conditional based on variant */}
           {includeBottomPart && selectedVariant !== 'event' && (
-            <div className={`p-4 space-y-4 ${
-              selectedVariant === 'product' ? 'bg-white' : 'bg-opacity-90'
-            }`}>
+            <div className={`p-4 space-y-4 ${selectedVariant === 'product' ? 'bg-white' : 'bg-opacity-90'}`}>
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -294,11 +291,7 @@ const CreateCard = () => {
                   {largeDescription}
                 </div>
               </motion.div>
-              <div className={`text-xs w-fit px-1.5 rounded-full py-1 ${
-                selectedVariant === 'product' 
-                  ? 'bg-slate-800 text-white' 
-                  : 'bg-stone-300 text-stone-50'
-              }`}>
+              <div className={`text-xs w-fit px-1.5 rounded-full py-1 ${selectedVariant === 'product' ? 'bg-slate-800 text-white' : 'bg-stone-300 text-stone-50'}`}>
                 Adisa Made It+
               </div>
             </div>
@@ -307,7 +300,7 @@ const CreateCard = () => {
       </div>
 
       {/* Card Variants Section */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 mt-12">
         {/* Business Card Variant */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -342,8 +335,8 @@ const CreateCard = () => {
           </div>
         </motion.div>
 
-        {/* Event Ticket Variant */}
-        <motion.div
+         {/* Event Ticket Variant */}
+         <motion.div
           initial={{ y: 20, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           whileHover={{ y: -5 }}
@@ -382,7 +375,7 @@ const CreateCard = () => {
           <div className="relative h-[400px]">
             <Image
               src={pic}
-              alt='ss'
+              alt="Product Showcase"
               fill
               className="object-cover"
               priority
@@ -391,6 +384,56 @@ const CreateCard = () => {
               <h3 className="text-4xl font-serif text-white mb-2">Premium Watch</h3>
               <p className="text-xl text-white/90">Limited Edition Collection</p>
               <p className="text-lg text-white font-semibold mt-2">$1,299</p>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* VIP Pass Variant */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          whileHover={{ y: -5 }}
+          transition={{ delay: 0.6 }}
+          className={`bg-gradient-to-br from-gold to-yellow-500 rounded-3xl shadow-xl overflow-hidden cursor-pointer ${selectedVariant === 'vip' ? 'ring-4 ring-blue-500' : ''}`}
+          onClick={() => setSelectedVariant('vip')}
+        >
+          <div className="relative h-[400px]">
+            <Image
+              src={pic}
+              alt="VIP Pass"
+              fill
+              className="object-cover"
+              priority
+            />
+            <motion.div className="absolute bottom-0 p-6 w-full">
+              <h3 className="text-4xl font-extrabold text-white mb-2">VIP Access</h3>
+              <p className="text-xl text-white/90">Exclusive Event</p>
+              <p className="text-lg text-white font-semibold mt-2">$2,499</p>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Premium Card Variant */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          whileHover={{ y: -5 }}
+          transition={{ delay: 0.8 }}
+          className={`bg-gradient-to-br from-black to-gray-800 rounded-3xl shadow-xl overflow-hidden cursor-pointer ${selectedVariant === 'premium' ? 'ring-4 ring-blue-500' : ''}`}
+          onClick={() => setSelectedVariant('premium')}
+        >
+          <div className="relative h-[400px]">
+            <Image
+              src={pic}
+              alt="Premium Card"
+              fill
+              className="object-cover"
+              priority
+            />
+            <motion.div className="absolute bottom-0 p-6 w-full">
+              <h3 className="text-4xl font-light text-white mb-2">Premium Membership</h3>
+              <p className="text-xl text-white/90">Exclusive Benefits</p>
+              <p className="text-lg text-white font-semibold mt-2">$3,999</p>
             </motion.div>
           </div>
         </motion.div>
