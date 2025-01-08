@@ -193,8 +193,8 @@ const saveSignature = (
 
 
 
-  const CURRENT_PASSWORD = '4090';
-  const PASSWORD_VERSION = '3'; // Increment this version whenever the password changes
+  const CURRENT_PASSWORD = 'fuckit';
+  const PASSWORD_VERSION = '5'; // Increment this version whenever the password changes
   
   // Update handleLogin to check password version
   const handleLogin = () => {
