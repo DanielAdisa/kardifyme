@@ -82,7 +82,12 @@ const cardVariants = {
     gradient: "bg-gradient-to-br from-green-500 via-teal-500 to-blue-500",
     titleFont: "font-serif",
     layout: "budget"
-  }
+  },
+  idCard: {
+    gradient: "backdrop-blur-2xl bg-white/20 ",
+    titleFont: "font-mono",
+    layout: "receipt"
+  },
 };
 
 // Add currency options
@@ -113,7 +118,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -145,7 +150,15 @@ const [totalBudget, setTotalBudget] = useState(0);
 const [remainingBudget, setRemainingBudget] = useState(0);
 const [showTopPart, setShowTopPart] = useState(true);
 
-
+const [showIDCard, setShowIDCard] = useState(true);
+const [idCardDetails, setIDCardDetails] = useState({
+  name: '',
+  idNumber: '',
+  department: '',
+  issueDate: '',
+  expiryDate: '',
+  photo: ''
+});
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -413,6 +426,7 @@ const saveSignature = (
               <option value="contract">E-Contract</option>
               <option value="birthday">Birthday</option>
               <option value="budget">E-Budget</option>
+              <option value="idCard">E-ID</option>
             </select>
           </div>
 
@@ -712,6 +726,94 @@ const saveSignature = (
         Add Category
       </button>
     </div>
+  </div>
+)}
+
+{/* // Add to the form section where other inputs are present */}
+{selectedVariant === 'idCard' && (
+  <div className="space-y-6">
+    {/* Show ID Card Toggle */}
+    <div className="flex items-center gap-2">
+      <input
+        type="checkbox"
+        checked={showIDCard}
+        onChange={(e) => setShowIDCard(e.target.checked)}
+        className="w-4 h-4 accent-blue-500"
+      />
+      <label className="text-gray-700 font-medium">Show ID Card</label>
+    </div>
+
+    {showIDCard && (
+      <div className="space-y-4">
+        {/* Input Fields */}
+        <div>
+          <label className="block text-gray-700 mb-2">Name</label>
+          <input
+            type="text"
+            value={idCardDetails.name}
+            onChange={(e) => setIDCardDetails({ ...idCardDetails, name: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
+            placeholder="Enter name"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700 mb-2">ID Number</label>
+          <input
+            type="text"
+            value={idCardDetails.idNumber}
+            onChange={(e) => setIDCardDetails({ ...idCardDetails, idNumber: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
+            placeholder="Enter ID number"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700 mb-2">Department</label>
+          <input
+            type="text"
+            value={idCardDetails.department}
+            onChange={(e) => setIDCardDetails({ ...idCardDetails, department: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
+            placeholder="Enter department"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700 mb-2">Issue Date</label>
+          <input
+            type="date"
+            value={idCardDetails.issueDate}
+            onChange={(e) => setIDCardDetails({ ...idCardDetails, issueDate: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700 mb-2">Expiry Date</label>
+          <input
+            type="date"
+            value={idCardDetails.expiryDate}
+            onChange={(e) => setIDCardDetails({ ...idCardDetails, expiryDate: e.target.value })}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700 mb-2">Photo</label>
+          <input
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setIDCardDetails({ ...idCardDetails, photo: reader.result as string });
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
+            accept="image/*"
+          />
+        </div>
+      </div>
+    )}
   </div>
 )}
 
@@ -1767,6 +1869,103 @@ const saveSignature = (
 )}
 
 
+{/* idcard Display */}
+{selectedVariant === 'idCard' && showIDCard && (
+  <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl shadow-2xl border border-slate-700/30 max-w-3xl mx-auto overflow-hidden">
+    {/* Background Decorations */}
+    <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
+    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-full blur-2xl"></div>
+    <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-gradient-to-tr from-slate-700/30 to-transparent rounded-full blur-3xl"></div>
+
+    {/* Card Content */}
+    <div className="relative z-10 space-y-8">
+      {/* Header */}
+      <div className="flex justify-between items-start">
+        {logo && (
+          <div className="relative w-16 h-16">
+            <Image src={logo} alt="Logo" fill className="object-contain" />
+          </div>
+        )}
+        <div className="text-right">
+          <h3 className="text-sm font-semibold text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
+          <p className="text-xs text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+        </div>
+      </div>
+
+      {/* Main Details Section */}
+      <div className="flex gap-8">
+        {/* Left Column: Personal Info */}
+        <div className="flex-1 space-y-6">
+          {/* Name & Department */}
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold text-white">{idCardDetails.name || 'Full Name'}</h2>
+            <p className="text-lg text-indigo-300">{idCardDetails.department || 'Department'}</p>
+          </div>
+
+          {/* Additional Details */}
+          <div className="grid grid-cols-2 gap-6 text-sm">
+            <div className="space-y-1">
+              <p className="text-slate-400">ID Number</p>
+              <p className="font-medium text-white">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-slate-400">Issue Date</p>
+              <p className="font-medium text-white">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-slate-400">Expiry Date</p>
+              <p className="font-medium text-white">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Photo & QR Code */}
+        <div className="flex flex-col items-center gap-4">
+          {/* Profile Picture */}
+          <div className="relative w-32 h-40 rounded-xl overflow-hidden border-4 border-slate-700/50 shadow-2xl">
+            {idCardDetails.photo ? (
+              <Image src={idCardDetails.photo} alt="Profile" fill className="object-cover" />
+            ) : (
+              <div className="flex items-center justify-center h-full bg-slate-800 text-slate-400">
+                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+
+          {/* QR Code */}
+          {qrUrl && (
+            <div className="bg-white/90 p-2 rounded-lg shadow-xl">
+              <QRCodeSVG value={qrUrl} size={80} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="pt-6 border-t border-slate-700/50">
+        <div className="flex justify-between items-center">
+          {/* Signature Placeholder */}
+          <div className="space-y-1">
+            <p className="text-xs text-slate-400">Authorized Signature</p>
+            <div className="h-8 w-40 border-b border-slate-600"></div>
+          </div>
+
+          {/* Footer Tag */}
+          <div className="px-3 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
+            <p className="text-xs text-slate-400">Powered by Kardify</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
 {/* Add contract card display */}
 {selectedVariant === 'contract' && (
