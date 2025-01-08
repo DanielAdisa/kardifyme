@@ -7,6 +7,8 @@ import Image from 'next/image';
 import place from "@/public/12.jpg"
 import SignatureCanvas from 'react-signature-canvas';
 import type ReactSignatureCanvas from 'react-signature-canvas';
+import { ethers } from 'ethers';
+
 
 
 
@@ -56,6 +58,11 @@ const cardVariants = {
     gradient: "bg-gradient-to-br from-blue-900 to-indigo-900",
     titleFont: "font-mono",
     layout: "contract"
+  },
+  birthday: {
+    gradient: "bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500",
+    titleFont: "font-serif",
+    layout: "birthday"
   }
 };
 
@@ -88,7 +95,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -111,6 +118,11 @@ const [party2Sign, setParty2Sign] = useState('');
 const [contractTerms, setContractTerms] = useState('');
 const [contractDate, setContractDate] = useState('');
 const [contractValue, setContractValue] = useState('');
+const [celebrantName, setCelebrantName] = useState('');
+const [age, setAge] = useState('');
+const [message, setMessage] = useState('');
+const [wishType, setWishType] = useState('Happy Birthday');
+
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -284,6 +296,45 @@ const saveSignature = (
     }
   };
 
+  function calculateDaysUntilNextBirthday(age: string): React.ReactNode {
+    // If no age provided, return placeholder text
+    if (!age) {
+      return "Loading...";
+    }
+
+    try {
+      // Get current date
+      const today = new Date();
+      const currentYear = today.getFullYear();
+
+      // Create date object for this year's birthday
+      const thisYearBirthday = new Date();
+      thisYearBirthday.setFullYear(currentYear);
+
+      // If birthday has passed this year, calculate for next year
+      if (today > thisYearBirthday) {
+        thisYearBirthday.setFullYear(currentYear + 1);
+      }
+
+      // Calculate difference in days
+      const diffTime = thisYearBirthday.getTime() - today.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      // Format the response
+      if (diffDays === 0) {
+        return "Today! 🎉";
+      } else if (diffDays === 1) {
+        return "Tomorrow!";
+      } else {
+        return `${diffDays} days`;
+      }
+
+    } catch (error) {
+      console.error("Error calculating birthday countdown:", error);
+      return "Calculate your birthday countdown";
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-4">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
@@ -309,6 +360,7 @@ const saveSignature = (
               <option value="flyer">E-Flyer</option>
               <option value="recipe">E-Recipe</option>
               <option value="contract">E-Contract</option>
+              <option value="birthday">Birthday</option>
             </select>
           </div>
 
@@ -799,6 +851,60 @@ const saveSignature = (
         onChange={(e) => setValidUntil(e.target.value)}
         className="w-full p-3 rounded-xl border border-slate-300"
       />
+    </div>
+  </div>
+)}
+
+
+{/* Add birthday input fields */}
+{selectedVariant === 'birthday' && (
+  <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Celebrant's Name</label>
+        <input
+          type="text"
+          value={celebrantName}
+          onChange={(e) => setCelebrantName(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+          placeholder="Enter name"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Age</label>
+        <input
+          type="number"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+          placeholder="Enter age"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Birthday Message</label>
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 min-h-[100px]"
+        placeholder="Write your birthday message..."
+      />
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Wish Type</label>
+      <select
+        value={wishType}
+        onChange={(e) => setWishType(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300"
+      >
+        <option>Happy Birthday</option>
+        <option>Happy Birthday!</option>
+        <option>Many Happy Returns</option>
+        <option>Feliz Cumpleaños</option>
+        <option>Joyeux Anniversaire</option>
+      </select>
     </div>
   </div>
 )}
@@ -1362,7 +1468,7 @@ const saveSignature = (
       <div className="md:w-1/3 space-y-6">
         {image && (
           <div className="rounded-2xl overflow-hidden shadow-lg">
-            <Image src={image} alt={title} width={300} height={300} className=" w-full object-cover" />
+            <Image src={image} alt={title} width={300} height={300} className=" w-full h-[200px] object-cover object-top" />
           </div>
         )}
         
@@ -1523,6 +1629,103 @@ const saveSignature = (
     </div>
   </div>
 )}
+
+
+{/* Add birthday card display */}
+{selectedVariant === "birthday" && (
+  <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-10 rounded-3xl shadow-2xl overflow-hidden animate-gradient-x">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
+    <div className="absolute -top-28 -right-28 w-[28rem] h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
+    <div className="absolute -bottom-28 -left-28 w-[28rem] h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
+    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+
+    <div className="relative z-10 space-y-10">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
+          {wishType || "Happy Birthday!"}
+        </h2>
+        <p className="text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
+          {celebrantName || "Dear Friend"}
+        </p>
+        {age && (
+          <p className="text-3xl text-white/90 drop-shadow-lg">
+            on your {age}
+            <sup>th</sup> Birthday!
+          </p>
+        )}
+      </div>
+
+      {/* Main Image */}
+      {image && (
+        <div className="relative mx-auto w-72 h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
+          <Image
+            src={image}
+            alt="Birthday Memory"
+            fill
+            className="object-cover"
+          />
+        </div>
+      )}
+
+      {/* Countdown Timer */}
+      <div className="text-center">
+        <p className="text-xl text-white/80">Your next birthday is in:</p>
+        <p className="text-4xl font-bold text-white tracking-wide">
+          {calculateDaysUntilNextBirthday(age)}
+        </p>
+      </div>
+
+      {/* Message */}
+      <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-lg">
+        <p className="text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
+          {message ||
+            "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
+        </p>
+      </div>
+
+      {/* Social Media Share */}
+      <div className="text-center space-x-4">
+        <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Share on Facebook
+        </button>
+        <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Tweet
+        </button>
+        <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Share on Instagram
+        </button>
+      </div>
+
+      {/* Footer */}
+      <div className="flex justify-between items-center pt-6">
+        <div className="flex items-center gap-4">
+          {logo && (
+            <div className="relative w-16 h-16 hover:scale-110 transition-transform duration-300">
+              <Image
+                src={logo}
+                alt="Logo"
+                fill
+                className="rounded-full object-cover border-2 border-white/50"
+              />
+            </div>
+          )}
+          {qrUrl && (
+            <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+              <QRCodeSVG value={qrUrl} size={48} />
+            </div>
+          )}
+        </div>
+        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md">
+          Celebrate with Kardify 🎉
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
               {/* Event Variant */}
               {selectedVariant === 'event' && (
                 <div className="bg-white/95 p-4 rounded-2xl shadow-lg">
