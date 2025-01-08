@@ -400,10 +400,11 @@ const saveSignature = (
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-3">
+      <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-3">
         <h1 className="text-3xl font-bold mb-6 text-center text-stone-950">Create Your Card</h1>
-        <div className="space-y-6">
+        {/* input fields */}
+        <div className="space-y-4">
           {/* Other Inputs */}
 
           {/* Select Card Type */}
@@ -1501,7 +1502,7 @@ const saveSignature = (
         >
           {/* Card Hero with responsive height */}
           {showTopPart && (
-  <div className="relative w-full h-[250px] sm:h-[250px] md:h-[300px]">
+  <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px]">
     {image ? (
       <Image
         src={image || place} // Set default image
@@ -1578,10 +1579,10 @@ const saveSignature = (
 
           {/* Update the card content section */}
           {showBottomPart && (
-            <div className={`p-3 ${selectedVariant === 'product' ? 'bg-white/95' : ''}`}>
+            <div className={`p-1 ${selectedVariant === 'product' ? 'bg-white/95' : ''}`}>
               {/* Product Variant */}
               {selectedVariant === 'product' && (
-                <div className="space-y-6 bg-white/95 p-4 rounded-2xl shadow-lg">
+                <div className="space-y-4 bg-white/95 p-4 rounded-2xl shadow-lg">
                   <div className="flex justify-between items-start">
                     <div className="space-y-3">
                       <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
@@ -1907,18 +1908,18 @@ const saveSignature = (
           </div>
 
           {/* Additional Details */}
-          <div className="grid grid-cols-1 gap-4 text-sm">
+          <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="space-y-1">
-              <p className="text-stone-50/80  text-[11px] text-center p-0.5 rounded-xl font-semibold">ID Number</p>
-              <p className="font-medium text-stone-50/90 bg-slate-800 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+              <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">ID Number</p>
+              <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-stone-50/80  text-[11px] text-center p-0.5 rounded-xl font-semibold">Issue Date</p>
-              <p className="font-medium text-stone-50/90 bg-slate-800 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
+              <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">Issue Date</p>
+              <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-stone-50/80  text-[11px] text-center p-0.5 rounded-xl font-semibold">Expiry Date</p>
-              <p className="font-medium text-stone-50/90 bg-slate-800 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+              <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">Expiry Date</p>
+              <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
             </div>
           </div>
         </div>
@@ -2308,8 +2309,8 @@ const saveSignature = (
                   </div> */}
                 </div>
               )}
-              <div className="mt-4 flex justify-end">
-          <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800/40 text-stone-50">
+              <div className="mt-2 flex justify-end">
+          <div className="text-xs  w-full text-center rounded-b-2xl px-2 py-1 rounded-md bg-slate-800/40 text-stone-50">
             Kardify Me+
           </div>
         </div>
