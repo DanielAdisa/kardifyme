@@ -178,7 +178,7 @@ const [budgetState, setBudgetState] = useState<BudgetState>({
   currency: 'USD'
 });
 
-// Add after existing state declarations
+
 const [cardColor, setCardColor] = useState({
   business: '#ffffff',
   event: '#ff5733',
@@ -487,10 +487,10 @@ const baseLabelStyles = `
         <div className="space-y-4">
           {/* Other Inputs */}
 
-          // Add this inside the form component, before the variant-specific inputs
-<div className="space-y-4 p-4 bg-white/5 rounded-xl">
-  <div>
-    <label className="block text-sm font-medium text-slate-700">Card Color</label>
+          
+<div className={baseWrapperStyles}>
+  <div >
+    <label className={baseLabelStyles}>Card Color</label>
     <input
       type="color"
       value={cardColor[selectedVariant]}
@@ -498,26 +498,31 @@ const baseLabelStyles = `
         ...cardColor,
         [selectedVariant]: e.target.value
       })}
-      className="w-full h-10 rounded-lg mt-1"
+      className={`${baseInputStyles}  cursor-pointer py-0 h-[53px] rounded- px-0`}
     />
   </div>
   
   <div>
-    <label className="block text-sm font-medium text-slate-700">Template Style</label>
+    <label className={baseLabelStyles}>Template Style</label>
     <select
       value={selectedTemplate[selectedVariant]}
       onChange={(e) => setSelectedTemplate({
         ...selectedTemplate,
         [selectedVariant]: e.target.value
       })}
-      className="w-full p-2 rounded-lg border mt-1"
+      className={`${baseInputStyles} cursor-pointer appearance-none pr-10`}
+      
     >
+      
       {templateOptions[selectedVariant].map((template) => (
         <option key={template} value={template}>
           {template.charAt(0).toUpperCase() + template.slice(1)}
+          
         </option>
+        
       ))}
     </select>
+    
   </div>
 </div>
 
