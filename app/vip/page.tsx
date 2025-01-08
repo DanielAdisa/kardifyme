@@ -117,6 +117,14 @@ const [contractValue, setContractValue] = useState('');
   const [party1Signature, setParty1Signature] = useState('');
 const [party2Signature, setParty2Signature] = useState('');
 
+
+const handleDeleteImage = (type: 'main' | 'logo') => {
+  if (type === 'main') {
+    setImage('');
+  } else if (type === 'logo') {
+    setLogo('');
+  }
+};
 // Import the type from react-signature-canvas
 
 // Refs for signature canvases
@@ -986,25 +994,54 @@ const saveSignature = (
 
             {/* Common fields for all variants */}
             <div>
-              <label className="block text-stone-950 mb-2">Upload Image</label>
-              <input
-                type="file"
-                onChange={(e) => handleImageChange(e, 'main')}
-                className="w-full p-2 rounded-lg border border-slate-300"
-                title="Upload an image"
-                placeholder="Upload an image"
-              />
-            </div>
-            <div>
-              <label className="block text-stone-950 mb-2">Upload Logo</label>
-              <input
-                type="file"
-                onChange={(e) => handleImageChange(e, 'logo')}
-                className="w-full p-2 rounded-lg border border-slate-300"
-                title="Upload a logo"
-                placeholder="Upload a logo"
-              />
-            </div>
+  <label className="block text-stone-950 mb-2">Upload Image</label>
+  <div className="space-y-2">
+    {image && (
+      <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden">
+        <Image src={image} alt="Uploaded" fill className="object-cover" />
+        <button
+          onClick={() => handleDeleteImage('main')}
+          className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    )}
+    <input
+      type="file"
+      onChange={(e) => handleImageChange(e, 'main')}
+      className="w-full p-3 rounded-xl border border-slate-300"
+      accept="image/*"
+    />
+  </div>
+</div>
+
+<div>
+  <label className="block text-stone-950 mb-2">Upload Logo</label>
+  <div className="space-y-2">
+    {logo && (
+      <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden">
+        <Image src={logo} alt="Logo" fill className="object-cover" />
+        <button
+          onClick={() => handleDeleteImage('logo')}
+          className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    )}
+    <input
+      type="file"
+      onChange={(e) => handleImageChange(e, 'logo')}
+      className="w-full p-3 rounded-xl border border-slate-300"
+      accept="image/*"
+    />
+  </div>
+</div>
             <div>
               <label className="block text-stone-950 mb-2">QR Code URL</label>
               <input
@@ -1359,8 +1396,8 @@ const saveSignature = (
 {selectedVariant === 'contract' && (
   <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-4 rounded-3xl shadow-2xl overflow-hidden">
     {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-grid-white/10"></div>
-    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+    <div className="absolute z-10 inset-0 bg-grid-white/10"></div>
+    <div className="absolute z-10 top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
     
     <div className="relative z-10 space-y-4">
       {/* Header with Official Seal */}
