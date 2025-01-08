@@ -33,14 +33,16 @@ const cardVariants = {
       modern: 'bg-white/40',
       classic: 'bg-stone-100/40',
       minimal: 'bg-slate-50/40'
-    }
+    },
+    layout: 'business'
   },
   event: {
     templates: {
       classic: 'bg-gradient-to-br from-blue-500 to-pink-500',
       bold: 'bg-gradient-to-br from-purple-600 to-red-500',
       elegant: 'bg-gradient-to-br from-indigo-500 to-pink-500'
-    }
+    },
+    layout: 'event'
   },
   product: {
     gradient: "bg-gradient-to-br from-slate-800 to-slate-900",
@@ -1796,7 +1798,7 @@ const baseLabelStyles = `
       animate={{ y: 0, opacity: 1 }}
       className="absolute bottom-0 p-4 sm:p-6 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent"
     >
-      <h1 className={`text-xl md:text-6xl ${cardVariants[selectedVariant]?.titleFont} text-white mb-2 tracking-tight`}>
+      <h1 className={`text-xl md:text-6xl ${'titleFont' in cardVariants[selectedVariant] ? cardVariants[selectedVariant].titleFont : 'default-font'} text-white mb-2 tracking-tight`}>
         {title || 'Untitled'}
       </h1>
       <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl whitespace-pre-line font-light ">
