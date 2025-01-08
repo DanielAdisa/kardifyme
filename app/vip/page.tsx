@@ -862,6 +862,26 @@ const saveSignature = (
         />
       </div>
     </div>
+    <div className="flex gap-2">
+    <input
+      type="number"
+      value={contractValue}
+      onChange={(e) => setContractValue(e.target.value)}
+      className="flex-1 p-3 rounded-xl border border-slate-300"
+      placeholder="Enter contract value"
+    />
+    <select
+      value={currency}
+      onChange={(e) => setCurrency(e.target.value)}
+      className="w-32 p-3 rounded-xl border border-slate-300"
+    >
+      {currencyOptions.map(option => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  </div>
 
     {/* Party Information */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1556,34 +1576,44 @@ const saveSignature = (
 
 {/* Budget Display */}
 {selectedVariant === 'budget' && (
-  <div className="relative bg-gradient-to-br from-green-500 via-teal-500 to-blue-500 p-8 rounded-3xl shadow-2xl overflow-hidden">
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-grid-white/10"></div>
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
-    
-    <div className="relative z-10 space-y-8">
-      {/* Header */}
-      <div className="text-center border-b border-white/20 pb-6">
-        <h2 className="text-4xl font-serif text-white mb-2">{title || 'Monthly Budget'}</h2>
-        <p className="text-xl text-white/90">{budgetState.monthYear}</p>
-        <div className="mt-4 text-3xl font-bold text-white">
+  <div className="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 p-4 rounded-2xl shadow-xl overflow-hidden">
+    {/* Subtle Background Elements */}
+    <div className="absolute inset-0 bg-grid-gray-600/10 z-0"></div>
+    <div className="absolute -top-20 -right-20 w-60 h-60 bg-teal-500/20 rounded-full blur-3xl z-0"></div>
+    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-500/20 rounded-full blur-3xl z-0"></div>
+
+    <div className="relative z-10 space-y-4">
+      {/* Header Section */}
+      <div className="text-center border-b border-gray-600/20 pb-4">
+        <h2 className="text-2xl md:text-3xl font-semibold text-teal-300">
+          {title || 'Monthly Budget'}
+        </h2>
+        <p className="text-sm md:text-base text-gray-400">{budgetState.monthYear}</p>
+        <div className="mt-2 text-xl md:text-2xl font-bold text-teal-100">
           {formatCurrency(budgetState.totalBudget, budgetState.currency)}
         </div>
       </div>
 
-      {/* Categories Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Budget Categories */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {budgetState.categories.map((category) => (
-          <div key={category.id} className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="text-lg font-medium text-white">{category.name}</h3>
-              <span className="text-white/90">{formatCurrency(category.amount, budgetState.currency)}</span>
+          <div
+            key={category.id}
+            className="bg-gray-700 p-3 rounded-lg shadow-sm border border-gray-600"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-base md:text-lg font-medium text-teal-200">
+                {category.name}
+              </h3>
+              <span className="text-sm text-gray-300">
+                {formatCurrency(category.amount, budgetState.currency)}
+              </span>
             </div>
-            <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-white/60 rounded-full"
+            <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-teal-400 rounded-full"
                 style={{
-                  width: `${(category.amount / budgetState.totalBudget) * 100}%`
+                  width: `${(category.amount / budgetState.totalBudget) * 100}%`,
                 }}
               />
             </div>
@@ -1592,10 +1622,10 @@ const saveSignature = (
       </div>
 
       {/* Summary Section */}
-      <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl">
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-white/90">Total Spent</span>
-          <span className="text-white font-medium">
+      <div className="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-600">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm md:text-base text-gray-400">Total Spent</span>
+          <span className="text-sm md:text-base text-teal-200 font-medium">
             {formatCurrency(
               budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
               budgetState.currency
@@ -1603,31 +1633,32 @@ const saveSignature = (
           </span>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-white/90">Remaining</span>
-          <span className="text-white font-medium">
+          <span className="text-sm md:text-base text-gray-400">Remaining</span>
+          <span className="text-sm md:text-base text-teal-200 font-medium">
             {formatCurrency(
-              budgetState.totalBudget - 
-              budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
+              budgetState.totalBudget -
+                budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
               budgetState.currency
             )}
           </span>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="flex justify-between items-center pt-4 border-t border-white/20">
+      {/* Footer Section */}
+      <div className="flex justify-between items-center pt-3 border-t border-gray-600/20">
         {logo && (
-          <div className="relative w-16 h-16">
-            <Image 
-              src={logo} 
-              alt="Logo" 
-              fill 
-              className="rounded-full object-cover border-2 border-white/50" 
+          <div className="relative w-12 h-12">
+            <Image
+              src={logo}
+              alt="Logo"
+              fill
+              className="rounded-full object-cover border-2 border-gray-500"
             />
           </div>
         )}
-        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
-          Kardify Budget Planner
+        <div className="text-sm text-gray-400">
+          <p>Plan your expenses wisely</p>
+          <p className="text-teal-300 font-medium">Powered by Kardify</p>
         </div>
       </div>
     </div>
