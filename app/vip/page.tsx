@@ -1362,7 +1362,7 @@ const saveSignature = (
       <div className="md:w-1/3 space-y-6">
         {image && (
           <div className="rounded-2xl overflow-hidden shadow-lg">
-            <Image src={image} alt={title} width={400} height={300} className="object-cover" />
+            <Image src={image} alt={title} width={300} height={300} className=" w-full object-cover" />
           </div>
         )}
         
