@@ -295,6 +295,25 @@ const cardVariants = {
       }
     }
   },
+  menu: {
+    templates: {
+      modern: {
+        // background: 'bg-white',
+        font: 'font-serif',
+        layout: 'p-1'
+      },
+      classic: {
+        // background: 'bg-stone-100',
+        font: 'font-mono',
+        layout: 'p-0.5'
+      },
+      minimal: {
+        // background: 'bg-slate-50',
+        font: 'font-sans',
+        layout: 'p-0'
+      }
+    }
+  },
 };
 
 // Add currency options
@@ -327,7 +346,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -364,6 +383,7 @@ const smileys = ['😊', '😢', '😂', '😍', '😎', '😡', '😱', '😴',
 const [date, setDate] = useState('');
 const [name, setName] = useState('');
 const [titleColor, setTitleColor] = useState('#000000');
+const [subtitleColor, setSubtitleColor] = useState('#000000');
 const [descriptionColor, setDescriptionColor] = useState('#000000');
 const [dateNameColor, setDateNameColor] = useState('#000000');
 const [gradientFrom, setGradientFrom] = useState('#ff7e5f');
@@ -375,6 +395,65 @@ const [affirmationTime, setAffirmationTime] = useState('');
 const [affirmationDate, setAffirmationDate] = useState('');
 const [affirmationTextColor, setAffirmationTextColor] = useState('#000000');
 const [cardBackgroundColor, setCardBackgroundColor] = useState('#ffffff');
+const [categoryName, setCategoryName] = useState('');
+const [categoryDescription, setCategoryDescription] = useState('');
+const [menuItemName, setMenuItemName] = useState('');
+const [menuItemDescription, setMenuItemDescription] = useState('');
+const [menuItemPrice, setMenuItemPrice] = useState('');
+const [menuItemTags, setMenuItemTags] = useState('');
+const [menuItemImage, setMenuItemImage] = useState<File | null>(null);
+const [menuTitle, setMenuTitle] = useState('');
+const [menuSubtitle, setMenuSubtitle] = useState('');
+const formatCurrency = (value: number, currency: string) => {
+  return new Intl.NumberFormat('en-NG', {
+    style: 'currency',
+    currency: currency === 'NGN' ? 'NGN' : currency,
+    minimumFractionDigits: 0,
+  }).format(value);
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 0,
+  }).format(value);
+};
+interface MenuItem {
+  name: string;
+  image?: File | string;
+  textColor?: string;
+  price?: string;
+  description?: string;
+  descriptionColor?: string;
+  tags?: string;
+  currency?: string;
+}
+
+interface MenuCategory {
+  name: string;
+  textColor: string;
+  description: string;
+  items: MenuItem[];
+}
+
+const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
+const [specialItemDescription, setSpecialItemDescription] = useState('');
+// const [specialItemImage, setSpecialItemImageState] = useState<string | null>(null);
+const [menuBackgroundColor, setMenuBackgroundColor] = useState('#FFFFFF');
+
+// function setSpecialItemImage(file: File): void {
+//   if (file) {
+//     const reader = new FileReader();
+//     reader.onload = (event) => {
+//       setSpecialItemImageState(event.target?.result as string);
+//     };
+//     reader.readAsDataURL(file);
+//   }
+// }
+
+
+const [categoryTextColor, setCategoryTextColor] = useState('#555');
+
+const [itemTitleColor, setItemTitleColor] = useState('#333');
+const [itemDescriptionColor, setItemDescriptionColor] = useState('#555');
 
 const [showIDCard, setShowIDCard] = useState(true);
 const [idCardDetails, setIDCardDetails] = useState({
@@ -415,7 +494,8 @@ const [cardColor, setCardColor] = useState({
   budget: '#33ffa8',
   idCard: '#ffffff',
   mood: '#ffeb3b',
-  affirmations: '#ffeb3b'
+  affirmations: '#ffeb3b',
+  menu: '#ffffff',
 });
 
 const [selectedTemplate, setSelectedTemplate] = useState({
@@ -433,6 +513,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   idCard: 'minimal',
   mood: 'energetic',
   affirmations: 'minimal',
+  menu: 'minimal',
 });
 
 const templateOptions = {
@@ -450,6 +531,7 @@ const templateOptions = {
   idCard: ['standard', 'modern', 'minimal'],
   mood: ['happy', 'calm', 'energetic'],
   affirmations: ['modern', 'classic', 'minimal'],
+  menu: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -570,8 +652,14 @@ const saveSignature = (
     );
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'main' | 'logo' | 'moodPicture') => {
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: 'main' | 'logo' | 'moodPicture' | 'menuItem',
+    categoryIndex?: number,
+    itemIndex?: number
+  ) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
       const reader = new FileReader();
       reader.onload = (event) => {
         if (type === 'main') {
@@ -580,12 +668,16 @@ const saveSignature = (
           setLogo(event.target?.result as string);
         } else if (type === 'moodPicture') {
           setMoodPicture(event.target?.result as string);
+        } else if (type === 'menuItem' && categoryIndex !== undefined && itemIndex !== undefined) {
+          const newCategories = [...menuCategories];
+          newCategories[categoryIndex].items[itemIndex].image = file;
+          setMenuCategories(newCategories);
         }
       };
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     }
   };
-
+  
   // Add error handling for image generation
   const generateImage = async () => {
     if (!cardRef.current) return;
@@ -649,13 +741,7 @@ const baseLabelStyles = `
   };
 
   // Utility function to format currency
-  const formatCurrency = (value: number, currency: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 0,
-    }).format(value);
-  };
+
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -733,6 +819,23 @@ const baseLabelStyles = `
       return "Calculate your birthday countdown";
     }
   }
+  // const [specialItemImage, setSpecialItemImageState] = useState<string | null>(null);
+
+  // function setSpecialItemImage(file: File): void {
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       setSpecialItemImageState(e.target?.result as string);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
+  
+  interface MenuItem {
+    name: string;
+    image?: string | File;
+  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-3">
@@ -771,6 +874,7 @@ const baseLabelStyles = `
         <option value="idCard">🆔 E-ID</option>
         <option value="mood">📜 Mood</option>
         <option value="affirmations">📜 Affirmations</option>
+        <option value="menu">📜 E-Menu</option>
       </select>
       <div className="absolute right-3 top-[41px] pointer-events-none text-slate-400">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2069,6 +2173,212 @@ const baseLabelStyles = `
             )}
 
 
+            {/* Menu specific fields */}
+            {selectedVariant === 'menu' && (
+  <div className="space-y-6 p-4 sm:p-6 md:p-8 bg-white shadow-lg rounded-lg">
+    {/* Menu Title and Subtitle */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label className="block text-gray-700 text-sm font-medium">Menu Title</label>
+        <input
+          type="text"
+          value={menuTitle}
+          onChange={(e) => setMenuTitle(e.target.value)}
+          className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+          placeholder="Enter Menu Title"
+        />
+        <input
+          type="color"
+          value={titleColor}
+          onChange={(e) => setTitleColor(e.target.value)}
+          className="w-full mt-2 h-10 rounded-lg border border-gray-300"
+          title="Title Text Color"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 text-sm font-medium">Menu Subtitle</label>
+        <input
+          type="text"
+          value={menuSubtitle}
+          onChange={(e) => setMenuSubtitle(e.target.value)}
+          className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+          placeholder="Enter Menu Subtitle"
+        />
+        <input
+          type="color"
+          value={subtitleColor}
+          onChange={(e) => setSubtitleColor(e.target.value)}
+          className="w-full mt-2 h-10 rounded-lg border border-gray-300"
+          title="Subtitle Text Color"
+        />
+      </div>
+    </div>
+
+    {/* Menu Categories */}
+    <div>
+      <label className="block text-gray-700 text-sm font-medium">Menu Categories</label>
+      {menuCategories.map((category, index) => (
+        <div
+          key={index}
+          className="p-4 mt-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4"
+        >
+          {/* Category Name */}
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={category.name}
+              onChange={(e) => {
+                const updatedCategories = [...menuCategories];
+                updatedCategories[index].name = e.target.value;
+                setMenuCategories(updatedCategories);
+              }}
+              className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+              placeholder="Category Name"
+            />
+            <input
+              type="color"
+              value={category.textColor}
+              onChange={(e) => {
+                const updatedCategories = [...menuCategories];
+                updatedCategories[index].textColor = e.target.value;
+                setMenuCategories(updatedCategories);
+              }}
+              className="w-10 h-10 border border-gray-300 rounded-lg"
+              title="Category Text Color"
+            />
+            <button
+              onClick={() =>
+                setMenuCategories(menuCategories.filter((_, i) => i !== index))
+              }
+              className="text-red-500 text-lg hover:bg-red-50 p-2 rounded-full"
+            >
+              ×
+            </button>
+          </div>
+          {/* Category Description */}
+          <textarea
+            value={category.description}
+            onChange={(e) => {
+              const updatedCategories = [...menuCategories];
+              updatedCategories[index].description = e.target.value;
+              setMenuCategories(updatedCategories);
+            }}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder="Category Description"
+          ></textarea>
+
+          {/* Menu Items */}
+          <div>
+            <label className="block text-gray-700 text-sm font-medium">Menu Items</label>
+            {category.items.map((item, itemIndex) => (
+              <div key={itemIndex} className="flex items-center gap-2 mt-2">
+                <input
+                  type="text"
+                  value={item.name}
+                  onChange={(e) => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items[itemIndex].name = e.target.value;
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                  placeholder="Item Name"
+                />
+                <input
+                  type="text"
+                  value={item.price}
+                  onChange={(e) => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items[itemIndex].price = e.target.value;
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="w-24 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                  placeholder="Price"
+                />
+                <select
+                  value={item.currency}
+                  onChange={(e) => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items[itemIndex].currency = e.target.value;
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="w-24 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                >
+                  {currencyOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="color"
+                  value={item.textColor}
+                  onChange={(e) => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items[itemIndex].textColor = e.target.value;
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="w-10 h-10 border border-gray-300 rounded-lg"
+                  title="Item Text Color"
+                />
+                <button
+                  onClick={() => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items = updatedCategories[index].items.filter(
+                      (_, i) => i !== itemIndex
+                    );
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="text-red-500 text-lg hover:bg-red-50 p-2 rounded-full"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            <button
+              onClick={() => {
+                const updatedCategories = [...menuCategories];
+                updatedCategories[index].items.push({
+                  name: '',
+                  price: '',
+                  currency: currencyOptions[0].value,
+                  textColor: '#000000',
+                  description: '',
+                });
+                setMenuCategories(updatedCategories);
+              }}
+              className="text-emerald-600 mt-2 hover:text-emerald-700"
+            >
+              + Add Item
+            </button>
+          </div>
+        </div>
+      ))}
+      <button
+        onClick={() =>
+          setMenuCategories([
+            ...menuCategories,
+            { name: '', textColor: '#000000', description: '', items: [] },
+          ])
+        }
+        className="text-emerald-600 mt-4 hover:text-emerald-700"
+      >
+        + Add Category
+      </button>
+    </div>
+
+    {/* Special Section */}
+    <div>
+      <label className="block text-gray-700 text-sm font-medium">Special Section</label>
+      <textarea
+        value={specialItemDescription}
+        onChange={(e) => setSpecialItemDescription(e.target.value)}
+        className="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+        placeholder="Enter Today's Special Description"
+      ></textarea>
+    </div>
+  </div>
+)}
+
             {/* Invoice/Receipt/E-Invoice fields */}
             {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
               <>
@@ -3169,6 +3479,123 @@ const baseLabelStyles = `
   </div>
 )}
 
+    {/* Add Menu card display */}
+    {selectedVariant === 'menu' && (
+  <div
+    className="space-y-8 p-6 bg-white shadow-2xl rounded-3xl relative"
+    style={{
+      backgroundColor: menuBackgroundColor || '#FFFFFF',
+    }}
+  >
+    {/* Menu Header */}
+    <div className="text-center space-y-2">
+      <h1
+        className="text-4xl font-bold tracking-tight"
+        style={{ color: titleColor || '#333' }}
+      >
+        {menuTitle || 'Restaurant Menu'}
+      </h1>
+      {menuSubtitle && (
+        <p className="text-lg" style={{ color: subtitleColor || '#666' }}>
+          {menuSubtitle}
+        </p>
+      )}
+    </div>
+
+    {/* Menu Categories */}
+    <div className="space-y-8">
+      {menuCategories && menuCategories.length > 0 ? (
+        menuCategories.map((category, catIndex) => (
+          <div key={catIndex}>
+            {/* Single Category Header */}
+            <div className="mb-4">
+              <h2
+                className="text-2xl font-semibold border-b pb-2"
+                style={{ color: category.textColor || '#555' }}
+              >
+                {category.name || `Category ${catIndex + 1}`}
+              </h2>
+              {category.description && (
+                <p className="text-sm text-gray-500 mt-1">
+                  {category.description}
+                </p>
+              )}
+            </div>
+
+            {/* Menu Items for Category */}
+            <div className="space-y-6">
+              {category.items && category.items.length > 0 ? (
+                category.items.map((item, itemIndex) => (
+                  <div
+                    key={itemIndex}
+                    className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg shadow-sm"
+                  >
+                    {/* Item Image */}
+                    {item.image && (
+                      <div className="w-16 h-16 overflow-hidden rounded-lg">
+                        <img
+                          src={URL.createObjectURL(item.image as File)}
+                          alt={item.name || `Item ${itemIndex + 1}`}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    )}
+                    {/* Item Details */}
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center">
+                        <h3
+                          className="text-lg font-medium"
+                          style={{ color: item.textColor || '#333' }}
+                        >
+                          {item.name || `Item ${itemIndex + 1}`}
+                        </h3>
+                        <span className="text-sm font-semibold text-gray-600">
+                          {item.price ? formatCurrency(parseFloat(item.price), item.currency) : formatCurrency(0, item.currency)}
+                        </span>
+                      </div>
+                      {item.description && (
+                        <p
+                          className="text-sm text-gray-500"
+                          style={{ color: item.descriptionColor || '#555' }}
+                        >
+                          {item.description}
+                        </p>
+                      )}
+                      {item.tags && (
+                        <div className="flex gap-2 mt-2">
+                          {item.tags.split(',').map((tag, tagIndex) => (
+                            <span
+                              key={tagIndex}
+                              className="bg-gray-100 text-xs text-gray-600 px-2 py-1 rounded-full"
+                            >
+                              {tag.trim()}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No items available in this category.</p>
+              )}
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-gray-500 text-center">No categories to display.</p>
+      )}
+    </div>
+
+    {/* Special Section */}
+    {specialItemDescription && (
+      <div className="p-4 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold text-gray-900">Today's Special</h3>
+        <p className="text-sm text-gray-800 mt-1">{specialItemDescription}</p>
+      </div>
+    )}
+  </div>
+)}
 
     {/* Event Variant */}
       {selectedVariant === 'event' && (
