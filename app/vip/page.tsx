@@ -2824,7 +2824,8 @@ const baseLabelStyles = `
             </div>
           </div>
         </div>
-
+        <div className=" flex items-center justify-center gap-6">
+        
         {moodPicture && (
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-all duration-300 rounded-2xl" />
@@ -2838,6 +2839,8 @@ const baseLabelStyles = `
             </div>
           </div>
         )}
+        </div>
+        
       </div>
 
       {/* Description Card */}
@@ -2851,13 +2854,18 @@ const baseLabelStyles = `
       )}
 
       {/* Date and Name Section */}
-      <div className="pt-2 border-t border-white/20">
+      <div className="pt-2 border-t flex items-center w-full justify-between gap-6 border-white/20">
         <p className="text-white leading-relaxed text-lg">
           <strong>Date:</strong> {date}
         </p>
-        <p className="text-white leading-relaxed text-lg">
-          {/* <strong>Name:</strong> {name} */}
-        </p>
+        {/* <p className="text-white leading-relaxed text-lg">
+          <strong>Name:</strong> {name}
+        </p> */}
+        {qrUrl && (
+                  <div className="bg-white/90 justify-end  rounded-lg shadow-xl">
+                    <QRCodeSVG value={qrUrl} size={40} />
+                  </div>
+                )}
       </div>
 
       {/* Footer Accent */}
