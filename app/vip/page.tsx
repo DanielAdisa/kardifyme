@@ -175,7 +175,7 @@ const cardVariants = {
       },
       classic: {
         // background: 'bg-gradient-to-br from-emerald-300 to-teal-500',
-        font: 'font-serif',
+        font: 'font-mono',
         layout: 'p-0'
       }
     }
@@ -453,8 +453,8 @@ const saveSignature = (
 
 
 
-  const CURRENT_PASSWORD = 'fuckit';
-  const PASSWORD_VERSION = '5'; // Increment this version whenever the password changes
+  const CURRENT_PASSWORD = 'epicgames';
+  const PASSWORD_VERSION = '6'; // Increment this version whenever the password changes
   
   // Update handleLogin to check password version
   const handleLogin = () => {
@@ -2199,7 +2199,7 @@ const baseLabelStyles = `
 
     {/* Business Variant */}
       {selectedVariant === 'business' && (
-        <div className="space-y-4 bg-white/40 test rounded-b-md p-4 rounded-2xl shadow-lg">
+        <div className="space-y-4 bg-indigo-500/10 backdrop-blur-2xl border border-white/20 shadow-lg hover:bg-indigo-500/20 transition-all duration-300 test rounded-b-md p-4 rounded-2xl shadow-lg">
           <div className="flex justify-between items-start">
             <div className="space-y-3">
               <h3 className="text-3xl font-bold text-stone-50" style={{color: titleColor}}>{title}</h3>
@@ -2231,12 +2231,12 @@ const baseLabelStyles = `
             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
               <div className="space-y-6 flex-1">
                 <div>
-                  <h3 className="text-6xl font-black text-white mb-4 leading-tight">{title || 'Your Event Title'}</h3>
-                  <p className="text-3xl font-medium text-white/90">{description || 'Add a compelling description'}</p>
+                  <h3 className="text-6xl font-black text-white mb-4 leading-tight"style={{color: titleColor}}>{title || 'Your Event Title'}</h3>
+                  <p className="text-3xl font-medium text-white/90"style={{color: titleColor}}>{description || 'Add a compelling description'}</p>
                 </div>
                 
                 <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl text-white mt-8">
-                  <p className="text-xl leading-relaxed whitespace-pre-line">{largeDescription || 'Enter event details here'}</p>
+                  <p className="text-xl leading-relaxed whitespace-pre-line"style={{color: titleColor}}>{largeDescription || 'Enter event details here'}</p>
                 </div>
               </div>
 
@@ -2244,14 +2244,14 @@ const baseLabelStyles = `
                 {qrUrl && (
                   <div className="bg-white/95 p-4 flex-col items-center justify-center rounded-2xl shadow-lg backdrop-blur-md">
                     <QRCodeSVG value={qrUrl} size={120} />
-                    <p className="text-sm text-center mt-2 text-gray-600 font-medium">Scan for details</p>
+                    <p className="text-sm text-center mt-2 text-gray-600 font-medium"style={{color: titleColor}}>Scan for details</p>
                   </div>
                 )}
                 
                 {price && !isNaN(parseFloat(price)) && (
                   <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl text-center">
-                    <p className="text-sm text-gray-500 mb-1">Price</p>
-                    <p className="text-xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent">
+                    <p className="text-sm text-gray-500 mb-1"style={{color: titleColor}}>Price</p>
+                    <p className="text-xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent"style={{color: titleColor}}>
                       {formatCurrency(parseFloat(price), currency)}
                     </p>
                   </div>
@@ -2371,7 +2371,7 @@ const baseLabelStyles = `
 
     {/* Recipe Display */}
       {selectedVariant === 'recipe' && (
-        <div className="relative bg-gradient-to-br from-emerald-500 to-orange-700 p-3 rounded-2xl rounded-b-md pb-0 shadow-2xl overflow-hidden">
+        <div className="relative bg-gradient-to-br from-blue-500 via-teal-500 to-green-500 p-3 rounded-2xl rounded-b-md pb-0 shadow-2xl overflow-hidden">
           {/* Decorative Elements */}
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
