@@ -287,6 +287,7 @@ const currencyOptions = [
 ];
 
 const CreateCard = () => {
+  const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [largeDescription, setLargeDescription] = useState('');
@@ -1033,7 +1034,9 @@ const baseLabelStyles = `
         placeholder="Enter flyer details, features, or event information"
       />
     </div>
-    <div>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
         <label className="block text-stone-950 mb-2">Gradient From</label>
         <input
           type="color"
@@ -1060,6 +1063,22 @@ const baseLabelStyles = `
           className="w-full h-10 rounded-lg border border-slate-300"
         />
       </div>
+      {/* Background Image Upload */}
+    <div>
+      <label className="block text-gray-800 font-medium mb-2">Upload Background Image</label>
+      <input
+        type="file"
+        onChange={(e) => {
+          if (e.target.files) {
+            setBackgroundImage(e.target.files[0]);
+          }
+        }}
+        className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        accept="image/*"
+      />
+    </div>
+    </div>
+
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Price</label>
@@ -1116,7 +1135,6 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
-
 {/* Budget Input Field */}
 {selectedVariant === 'budget' && (
   <div className="space-y-6">
@@ -2353,68 +2371,104 @@ const baseLabelStyles = `
       )}
 
     {/* Flyer Display */}
-      {selectedVariant === 'flyer' && (
-        <div
-        className={`relative p-4 rounded-t-lg rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+    {selectedVariant === 'flyer' && (
+  <div
+    className="relative p-6 rounded-2xl shadow-2xl overflow-hidden"
+    style={{
+      background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
+    }}
+  >
+    {/* Background Image */}
+    {backgroundImage && (
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-40"
         style={{
-          background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
+          backgroundImage: `url(${URL.createObjectURL(backgroundImage)})`,
         }}
+      ></div>
+    )}
+
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
+    <div className="absolute -top-20 -right-20 w-80 h-80 bg-yellow-400/30 rounded-full blur-3xl"></div>
+    <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-500/30 rounded-full blur-3xl"></div>
+
+    {/* Flyer Content */}
+    <div className="relative z-10 space-y-8 text-center">
+      {/* Title */}
+      <h3
+        className="text-5xl font-bold text-white"
+        style={{ color: titleColor }}
       >
-          {/* Decorative Elements */}
-          {/* <div className="absolute inset-0 bg-black/10"></div>
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div> */}
-          
-          <div className="relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-              <div className="space-y-6 flex-1">
-                <div>
-                  <h3 className="text-6xl font-black text-white mb-4 leading-tight"style={{color: titleColor}}>{title || 'Your Event Title'}</h3>
-                  <p className="text-3xl font-medium text-white/90"style={{color: titleColor}}>{description || 'Add a compelling description'}</p>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl text-white mt-8">
-                  <p className="text-xl leading-relaxed whitespace-pre-line"style={{color: titleColor}}>{largeDescription || 'Enter event details here'}</p>
-                </div>
-              </div>
+        {title || "Party All Night!"}
+      </h3>
 
-              <div className="space-y-6 md:w-1/5 w-full">
-                {qrUrl && (
-                  <div className="bg-white/95 p-4 flex-col items-center justify-center rounded-2xl shadow-lg backdrop-blur-md">
-                    <QRCodeSVG value={qrUrl} size={120} />
-                    <p className="text-sm text-center mt-2 text-gray-600 font-medium"style={{color: titleColor}}>Scan for details</p>
-                  </div>
-                )}
-                
-                {price && !isNaN(parseFloat(price)) && (
-                  <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl text-center">
-                    <p className="text-sm text-gray-500 mb-1"style={{color: titleColor}}>Price</p>
-                    <p className="text-xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent"style={{color: titleColor}}>
-                      {formatCurrency(parseFloat(price), currency)}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
+      {/* Description */}
+      <p
+        className="text-2xl text-white/90"
+        style={{ color: titleColor }}
+      >
+        {description || "Join us for an unforgettable evening!"}
+      </p>
 
-            <div className="mt-8 flex justify-between items-center">
-              {logo && (
-                <div className="relative w-20 h-20">
-                  <Image 
-                    src={logo} 
-                    alt="Logo" 
-                    fill 
-                    className="rounded-xl object-cover border-2 border-white/50 shadow-lg" 
-                  />
-                </div>
-              )}
-              {/* <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md text-white text-sm font-medium">
-                Created with Kardify
-              </div> */}
-            </div>
+      {/* Main Content */}
+      <div className="bg-white/10 p-6 rounded-xl backdrop-blur-md shadow-md">
+        <p
+          className="text-xl text-white"
+          style={{ color: titleColor }}
+        >
+          {largeDescription ||
+            "Live music, drinks, and amazing vibes. Don't miss it!"}
+        </p>
+      </div>
+
+      {/* QR Code & Price */}
+      <div className="flex flex-wrap justify-center gap-6">
+        {qrUrl && (
+          <div className="bg-white/90 p-2 rounded-lg  h-fit  shadow-md">
+            <QRCodeSVG value={qrUrl} size={120} className=' mx-auto' />
+            <p
+              className="text-sm text-gray-700 mt-2"
+              style={{ color: titleColor }}
+            >
+              Scan for details
+            </p>
+          </div>
+        )}
+        {price && !isNaN(parseFloat(price)) && (
+          <div className="bg-white/90 p-4 flex-1 rounded-2xl text-center shadow-md flex flex-col justify-center items-center">
+          <p
+            className="text-sm text-gray-700 mb-1"
+            style={{ color: titleColor }}
+          >
+            Entry Fee
+          </p>
+          <p
+            className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent"
+            style={{ color: titleColor }}
+          >
+            {formatCurrency(parseFloat(price), currency)}
+          </p>
+        </div>
+        )}
+      </div>
+
+      {/* Logo */}
+      {logo && (
+        <div className="flex justify-center mt-6">
+          <div className="relative w-20 h-20">
+            <Image
+              src={logo}
+              alt="Logo"
+              fill
+              className="rounded-xl object-cover border-2 border-white/50 shadow-md"
+            />
           </div>
         </div>
       )}
+    </div>
+  </div>
+)}
 
     {/* Budget Display */}
       {selectedVariant === 'budget' && (
