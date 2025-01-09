@@ -8,6 +8,7 @@ import place from "@/public/12.jpg"
 import SignatureCanvas from 'react-signature-canvas';
 import type ReactSignatureCanvas from 'react-signature-canvas';
 import { ethers } from 'ethers';
+import { ClockIcon, CalendarIcon } from '@heroicons/react/24/outline';
 
 
 
@@ -274,7 +275,26 @@ const cardVariants = {
         layout: 'p-0'
       }
     }
-  }
+  },
+  affirmations: {
+    templates: {
+      modern: {
+        // background: 'bg-white',
+        font: 'font-sans',
+        layout: 'p-1'
+      },
+      classic: {
+        // background: 'bg-stone-100',
+        font: 'font-serif',
+        layout: 'p-0.5'
+      },
+      minimal: {
+        // background: 'bg-slate-50',
+        font: 'font-mono',
+        layout: 'p-0'
+      }
+    }
+  },
 };
 
 // Add currency options
@@ -287,6 +307,7 @@ const currencyOptions = [
 ];
 
 const CreateCard = () => {
+  const [affirmationTitle, setAffirmationTitle] = useState('');
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -306,7 +327,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -349,6 +370,11 @@ const [gradientFrom, setGradientFrom] = useState('#ff7e5f');
 const [gradientVia, setGradientVia] = useState('#feb47b');
 const [gradientTo, setGradientTo] = useState('#ff7e5f');
 const [backgroundColor, setBackgroundColor] = useState('#ffffff');
+const [affirmationText, setAffirmationText] = useState('');
+const [affirmationTime, setAffirmationTime] = useState('');
+const [affirmationDate, setAffirmationDate] = useState('');
+const [affirmationTextColor, setAffirmationTextColor] = useState('#000000');
+const [cardBackgroundColor, setCardBackgroundColor] = useState('#ffffff');
 
 const [showIDCard, setShowIDCard] = useState(true);
 const [idCardDetails, setIDCardDetails] = useState({
@@ -388,7 +414,8 @@ const [cardColor, setCardColor] = useState({
   birthday: '#ff33a8',
   budget: '#33ffa8',
   idCard: '#ffffff',
-  mood: '#ffeb3b'
+  mood: '#ffeb3b',
+  affirmations: '#ffeb3b'
 });
 
 const [selectedTemplate, setSelectedTemplate] = useState({
@@ -404,7 +431,8 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   birthday: 'elegant',
   budget: 'visual',
   idCard: 'minimal',
-  mood: 'energetic'
+  mood: 'energetic',
+  affirmations: 'minimal',
 });
 
 const templateOptions = {
@@ -420,7 +448,8 @@ const templateOptions = {
   birthday: ['fun', 'elegant', 'minimal'],
   budget: ['clean', 'detailed', 'visual'],
   idCard: ['standard', 'modern', 'minimal'],
-  mood: ['happy', 'calm', 'energetic']
+  mood: ['happy', 'calm', 'energetic'],
+  affirmations: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -741,6 +770,7 @@ const baseLabelStyles = `
         <option value="budget">💰 E-Budget</option>
         <option value="idCard">🆔 E-ID</option>
         <option value="mood">📜 Mood</option>
+        <option value="affirmations">📜 Affirmations</option>
       </select>
       <div className="absolute right-3 top-[41px] pointer-events-none text-slate-400">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1135,6 +1165,8 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
+
 {/* Budget Input Field */}
 {selectedVariant === 'budget' && (
   <div className="space-y-6">
@@ -1676,7 +1708,92 @@ const baseLabelStyles = `
         value={validUntil}
         onChange={(e) => setValidUntil(e.target.value)}
         className="w-full p-3 rounded-xl border border-slate-300"
+        />
+    </div>
+  </div>
+)}
+
+{/* Add Affirmations input fields */}
+{selectedVariant === 'affirmations' && (
+  <div className="space-y-4">
+    {/* Title Input */}
+    <div>
+      <label className="block text-gray-900 mb-1 text-sm font-medium">
+        Affirmation Title
+      </label>
+      <input
+        type="text"
+        value={affirmationTitle}
+        onChange={(e) => setAffirmationTitle(e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        placeholder="Enter your affirmation title"
       />
+    </div>
+
+    {/* Affirmation Text Input */}
+    <div>
+      <label className="block text-gray-900 mb-1 text-sm font-medium">
+        Affirmation Text
+      </label>
+      <textarea
+        value={affirmationText}
+        onChange={(e) => setAffirmationText(e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        placeholder="Enter your affirmation"
+        rows={3}
+      />
+    </div>
+
+    {/* Time and Date Inputs */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label className="block text-gray-900 mb-1 text-sm font-medium">
+          Time of Affirmation
+        </label>
+        <input
+          type="time"
+          value={affirmationTime}
+          onChange={(e) => setAffirmationTime(e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-900 mb-1 text-sm font-medium">
+          Date of Affirmation
+        </label>
+        <input
+          type="date"
+          value={affirmationDate}
+          onChange={(e) => setAffirmationDate(e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        />
+      </div>
+    </div>
+
+    {/* Color Customization Inputs */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label className="block text-gray-900 mb-1 text-sm">
+          Affirmation Text Color
+        </label>
+        <input
+          type="color"
+          value={affirmationTextColor}
+          onChange={(e) => setAffirmationTextColor(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-900 mb-1 text-sm">
+          Card Background Color
+        </label>
+        <input
+          type="color"
+          value={cardBackgroundColor}
+          onChange={(e) => setCardBackgroundColor(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        />
+      </div>
     </div>
   </div>
 )}
@@ -1734,6 +1851,7 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
 
 
           {/* Base form fields for all variants */}
@@ -2977,6 +3095,73 @@ const baseLabelStyles = `
           </div>
         </div>
       )}
+
+    {/* Add Affirmations card display */}
+    {selectedVariant === 'affirmations' && (
+  <div
+    className="relative p-6 rounded-3xl shadow-2xl overflow-hidden group transition-all duration-500 hover:shadow-indigo-500/30"
+    style={{
+      backgroundColor: cardBackgroundColor || '#F9FAFB',
+    }}
+  >
+    {/* Subtle Animated Gradient Overlay */}
+    <div className="absolute inset-0 bg-gradient-to-br from-teal-400/10 via-indigo-400/10 to-purple-400/10 animate-gradient-slow" />
+    <div className="absolute inset-0 backdrop-blur-lg bg-white/10" />
+    <div className="absolute inset-0 bg-grid-white/10 opacity-30" />
+
+    <div className="relative space-y-6">
+      {/* Header Section */}
+      <div className="text-center space-y-2">
+        <h3
+          className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"
+        >
+          {affirmationTitle || 'Daily Affirmation'}
+        </h3>
+        <div className="flex justify-center items-center gap-2 text-sm font-medium text-gray-500">
+          <ClockIcon className="w-5 h-5 text-indigo-400" />
+          <span style={{ color: affirmationTextColor || '#6B7280' }}>
+            {affirmationTime || 'Time'} • {affirmationDate || 'Date'}
+          </span>
+        </div>
+      </div>
+
+      {/* Affirmation Text */}
+      <div className="relative rounded-2xl bg-white/5 p-6 backdrop-blur-md border border-gray-200/20 shadow-sm">
+        <div className="absolute top-4 left-4 text-6xl text-gray-300 opacity-10">
+          "
+        </div>
+        <p
+          className="text-xl text-center font-medium leading-relaxed whitespace-pre-wrap"
+          style={{ color: affirmationTextColor || '#333' }}
+        >
+          {affirmationText || 'Your inspiring affirmation text goes here.'}
+        </p>
+        <div className="absolute bottom-4 right-4 text-6xl text-gray-300 opacity-10">
+          "
+        </div>
+      </div>
+
+      {/* Footer Section */}
+      <div className="flex items-center justify-between pt-4 border-t border-gray-300/20">
+        <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+          <CalendarIcon className="w-5 h-5 text-teal-400" />
+          <p
+            className="text-base"
+            style={{ color: affirmationTextColor || '#555' }}
+          >
+            {affirmationDate || 'Date'}
+          </p>
+        </div>
+
+        {qrUrl && (
+          <div className="bg-gray-100 p-2 rounded-xl shadow-md transform transition-all duration-300 hover:scale-105">
+            <QRCodeSVG value={qrUrl} size={36} />
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
 
 
     {/* Event Variant */}
