@@ -2804,7 +2804,7 @@ const baseLabelStyles = `
       {/* Mood */}
       {selectedVariant === 'mood' && (
   <div className="backdrop-blur-2xl bg-slate-800/60 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
-    <div className="p-6 space-y-6">
+    <div className="p-3 space-y-4">
       {/* Header Section */}
       <div className="flex items-start justify-between">
         <div className="space-y-2">
@@ -2824,7 +2824,7 @@ const baseLabelStyles = `
               alt="Mood"
               width={90}
               height={90}
-              className="rounded-full object-cover border-2 border-white shadow-md transition-transform duration-300 group-hover:scale-105"
+              className="rounded-md object-cover border-2 border-white shadow-md transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         )}
