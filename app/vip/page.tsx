@@ -2202,8 +2202,8 @@ const baseLabelStyles = `
         <div className="space-y-4 bg-white/40 test rounded-b-md p-4 rounded-2xl shadow-lg">
           <div className="flex justify-between items-start">
             <div className="space-y-3">
-              <h3 className="text-3xl font-bold text-stone-50">{title}</h3>
-              <p className="text-xl font-medium whitespace-pre-line text-stone-50">{description}</p>
+              <h3 className="text-3xl font-bold text-stone-50" style={{color: titleColor}}>{title}</h3>
+              <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{color: titleColor}}>{description}</p>
             </div>
             {qrUrl && (
               <div className="bg-white p-2 rounded-xl shadow-md">
@@ -2213,7 +2213,7 @@ const baseLabelStyles = `
           </div>
           
           <div className="prose max-w-full">
-            <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed">{largeDescription}</p>
+            <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{color: titleColor}}>{largeDescription}</p>
           </div>
           
         </div>
@@ -2909,18 +2909,18 @@ const baseLabelStyles = `
         <div className="bg-white p-4 rounded-b-md rounded-2xl space-y-4">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-xl font-bold text-stone-950">
+              <h3 className="text-xl font-bold text-stone-950" style={{color: titleColor}}>
                 {selectedVariant === 'receipt' ? 'Receipt' : 'Invoice'} #{invoiceNumber}
               </h3>
-              <p className="text-sm text-stone-950">Date: {new Date().toLocaleDateString()}</p>
-              {dueDate && <p className="text-sm text-stone-950">Due: {dueDate}</p>}
+              <p className="text-sm text-stone-950" style={{color: titleColor}}>Date: {new Date().toLocaleDateString()}</p>
+              {dueDate && <p className="text-sm text-stone-950" style={{color: titleColor}}>Due: {dueDate}</p>}
             </div>
             {qrUrl && <QRCodeSVG value={qrUrl} size={60} className="bg-white p-1 rounded-lg" />}
           </div>
 
           <div className="space-y-2">
             {largeDescription && (
-          <div className="mt-4 text-stone-950 whitespace-pre-line">{largeDescription}</div>
+          <div className="mt-4 text-stone-950 whitespace-pre-line" style={{color: titleColor}}>{largeDescription}</div>
         )}
             {items.map((item, i) => (
               <motion.div
@@ -2930,8 +2930,8 @@ const baseLabelStyles = `
                 transition={{ delay: i * 0.1 }}
                 className="flex justify-between items-center p-4 backdrop-blur-md bg-white/5 rounded-2xl mb-2 hover:bg-white/10 transition-all duration-300"
               >
-                <span className="text-stone-950 font-medium">{item.description}</span>
-                <span className="text-stone-950 font-semibold">
+                <span className="text-stone-950 font-medium" style={{color: titleColor}}>{item.description}</span>
+                <span className="text-stone-950 font-semibold" style={{color: titleColor}}>
                   {formatCurrency(item.amount, currency)}
                 </span>
               </motion.div>
@@ -2942,7 +2942,7 @@ const baseLabelStyles = `
                 <motion.div 
                   initial={{ y: 10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  className="flex justify-between text-stone-950 mb-2"
+                  className="flex justify-between text-stone-950 mb-2"style={{color: titleColor}}
                 >
                   <span>Tax ({taxRate}%)</span>
                   <span>{formatCurrency(items.reduce((sum, item) => sum + item.amount, 0) * (taxRate / 100), currency)}</span>
@@ -2952,10 +2952,10 @@ const baseLabelStyles = `
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="flex justify-between font-bold text-stone-950 text-xl mt-2 bg-white p-4 rounded-2xl shadow-md"
+                className="flex justify-between font-bold text-stone-950 text-xl mt-2 bg-white p-4 rounded-2xl shadow-md" style={{color: titleColor}}
               >
-                <span>Total</span>
-                <span>
+                <span style={{color: titleColor}}>Total</span>
+                <span style={{color: titleColor}}>
                   {formatCurrency(items.reduce((sum, item) => sum + item.amount, 0) * (1 + taxRate / 100), currency)}
                 </span>
               </motion.div>
@@ -2971,7 +2971,7 @@ const baseLabelStyles = `
 
     {/* Footer */}
       <div className="mt-2 flex justify-end">
-      <div className="text-xs  w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50">
+      <div className="text-xs  w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50" style={{color: titleColor}}>
        Powered by KardifyMe+
       </div>
       </div>
