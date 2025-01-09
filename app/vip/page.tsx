@@ -151,12 +151,12 @@ const cardVariants = {
       },
       creative: {
         // background: 'bg-gradient-to-br from-yellow-400 to-red-400',
-        font: 'font-mono',
+        font: 'font-sans',
         layout: 'p-1.5'
       },
       minimal: {
         // background: 'bg-gradient-to-br from-yellow-300 to-red-300',
-        font: 'font-serif',
+        font: 'font-mono',
        layout: 'p-0'
       }
     }
@@ -2373,7 +2373,7 @@ const baseLabelStyles = `
     {/* Flyer Display */}
     {selectedVariant === 'flyer' && (
   <div
-    className="relative p-6 rounded-2xl shadow-2xl overflow-hidden"
+    className="relative p-3 rounded-b-none rounded-2xl shadow-2xl overflow-hidden"
     style={{
       background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
     }}
@@ -2394,7 +2394,7 @@ const baseLabelStyles = `
     <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-500/30 rounded-full blur-3xl"></div>
 
     {/* Flyer Content */}
-    <div className="relative z-10 space-y-8 text-center">
+    <div className="relative z-10 h-full space-y-8 text-center">
       {/* Title */}
       <h3
         className="text-5xl font-bold text-white"
@@ -2412,9 +2412,9 @@ const baseLabelStyles = `
       </p>
 
       {/* Main Content */}
-      <div className="bg-white/10 p-6 rounded-xl backdrop-blur-md shadow-md">
+      <div className=" p-6 rounded-xl bg-black/20 backdrop-blur-2xl shadow-md">
         <p
-          className="text-xl text-white"
+          className="text-xl whitespace-pre-wrap text-white"
           style={{ color: titleColor }}
         >
           {largeDescription ||
@@ -2425,7 +2425,7 @@ const baseLabelStyles = `
       {/* QR Code & Price */}
       <div className="flex flex-wrap justify-center gap-6">
         {qrUrl && (
-          <div className="bg-white/90 p-2 rounded-lg  h-fit  shadow-md">
+          <div className="backdrop-blur-2xl shadow-md bg-black/20 p-2 rounded-lg  h-fit  shadow-md">
             <QRCodeSVG value={qrUrl} size={120} className=' mx-auto' />
             <p
               className="text-sm text-gray-700 mt-2"
@@ -2436,7 +2436,7 @@ const baseLabelStyles = `
           </div>
         )}
         {price && !isNaN(parseFloat(price)) && (
-          <div className="bg-white/90 p-4 flex-1 rounded-2xl text-center shadow-md flex flex-col justify-center items-center">
+          <div className="backdrop-blur-2xl shadow-md bg-black/20 p-4 flex-1 rounded-2xl text-center shadow-md flex flex-col justify-center items-center">
           <p
             className="text-sm text-gray-700 mb-1"
             style={{ color: titleColor }}
@@ -3165,7 +3165,7 @@ const baseLabelStyles = `
 
     {/* Footer */}
       <div className="mt-2 flex justify-end">
-      <div className="text-xs  w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50" style={{color: titleColor}}>
+      <div className="text-xs rounded-t-none w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50" style={{color: titleColor}}>
        Powered by KardifyMe+
       </div>
       </div>
