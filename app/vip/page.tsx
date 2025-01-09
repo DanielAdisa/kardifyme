@@ -31,17 +31,17 @@ const cardVariants = {
   business: {
     templates: {
       modern: {
-        background: 'bg-white',
+        // background: 'bg-white',
         font: 'font-sans',
         layout: 'p-2'
       },
       classic: {
-        background: 'bg-stone-100',
+        // background: 'bg-stone-100',
         font: 'font-serif',
         layout: 'p-1.5'
       },
       minimal: {
-        background: 'bg-slate-50',
+        // background: 'bg-slate-50',
         font: 'font-mono',
         layout: 'p-0'
       }
@@ -50,17 +50,17 @@ const cardVariants = {
   event: {
     templates: {
       classic: {
-        background: 'bg-gradient-to-br from-blue-500 to-pink-500',
+        // background: 'bg-gradient-to-br from-blue-500 to-pink-500',
         font: 'font-sans',
         layout: 'p-2'
       },
       bold: {
-        background: 'bg-gradient-to-br from-purple-600 to-red-500',
+        // background: 'bg-gradient-to-br from-purple-600 to-red-500',
         font: 'font-bold',
         layout: 'p-1.5'
       },
       elegant: {
-        background: 'bg-gradient-to-br from-indigo-500 to-pink-500',
+        // background: 'bg-gradient-to-br from-indigo-500 to-pink-500',
         font: 'font-serif',
         layout: 'p-0'
       }
@@ -69,18 +69,18 @@ const cardVariants = {
   product: {
     templates: {
       showcase: {
-        background: 'bg-gradient-to-br from-slate-800 to-slate-900',
+        // background: 'bg-gradient-to-br from-slate-800 to-slate-900',
         font: 'font-sans',
         layout: 'p-2'
       },
       grid: {
-        background: 'bg-gradient-to-br from-gray-700 to-gray-800',
+        // background: 'bg-gradient-to-br from-gray-700 to-gray-800',
         font: 'font-mono',
         layout: 'p-1.5'
       },
       minimal: {
-        background: 'bg-gradient-to-br from-slate-600 to-slate-700',
-        font: 'font-serif',
+        // background: 'bg-gradient-to-br from-slate-600 to-slate-700',
+        font: 'font-sans',
         layout: 'p-0'
       }
     }
@@ -88,17 +88,17 @@ const cardVariants = {
   invoice: {
     templates: {
       professional: {
-        background: 'backdrop-blur-2xl bg-stone-600/30',
+        // background: 'backdrop-blur-2xl bg-stone-600/30',
         font: 'font-sans',
         layout: 'p-2'
       },
       simple: {
-        background: 'bg-stone-500/30',
+        // background: 'bg-stone-500/30',
         font: 'font-mono',
         layout: 'p-1.5'
       },
       detailed: {
-        background: 'bg-stone-400/30',
+        // background: 'bg-stone-400/30',
         font: 'font-serif',
         layout: 'p-0'
       }
@@ -107,17 +107,17 @@ const cardVariants = {
   receipt: {
     templates: {
       simple: {
-        background: 'backdrop-blur-2xl bg-white/20',
+        // background: 'backdrop-blur-2xl bg-white/20',
         font: 'font-mono',
         layout: 'p-2'
       },
       detailed: {
-        background: 'bg-white/30',
+        // background: 'bg-white/30',
         font: 'font-sans',
         layout: 'p-1.5'
       },
       compact: {
-        background: 'bg-white/40',
+        // background: 'bg-white/40',
         font: 'font-serif',
        layout: 'p-0'
       }
@@ -126,17 +126,17 @@ const cardVariants = {
   einvoice: {
     templates: {
       digital: {
-        background: 'bg-gradient-to-tl from-orange-500 to-purple-700',
+        // background: 'bg-gradient-to-tl from-orange-500 to-purple-700',
         font: 'font-sans',
         layout: 'p-2'
       },
       modern: {
-        background: 'bg-gradient-to-tl from-orange-400 to-purple-600',
+        // background: 'bg-gradient-to-tl from-orange-400 to-purple-600',
         font: 'font-mono',
         layout: 'p-1.5'
       },
       classic: {
-        background: 'bg-gradient-to-tl from-orange-300 to-purple-500',
+        // background: 'bg-gradient-to-tl from-orange-300 to-purple-500',
         font: 'font-serif',
         layout: 'p-0'
       }
@@ -145,17 +145,17 @@ const cardVariants = {
   flyer: {
     templates: {
       bold: {
-        background: 'bg-gradient-to-br from-yellow-500 to-red-500',
+        // background: 'bg-gradient-to-br from-yellow-500 to-red-500',
         font: 'font-sans',
         layout: 'p-2'
       },
       creative: {
-        background: 'bg-gradient-to-br from-yellow-400 to-red-400',
+        // background: 'bg-gradient-to-br from-yellow-400 to-red-400',
         font: 'font-mono',
         layout: 'p-1.5'
       },
       minimal: {
-        background: 'bg-gradient-to-br from-yellow-300 to-red-300',
+        // background: 'bg-gradient-to-br from-yellow-300 to-red-300',
         font: 'font-serif',
        layout: 'p-0'
       }
@@ -164,17 +164,17 @@ const cardVariants = {
   recipe: {
     templates: {
       elegant: {
-        background: 'bg-gradient-to-br from-emerald-500 to-teal-700',
+        // background: 'bg-gradient-to-br from-emerald-500 to-teal-700',
         font: 'font-mono',
         layout: 'p-2'
       },
       modern: {
-        background: 'bg-gradient-to-br from-emerald-400 to-teal-600',
+        // background: 'bg-gradient-to-br from-emerald-400 to-teal-600',
         font: 'font-sans',
         layout: 'p-1.5'
       },
       classic: {
-        background: 'bg-gradient-to-br from-emerald-300 to-teal-500',
+        // background: 'bg-gradient-to-br from-emerald-300 to-teal-500',
         font: 'font-serif',
         layout: 'p-0'
       }
@@ -183,17 +183,17 @@ const cardVariants = {
   contract: {
     templates: {
       formal: {
-        background: 'bg-gradient-to-br from-blue-900 to-indigo-900',
+        // background: 'bg-gradient-to-br from-blue-900 to-indigo-900',
         font: 'font-mono',
         layout: 'p-2'
       },
       modern: {
-        background: 'bg-gradient-to-br from-blue-800 to-indigo-800',
+        // background: 'bg-gradient-to-br from-blue-800 to-indigo-800',
         font: 'font-sans',
         layout: 'p-1.5'
       },
       simple: {
-        background: 'bg-gradient-to-br from-blue-700 to-indigo-700',
+        // background: 'bg-gradient-to-br from-blue-700 to-indigo-700',
         font: 'font-serif',
        layout: 'p-0'
       }
@@ -202,17 +202,17 @@ const cardVariants = {
   birthday: {
     templates: {
       fun: {
-        background: 'bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500',
+        // background: 'bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500',
         font: 'font-serif',
         layout: 'p-2'
       },
       elegant: {
-        background: 'bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400',
+        // background: 'bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400',
         font: 'font-sans',
         layout: 'p-1.5'
       },
       minimal: {
-        background: 'bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300',
+        // background: 'bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300',
         font: 'font-mono',
         layout: 'p-0'
       }
@@ -221,17 +221,17 @@ const cardVariants = {
   budget: {
     templates: {
       clean: {
-        background: 'bg-gradient-to-br from-green-500 via-teal-500 to-blue-500',
+        // background: 'bg-gradient-to-br from-green-500 via-teal-500 to-blue-500',
         font: 'font-serif',
         layout: 'p-2'
       },
       detailed: {
-        background: 'bg-gradient-to-br from-green-400 via-teal-400 to-blue-400',
+        // background: 'bg-gradient-to-br from-green-400 via-teal-400 to-blue-400',
         font: 'font-sans',
         layout: 'p-1.5'
       },
       visual: {
-        background: 'bg-gradient-to-br from-green-300 via-teal-300 to-blue-300',
+        // background: 'bg-gradient-to-br from-green-300 via-teal-300 to-blue-300',
         font: 'font-mono',
         layout: 'p-0'
       }
@@ -240,18 +240,37 @@ const cardVariants = {
   idCard: {
     templates: {
       standard: {
-        background: 'backdrop-blur-2xl bg-white/20',
+        // background: 'backdrop-blur-2xl bg-white/20',
         font: 'font-mono',
         layout: 'p-2'
       },
       modern: {
-        background: 'bg-white/30',
+        // background: 'bg-white/30',
         font: 'font-sans',
         layout: 'p-1.5'
       },
       minimal: {
-        background: 'bg-white/40',
+        // background: 'bg-white/40',
         font: 'font-serif',
+        layout: 'p-0'
+      }
+    }
+  },
+  mood: {
+    templates: {
+      happy: {
+        // background: 'bg-gradient-to-br from-yellow-400 to-orange-500',
+        font: 'font-sans',
+        layout: 'p-2'
+      },
+      calm: {
+        // background: 'bg-gradient-to-br from-blue-300 to-green-400',
+        font: 'font-serif',
+        layout: 'p-1.5'
+      },
+      energetic: {
+        // background: 'bg-gradient-to-br from-red-400 to-pink-500',
+        font: 'font-mono',
         layout: 'p-0'
       }
     }
@@ -286,7 +305,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -317,6 +336,9 @@ const [budgetCategories, setBudgetCategories] = useState([{ category: '', amount
 const [totalBudget, setTotalBudget] = useState(0);
 const [remainingBudget, setRemainingBudget] = useState(0);
 const [showTopPart, setShowTopPart] = useState(true);
+const [moodPicture, setMoodPicture] = useState('');
+const [moodSmiley, setMoodSmiley] = useState('😊');
+const smileys = ['😊', '😢', '😂', '😍', '😎', '😡', '😱', '😴', '🤔', '😇'];
 
 const [showIDCard, setShowIDCard] = useState(true);
 const [idCardDetails, setIDCardDetails] = useState({
@@ -353,7 +375,8 @@ const [cardColor, setCardColor] = useState({
   contract: '#ffffff',
   birthday: '#ff33a8',
   budget: '#33ffa8',
-  idCard: '#ffffff'
+  idCard: '#ffffff',
+  mood: '#ffeb3b'
 });
 
 const [selectedTemplate, setSelectedTemplate] = useState({
@@ -368,7 +391,8 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   contract: 'formal',
   birthday: 'fun',
   budget: 'clean',
-  idCard: 'standard'
+  idCard: 'standard',
+  mood: 'happy'
 });
 
 const templateOptions = {
@@ -383,7 +407,8 @@ const templateOptions = {
   contract: ['formal', 'modern', 'simple'],
   birthday: ['fun', 'elegant', 'minimal'],
   budget: ['clean', 'detailed', 'visual'],
-  idCard: ['standard', 'modern', 'minimal']
+  idCard: ['standard', 'modern', 'minimal'],
+  mood: ['happy', 'calm', 'energetic']
 };
 
 
@@ -599,33 +624,33 @@ const baseLabelStyles = `
     }
   };
 
-  const TemplateSelector = () => (
-    <div className="space-y-4 mb-6">
-      <select
-        value={selectedTemplate[selectedVariant]}
-        onChange={(e) => setSelectedTemplate({
-          ...selectedTemplate,
-          [selectedVariant]: e.target.value
-        })}
-        className="w-full p-2 rounded-lg border"
-      >
-        {Object.keys(cardVariants[selectedVariant].templates).map((template) => (
-          <option key={template} value={template}>
-            {template.charAt(0).toUpperCase() + template.slice(1)}
-          </option>
-        ))}
-      </select>
-      <input
-        type="color"
-        value={cardColor[selectedVariant]}
-        onChange={(e) => setCardColor({
-          ...cardColor,
-          [selectedVariant]: e.target.value
-        })}
-        className="w-full h-10 rounded-lg"
-      />
-    </div>
-  );
+  // const TemplateSelector = () => (
+  //   <div className="space-y-4 mb-6">
+  //     <select
+  //       value={selectedTemplate[selectedVariant]}
+  //       onChange={(e) => setSelectedTemplate({
+  //         ...selectedTemplate,
+  //         [selectedVariant]: e.target.value
+  //       })}
+  //       className="w-full p-2 rounded-lg border"
+  //     >
+  //       {Object.keys(cardVariants[selectedVariant].templates).map((template) => (
+  //         <option key={template} value={template}>
+  //           {template.charAt(0).toUpperCase() + template.slice(1)}
+  //         </option>
+  //       ))}
+  //     </select>
+  //     <input
+  //       type="color"
+  //       value={cardColor[selectedVariant]}
+  //       onChange={(e) => setCardColor({
+  //         ...cardColor,
+  //         [selectedVariant]: e.target.value
+  //       })}
+  //       className="w-full h-10 rounded-lg"
+  //     />
+  //   </div>
+  // );
 
   function calculateDaysUntilNextBirthday(age: string): React.ReactNode {
     // If no age provided, return placeholder text
@@ -737,6 +762,7 @@ const baseLabelStyles = `
         <option value="birthday">🎂 Birthday</option>
         <option value="budget">💰 E-Budget</option>
         <option value="idCard">🆔 E-ID</option>
+        <option value="mood">📜 Mood</option>
       </select>
       <div className="absolute right-3 top-[41px] pointer-events-none text-slate-400">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -926,6 +952,9 @@ const baseLabelStyles = `
               </div>
             </div>
           )}
+
+
+          
 
 {/* Flyer Input Fields */}
 {selectedVariant === 'flyer' && (
@@ -1672,6 +1701,54 @@ const baseLabelStyles = `
               </>
             )}
 
+            {/* MOOD SPECIFIC FIELDS */}
+            {selectedVariant === 'mood' && (
+        <div className="space-y-6">
+          <div>
+            <label className="block text-stone-950 mb-2">Mood Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full p-2 rounded-lg border border-slate-300"
+              placeholder="Enter mood title"
+            />
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">Mood Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full p-2 rounded-lg border border-slate-300"
+              placeholder="Enter mood description"
+            />
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">Mood Picture URL</label>
+            <input
+              type="text"
+              value={moodPicture}
+              onChange={(e) => setMoodPicture(e.target.value)}
+              className="w-full p-2 rounded-lg border border-slate-300"
+              placeholder="Enter mood picture URL"
+            />
+          </div>
+          <div>
+            <label className="block text-stone-950 mb-2">Mood Smiley</label>
+            <select
+              value={moodSmiley}
+              onChange={(e) => setMoodSmiley(e.target.value)}
+              className="w-full p-2 rounded-lg border border-slate-300"
+            >
+              {smileys.map((smiley) => (
+                <option key={smiley} value={smiley}>
+                  {smiley}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
             {/* Invoice/Receipt/E-Invoice fields */}
             {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
               <>
@@ -2033,10 +2110,10 @@ const baseLabelStyles = `
 
           {/* Update the card content section */}
           {showBottomPart && (
-            <div className={`p-2 ${selectedVariant === 'product' ? 'bg-white/95' : ''}`}>
+            <div className={`p-2 ${selectedVariant === 'product' ? '' : ''}`}>
     {/* Product Variant */}
         {selectedVariant === 'product' && (
-          <div className="space-y-4 bg-white/95 p-4 rounded-2xl rounded-b-md shadow-lg">
+          <div className="space-y-4 backdrop-blur-3xl bg-black/50 p-4 rounded-2xl rounded-b-md shadow-lg">
             <div className="flex justify-between items-start">
               <div className="space-y-3">
                 <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
@@ -2699,6 +2776,47 @@ const baseLabelStyles = `
           </div> */}
         </div>
       )}
+
+      {/* Mood */}
+      {selectedVariant === 'mood' && (
+  <div className="backdrop-blur-2xl bg-slate-800/40 rounded-2xl shadow-sm  overflow-hidden transition-all duration-300 hover:shadow-md">
+    <div className="p-6 space-y-6">
+      {/* Header Section */}
+      <div className="flex items-start justify-between">
+        <div className="space-y-2">
+          <h3 className="text-2xl font-medium text-gray-900 tracking-tight">
+            {title || 'My Mood'}
+          </h3>
+          <p className="text-5xl transform transition-transform hover:scale-110">
+            {moodSmiley}
+          </p>
+        </div>
+        
+        {moodPicture && (
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <Image
+              src={idCardDetails.photo}
+              alt="Mood"
+              width={90}
+              height={90}
+              className="rounded-full object-cover border-2 border-white shadow-md transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Description Section */}
+      {description && (
+        <div className="pt-4 border-t border-gray-100">
+          <p className="text-gray-600 leading-relaxed text-base">
+            {description}
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
     {/* Invoice/Receipt/E-Invoice Variants */}
       {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
