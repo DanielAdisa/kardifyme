@@ -955,16 +955,18 @@ const baseLabelStyles = `
     <div className={baseWrapperStyles}>
   <div >
     <label className={baseLabelStyles}>Outer Card Color</label>
-    <input
-      type="color"
-      value={cardColor[selectedVariant]}
-      onChange={(e) => setCardColor({
-        ...cardColor,
-        [selectedVariant]: e.target.value
-      })}
-      className=" w-full h-[45px] backdrop-blur-sm
+  <input
+    type="color"
+    value={cardColor[selectedVariant]}
+    onChange={(e) => setCardColor({
+      ...cardColor,
+      [selectedVariant]: e.target.value
+    })}
+    className=" w-full h-[45px] backdrop-blur-sm
   rounded-xl"
-    />
+    title="Select card color"
+    placeholder="Select card color"
+  />
   </div>
   
   <div>
@@ -1961,8 +1963,7 @@ const baseLabelStyles = `
           {/* Base form fields for all variants */}
           <div className="space-y-6">
           {/* <TemplateSelector /> */}
-            
-            
+
             {/* Product specific fields */}
             {(selectedVariant === 'product' || selectedVariant === 'business' ) && (
               <>
@@ -3550,7 +3551,7 @@ const baseLabelStyles = `
                           {item.name || `Item ${itemIndex + 1}`}
                         </h3>
                         <span className="text-sm font-semibold text-gray-600">
-                          {item.price ? formatCurrency(parseFloat(item.price), item.currency) : formatCurrency(0, item.currency)}
+                          {item.price ? formatCurrency(parseFloat(item.price), item.currency || 'USD') : formatCurrency(0, item.currency || 'USD')}
                         </span>
                       </div>
                       {item.description && (
