@@ -341,6 +341,9 @@ const [moodSmiley, setMoodSmiley] = useState('😊');
 const smileys = ['😊', '😢', '😂', '😍', '😎', '😡', '😱', '😴', '🤔', '😇'];
 const [date, setDate] = useState('');
 const [name, setName] = useState('');
+const [titleColor, setTitleColor] = useState('#000000');
+const [descriptionColor, setDescriptionColor] = useState('#000000');
+const [dateNameColor, setDateNameColor] = useState('#000000');
 
 const [showIDCard, setShowIDCard] = useState(true);
 const [idCardDetails, setIDCardDetails] = useState({
@@ -960,7 +963,34 @@ const baseLabelStyles = `
           )}
 
 
-          
+{/* Existing fields */}
+<div>
+    <label className="block text-stone-950 mb-2">Title Color</label>
+    <input
+      type="color"
+      value={titleColor}
+      onChange={(e) => setTitleColor(e.target.value)}
+      className="w-full h-10 rounded-lg border border-slate-300"
+    />
+  </div>
+  <div>
+    <label className="block text-stone-950 mb-2">Description Color</label>
+    <input
+      type="color"
+      value={descriptionColor}
+      onChange={(e) => setDescriptionColor(e.target.value)}
+      className="w-full h-10 rounded-lg border border-slate-300"
+    />
+  </div>
+  <div>
+    <label className="block text-stone-950 mb-2">Date/Name Color</label>
+    <input
+      type="color"
+      value={dateNameColor}
+      onChange={(e) => setDateNameColor(e.target.value)}
+      className="w-full h-10 rounded-lg border border-slate-300"
+    />
+  </div>
 
 {/* Flyer Input Fields */}
 {selectedVariant === 'flyer' && (
@@ -2810,17 +2840,17 @@ const baseLabelStyles = `
       {/* Header with Profile */}
       <div className="flex  w-full items-start justify-between">
         <div className="space-y-4">
-          <h3 className="text-4xl font-bold w-full bg-gradient-to-r text-center from-emerald-500 to-teal-600   bg-clip-text text-transparent">
+          <h3 className={`text-4xl font-bold w-full bg-gradient-to-r text-center from-emerald-500 to-teal-600   bg-clip-text text-transparent`} style={{color: titleColor}}>
             {title || 'My Mood'}
           </h3>
           <div className="flex items-center gap-3">
-            <span className="text-5xl animate-bounce-slow transform transition-all duration-300 hover:scale-110 cursor-pointer">
+            <span className="text-5xl animate-bounce-slow transform transition-all duration-300 hover:scale-110 cursor-pointer" >
               {moodSmiley}
             </span>
             <div className="h-12 w-px bg-gradient-to-b from-transparent via-gray-200 to-transparent" />
             <div className="space-y-1">
               {/* <p className="text-gray-400 text-sm font-medium">{date}</p> */}
-              <p className="text-gray-300 font-semibold">{name}</p>
+              <p className="text-gray-300 font-semibold" style={{color: titleColor}}>{name}</p>
             </div>
           </div>
         </div>
@@ -2847,7 +2877,7 @@ const baseLabelStyles = `
       {description && (
         <div className="relative overflow-hidden rounded-2xl bg-white/5 p-4 backdrop-blur-lg border border-white/10 transform transition-all duration-300 hover:bg-white/10">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5" />
-          <p className="relative text-gray-300 leading-relaxed text-lg">
+          <p className="relative text-gray-300 leading-relaxed text-lg" style={{color: titleColor}}>
             {description}
           </p>
         </div>
@@ -2855,14 +2885,14 @@ const baseLabelStyles = `
 
       {/* Date and Name Section */}
       <div className="pt-2 border-t flex items-center w-full justify-between gap-6 border-white/20">
-        <p className="text-white leading-relaxed text-lg">
+        <p className="text-white leading-relaxed text-lg" style={{color: titleColor}}>
           <strong>Date:</strong> {date}
         </p>
         {/* <p className="text-white leading-relaxed text-lg">
           <strong>Name:</strong> {name}
         </p> */}
         {qrUrl && (
-                  <div className="bg-white/90 justify-end  rounded-lg shadow-xl">
+                  <div className="bg-white/90 p-1 justify-end  rounded-lg shadow-xl" >
                     <QRCodeSVG value={qrUrl} size={40} />
                   </div>
                 )}
