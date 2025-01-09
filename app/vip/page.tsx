@@ -339,6 +339,8 @@ const [showTopPart, setShowTopPart] = useState(true);
 const [moodPicture, setMoodPicture] = useState('');
 const [moodSmiley, setMoodSmiley] = useState('😊');
 const smileys = ['😊', '😢', '😂', '😍', '😎', '😡', '😱', '😴', '🤔', '😇'];
+const [date, setDate] = useState('');
+const [name, setName] = useState('');
 
 const [showIDCard, setShowIDCard] = useState(true);
 const [idCardDetails, setIDCardDetails] = useState({
@@ -349,6 +351,8 @@ const [idCardDetails, setIDCardDetails] = useState({
   expiryDate: '',
   photo: ''
 });
+
+
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -529,14 +533,16 @@ const saveSignature = (
     );
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'main' | 'logo') => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'main' | 'logo' | 'moodPicture') => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (event) => {
         if (type === 'main') {
           setImage(event.target?.result as string);
-        } else {
+        } else if (type === 'logo') {
           setLogo(event.target?.result as string);
+        } else if (type === 'moodPicture') {
+          setMoodPicture(event.target?.result as string);
         }
       };
       reader.readAsDataURL(e.target.files[0]);
@@ -1703,52 +1709,70 @@ const baseLabelStyles = `
 
             {/* MOOD SPECIFIC FIELDS */}
             {selectedVariant === 'mood' && (
-        <div className="space-y-6">
-          <div>
-            <label className="block text-stone-950 mb-2">Mood Title</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-2 rounded-lg border border-slate-300"
-              placeholder="Enter mood title"
-            />
-          </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Mood Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-2 rounded-lg border border-slate-300"
-              placeholder="Enter mood description"
-            />
-          </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Mood Picture URL</label>
-            <input
-              type="text"
-              value={moodPicture}
-              onChange={(e) => setMoodPicture(e.target.value)}
-              className="w-full p-2 rounded-lg border border-slate-300"
-              placeholder="Enter mood picture URL"
-            />
-          </div>
-          <div>
-            <label className="block text-stone-950 mb-2">Mood Smiley</label>
-            <select
-              value={moodSmiley}
-              onChange={(e) => setMoodSmiley(e.target.value)}
-              className="w-full p-2 rounded-lg border border-slate-300"
-            >
-              {smileys.map((smiley) => (
-                <option key={smiley} value={smiley}>
-                  {smiley}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      )}
+  <div className="space-y-6">
+    <div>
+      <label className="block text-stone-950 mb-2">Mood Title</label>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        placeholder="Enter mood title"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Mood Description</label>
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        placeholder="Enter mood description"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Mood Picture</label>
+      <input
+        type="file"
+        onChange={(e) => handleImageChange(e, 'moodPicture')}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        accept="image/*"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Mood Smiley</label>
+      <select
+        value={moodSmiley}
+        onChange={(e) => setMoodSmiley(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+      >
+        {smileys.map((smiley) => (
+          <option key={smiley} value={smiley}>
+            {smiley}
+          </option>
+        ))}
+      </select>
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Date</label>
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Name</label>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        placeholder="Enter your name"
+      />
+    </div>
+  </div>
+)}
             {/* Invoice/Receipt/E-Invoice fields */}
             {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
               <>
@@ -2779,15 +2803,15 @@ const baseLabelStyles = `
 
       {/* Mood */}
       {selectedVariant === 'mood' && (
-  <div className="backdrop-blur-2xl bg-slate-800/40 rounded-2xl shadow-sm  overflow-hidden transition-all duration-300 hover:shadow-md">
+  <div className="backdrop-blur-2xl bg-slate-800/60 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
     <div className="p-6 space-y-6">
       {/* Header Section */}
       <div className="flex items-start justify-between">
         <div className="space-y-2">
-          <h3 className="text-2xl font-medium text-gray-900 tracking-tight">
+          <h3 className="text-3xl font-bold text-white tracking-tight">
             {title || 'My Mood'}
           </h3>
-          <p className="text-5xl transform transition-transform hover:scale-110">
+          <p className="text-6xl transform transition-transform hover:scale-110">
             {moodSmiley}
           </p>
         </div>
@@ -2796,7 +2820,7 @@ const baseLabelStyles = `
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <Image
-              src={idCardDetails.photo}
+              src={moodPicture}
               alt="Mood"
               width={90}
               height={90}
@@ -2808,12 +2832,22 @@ const baseLabelStyles = `
 
       {/* Description Section */}
       {description && (
-        <div className="pt-4 border-t border-gray-100">
-          <p className="text-gray-600 leading-relaxed text-base">
+        <div className="pt-4 border-t border-white/20">
+          <p className="text-white leading-relaxed text-lg">
             {description}
           </p>
         </div>
       )}
+
+      {/* Date and Name Section */}
+      <div className="pt-4 border-t border-white/20">
+        <p className="text-white leading-relaxed text-lg">
+          <strong>Date:</strong> {date}
+        </p>
+        <p className="text-white leading-relaxed text-lg">
+          <strong>Name:</strong> {name}
+        </p>
+      </div>
     </div>
   </div>
 )}
