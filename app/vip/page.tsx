@@ -712,43 +712,7 @@ const baseLabelStyles = `
           {/* Other Inputs */}
 
           
-<div className={baseWrapperStyles}>
-  <div >
-    <label className={baseLabelStyles}>Card Color</label>
-    <input
-      type="color"
-      value={cardColor[selectedVariant]}
-      onChange={(e) => setCardColor({
-        ...cardColor,
-        [selectedVariant]: e.target.value
-      })}
-      className={`${baseInputStyles}  cursor-pointer py-0 h-[53px] rounded- px-0`}
-    />
-  </div>
-  
-  <div>
-    <label className={baseLabelStyles}>Template Style</label>
-    <select
-      value={selectedTemplate[selectedVariant]}
-      onChange={(e) => setSelectedTemplate({
-        ...selectedTemplate,
-        [selectedVariant]: e.target.value
-      })}
-      className={`${baseInputStyles} cursor-pointer appearance-none pr-10`}
-      
-    >
-      
-      {templateOptions[selectedVariant].map((template) => (
-        <option key={template} value={template}>
-          {template.charAt(0).toUpperCase() + template.slice(1)}
-          
-        </option>
-        
-      ))}
-    </select>
-    
-  </div>
-</div>
+
 
           {/* Select Card Type */}
 
@@ -803,7 +767,7 @@ const baseLabelStyles = `
             </select>
           </div> */}
 
-<div className={baseWrapperStyles}>
+{/* <div className={baseWrapperStyles}>
       <label className={baseLabelStyles}>Title</label>
       <input
         type="text"
@@ -812,10 +776,10 @@ const baseLabelStyles = `
         className={baseInputStyles}
         placeholder="Enter a captivating title"
       />
-    </div>
+    </div> */}
 
     {/* Textarea Example */}
-    <div className={baseWrapperStyles}>
+    {/* <div className={baseWrapperStyles}>
       <label className={baseLabelStyles}>Description</label>
       <textarea
         value={description}
@@ -823,10 +787,10 @@ const baseLabelStyles = `
         className={`${baseInputStyles} min-h-[120px] resize-none`}
         placeholder="Write a detailed description..."
       />
-    </div>
+    </div> */}
 
     {/* File Input Example */}
-    <div className={baseWrapperStyles}>
+    {/* <div className={baseWrapperStyles}>
       <label className={baseLabelStyles}>Upload Image</label>
       <div className="
         relative border-2 border-dashed border-slate-200 
@@ -847,9 +811,45 @@ const baseLabelStyles = `
           <p className="text-sm text-slate-600">Click or drag to upload an image</p>
         </div>
       </div>
-    </div>
+    </div> */}
 
+    <div className={baseWrapperStyles}>
+  <div >
+    <label className={baseLabelStyles}>Card Color</label>
+    <input
+      type="color"
+      value={cardColor[selectedVariant]}
+      onChange={(e) => setCardColor({
+        ...cardColor,
+        [selectedVariant]: e.target.value
+      })}
+      className={`${baseInputStyles}  cursor-pointer py-0 h-[53px] rounded- px-0`}
+    />
+  </div>
+  
+  <div>
+    <label className={baseLabelStyles}>Template Style</label>
+    <select
+      value={selectedTemplate[selectedVariant]}
+      onChange={(e) => setSelectedTemplate({
+        ...selectedTemplate,
+        [selectedVariant]: e.target.value
+      })}
+      className={`${baseInputStyles} cursor-pointer appearance-none pr-10`}
+      
+    >
+      
+      {templateOptions[selectedVariant].map((template) => (
+        <option key={template} value={template}>
+          {template.charAt(0).toUpperCase() + template.slice(1)}
+          
+        </option>
+        
+      ))}
+    </select>
     
+  </div>
+</div>
 
           {/* Conditional Inputs based on Variant */}
           {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
@@ -965,7 +965,7 @@ const baseLabelStyles = `
 
 {/* Existing fields */}
 <div>
-    <label className="block text-stone-950 mb-2">Title Color</label>
+    <label className="block text-stone-950 mb-2">Card Color</label>
     <input
       type="color"
       value={titleColor}
@@ -973,7 +973,7 @@ const baseLabelStyles = `
       className="w-full h-10 rounded-lg border border-slate-300"
     />
   </div>
-  <div>
+  {/* <div>
     <label className="block text-stone-950 mb-2">Description Color</label>
     <input
       type="color"
@@ -990,7 +990,7 @@ const baseLabelStyles = `
       onChange={(e) => setDateNameColor(e.target.value)}
       className="w-full h-10 rounded-lg border border-slate-300"
     />
-  </div>
+  </div> */}
 
 {/* Flyer Input Fields */}
 {selectedVariant === 'flyer' && (
