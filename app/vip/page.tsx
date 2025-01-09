@@ -2803,51 +2803,65 @@ const baseLabelStyles = `
 
       {/* Mood */}
       {selectedVariant === 'mood' && (
-  <div className="backdrop-blur-2xl bg-slate-800/60 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
-    <div className="p-3 space-y-4">
-      {/* Header Section */}
-      <div className="flex items-start justify-between">
-        <div className="space-y-2">
-          <h3 className="text-3xl font-bold text-white tracking-tight">
+  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-indigo-500/20">
+    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5" />
+    
+    <div className="relative p-4 space-y-3">
+      {/* Header with Profile */}
+      <div className="flex  w-full items-start justify-between">
+        <div className="space-y-4">
+          <h3 className="text-4xl font-bold w-full bg-gradient-to-r text-center from-emerald-500 to-teal-600   bg-clip-text text-transparent">
             {title || 'My Mood'}
           </h3>
-          <p className="text-6xl transform transition-transform hover:scale-110">
-            {moodSmiley}
-          </p>
+          <div className="flex items-center gap-3">
+            <span className="text-5xl animate-bounce-slow transform transition-all duration-300 hover:scale-110 cursor-pointer">
+              {moodSmiley}
+            </span>
+            <div className="h-12 w-px bg-gradient-to-b from-transparent via-gray-200 to-transparent" />
+            <div className="space-y-1">
+              {/* <p className="text-gray-400 text-sm font-medium">{date}</p> */}
+              <p className="text-gray-300 font-semibold">{name}</p>
+            </div>
+          </div>
         </div>
-        
+
         {moodPicture && (
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <Image
-              src={moodPicture}
-              alt="Mood"
-              width={90}
-              height={90}
-              className="rounded-md object-cover border-2 border-white shadow-md transition-transform duration-300 group-hover:scale-105"
-            />
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-all duration-300 rounded-2xl" />
+            <div className="relative h-24 w-24 rounded-2xl overflow-hidden ring-2 ring-white/20 transform transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
+              <Image
+                src={moodPicture}
+                alt="Mood"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
         )}
       </div>
 
-      {/* Description Section */}
+      {/* Description Card */}
       {description && (
-        <div className="pt-4 border-t border-white/20">
-          <p className="text-white leading-relaxed text-lg">
+        <div className="relative overflow-hidden rounded-2xl bg-white/5 p-4 backdrop-blur-lg border border-white/10 transform transition-all duration-300 hover:bg-white/10">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5" />
+          <p className="relative text-gray-300 leading-relaxed text-lg">
             {description}
           </p>
         </div>
       )}
 
       {/* Date and Name Section */}
-      <div className="pt-4 border-t border-white/20">
+      <div className="pt-2 border-t border-white/20">
         <p className="text-white leading-relaxed text-lg">
           <strong>Date:</strong> {date}
         </p>
         <p className="text-white leading-relaxed text-lg">
-          <strong>Name:</strong> {name}
+          {/* <strong>Name:</strong> {name} */}
         </p>
       </div>
+
+      {/* Footer Accent */}
+      {/* <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" /> */}
     </div>
   </div>
 )}
