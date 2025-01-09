@@ -184,17 +184,17 @@ const cardVariants = {
     templates: {
       formal: {
         // background: 'bg-gradient-to-br from-blue-900 to-indigo-900',
-        font: 'font-mono',
-        layout: 'p-2'
+        font: 'font-serif',
+        layout: 'p-1'
       },
       modern: {
         // background: 'bg-gradient-to-br from-blue-800 to-indigo-800',
-        font: 'font-sans',
+        font: 'font-mono',
         layout: 'p-1.5'
       },
       simple: {
         // background: 'bg-gradient-to-br from-blue-700 to-indigo-700',
-        font: 'font-serif',
+        font: 'font-sans',
        layout: 'p-0'
       }
     }
@@ -294,7 +294,7 @@ const CreateCard = () => {
   const [qrUrl, setQrUrl] = useState('');
   const [logo, setLogo] = useState('');
   const [price, setPrice] = useState('');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('NGN');
   const [includeBottomPart, setIncludeBottomPart] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -344,6 +344,10 @@ const [name, setName] = useState('');
 const [titleColor, setTitleColor] = useState('#000000');
 const [descriptionColor, setDescriptionColor] = useState('#000000');
 const [dateNameColor, setDateNameColor] = useState('#000000');
+const [gradientFrom, setGradientFrom] = useState('#ff7e5f');
+const [gradientVia, setGradientVia] = useState('#feb47b');
+const [gradientTo, setGradientTo] = useState('#ff7e5f');
+const [backgroundColor, setBackgroundColor] = useState('#ffffff');
 
 const [showIDCard, setShowIDCard] = useState(true);
 const [idCardDetails, setIDCardDetails] = useState({
@@ -366,7 +370,7 @@ const [budgetState, setBudgetState] = useState<BudgetState>({
   totalBudget: 0,
   categories: [],
   monthYear: new Date().toISOString().slice(0, 7),
-  currency: 'USD'
+  currency: 'NGN'
 });
 
 
@@ -379,7 +383,7 @@ const [cardColor, setCardColor] = useState({
   einvoice: '#ff33f5',
   flyer: '#f5ff33',
   recipe: '#33fff5',
-  contract: '#ffffff',
+  contract: '#000000',
   birthday: '#ff33a8',
   budget: '#33ffa8',
   idCard: '#ffffff',
@@ -387,19 +391,19 @@ const [cardColor, setCardColor] = useState({
 });
 
 const [selectedTemplate, setSelectedTemplate] = useState({
-  business: 'modern',
-  event: 'classic',
-  product: 'minimal',
-  invoice: 'professional',
-  receipt: 'simple',
-  einvoice: 'digital',
-  flyer: 'bold',
-  recipe: 'elegant',
-  contract: 'formal',
-  birthday: 'fun',
-  budget: 'clean',
-  idCard: 'standard',
-  mood: 'happy'
+  business: 'minimal',
+  event: 'elegant',
+  product: 'grid',
+  invoice: 'detailed',
+  receipt: 'compact',
+  einvoice: 'classic',
+  flyer: 'minimal',
+  recipe: 'classic',
+  contract: 'simple',
+  birthday: 'elegant',
+  budget: 'visual',
+  idCard: 'minimal',
+  mood: 'energetic'
 });
 
 const templateOptions = {
@@ -559,7 +563,7 @@ const saveSignature = (
     try {
       const content = cardRef.current;
       const dataUrl = await toPng(content, {
-        quality: 10,
+        quality: 100,
         pixelRatio: window.devicePixelRatio || 10,
         width: content.offsetWidth,
         height: content.offsetHeight,
@@ -815,7 +819,7 @@ const baseLabelStyles = `
 
     <div className={baseWrapperStyles}>
   <div >
-    <label className={baseLabelStyles}>Card Color</label>
+    <label className={baseLabelStyles}>Outer Card Color</label>
     <input
       type="color"
       value={cardColor[selectedVariant]}
@@ -823,7 +827,8 @@ const baseLabelStyles = `
         ...cardColor,
         [selectedVariant]: e.target.value
       })}
-      className={`${baseInputStyles}  cursor-pointer py-0 h-[53px] rounded- px-0`}
+      className=" w-full h-[45px] backdrop-blur-sm
+  rounded-xl"
     />
   </div>
   
@@ -963,16 +968,17 @@ const baseLabelStyles = `
           )}
 
 
-{/* Existing fields */}
-<div>
-    <label className="block text-stone-950 mb-2">Card Color</label>
-    <input
-      type="color"
-      value={titleColor}
-      onChange={(e) => setTitleColor(e.target.value)}
-      className="w-full h-10 rounded-lg border border-slate-300"
-    />
-  </div>
+{/* Color Fields */}
+      <div>
+          <label className={baseLabelStyles}>Text Color</label>
+          <input
+            type="color"
+            value={titleColor}
+            onChange={(e) => setTitleColor(e.target.value)}
+          className=" w-full h-[45px] backdrop-blur-sm
+        rounded-xl"
+          />
+      </div>
   {/* <div>
     <label className="block text-stone-950 mb-2">Description Color</label>
     <input
@@ -1027,7 +1033,33 @@ const baseLabelStyles = `
         placeholder="Enter flyer details, features, or event information"
       />
     </div>
-
+    <div>
+        <label className="block text-stone-950 mb-2">Gradient From</label>
+        <input
+          type="color"
+          value={gradientFrom}
+          onChange={(e) => setGradientFrom(e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2">Gradient Via</label>
+        <input
+          type="color"
+          value={gradientVia}
+          onChange={(e) => setGradientVia(e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2">Gradient To</label>
+        <input
+          type="color"
+          value={gradientTo}
+          onChange={(e) => setGradientTo(e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300"
+        />
+      </div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Price</label>
@@ -1089,6 +1121,17 @@ const baseLabelStyles = `
 {selectedVariant === 'budget' && (
   <div className="space-y-6">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Month & Year</label>
         <input
@@ -1229,6 +1272,27 @@ const baseLabelStyles = `
           />
         </div>
         <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-950 mb-2">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the description"
+                placeholder="Enter a description"
+              />
+            </div>
+        <div>
           <label className="block text-gray-700 mb-2">Issue Date</label>
           <input
             type="date"
@@ -1274,6 +1338,27 @@ const baseLabelStyles = `
 {selectedVariant === 'recipe' && (
   <div className="space-y-6">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-950 mb-2">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the description"
+                placeholder="Enter a description"
+              />
+            </div>
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Cooking Time (mins)</label>
         <input
@@ -1636,7 +1721,22 @@ const baseLabelStyles = `
           {/* Base form fields for all variants */}
           <div className="space-y-6">
           {/* <TemplateSelector /> */}
-            <div>
+            
+            
+            {/* Product specific fields */}
+            {(selectedVariant === 'product' || selectedVariant === 'business' ) && (
+              <>
+              <div>
+        <label className={baseLabelStyles}>Inner BG Color</label>
+        <input
+          type="color"
+          value={backgroundColor}
+          onChange={(e) => setBackgroundColor(e.target.value)}
+          className="w-full h-[45px] backdrop-blur-sm
+        rounded-xl"
+        />
+      </div>
+              <div>
               <label className="block text-stone-950 mb-2">Title</label>
               <input
                 type="text"
@@ -1657,10 +1757,6 @@ const baseLabelStyles = `
                 placeholder="Enter a description"
               />
             </div>
-            
-            {/* Product specific fields */}
-            {(selectedVariant === 'product' || selectedVariant === 'business' ) && (
-              <>
                 <div>
                   <label className="block text-stone-950 mb-2">Price</label>
                   <div className="flex gap-2">
@@ -1678,7 +1774,7 @@ const baseLabelStyles = `
                       <option value="USD">USD</option>
                       <option value="EUR">EUR</option>
                       <option value="GBP">GBP</option>
-                      <option value="NGN">NGN</option>
+                      <option value="NGN">₦</option>
                       <option value="GHC">GHC</option>
                     </select>
                   </div>
@@ -1698,6 +1794,27 @@ const baseLabelStyles = `
             {/* Event specific fields */}
             {selectedVariant === 'event' && (
               <>
+              <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-950 mb-2">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the description"
+                placeholder="Enter a description"
+              />
+            </div>
                 <div>
                   <label className="block text-stone-950 mb-2">Event Date</label>
                   <input
@@ -1741,6 +1858,15 @@ const baseLabelStyles = `
             {selectedVariant === 'mood' && (
   <div className="space-y-6">
     <div>
+        <label className="block text-stone-950 mb-2">Inner BG Color</label>
+        <input
+          type="color"
+          value={backgroundColor}
+          onChange={(e) => setBackgroundColor(e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300"
+        />
+      </div>
+    <div>
       <label className="block text-stone-950 mb-2">Mood Title</label>
       <input
         type="text"
@@ -1759,6 +1885,7 @@ const baseLabelStyles = `
         placeholder="Enter mood description"
       />
     </div>
+    
     <div>
       <label className="block text-stone-950 mb-2">Mood Picture</label>
       <input
@@ -1782,6 +1909,7 @@ const baseLabelStyles = `
         ))}
       </select>
     </div>
+    
     <div>
       <label className="block text-stone-950 mb-2">Date</label>
       <input
@@ -1802,10 +1930,33 @@ const baseLabelStyles = `
       />
     </div>
   </div>
-)}
+            )}
+
+
             {/* Invoice/Receipt/E-Invoice fields */}
             {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
               <>
+              <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-950 mb-2">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the description"
+                placeholder="Enter a description"
+              />
+            </div>
                 <div>
                   <label className="block text-stone-950 mb-2">
                     {selectedVariant === 'receipt' ? 'Receipt Number' : 'Invoice Number'}
@@ -1986,26 +2137,6 @@ const baseLabelStyles = `
       </div>
     </div>
 
-            {/* <div className="flex items-center gap-2 mb-4">
-              <label className="text-stone-950">Show Bottom Section</label>
-              <input
-                type="checkbox"
-                checked={showBottomPart}
-                onChange={(e) => setShowBottomPart(e.target.checked)}
-                className="w-4 h-4"
-              />
-            </div>
-
-
-            <div className="flex items-center gap-2 mb-4">
-  <label className="text-stone-950">Show Top Section</label>
-  <input
-    type="checkbox"
-    checked={showTopPart}
-    onChange={(e) => setShowTopPart(e.target.checked)}
-    className="w-4 h-4"
-  />
-</div> */}
           </div>
         </div>
 
@@ -2087,13 +2218,13 @@ const baseLabelStyles = `
 >
           {/* Card Hero with responsive height */}
           {showTopPart && (
-  <div className="relative rounded-xl w-full h-[200px] sm:h-[250px] md:h-[300px]">
+  <div className="relative rounded-xl w-full h-[150px] sm:h-[250px] md:h-[300px]">
     {image ? (
       <Image
         src={image || place} // Set default image
         alt={title || 'Card Image'}
         fill
-        className={`object-cover rounded-2xl transition-transform duration-700 ${
+        className={`object-cover rounded-t-2xl transition-transform duration-700 ${
           selectedVariant === 'event' ? 'opacity-80' : ''
         }`}
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -2134,7 +2265,7 @@ const baseLabelStyles = `
       <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl whitespace-pre-line font-light ">
         {description}
       </p>
-      {price && !isNaN(parseFloat(price)) && (
+      {price && !isNaN(parseFloat(price)) &&  (
         <p className="text-base font-semibold absolute right-2 bottom-4 bg-stone-50/30 text-stone-50/80 px-2 py-1 rounded-full inline-block">
           {formatCurrency(parseFloat(price), currency)}
         </p>
@@ -2167,7 +2298,8 @@ const baseLabelStyles = `
             <div className={`p-2 ${selectedVariant === 'product' ? '' : ''}`}>
     {/* Product Variant */}
         {selectedVariant === 'product' && (
-          <div className="space-y-4 backdrop-blur-3xl bg-black/50 p-4 rounded-2xl rounded-b-md shadow-lg">
+          <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+          style={{backgroundColor: backgroundColor,}}>
             <div className="flex justify-between items-start">
               <div className="space-y-3">
                 <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
@@ -2199,7 +2331,8 @@ const baseLabelStyles = `
 
     {/* Business Variant */}
       {selectedVariant === 'business' && (
-        <div className="space-y-4 bg-indigo-500/10 backdrop-blur-2xl border border-white/20 shadow-lg hover:bg-indigo-500/20 transition-all duration-300 test rounded-b-md p-4 rounded-2xl shadow-lg">
+        <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+        style={{backgroundColor: backgroundColor,}}>
           <div className="flex justify-between items-start">
             <div className="space-y-3">
               <h3 className="text-3xl font-bold text-stone-50" style={{color: titleColor}}>{title}</h3>
@@ -2221,11 +2354,16 @@ const baseLabelStyles = `
 
     {/* Flyer Display */}
       {selectedVariant === 'flyer' && (
-        <div className="relative bg-gradient-to-br pb-0 from-orange-500 via-pink-500 to-purple-600 p-4 rounded-b-md rounded-2xl shadow-2xl overflow-hidden">
+        <div
+        className={`relative p-4 rounded-t-lg rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+        style={{
+          background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
+        }}
+      >
           {/* Decorative Elements */}
-          <div className="absolute inset-0 bg-black/10"></div>
+          {/* <div className="absolute inset-0 bg-black/10"></div>
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div> */}
           
           <div className="relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
@@ -2371,7 +2509,8 @@ const baseLabelStyles = `
 
     {/* Recipe Display */}
       {selectedVariant === 'recipe' && (
-        <div className="relative bg-gradient-to-br from-blue-500 via-teal-500 to-green-500 p-3 rounded-2xl rounded-b-md pb-0 shadow-2xl overflow-hidden">
+        <div className={`relative p-3 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+        style={{backgroundColor: backgroundColor,}}>
           {/* Decorative Elements */}
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
@@ -2833,7 +2972,8 @@ const baseLabelStyles = `
 
       {/* Mood */}
       {selectedVariant === 'mood' && (
-  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-indigo-500/20">
+  <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+        style={{backgroundColor: backgroundColor,}}>
     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5" />
     
     <div className="relative p-4 space-y-3">
@@ -2980,25 +3120,6 @@ const baseLabelStyles = `
           )}
           
         </motion.div>
-
-        {/* Add modern call-to-action buttons */}
-        {/* <div className="flex justify-center gap-4 mt-8">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={generateImage}
-            className="
-              bg-gradient-to-r from-blue-600 to-blue-700
-              text-white px-8 py-4 rounded-2xl
-              font-medium shadow-lg shadow-blue-500/25
-              hover:shadow-blue-500/40 transition-all duration-300
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
-            disabled={isLoading}
-          >
-            {isLoading ? 'Generating...' : 'Download Card'}
-          </motion.button>
-        </div> */}
       </div>
     </div>
   );
