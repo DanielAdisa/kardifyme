@@ -3099,63 +3099,69 @@ const baseLabelStyles = `
     {/* Add Affirmations card display */}
     {selectedVariant === 'affirmations' && (
   <div
-    className="relative p-6 rounded-3xl shadow-2xl overflow-hidden group transition-all duration-500 hover:shadow-indigo-500/30"
+    className="relative p-4 rounded-2xl rounded-b-none shadow-2xl overflow-hidden group transition-all duration-500 hover:shadow-indigo-500/20"
     style={{
-      backgroundColor: cardBackgroundColor || '#F9FAFB',
+      backgroundColor: cardBackgroundColor || '#FFFFFF',
     }}
   >
-    {/* Subtle Animated Gradient Overlay */}
-    <div className="absolute inset-0 bg-gradient-to-br from-teal-400/10 via-indigo-400/10 to-purple-400/10 animate-gradient-slow" />
-    <div className="absolute inset-0 backdrop-blur-lg bg-white/10" />
-    <div className="absolute inset-0 bg-grid-white/10 opacity-30" />
+    {/* Animated Gradient Overlay */}
+    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-blue-500/10 to-purple-500/10 animate-gradient" />
+    <div className="absolute inset-0 backdrop-blur-xl bg-white/10" />
+    
+    {/* Background Pattern */}
+    <div className="absolute inset-0 bg-grid-white/5 opacity-30" />
 
-    <div className="relative space-y-6">
-      {/* Header Section */}
-      <div className="text-center space-y-2">
+    <div className="relative p-6 space-y-8">
+      {/* Header Section with Enhanced Typography */}
+      <div className="flex flex-col items-center justify-center text-center space-y-4">
         <h3
-          className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"
+          className="text-5xl font-bold tracking-tight transition-all duration-300 group-hover:scale-105"
+          style={{ color: titleColor }}
         >
           {affirmationTitle || 'Daily Affirmation'}
         </h3>
-        <div className="flex justify-center items-center gap-2 text-sm font-medium text-gray-500">
-          <ClockIcon className="w-5 h-5 text-indigo-400" />
+        <div className="flex items-center gap-2 text-sm font-medium opacity-75">
+          <ClockIcon className="w-4 h-4" />
           <span style={{ color: affirmationTextColor || '#6B7280' }}>
             {affirmationTime || 'Time'} • {affirmationDate || 'Date'}
           </span>
         </div>
       </div>
 
-      {/* Affirmation Text */}
-      <div className="relative rounded-2xl bg-white/5 p-6 backdrop-blur-md border border-gray-200/20 shadow-sm">
-        <div className="absolute top-4 left-4 text-6xl text-gray-300 opacity-10">
+      {/* Affirmation Text with Quote Marks */}
+      <div className="relative overflow-hidden rounded-2xl bg-white/5 p-8 backdrop-blur-xl border border-white/20 
+        transform transition-all duration-300 hover:bg-white/10 group/card">
+        <div className="absolute top-4 left-4 text-6xl opacity-20" style={{ color: affirmationTextColor }}>
           "
         </div>
         <p
-          className="text-xl text-center font-medium leading-relaxed whitespace-pre-wrap"
-          style={{ color: affirmationTextColor || '#333' }}
+          className=" whitespace-break-spaces relative text-2xl leading-relaxed text-center font-medium transition-all duration-300 
+            group-hover/card:scale-105"
+          style={{ color: affirmationTextColor || '#FFFFFF' }}
         >
           {affirmationText || 'Your inspiring affirmation text goes here.'}
         </p>
-        <div className="absolute bottom-4 right-4 text-6xl text-gray-300 opacity-10">
+        <div className="absolute bottom-4 right-4 text-6xl opacity-20" style={{ color: affirmationTextColor }}>
           "
         </div>
       </div>
 
-      {/* Footer Section */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-300/20">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-          <CalendarIcon className="w-5 h-5 text-teal-400" />
+      {/* Footer with Enhanced Layout */}
+      <div className="pt-4 border-t flex items-center justify-between gap-6 border-white/10">
+        <div className="flex items-center gap-4">
+          <CalendarIcon className="w-5 h-5 opacity-75" style={{ color: affirmationTextColor }} />
           <p
-            className="text-base"
-            style={{ color: affirmationTextColor || '#555' }}
+            className="text-lg font-medium"
+            style={{ color: affirmationTextColor }}
           >
             {affirmationDate || 'Date'}
           </p>
         </div>
-
+        
         {qrUrl && (
-          <div className="bg-gray-100 p-2 rounded-xl shadow-md transform transition-all duration-300 hover:scale-105">
-            <QRCodeSVG value={qrUrl} size={36} />
+          <div className="bg-white/90 p-2 rounded-xl shadow-xl transform transition-all duration-300 
+            hover:scale-105 hover:rotate-3">
+            <QRCodeSVG value={qrUrl} size={44} />
           </div>
         )}
       </div>
