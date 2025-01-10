@@ -263,12 +263,12 @@ const cardVariants = {
       happy: {
         // background: 'bg-gradient-to-br from-yellow-400 to-orange-500',
         font: 'font-sans',
-        layout: 'p-2'
+        layout: 'p-0.5'
       },
       calm: {
         // background: 'bg-gradient-to-br from-blue-300 to-green-400',
         font: 'font-serif',
-        layout: 'p-1.5'
+        layout: 'p-0'
       },
       energetic: {
         // background: 'bg-gradient-to-br from-red-400 to-pink-500',
@@ -287,7 +287,7 @@ const cardVariants = {
       classic: {
         // background: 'bg-stone-100',
         font: 'font-serif',
-        layout: 'p-0.5'
+        layout: 'p-0'
       },
       minimal: {
         // background: 'bg-slate-50',
@@ -301,7 +301,7 @@ const cardVariants = {
       modern: {
         // background: 'bg-white',
         font: 'font-serif',
-        layout: 'p-2'
+        layout: 'p-'
       },
       classic: {
         // background: 'bg-stone-100',
@@ -320,7 +320,26 @@ const cardVariants = {
       modern: {
         // background: 'bg-white',
         font: 'font-serif',
-        layout: 'p-2'
+        layout: 'p-0'
+      },
+      classic: {
+        // background: 'bg-stone-100',
+        font: 'font-mono',
+        layout: 'p-0'
+      },
+      minimal: {
+        // background: 'bg-slate-50',
+        font: 'font-sans',
+        layout: 'p-0'
+      }
+    }
+  },
+  invitation: {
+    templates: {
+      modern: {
+        // background: 'bg-white',
+        font: 'font-serif',
+        layout: 'p-0'
       },
       classic: {
         // background: 'bg-stone-100',
@@ -375,6 +394,9 @@ type TextColors = {
 // };
 
 const CreateCard = () => {
+  const [occasion, setOccasion] = useState('');
+  const [inviterName, setInviterName] = useState('');
+  const [inviteeName, setInviteeName] = useState<string>('');
   const [textColors, setTextColors] = useState<{ [key: string]: string }>({});
   interface TextColors {
     facebook: string;
@@ -424,11 +446,18 @@ const [heroImage, setHeroImage] = useState<File | null>(null);
   const [items, setItems] = useState([{ description: '', amount: 0 }]);
   const [taxRate, setTaxRate] = useState(0);
   const [dueDate, setDueDate] = useState('');
+  const [bgType, setBgType] = useState('gradient'); // 'gradient' or 'solid'
+const [solidColor, setSolidColor] = useState('#ffffff');
+
+const [eventName, setEventName] = useState('');
+
+const [eventTime, setEventTime] = useState('');
+
   const [showBottomPart, setShowBottomPart] = useState(true);
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -586,6 +615,7 @@ const [cardColor, setCardColor] = useState({
   affirmations: '#ffeb3b',
   menu: '#ffffff',
   brand: '#ffffff',
+  invitation: '#ffeb3b',
 });
 
 const [selectedTemplate, setSelectedTemplate] = useState({
@@ -605,6 +635,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   affirmations: 'minimal',
   menu: 'minimal',
   brand: 'minimal',
+  invitation: 'minimal',
 });
 
 const templateOptions = {
@@ -624,6 +655,7 @@ const templateOptions = {
   affirmations: ['modern', 'classic', 'minimal'],
   menu: ['modern', 'classic', 'minimal'],
   brand: ['modern', 'classic', 'minimal'],
+  invitation: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -937,6 +969,7 @@ const baseLabelStyles = `
   }
 
 
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-3">
 
@@ -1203,7 +1236,7 @@ const baseLabelStyles = `
 {/* brandcard display */}
 {selectedVariant === 'brand' && (
   <div
-    className="relative min-h-[600px] p-4 md:p-8 rounded-2xl rounded-b-none shadow-2xl overflow-hidden"
+    className="relative min-h-[600px] p-4 md:p-8 rounded-xl shadow-2xl overflow-hidden"
     style={{
       background: `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
     }}
@@ -1226,16 +1259,16 @@ const baseLabelStyles = `
       
       {/* Logo Section */}
       {logo && (
-        <div className="flex justify-center -mt-2">
-          <div className="relative w-24 h-24 md:w-32 md:h-32">
-            <img
-              src={typeof logo === 'string' ? logo : URL.createObjectURL(logo as Blob)}
-              alt="Brand Logo"
-              className="rounded-full object-cover border-4 border-white/30 shadow-xl transition-transform duration-300 hover:scale-105"
-            />
-          </div>
-        </div>
-      )}
+  <div className="flex justify-center -mt-2">
+    <div className="relative w-24 h-24 md:w-32 md:h-32">
+      <img
+        src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)}
+        alt="Brand Logo"
+        className="rounded-full object-cover border-4 border-white/30 shadow-xl transition-transform duration-300 hover:scale-105"
+      />
+    </div>
+  </div>
+)}
 
       {/* Brand Info Section */}
       <div className="space-y-4 text-center">
@@ -1256,52 +1289,56 @@ const baseLabelStyles = `
 
       {/* Content Cards */}
       <div className="space-y-4 md:space-y-6">
-        {/* Description Card */}
-        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
-          <p
-            className="text-base md:text-lg leading-relaxed"
-            style={{ color: textColors.description }}
-          >
-            {description || "Share your brand story here"}
-          </p>
-        </div>
+        {description && (
+          <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+            <p
+              className="text-base md:text-lg leading-relaxed"
+              style={{ color: textColors.description }}
+            >
+              {description}
+            </p>
+          </div>
+        )}
 
-        {/* Policies Card */}
-        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
-          <p
-            className="text-base md:text-lg leading-relaxed"
-            style={{ color: textColors.orderPolicies }}
-          >
-            {orderPolicies || "Your policies here"}
-          </p>
-        </div>
+        {orderPolicies && (
+          <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+            <p
+              className="text-base md:text-lg leading-relaxed"
+              style={{ color: textColors.orderPolicies }}
+            >
+              {orderPolicies}
+            </p>
+          </div>
+        )}
 
-        {/* Contact Section */}
-        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
-          <p
-            className="text-base md:text-lg break-words"
-            style={{ color: textColors.contactInfo }}
-          >
-            {contactInfo || "Contact information"}
-          </p>
-        </div>
+        {contactInfo && (
+          <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+            <p
+              className="text-base md:text-lg break-words"
+              style={{ color: textColors.contactInfo }}
+            >
+              {contactInfo}
+            </p>
+          </div>
+        )}
       </div>
 
+      {/* Social Links + QR Section */}
       <div className="mt-auto pt-6 flex flex-col md:flex-row items-center justify-between gap-6">
-        {/* Social Icons */}
+        {/* Social Media Handles */}
         <div className="flex flex-wrap justify-center gap-4">
-  {Object.entries(socialMediaLinks).map(([platform, handle]) => (
-    handle && (
-      <div
-        key={platform}
-        className="flex items-center justify-center rounded-full bg-white/15 backdrop-blur-lg p-3 transition-colors duration-300"
-        style={{ color: textColors[platform] }}
-      >
-        <span className="text-lg font-medium">{handle}</span>
-      </div>
-    )
-  ))}
-</div>
+          {Object.entries(socialMediaLinks).map(([platform, handle]) => (
+            handle && (
+              <div
+                key={platform}
+                className="flex items-center justify-center rounded-full bg-white/15 backdrop-blur-lg p-3 transition-colors duration-300"
+                style={{ color: textColors[platform] }}
+              >
+                <span className="text-lg font-medium">{handle}</span>
+              </div>
+            )
+          ))}
+        </div>
 
         {/* QR Code */}
         {qrUrl && (
@@ -1314,6 +1351,141 @@ const baseLabelStyles = `
   </div>
 )}
 
+{/* InviatationCard display */}
+{selectedVariant === 'invitation' && (
+  <div
+    className="relative min-h-[600px] p-6 md:p-8 rounded-2xl shadow-2xl overflow-hidden"
+    style={{
+      background:
+        bgType === 'gradient'
+          ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+          : solidColor,
+    }}
+  >
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+
+    <div className="relative z-10 flex flex-col items-center gap-8">
+      {/* Logo */}
+      {logo && (
+        <div className="transform hover:scale-105 transition-transform duration-300">
+          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white/30 shadow-xl overflow-hidden">
+            <img
+              src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)}
+              alt="Event Logo"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Event Name */}
+      {eventName && (
+        <div className="w-full max-w-2xl transform hover:-translate-y-1 transition-all duration-300">
+          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+            <h3 
+              className="text-3xl md:text-5xl font-bold text-center tracking-tight" 
+              style={{ color: textColors.eventName }}
+            >
+              {eventName}
+            </h3>
+          </div>
+        </div>
+      )}
+
+      {/* Event Details */}
+      <div className="space-y-4 text-center max-w-xl">
+        {eventDate && (
+          <p 
+            className="text-xl md:text-2xl font-light"
+            style={{ color: textColors.eventDate }}
+          >
+            Date: {eventDate}
+          </p>
+        )}
+        {eventTime && (
+          <p 
+            className="text-lg md:text-xl"
+            style={{ color: textColors.eventTime }}
+          >
+            Time: {eventTime}
+          </p>
+        )}
+        {eventLocation && (
+          <p 
+            className="text-lg md:text-xl italic"
+            style={{ color: textColors.eventLocation }}
+          >
+            Location: {eventLocation} 😊
+          </p>
+        )}
+      </div>
+
+      {/* Invitee and Inviter Names */}
+      <div className="space-y-4 text-center max-w-xl">
+        {inviteeName && (
+          <p 
+            className="text-lg md:text-xl"
+            style={{ color: textColors.inviteeName }}
+          >
+            Dear {inviteeName},
+          </p>
+        )}
+        {inviterName && (
+          <p 
+            className="text-lg md:text-xl"
+            style={{ color: textColors.inviterName }}
+          >
+            You are cordially invited by {inviterName}
+          </p>
+        )}
+        {occasion && (
+          <p 
+            className="text-lg md:text-xl"
+            style={{ color: textColors.occasion }}
+          >
+            to the occasion of {occasion}
+          </p>
+        )}
+      </div>
+
+      {/* Description */}
+      {description && (
+        <div className="w-full max-w-2xl">
+          <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+            <p 
+              className="text-lg text-center whitespace-pre-wrap leading-relaxed"
+              style={{ color: textColors.description }}
+            >
+              {description}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* QR Code */}
+      {qrUrl && (
+        <div className="mt-auto">
+          <div className="p-4 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-3">
+            <QRCodeSVG 
+              value={qrUrl} 
+              size={120}
+              className="rounded-xl"
+            />
+            <p 
+              className="text-sm font-medium tracking-wide"
+              style={{ color: textColors.qrUrl }}
+            >
+              Scan to RSVP
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+)}
     {/* Budget Display */}
       {selectedVariant === 'budget' && (
         <div className="relative bg-gradient-to-br pb-0 from-gray-800 via-gray-700 to-gray-900 p-2 rounded-b-md rounded-2xl shadow-xl overflow-hidden">
@@ -2265,8 +2437,8 @@ const baseLabelStyles = `
         <option value="idCard">🆔 ID Card</option>
         <option value="mood">🌈 Mood Board</option>
         <option value="affirmations">💬 Affirmations</option>
-        <option value="menu">🍴 Menu</option>
-        <option value="brand">Brand Card</option>
+        <option value="brand">🏷️ Brand Card</option>
+        <option value="invitation">💌 Invitation</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2829,6 +3001,241 @@ const baseLabelStyles = `
         onChange={(e) => setQrUrl(e.target.value)}
         className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
         placeholder="Enter QR Code URL"
+      />
+    </div>
+  </div>
+)}
+
+{/* Invitation input field */}
+{selectedVariant === 'invitation' && (
+  <div className="space-y-6 p-4 backdrop-blur-3xl bg-black/30 rounded-lg shadow-lg">
+    {/* Background Type Selection */}
+    <div>
+      <label className="block text-gray-800 mb-2 font-medium">Background Type</label>
+      <select
+        value={bgType}
+        onChange={(e) => setBgType(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+      >
+        <option value="gradient">Gradient</option>
+        <option value="solid">Solid Color</option>
+      </select>
+    </div>
+
+    {/* Gradient Background Inputs */}
+    {bgType === 'gradient' && (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Gradient From</label>
+          <input
+            type="color"
+            value={gradientFrom}
+            onChange={(e) => setGradientFrom(e.target.value)}
+            className="w-full h-10 rounded-lg border border-gray-300 bg-white"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Gradient Via</label>
+          <input
+            type="color"
+            value={gradientVia}
+            onChange={(e) => setGradientVia(e.target.value)}
+            className="w-full h-10 rounded-lg border border-gray-300 bg-white"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Gradient To</label>
+          <input
+            type="color"
+            value={gradientTo}
+            onChange={(e) => setGradientTo(e.target.value)}
+            className="w-full h-10 rounded-lg border border-gray-300 bg-white"
+          />
+        </div>
+      </div>
+    )}
+
+    {/* Solid Color Background Input */}
+    {bgType === 'solid' && (
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Solid Background Color</label>
+        <input
+          type="color"
+          value={solidColor}
+          onChange={(e) => setSolidColor(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300 bg-white"
+        />
+      </div>
+    )}
+
+    {/* Event Information */}
+    <div className="space-y-4">
+      {/* Event Name */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Event Name</label>
+        <textarea
+          value={eventName}
+          onChange={(e) => setEventName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        <input
+          type="color"
+          value={textColors.eventName}
+          onChange={(e) => setTextColors({ ...textColors, eventName: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Event Name Text Color"
+        />
+      </div>
+      {/* Event Date */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Event Date</label>
+        <input
+          type="date"
+          value={eventDate}
+          onChange={(e) => setEventDate(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        <input
+          type="color"
+          value={textColors.eventDate}
+          onChange={(e) => setTextColors({ ...textColors, eventDate: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Event Date Text Color"
+        />
+      </div>
+      {/* Event Time */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Event Time</label>
+        <input
+          type="time"
+          value={eventTime}
+          onChange={(e) => setEventTime(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        <input
+          type="color"
+          value={textColors.eventTime}
+          onChange={(e) => setTextColors({ ...textColors, eventTime: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Event Time Text Color"
+        />
+      </div>
+      {/* Event Location */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Event Location 😊</label>
+        <textarea
+          value={eventLocation}
+          onChange={(e) => setEventLocation(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        <input
+          type="color"
+          value={textColors.eventLocation}
+          onChange={(e) => setTextColors({ ...textColors, eventLocation: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Event Location Text Color"
+        />
+      </div>
+    </div>
+
+    {/* Invitee and Inviter Information */}
+    <div className="space-y-4">
+      {/* Invitee Name */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Invitee Name</label>
+        <textarea
+          value={inviteeName}
+          onChange={(e) => setInviteeName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        <input
+          type="color"
+          value={textColors.inviteeName}
+          onChange={(e) => setTextColors({ ...textColors, inviteeName: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Invitee Name Text Color"
+        />
+      </div>
+      {/* Inviter Name */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Inviter Name</label>
+        <textarea
+          value={inviterName}
+          onChange={(e) => setInviterName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        <input
+          type="color"
+          value={textColors.inviterName}
+          onChange={(e) => setTextColors({ ...textColors, inviterName: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Inviter Name Text Color"
+        />
+      </div>
+      {/* Occasion */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Occasion</label>
+        <textarea
+          value={occasion}
+          onChange={(e) => setOccasion(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        <input
+          type="color"
+          value={textColors.occasion}
+          onChange={(e) => setTextColors({ ...textColors, occasion: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Occasion Text Color"
+        />
+      </div>
+    </div>
+
+    {/* Description */}
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">Description</label>
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        rows={3}
+      />
+      <input
+        type="color"
+        value={textColors.description}
+        onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
+        className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+        title="Description Text Color"
+      />
+    </div>
+
+    {/* QR Code */}
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">QR Code URL</label>
+      <input
+        type="url"
+        value={qrUrl}
+        onChange={(e) => setQrUrl(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+      />
+    </div>
+
+    {/* Logo Upload */}
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">Upload Logo</label>
+      <input
+        type="file"
+        onChange={(e) => {
+          if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setLogo(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+          }
+        }}
+        className="w-full p-3 rounded-lg border border-gray-300 bg-white"
+        accept="image/*"
       />
     </div>
   </div>
@@ -4535,7 +4942,7 @@ const baseLabelStyles = `
 {/* brandcard display */}
 {selectedVariant === 'brand' && (
   <div
-    className="relative min-h-[600px] p-4 md:p-8 rounded-2xl rounded-b-none shadow-2xl overflow-hidden"
+    className="relative min-h-[600px] p-4 md:p-8 rounded-xl shadow-2xl overflow-hidden"
     style={{
       background: `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
     }}
@@ -4558,16 +4965,16 @@ const baseLabelStyles = `
       
       {/* Logo Section */}
       {logo && (
-        <div className="flex justify-center -mt-2">
-          <div className="relative w-24 h-24 md:w-32 md:h-32">
-            <img
-              src={typeof logo === 'string' ? logo : URL.createObjectURL(logo as Blob)}
-              alt="Brand Logo"
-              className="rounded-full object-cover border-4 border-white/30 shadow-xl transition-transform duration-300 hover:scale-105"
-            />
-          </div>
-        </div>
-      )}
+  <div className="flex justify-center -mt-2">
+    <div className="relative w-24 h-24 md:w-32 md:h-32">
+      <img
+        src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)}
+        alt="Brand Logo"
+        className="rounded-full object-cover border-4 border-white/30 shadow-xl transition-transform duration-300 hover:scale-105"
+      />
+    </div>
+  </div>
+)}
 
       {/* Brand Info Section */}
       <div className="space-y-4 text-center">
@@ -4588,52 +4995,56 @@ const baseLabelStyles = `
 
       {/* Content Cards */}
       <div className="space-y-4 md:space-y-6">
-        {/* Description Card */}
-        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
-          <p
-            className="text-base md:text-lg leading-relaxed"
-            style={{ color: textColors.description }}
-          >
-            {description || "Share your brand story here"}
-          </p>
-        </div>
+        {description && (
+          <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+            <p
+              className="text-base md:text-lg leading-relaxed"
+              style={{ color: textColors.description }}
+            >
+              {description}
+            </p>
+          </div>
+        )}
 
-        {/* Policies Card */}
-        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
-          <p
-            className="text-base md:text-lg leading-relaxed"
-            style={{ color: textColors.orderPolicies }}
-          >
-            {orderPolicies || "Your policies here"}
-          </p>
-        </div>
+        {orderPolicies && (
+          <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+            <p
+              className="text-base md:text-lg leading-relaxed"
+              style={{ color: textColors.orderPolicies }}
+            >
+              {orderPolicies}
+            </p>
+          </div>
+        )}
 
-        {/* Contact Section */}
-        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
-          <p
-            className="text-base md:text-lg break-words"
-            style={{ color: textColors.contactInfo }}
-          >
-            {contactInfo || "Contact information"}
-          </p>
-        </div>
+        {contactInfo && (
+          <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+            <p
+              className="text-base md:text-lg break-words"
+              style={{ color: textColors.contactInfo }}
+            >
+              {contactInfo}
+            </p>
+          </div>
+        )}
       </div>
 
+      {/* Social Links + QR Section */}
       <div className="mt-auto pt-6 flex flex-col md:flex-row items-center justify-between gap-6">
-        {/* Social Icons */}
+        {/* Social Media Handles */}
         <div className="flex flex-wrap justify-center gap-4">
-  {Object.entries(socialMediaLinks).map(([platform, handle]) => (
-    handle && (
-      <div
-        key={platform}
-        className="flex items-center justify-center rounded-full bg-white/15 backdrop-blur-lg p-3 transition-colors duration-300"
-        style={{ color: textColors[platform] }}
-      >
-        <span className="text-lg font-medium">{handle}</span>
-      </div>
-    )
-  ))}
-</div>
+          {Object.entries(socialMediaLinks).map(([platform, handle]) => (
+            handle && (
+              <div
+                key={platform}
+                className="flex items-center justify-center rounded-full bg-white/15 backdrop-blur-lg p-3 transition-colors duration-300"
+                style={{ color: textColors[platform] }}
+              >
+                <span className="text-lg font-medium">{handle}</span>
+              </div>
+            )
+          ))}
+        </div>
 
         {/* QR Code */}
         {qrUrl && (
@@ -4642,6 +5053,142 @@ const baseLabelStyles = `
           </div>
         )}
       </div>
+    </div>
+  </div>
+)}
+
+{/* invitationcard display */}
+{selectedVariant === 'invitation' && (
+  <div
+    className="relative min-h-[600px] p-6 md:p-8 rounded-2xl shadow-2xl overflow-hidden"
+    style={{
+      background:
+        bgType === 'gradient'
+          ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+          : solidColor,
+    }}
+  >
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+
+    <div className="relative z-10 flex flex-col items-center gap-8">
+      {/* Logo */}
+      {logo && (
+        <div className="transform hover:scale-105 transition-transform duration-300">
+          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white/30 shadow-xl overflow-hidden">
+            <img
+              src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)}
+              alt="Event Logo"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Event Name */}
+      {eventName && (
+        <div className="w-full max-w-2xl transform hover:-translate-y-1 transition-all duration-300">
+          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+            <h3 
+              className="text-3xl md:text-5xl font-bold text-center tracking-tight" 
+              style={{ color: textColors.eventName }}
+            >
+              {eventName}
+            </h3>
+          </div>
+        </div>
+      )}
+
+      {/* Event Details */}
+      <div className="space-y-4 text-center max-w-xl">
+        {eventDate && (
+          <p 
+            className="text-xl md:text-2xl font-light"
+            style={{ color: textColors.eventDate }}
+          >
+            Date: {eventDate}
+          </p>
+        )}
+        {eventTime && (
+          <p 
+            className="text-lg md:text-xl"
+            style={{ color: textColors.eventTime }}
+          >
+            Time: {eventTime}
+          </p>
+        )}
+        {eventLocation && (
+          <p 
+            className="text-lg md:text-xl italic"
+            style={{ color: textColors.eventLocation }}
+          >
+            Location: {eventLocation} 😊
+          </p>
+        )}
+      </div>
+
+      {/* Invitee and Inviter Names */}
+      <div className="space-y-4 text-center max-w-xl">
+        {inviteeName && (
+          <p 
+            className="text-lg md:text-xl"
+            style={{ color: textColors.inviteeName }}
+          >
+            Dear {inviteeName},
+          </p>
+        )}
+        {inviterName && (
+          <p 
+            className="text-lg md:text-xl"
+            style={{ color: textColors.inviterName }}
+          >
+            You are cordially invited by {inviterName}
+          </p>
+        )}
+        {occasion && (
+          <p 
+            className="text-lg md:text-xl"
+            style={{ color: textColors.occasion }}
+          >
+            to the occasion of {occasion}
+          </p>
+        )}
+      </div>
+
+      {/* Description */}
+      {description && (
+        <div className="w-full max-w-2xl">
+          <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+            <p 
+              className="text-lg text-center whitespace-pre-wrap leading-relaxed"
+              style={{ color: textColors.description }}
+            >
+              {description}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* QR Code */}
+      {qrUrl && (
+        <div className="mt-auto">
+          <div className="p-4 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-3">
+            <QRCodeSVG 
+              value={qrUrl} 
+              size={120}
+              className="rounded-xl"
+            />
+            <p 
+              className="text-sm font-medium tracking-wide"
+              style={{ color: textColors.qrUrl }}
+            >
+              Scan to RSVP
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   </div>
 )}
