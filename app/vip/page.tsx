@@ -1250,7 +1250,7 @@ const baseLabelStyles = `
       <div
         className="absolute inset-0 bg-cover bg-center opacity-30 transform transition-transform duration-1000 hover:scale-105"
         style={{
-          backgroundImage: `url(${URL.createObjectURL(heroImage)})`,
+          backgroundImage: `url(${typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)})`,
         }}
       ></div>
     )}
@@ -2905,7 +2905,7 @@ const baseLabelStyles = `
       <div className="space-y-2">
         {heroImage && (
           <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden shadow-md">
-            <img src={URL.createObjectURL(heroImage)} alt="Uploaded" className="object-cover w-full h-full" />
+            <img src={typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)} alt="Uploaded" className="object-cover w-full h-full" />
             <button
               title="Delete hero image"
               onClick={() => setHeroImage(null)}
@@ -2921,7 +2921,12 @@ const baseLabelStyles = `
           type="file"
           onChange={(e) => {
             if (e.target.files && e.target.files[0]) {
-              setHeroImage(e.target.files[0]);
+              const file = e.target.files[0];
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setHeroImage(reader.result as string);
+              };
+              reader.readAsDataURL(file);
             }
           }}
           className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500"
@@ -5001,7 +5006,7 @@ const baseLabelStyles = `
       <div
         className="absolute inset-0 bg-cover bg-center opacity-30 transform transition-transform duration-1000 hover:scale-105"
         style={{
-          backgroundImage: `url(${URL.createObjectURL(heroImage)})`,
+          backgroundImage: `url(${typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)})`,
         }}
       ></div>
     )}
