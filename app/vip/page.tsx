@@ -1359,7 +1359,9 @@ const baseLabelStyles = `
       background:
         bgType === 'gradient'
           ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-          : solidColor,
+          : bgType === 'solid'
+          ? solidColor
+          : `url(${heroImage}) no-repeat center center/cover`,
     }}
   >
     {/* Decorative Elements */}
@@ -1486,6 +1488,7 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
     {/* Budget Display */}
       {selectedVariant === 'budget' && (
         <div className="relative bg-gradient-to-br pb-0 from-gray-800 via-gray-700 to-gray-900 p-2 rounded-b-md rounded-2xl shadow-xl overflow-hidden">
@@ -3019,6 +3022,7 @@ const baseLabelStyles = `
       >
         <option value="gradient">Gradient</option>
         <option value="solid">Solid Color</option>
+        <option value="image">Hero Image</option>
       </select>
     </div>
 
@@ -3067,6 +3071,45 @@ const baseLabelStyles = `
         />
       </div>
     )}
+
+    {/* Hero Image Background Input */}
+    {bgType === 'image' && (
+  <div>
+    <label className="block text-gray-800 mb-1 text-sm">Upload Hero Image</label>
+    <input
+      type="file"
+      onChange={(e) => {
+        if (e.target.files && e.target.files[0]) {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setHeroImage(reader.result as string);
+          };
+          reader.readAsDataURL(file);
+        }
+      }}
+      className="w-full p-3 rounded-lg border border-gray-300 bg-white"
+      accept="image/*"
+    />
+    {heroImage && (
+      <div className="relative mt-4 w-full h-64 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+        <img
+          src={heroImage}
+          alt="Hero"
+          className="object-cover w-full h-full"
+        />
+        <button
+          onClick={() => setHeroImage('')}
+          className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    )}
+  </div>
+)}
 
     {/* Event Information */}
     <div className="space-y-4">
@@ -3240,6 +3283,8 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
+
 
 {/* Budget Input Field */}
 {selectedVariant === 'budget' && (
