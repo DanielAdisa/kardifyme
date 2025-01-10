@@ -7,6 +7,7 @@ import Image from 'next/image';
 import place from "@/public/12.jpg"
 import SignatureCanvas from 'react-signature-canvas';
 import type ReactSignatureCanvas from 'react-signature-canvas';
+
 import { ethers } from 'ethers';
 import { ClockIcon, CalendarIcon } from '@heroicons/react/24/outline';
 
@@ -314,6 +315,25 @@ const cardVariants = {
       }
     }
   },
+  brand: {
+    templates: {
+      modern: {
+        // background: 'bg-white',
+        font: 'font-serif',
+        layout: 'p-2'
+      },
+      classic: {
+        // background: 'bg-stone-100',
+        font: 'font-mono',
+        layout: 'p-0'
+      },
+      minimal: {
+        // background: 'bg-slate-50',
+        font: 'font-sans',
+        layout: 'p-0'
+      }
+    }
+  },
 };
 
 // Add currency options
@@ -325,7 +345,58 @@ const currencyOptions = [
   { value: 'NGN', label: 'Nigerian Naira (₦)' }
 ];
 
+type SocialMediaPlatform = 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube';
+
+// type TextColors = {
+//   [key in SocialMediaPlatform]: string;
+// };
+
+// type TextColors = {
+//   brandName: string;
+//   tagline: string;
+//   description: string;
+//   orderPolicies: string;
+//   contactInfo: string;
+//   [key: string]: string;
+// };
+
+type TextColors = {
+  brandName: string;
+  tagline: string;
+  description: string;
+  orderPolicies: string;
+  contactInfo: string;
+  [key: string]: string;
+};
+
+// type TextColors = {
+//   tagline: string;
+//   // Add other properties as needed
+// };
+
 const CreateCard = () => {
+  const [textColors, setTextColors] = useState<{ [key: string]: string }>({});
+  interface TextColors {
+    facebook: string;
+    twitter: string;
+    instagram: string;
+    linkedin: string;
+    youtube: string;
+    description: string;
+    orderPolicies: string;
+    contactInfo: string;
+  }
+  
+  // const textColors: TextColors = {
+  //   facebook: '#3b5998',
+  //   twitter: '#1da1f2',
+  //   instagram: '#e1306c',
+  //   linkedin: '#0077b5',
+  //   youtube: '#ff0000',
+  // description: '#000000',
+  // orderPolicies: '#000000',
+  // contactInfo: '#000000',
+  // };
   const [affirmationTitle, setAffirmationTitle] = useState('');
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   const [title, setTitle] = useState('');
@@ -334,7 +405,17 @@ const CreateCard = () => {
   const [image, setImage] = useState('');
   const [qrUrl, setQrUrl] = useState('');
   const [logo, setLogo] = useState('');
-  
+  const [brandName, setBrandName] = useState('');
+const [tagline, setTagline] = useState('');
+const [orderPolicies, setOrderPolicies] = useState('');
+const [contactInfo, setContactInfo] = useState('');
+const [socialMediaLinks, setSocialMediaLinks] = useState({
+  instagram: '',
+  facebook: '',
+  twitter: '',
+});
+const [heroImage, setHeroImage] = useState<File | null>(null);
+
   const [price, setPrice] = useState('');
   const [currency, setCurrency] = useState('NGN');
   const [includeBottomPart, setIncludeBottomPart] = useState(true);
@@ -347,7 +428,7 @@ const CreateCard = () => {
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
@@ -504,6 +585,7 @@ const [cardColor, setCardColor] = useState({
   mood: '#ffeb3b',
   affirmations: '#ffeb3b',
   menu: '#ffffff',
+  brand: '#ffffff',
 });
 
 const [selectedTemplate, setSelectedTemplate] = useState({
@@ -522,6 +604,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   mood: 'energetic',
   affirmations: 'minimal',
   menu: 'minimal',
+  brand: 'minimal',
 });
 
 const templateOptions = {
@@ -540,6 +623,7 @@ const templateOptions = {
   mood: ['happy', 'calm', 'energetic'],
   affirmations: ['modern', 'classic', 'minimal'],
   menu: ['modern', 'classic', 'minimal'],
+  brand: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -1111,6 +1195,121 @@ const baseLabelStyles = `
           </div>
         </div>
       )}
+    </div>
+  </div>
+)}
+
+
+{/* brandcard display */}
+{selectedVariant === 'brand' && (
+  <div
+    className="relative min-h-[600px] p-4 md:p-8 rounded-2xl rounded-b-none shadow-2xl overflow-hidden"
+    style={{
+      background: `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
+    }}
+  >
+    {/* Animated Background Gradient */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/20 to transparent animate-gradient"></div>
+    
+    {/* Background Image with Parallax */}
+    {heroImage && (
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-30 transform transition-transform duration-1000 hover:scale-105"
+        style={{
+          backgroundImage: `url(${URL.createObjectURL(heroImage)})`,
+        }}
+      ></div>
+    )}
+
+    {/* Glass Morphism Containers */}
+    <div className="relative z-10 flex flex-col gap-6 h-full max-w-2xl mx-auto">
+      
+      {/* Logo Section */}
+      {logo && (
+        <div className="flex justify-center -mt-2">
+          <div className="relative w-24 h-24 md:w-32 md:h-32">
+            <img
+              src={typeof logo === 'string' ? logo : URL.createObjectURL(logo as Blob)}
+              alt="Brand Logo"
+              className="rounded-full object-cover border-4 border-white/30 shadow-xl transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Brand Info Section */}
+      <div className="space-y-4 text-center">
+        <h1
+          className="text-3xl md:text-5xl font-black tracking-tight animate-text bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent"
+          style={{ color: textColors.brandName }}
+        >
+          {brandName || "Your Brand"}
+        </h1>
+
+        <p
+          className="text-xl md:text-2xl font-light italic"
+          style={{ color: textColors.tagline }}
+        >
+          {tagline || "Your Vision, Our Mission"}
+        </p>
+      </div>
+
+      {/* Content Cards */}
+      <div className="space-y-4 md:space-y-6">
+        {/* Description Card */}
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+          <p
+            className="text-base md:text-lg leading-relaxed"
+            style={{ color: textColors.description }}
+          >
+            {description || "Share your brand story here"}
+          </p>
+        </div>
+
+        {/* Policies Card */}
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+          <p
+            className="text-base md:text-lg leading-relaxed"
+            style={{ color: textColors.orderPolicies }}
+          >
+            {orderPolicies || "Your policies here"}
+          </p>
+        </div>
+
+        {/* Contact Section */}
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+          <p
+            className="text-base md:text-lg break-words"
+            style={{ color: textColors.contactInfo }}
+          >
+            {contactInfo || "Contact information"}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-auto pt-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Social Icons */}
+        <div className="flex flex-wrap justify-center gap-4">
+  {Object.entries(socialMediaLinks).map(([platform, handle]) => (
+    handle && (
+      <div
+        key={platform}
+        className="flex items-center justify-center rounded-full bg-white/15 backdrop-blur-lg p-3 transition-colors duration-300"
+        style={{ color: textColors[platform] }}
+      >
+        <span className="text-lg font-medium">{handle}</span>
+      </div>
+    )
+  ))}
+</div>
+
+        {/* QR Code */}
+        {qrUrl && (
+          <div className="backdrop-blur-lg bg-white/15 p-3 rounded-xl">
+            <QRCodeSVG value={qrUrl} size={80} />
+          </div>
+        )}
+      </div>
     </div>
   </div>
 )}
@@ -2067,6 +2266,7 @@ const baseLabelStyles = `
         <option value="mood">🌈 Mood Board</option>
         <option value="affirmations">💬 Affirmations</option>
         <option value="menu">🍴 Menu</option>
+        <option value="brand">Brand Card</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2392,6 +2592,247 @@ const baseLabelStyles = `
   </div>
 )}
 
+{/* BRandcard field */}
+{selectedVariant === 'brand' && (
+  <div className="space-y-6 bg-white p-6 shadow-lg rounded-2xl">
+    {/* Brand Name */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Brand Name</label>
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={brandName}
+          onChange={(e) => setBrandName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter brand name"
+        />
+        <input
+          type="color"
+          value={textColors.brandName}
+          onChange={(e) => setTextColors({ ...textColors, brandName: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Brand Name Text Color"
+        />
+      </div>
+    </div>
+
+    {/* Tagline */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Tagline</label>
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={tagline}
+          onChange={(e) => setTagline(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter tagline"
+        />
+        <input
+          type="color"
+          value={textColors.tagline}
+          onChange={(e) => setTextColors({ ...textColors, tagline: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Tagline Text Color"
+        />
+      </div>
+    </div>
+
+    {/* Description */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Description</label>
+      <div className="flex items-center gap-2">
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter description"
+        />
+        <input
+          type="color"
+          value={textColors.description}
+          onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Description Text Color"
+        />
+      </div>
+    </div>
+
+    {/* Order Policies */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Order Policies</label>
+      <div className="flex items-center gap-2">
+        <textarea
+          value={orderPolicies}
+          onChange={(e) => setOrderPolicies(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter order policies"
+        />
+        <input
+          type="color"
+          value={textColors.orderPolicies}
+          onChange={(e) => setTextColors({ ...textColors, orderPolicies: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Order Policies Text Color"
+        />
+      </div>
+    </div>
+
+    {/* Contact Information */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Contact Information</label>
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={contactInfo}
+          onChange={(e) => setContactInfo(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter contact information"
+        />
+        <input
+          type="color"
+          value={textColors.contactInfo}
+          onChange={(e) => setTextColors({ ...textColors, contactInfo: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Contact Information Text Color"
+        />
+      </div>
+    </div>
+
+    {/* Social Media Links */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Social Media Links</label>
+      <div className="space-y-2">
+        {Object.keys(socialMediaLinks).map((platform) => (
+          <div key={platform} className="flex items-center gap-2">
+            <input
+              type="text"
+              value={socialMediaLinks[platform as keyof typeof socialMediaLinks]}
+              onChange={(e) => setSocialMediaLinks({ ...socialMediaLinks, [platform]: e.target.value })}
+              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+              placeholder={`Enter ${platform} link`}
+            />
+            <input
+              type="color"
+              value={textColors[platform as keyof typeof textColors]}
+              onChange={(e) => setTextColors({ ...textColors, [platform]: e.target.value })}
+              className="w-10 h-10 rounded-lg border border-gray-300"
+              title={`${platform.charAt(0).toUpperCase() + platform.slice(1)} Text Color`}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Hero Image */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Upload Hero Image</label>
+      <div className="space-y-2">
+        {heroImage && (
+          <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden shadow-md">
+            <img src={URL.createObjectURL(heroImage)} alt="Uploaded" className="object-cover w-full h-full" />
+            <button
+              title="Delete hero image"
+              onClick={() => setHeroImage(null)}
+              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              setHeroImage(e.target.files[0]);
+            }
+          }}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          accept="image/*"
+        />
+      </div>
+    </div>
+
+    {/* Logo */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Upload Your Logo</label>
+      <div className="space-y-2">
+        {logo && (
+          <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden shadow-md">
+            <img src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)} alt="Logo" className="object-cover w-full h-full" />
+            <button
+              onClick={() => setLogo('')}
+              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              const file = e.target.files[0];
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setLogo(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          accept="image/*"
+        />
+      </div>
+    </div>
+
+    {/* Background Gradient */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Gradient From</label>
+        <input
+          type="color"
+          value={gradientFrom}
+          onChange={(e) => setGradientFrom(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Gradient Via</label>
+        <input
+          type="color"
+          value={gradientVia}
+          onChange={(e) => setGradientVia(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Gradient To</label>
+        <input
+          type="color"
+          value={gradientTo}
+          onChange={(e) => setGradientTo(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        />
+      </div>
+    </div>
+
+    {/* QR Code URL */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">QR Code URL</label>
+      <input
+        type="text"
+        value={qrUrl}
+        onChange={(e) => setQrUrl(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter QR Code URL"
+      />
+    </div>
+  </div>
+)}
 
 {/* Budget Input Field */}
 {selectedVariant === 'budget' && (
@@ -4086,6 +4527,121 @@ const baseLabelStyles = `
           </div>
         </div>
       )}
+    </div>
+  </div>
+)}
+
+
+{/* brandcard display */}
+{selectedVariant === 'brand' && (
+  <div
+    className="relative min-h-[600px] p-4 md:p-8 rounded-2xl rounded-b-none shadow-2xl overflow-hidden"
+    style={{
+      background: `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
+    }}
+  >
+    {/* Animated Background Gradient */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/20 to transparent animate-gradient"></div>
+    
+    {/* Background Image with Parallax */}
+    {heroImage && (
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-30 transform transition-transform duration-1000 hover:scale-105"
+        style={{
+          backgroundImage: `url(${URL.createObjectURL(heroImage)})`,
+        }}
+      ></div>
+    )}
+
+    {/* Glass Morphism Containers */}
+    <div className="relative z-10 flex flex-col gap-6 h-full max-w-2xl mx-auto">
+      
+      {/* Logo Section */}
+      {logo && (
+        <div className="flex justify-center -mt-2">
+          <div className="relative w-24 h-24 md:w-32 md:h-32">
+            <img
+              src={typeof logo === 'string' ? logo : URL.createObjectURL(logo as Blob)}
+              alt="Brand Logo"
+              className="rounded-full object-cover border-4 border-white/30 shadow-xl transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Brand Info Section */}
+      <div className="space-y-4 text-center">
+        <h1
+          className="text-3xl md:text-5xl font-black tracking-tight animate-text bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent"
+          style={{ color: textColors.brandName }}
+        >
+          {brandName || "Your Brand"}
+        </h1>
+
+        <p
+          className="text-xl md:text-2xl font-light italic"
+          style={{ color: textColors.tagline }}
+        >
+          {tagline || "Your Vision, Our Mission"}
+        </p>
+      </div>
+
+      {/* Content Cards */}
+      <div className="space-y-4 md:space-y-6">
+        {/* Description Card */}
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+          <p
+            className="text-base md:text-lg leading-relaxed"
+            style={{ color: textColors.description }}
+          >
+            {description || "Share your brand story here"}
+          </p>
+        </div>
+
+        {/* Policies Card */}
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+          <p
+            className="text-base md:text-lg leading-relaxed"
+            style={{ color: textColors.orderPolicies }}
+          >
+            {orderPolicies || "Your policies here"}
+          </p>
+        </div>
+
+        {/* Contact Section */}
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 transform transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg border border-white/5">
+          <p
+            className="text-base md:text-lg break-words"
+            style={{ color: textColors.contactInfo }}
+          >
+            {contactInfo || "Contact information"}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-auto pt-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Social Icons */}
+        <div className="flex flex-wrap justify-center gap-4">
+  {Object.entries(socialMediaLinks).map(([platform, handle]) => (
+    handle && (
+      <div
+        key={platform}
+        className="flex items-center justify-center rounded-full bg-white/15 backdrop-blur-lg p-3 transition-colors duration-300"
+        style={{ color: textColors[platform] }}
+      >
+        <span className="text-lg font-medium">{handle}</span>
+      </div>
+    )
+  ))}
+</div>
+
+        {/* QR Code */}
+        {qrUrl && (
+          <div className="backdrop-blur-lg bg-white/15 p-3 rounded-xl">
+            <QRCodeSVG value={qrUrl} size={80} />
+          </div>
+        )}
+      </div>
     </div>
   </div>
 )}
