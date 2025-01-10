@@ -334,6 +334,7 @@ const CreateCard = () => {
   const [image, setImage] = useState('');
   const [qrUrl, setQrUrl] = useState('');
   const [logo, setLogo] = useState('');
+  
   const [price, setPrice] = useState('');
   const [currency, setCurrency] = useState('NGN');
   const [includeBottomPart, setIncludeBottomPart] = useState(true);
@@ -371,6 +372,11 @@ const [contractDate, setContractDate] = useState('');
 const [contractValue, setContractValue] = useState('');
 const [celebrantName, setCelebrantName] = useState('');
 const [age, setAge] = useState('');
+const [menuTitleColor, setMenuTitleColor] = useState('#333');
+const [menuSubtitleColor, setMenuSubtitleColor] = useState('#666');
+const [menuDateColor, setMenuDateColor] = useState('#666');
+const [innerCardColor, setInnerCardColor] = useState('#ffffff');
+
 const [message, setMessage] = useState('');
 const [wishType, setWishType] = useState('Happy Birthday');
 const [budgetCategories, setBudgetCategories] = useState([{ category: '', amount: 0 }]);
@@ -383,6 +389,8 @@ const smileys = ['😊', '😢', '😂', '😍', '😎', '😡', '😱', '😴',
 const [date, setDate] = useState('');
 const [name, setName] = useState('');
 const [titleColor, setTitleColor] = useState('#000000');
+const [menuDate, setMenuDate] = useState<string | null>(null);
+const [isDateOptional, setIsDateOptional] = useState(false);
 const [subtitleColor, setSubtitleColor] = useState('#000000');
 const [descriptionColor, setDescriptionColor] = useState('#000000');
 const [dateNameColor, setDateNameColor] = useState('#000000');
@@ -2178,7 +2186,7 @@ const baseLabelStyles = `
             {selectedVariant === 'menu' && (
   <div className="space-y-6 p-4 sm:p-6 md:p-8 bg-white shadow-lg rounded-lg">
     {/* Menu Title and Subtitle */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid gap-4">
       <div>
         <label className="block text-gray-700 text-sm font-medium">Menu Title</label>
         <input
@@ -2190,9 +2198,9 @@ const baseLabelStyles = `
         />
         <input
           type="color"
-          value={titleColor}
-          onChange={(e) => setTitleColor(e.target.value)}
-          className="w-full mt-2 h-10 rounded-lg border border-gray-300"
+          value={menuTitleColor}
+          onChange={(e) => setMenuTitleColor(e.target.value)}
+          className="w-10 h-10 mt-2 rounded-lg border border-gray-300"
           title="Title Text Color"
         />
       </div>
@@ -2207,21 +2215,74 @@ const baseLabelStyles = `
         />
         <input
           type="color"
-          value={subtitleColor}
-          onChange={(e) => setSubtitleColor(e.target.value)}
-          className="w-full mt-2 h-10 rounded-lg border border-gray-300"
+          value={menuSubtitleColor}
+          onChange={(e) => setMenuSubtitleColor(e.target.value)}
+          className="w-10 h-10 mt-2 rounded-lg border border-gray-300"
           title="Subtitle Text Color"
         />
       </div>
     </div>
 
+    {/* Menu Date */}
+    <div className="space-y-2">
+      <label className="block text-gray-700 text-sm font-medium">Menu Date</label>
+      <div className="flex flex-col sm:flex-row items-center gap-4">
+        <input
+          type="date"
+          value={menuDate || ''}
+          onChange={(e) => setMenuDate(e.target.value)}
+          className="w-full sm:w-auto mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+        />
+        <input
+          type="color"
+          value={menuDateColor}
+          onChange={(e) => setMenuDateColor(e.target.value)}
+          className="w-10 h-10 border border-gray-300 rounded-lg"
+          title="Date Text Color"
+        />
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            checked={isDateOptional}
+            onChange={(e) => setIsDateOptional(e.target.checked)}
+            className="h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+          />
+          <label className="ml-2 text-gray-700 text-sm">Optional Date</label>
+        </div>
+      </div>
+    </div>
+
+    {/* Inner Card Color */}
+    <div className="space-y-2">
+      <label className="block text-gray-700 text-sm font-medium">Inner Card Color</label>
+      <input
+        type="color"
+        value={innerCardColor}
+        onChange={(e) => setInnerCardColor(e.target.value)}
+        className="w-full mt-2 h-10 rounded-lg border border-gray-300"
+        title="Inner Card Color"
+      />
+    </div>
+
+    {/* Menu Background Color */}
+    <div className="space-y-2">
+      <label className="block text-gray-700 text-sm font-medium">Menu Background Color</label>
+      <input
+        type="color"
+        value={menuBackgroundColor}
+        onChange={(e) => setMenuBackgroundColor(e.target.value)}
+        className="w-full mt-2 h-10 rounded-lg border border-gray-300"
+        title="Menu Background Color"
+      />
+    </div>
+
     {/* Menu Categories */}
-    <div>
+    <div className="space-y-4">
       <label className="block text-gray-700 text-sm font-medium">Menu Categories</label>
       {menuCategories.map((category, index) => (
         <div
           key={index}
-          className="p-4 mt-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4"
+          className="p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4"
         >
           {/* Category Name */}
           <div className="flex items-center gap-2">
@@ -2256,6 +2317,7 @@ const baseLabelStyles = `
               ×
             </button>
           </div>
+
           {/* Category Description */}
           <textarea
             value={category.description}
@@ -2269,10 +2331,10 @@ const baseLabelStyles = `
           ></textarea>
 
           {/* Menu Items */}
-          <div>
+          <div className="space-y-2">
             <label className="block text-gray-700 text-sm font-medium">Menu Items</label>
             {category.items.map((item, itemIndex) => (
-              <div key={itemIndex} className="flex items-center gap-2 mt-2">
+              <div key={itemIndex} className="flex items-center gap-2">
                 <input
                   type="text"
                   value={item.name}
@@ -2304,23 +2366,11 @@ const baseLabelStyles = `
                   }}
                   className="w-24 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
                 >
-                  {currencyOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
+                  <option value="USD">USD</option>
+                  <option value="NGN">NGN</option>
+                  <option value="GHS">GHS</option>
+                  <option value="EUR">EUR</option>
                 </select>
-                <input
-                  type="color"
-                  value={item.textColor}
-                  onChange={(e) => {
-                    const updatedCategories = [...menuCategories];
-                    updatedCategories[index].items[itemIndex].textColor = e.target.value;
-                    setMenuCategories(updatedCategories);
-                  }}
-                  className="w-10 h-10 border border-gray-300 rounded-lg"
-                  title="Item Text Color"
-                />
                 <button
                   onClick={() => {
                     const updatedCategories = [...menuCategories];
@@ -2338,13 +2388,7 @@ const baseLabelStyles = `
             <button
               onClick={() => {
                 const updatedCategories = [...menuCategories];
-                updatedCategories[index].items.push({
-                  name: '',
-                  price: '',
-                  currency: currencyOptions[0].value,
-                  textColor: '#000000',
-                  description: '',
-                });
+                updatedCategories[index].items.push({ name: '', price: '', currency: 'USD' });
                 setMenuCategories(updatedCategories);
               }}
               className="text-emerald-600 mt-2 hover:text-emerald-700"
@@ -2358,7 +2402,7 @@ const baseLabelStyles = `
         onClick={() =>
           setMenuCategories([
             ...menuCategories,
-            { name: '', textColor: '#000000', description: '', items: [] },
+            { name: '', textColor: '#000', description: '', items: [] },
           ])
         }
         className="text-emerald-600 mt-4 hover:text-emerald-700"
@@ -3483,22 +3527,27 @@ const baseLabelStyles = `
     {/* Add Menu card display */}
     {selectedVariant === 'menu' && (
   <div
-    className="space-y-8 p-6 bg-white shadow-2xl rounded-3xl relative"
+    className="space-y-6 p-4 sm:p-6 lg:p-8 bg-white shadow-xl rounded-3xl relative"
     style={{
       backgroundColor: menuBackgroundColor || '#FFFFFF',
     }}
   >
     {/* Menu Header */}
-    <div className="text-center space-y-2">
+    <div className="text-center space-y-3">
       <h1
-        className="text-4xl font-bold tracking-tight"
-        style={{ color: titleColor || '#333' }}
+        className="text-3xl sm:text-4xl font-bold tracking-tight"
+        style={{ color: menuTitleColor || '#333' }}
       >
         {menuTitle || 'Restaurant Menu'}
       </h1>
       {menuSubtitle && (
-        <p className="text-lg" style={{ color: subtitleColor || '#666' }}>
+        <p className="text-base sm:text-lg" style={{ color: menuSubtitleColor || '#666' }}>
           {menuSubtitle}
+        </p>
+      )}
+      {menuDate && !isDateOptional && (
+        <p className="text-sm sm:text-base" style={{ color: menuDateColor || '#666' }}>
+          {new Date(menuDate).toLocaleDateString()}
         </p>
       )}
     </div>
@@ -3507,33 +3556,32 @@ const baseLabelStyles = `
     <div className="space-y-8">
       {menuCategories && menuCategories.length > 0 ? (
         menuCategories.map((category, catIndex) => (
-          <div key={catIndex}>
+          <div key={catIndex} className="space-y-6">
             {/* Single Category Header */}
-            <div className="mb-4">
+            <div className="space-y-2">
               <h2
-                className="text-2xl font-semibold border-b pb-2"
+                className="text-xl sm:text-2xl font-semibold border-b pb-2"
                 style={{ color: category.textColor || '#555' }}
               >
                 {category.name || `Category ${catIndex + 1}`}
               </h2>
               {category.description && (
-                <p className="text-sm text-gray-500 mt-1">
-                  {category.description}
-                </p>
+                <p className="text-sm text-gray-500">{category.description}</p>
               )}
             </div>
 
             {/* Menu Items for Category */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {category.items && category.items.length > 0 ? (
                 category.items.map((item, itemIndex) => (
                   <div
                     key={itemIndex}
-                    className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg shadow-sm"
+                    className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-gray-50 rounded-lg shadow-sm"
+                    style={{ backgroundColor: innerCardColor }}
                   >
                     {/* Item Image */}
                     {item.image && (
-                      <div className="w-16 h-16 overflow-hidden rounded-lg">
+                      <div className="w-20 h-20 overflow-hidden rounded-lg">
                         <img
                           src={URL.createObjectURL(item.image as File)}
                           alt={item.name || `Item ${itemIndex + 1}`}
@@ -3542,8 +3590,8 @@ const baseLabelStyles = `
                       </div>
                     )}
                     {/* Item Details */}
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center">
+                    <div className="flex-1 space-y-1">
+                      <div className="flex justify-between items-start">
                         <h3
                           className="text-lg font-medium"
                           style={{ color: item.textColor || '#333' }}
@@ -3551,7 +3599,9 @@ const baseLabelStyles = `
                           {item.name || `Item ${itemIndex + 1}`}
                         </h3>
                         <span className="text-sm font-semibold text-gray-600">
-                          {item.price ? formatCurrency(parseFloat(item.price), item.currency || 'USD') : formatCurrency(0, item.currency || 'USD')}
+                          {item.price
+                            ? formatCurrency(parseFloat(item.price), item.currency || 'USD')
+                            : formatCurrency(0, item.currency || 'USD')}
                         </span>
                       </div>
                       {item.description && (
@@ -3563,7 +3613,7 @@ const baseLabelStyles = `
                         </p>
                       )}
                       {item.tags && (
-                        <div className="flex gap-2 mt-2">
+                        <div className="flex flex-wrap gap-2 mt-2">
                           {item.tags.split(',').map((tag, tagIndex) => (
                             <span
                               key={tagIndex}
@@ -3584,7 +3634,7 @@ const baseLabelStyles = `
           </div>
         ))
       ) : (
-        <p className="text-gray-500 text-center">No categories to display.</p>
+        <p className="text-center text-gray-500">No categories to display.</p>
       )}
     </div>
 
