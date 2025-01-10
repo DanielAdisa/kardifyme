@@ -5122,7 +5122,7 @@ const baseLabelStyles = `
     }}
   >
     {/* Decorative Elements */}
-    <div className="absolute inset-1 bg-black/10 backdrop-blur-xl" />
+    <div className="absolute inset-0 rounded-xl bg-black/10 backdrop-blur-xl" />
     <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
     <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
 
