@@ -300,12 +300,12 @@ const cardVariants = {
       modern: {
         // background: 'bg-white',
         font: 'font-serif',
-        layout: 'p-1'
+        layout: 'p-2'
       },
       classic: {
         // background: 'bg-stone-100',
         font: 'font-mono',
-        layout: 'p-0.5'
+        layout: 'p-0'
       },
       minimal: {
         // background: 'bg-slate-50',
@@ -544,11 +544,13 @@ const templateOptions = {
 
 
 
-const handleDeleteImage = (type: 'main' | 'logo') => {
+const handleDeleteImage = (type: 'main' | 'logo'| 'profilePicture' ) => {
   if (type === 'main') {
     setImage('');
   } else if (type === 'logo') {
     setLogo('');
+  } else if (type === 'profilePicture') {
+    setProfilePicture('');
   }
 };
 // Import the type from react-signature-canvas
@@ -662,7 +664,7 @@ const saveSignature = (
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: 'main' | 'logo' | 'moodPicture' | 'menuItem',
+    type: 'main' | 'logo' | 'moodPicture' | 'menuItem' | 'profilePicture',
     categoryIndex?: number,
     itemIndex?: number
   ) => {
@@ -674,7 +676,13 @@ const saveSignature = (
           setImage(event.target?.result as string);
         } else if (type === 'logo') {
           setLogo(event.target?.result as string);
-        } else if (type === 'moodPicture') {
+          
+        } else if (type === 'profilePicture') {
+          setProfilePicture(event.target?.result as string);
+          
+        }
+        
+        else if (type === 'moodPicture') {
           setMoodPicture(event.target?.result as string);
         } else if (type === 'menuItem' && categoryIndex !== undefined && itemIndex !== undefined) {
           const newCategories = [...menuCategories];
@@ -861,12 +869,20 @@ const baseLabelStyles = `
 
           {/* Select Card Type */}
 
-          <div className={baseWrapperStyles}>
-      <label className={baseLabelStyles}>Card Type</label>
+          <div className="space-y-4 bg-gradient-to-br from-white to-gray-50/80 p-4 md:p-8 rounded-3xl shadow-xl border border-gray-100">
+  {/* Card Type Selector */}
+  <div className="space-y-2">
+    <label className="block text-lg font-semibold text-gray-800">
+      Select Card Type
+      <span className="ml-2 text-gray-400 text-sm font-normal">Choose your design</span>
+    </label>
+    <div className="relative mt-1">
       <select
         value={selectedVariant}
         onChange={(e) => setSelectedVariant(e.target.value as VariantType)}
-        className={`${baseInputStyles} cursor-pointer appearance-none pr-10`}
+        className="w-full p-4 pr-12 text-gray-700 bg-white rounded-2xl border border-gray-200 
+                 shadow-sm appearance-none cursor-pointer transition-all duration-200
+                 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
       >
         <option value="business">💼 Business Card</option>
         <option value="event">🎫 Event Ticket</option>
@@ -875,134 +891,92 @@ const baseLabelStyles = `
         <option value="receipt">🧾 Receipt</option>
         <option value="einvoice">📧 E-Invoice</option>
         <option value="flyer">📜 E-Flyer</option>
-        <option value="recipe">🍲 E-Recipe</option>
-        <option value="contract">📜 E-Contract</option>
+        <option value="recipe">🍲 Recipe</option>
+        <option value="contract">📜 Contract</option>
         <option value="birthday">🎂 Birthday</option>
-        <option value="budget">💰 E-Budget</option>
-        <option value="idCard">🆔 E-ID</option>
-        <option value="mood">📜 Mood</option>
-        <option value="affirmations">📜 Affirmations</option>
-        <option value="menu">📜 E-Menu</option>
+        <option value="budget">💰 Budget</option>
+        <option value="idCard">🆔 ID Card</option>
+        <option value="mood">🌈 Mood Board</option>
+        <option value="affirmations">💬 Affirmations</option>
+        <option value="menu">🍴 Menu</option>
       </select>
-      <div className="absolute right-3 top-[41px] pointer-events-none text-slate-400">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+        <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </div>
     </div>
-
-          {/* <div>
-            <label className="block text-stone-950 mb-2">Card Type</label>
-            <select
-              title="Select card type"
-              value={selectedVariant}
-              onChange={(e) => setSelectedVariant(e.target.value as VariantType)}
-              className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
-            >
-              <option value="business">Business Card</option>
-              <option value="event">Event Ticket</option>
-              <option value="product">Product Showcase</option>
-              <option value="invoice">Invoice</option>
-              <option value="receipt">Receipt</option>
-              <option value="einvoice">E-Invoice</option>
-              <option value="flyer">E-Flyer</option>
-              <option value="recipe">E-Recipe</option>
-              <option value="contract">E-Contract</option>
-              <option value="birthday">Birthday</option>
-              <option value="budget">E-Budget</option>
-              <option value="idCard">E-ID</option>
-            </select>
-          </div> */}
-
-{/* <div className={baseWrapperStyles}>
-      <label className={baseLabelStyles}>Title</label>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className={baseInputStyles}
-        placeholder="Enter a captivating title"
-      />
-    </div> */}
-
-    {/* Textarea Example */}
-    {/* <div className={baseWrapperStyles}>
-      <label className={baseLabelStyles}>Description</label>
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className={`${baseInputStyles} min-h-[120px] resize-none`}
-        placeholder="Write a detailed description..."
-      />
-    </div> */}
-
-    {/* File Input Example */}
-    {/* <div className={baseWrapperStyles}>
-      <label className={baseLabelStyles}>Upload Image</label>
-      <div className="
-        relative border-2 border-dashed border-slate-200 
-        rounded-xl p-8 text-center hover:border-blue-500
-        transition-all duration-200
-        cursor-pointer
-      ">
-        <input
-          type="file"
-          onChange={(e) => handleImageChange(e, 'main')}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          accept="image/*"
-        />
-        <div className="space-y-2">
-          <svg className="w-8 h-8 mx-auto text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm text-slate-600">Click or drag to upload an image</p>
-        </div>
-      </div>
-    </div> */}
-
-    <div className={baseWrapperStyles}>
-  <div >
-    <label className={baseLabelStyles}>Outer Card Color</label>
-  <input
-    type="color"
-    value={cardColor[selectedVariant]}
-    onChange={(e) => setCardColor({
-      ...cardColor,
-      [selectedVariant]: e.target.value
-    })}
-    className=" w-full h-[45px] backdrop-blur-sm
-  rounded-xl"
-    title="Select card color"
-    placeholder="Select card color"
-  />
   </div>
-  
-  <div>
-    <label className={baseLabelStyles}>Template Style</label>
-    <select
-      value={selectedTemplate[selectedVariant]}
-      onChange={(e) => setSelectedTemplate({
-        ...selectedTemplate,
-        [selectedVariant]: e.target.value
-      })}
-      className={`${baseInputStyles} cursor-pointer appearance-none pr-10`}
-      
-    >
-      
-      {templateOptions[selectedVariant].map((template) => (
-        <option key={template} value={template}>
-          {template.charAt(0).toUpperCase() + template.slice(1)}
-          
-        </option>
-        
-      ))}
-    </select>
-    
+
+  {/* Style Controls */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    {/* Card Color Picker */}
+    <div className="space-y-2 bg-white p-1 rounded-2xl border border-gray-100 shadow-sm">
+      <label className="block font-medium text-gray-700">
+        Card Color
+        <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
+      </label>
+      <div className="relative group">
+        <input
+          type="color"
+          value={cardColor[selectedVariant]}
+          onChange={(e) => setCardColor({ ...cardColor, [selectedVariant]: e.target.value })}
+          className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+                   hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+          title="Select card color"
+        />
+        <div className="absolute inset-0 rounded-xl ring-2 ring-gray-200 pointer-events-none 
+                      transition-opacity opacity-0 group-hover:opacity-100" />
+      </div>
+    </div>
+
+    {/* Template Selector */}
+    <div className="space-y-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+      <label className="block font-medium text-gray-700">
+        Template Style
+        <span className="ml-2 text-sm text-gray-400">Choose Font</span>
+      </label>
+      <select
+        value={selectedTemplate[selectedVariant]}
+        onChange={(e) => setSelectedTemplate({
+          ...selectedTemplate,
+          [selectedVariant]: e.target.value
+        })}
+        className="w-full p-3 text-gray-700 bg-white rounded-xl border border-gray-200 
+                 shadow-sm appearance-none cursor-pointer transition-all duration-200
+                 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+      >
+        {templateOptions[selectedVariant].map((template) => (
+          <option key={template} value={template}>
+            {template.charAt(0).toUpperCase() + template.slice(1)}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* Text Color Picker */}
+  <div className="space-y-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+    <label className="block font-medium text-gray-700">
+      Text Color
+      <span className="ml-2 text-sm text-gray-400">Set font color</span>
+    </label>
+    <div className="relative group">
+      <input
+        type="color"
+        value={titleColor}
+        onChange={(e) => setTitleColor(e.target.value)}
+        className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+                 hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+      />
+      <div className="absolute inset-0 rounded-xl ring-2 ring-gray-200 pointer-events-none 
+                    transition-opacity opacity-0 group-hover:opacity-100" />
+    </div>
   </div>
 </div>
-
-          {/* Conditional Inputs based on Variant */}
-          {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
+ 
+   {/* Conditional Inputs based on Variant */}
+   {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
             <div className="space-y-4">
               <div>
                 <label className="block text-stone-950 mb-2">
@@ -1112,36 +1086,6 @@ const baseLabelStyles = `
             </div>
           )}
 
-
-{/* Color Fields */}
-      <div>
-          <label className={baseLabelStyles}>Text Color</label>
-          <input
-            type="color"
-            value={titleColor}
-            onChange={(e) => setTitleColor(e.target.value)}
-          className=" w-full h-[45px] backdrop-blur-sm
-        rounded-xl"
-          />
-      </div>
-  {/* <div>
-    <label className="block text-stone-950 mb-2">Description Color</label>
-    <input
-      type="color"
-      value={descriptionColor}
-      onChange={(e) => setDescriptionColor(e.target.value)}
-      className="w-full h-10 rounded-lg border border-slate-300"
-    />
-  </div>
-  <div>
-    <label className="block text-stone-950 mb-2">Date/Name Color</label>
-    <input
-      type="color"
-      value={dateNameColor}
-      onChange={(e) => setDateNameColor(e.target.value)}
-      className="w-full h-10 rounded-lg border border-slate-300"
-    />
-  </div> */}
 
 {/* Flyer Input Fields */}
 {selectedVariant === 'flyer' && (
@@ -1390,92 +1334,110 @@ const baseLabelStyles = `
 
 {/* // Add to the form section where other inputs are present */}
 {selectedVariant === 'idCard' && (
-  <div className="space-y-6">
-    {/* Show ID Card Toggle */}
-    <div className="flex items-center gap-2">
-      <input
-        type="checkbox"
-        checked={showIDCard}
-        onChange={(e) => setShowIDCard(e.target.checked)}
-        className="w-4 h-4 accent-blue-500"
-      />
-      <label className="text-gray-700 font-medium">Show ID Card</label>
-    </div>
+  <div className="space-y-6 bg-white p-4 shadow-lg rounded-2xl">
+  {/* Show ID Card Toggle */}
+  <div className="flex items-center gap-2">
+    <input
+      type="checkbox"
+      checked={showIDCard}
+      onChange={(e) => setShowIDCard(e.target.checked)}
+      className="w-5 h-5 accent-blue-500"
+    />
+    <label className="text-gray-800 font-semibold">Show ID Card</label>
+  </div>
 
-    {showIDCard && (
-      <div className="space-y-4">
-        {/* Input Fields */}
-        <div>
-          <label className="block text-gray-700 mb-2">Name</label>
-          <input
-            type="text"
-            value={idCardDetails.name}
-            onChange={(e) => setIDCardDetails({ ...idCardDetails, name: e.target.value })}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
-            placeholder="Enter name"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-700 mb-2">ID Number</label>
-          <input
-            type="text"
-            value={idCardDetails.idNumber}
-            onChange={(e) => setIDCardDetails({ ...idCardDetails, idNumber: e.target.value })}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
-            placeholder="Enter ID number"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-700 mb-2">Department</label>
-          <input
-            type="text"
-            value={idCardDetails.department}
-            onChange={(e) => setIDCardDetails({ ...idCardDetails, department: e.target.value })}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
-            placeholder="Enter department"
-          />
-        </div>
-        <div>
-              <label className="block text-stone-950 mb-2">Title</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 rounded-lg border border-slate-300"
-                title="Enter the title"
-                placeholder="Enter a title"
-              />
-            </div>
-            <div>
-              <label className="block text-stone-950 mb-2">Description</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full p-2 rounded-lg border border-slate-300"
-                title="Enter the description"
-                placeholder="Enter a description"
-              />
-            </div>
-        <div>
-          <label className="block text-gray-700 mb-2">Issue Date</label>
-          <input
-            type="date"
-            value={idCardDetails.issueDate}
-            onChange={(e) => setIDCardDetails({ ...idCardDetails, issueDate: e.target.value })}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-700 mb-2">Expiry Date</label>
-          <input
-            type="date"
-            value={idCardDetails.expiryDate}
-            onChange={(e) => setIDCardDetails({ ...idCardDetails, expiryDate: e.target.value })}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-700 mb-2">Photo</label>
+  {showIDCard && (
+    <div className="space-y-4 bg-gray-50 p- rounded-lg shadow-md">
+      {/* Input Fields */}
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Name</label>
+        <input
+          type="text"
+          value={idCardDetails.name}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, name: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter name"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">ID Number</label>
+        <input
+          type="text"
+          value={idCardDetails.idNumber}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, idNumber: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter ID number"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Department</label>
+        <input
+          type="text"
+          value={idCardDetails.department}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, department: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter department"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Title</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter a title"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Description</label>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter a description"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Issue Date</label>
+        <input
+          type="date"
+          value={idCardDetails.issueDate}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, issueDate: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Expiry Date</label>
+        <input
+          type="date"
+          value={idCardDetails.expiryDate}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, expiryDate: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Photo</label>
+        {idCardDetails.photo ? (
+          <div className="relative w-32 h-32 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+            <img src={idCardDetails.photo} alt="ID Card Photo" className="object-cover w-full h-full" />
+            <button
+              onClick={() => setIDCardDetails({ ...idCardDetails, photo: '' })}
+              className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        ) : (
           <input
             type="file"
             onChange={(e) => {
@@ -1489,13 +1451,15 @@ const baseLabelStyles = `
                 reader.readAsDataURL(file);
               }
             }}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200"
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
             accept="image/*"
           />
-        </div>
+        )}
       </div>
-    )}
-  </div>
+    </div>
+  )}
+</div>
+
 )}
 
 {/* Recipe Input Fields */}
@@ -2189,37 +2153,41 @@ const baseLabelStyles = `
     <div className="grid gap-4">
       <div>
         <label className="block text-gray-700 text-sm font-medium">Menu Title</label>
-        <input
-          type="text"
-          value={menuTitle}
-          onChange={(e) => setMenuTitle(e.target.value)}
-          className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
-          placeholder="Enter Menu Title"
-        />
-        <input
-          type="color"
-          value={menuTitleColor}
-          onChange={(e) => setMenuTitleColor(e.target.value)}
-          className="w-10 h-10 mt-2 rounded-lg border border-gray-300"
-          title="Title Text Color"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={menuTitle}
+            onChange={(e) => setMenuTitle(e.target.value)}
+            className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder="Enter Menu Title"
+          />
+          <input
+            type="color"
+            value={menuTitleColor}
+            onChange={(e) => setMenuTitleColor(e.target.value)}
+            className="w-10 h-10 mt-1 rounded-lg border border-gray-300"
+            title="Title Text Color"
+          />
+        </div>
       </div>
       <div>
         <label className="block text-gray-700 text-sm font-medium">Menu Subtitle</label>
-        <input
-          type="text"
-          value={menuSubtitle}
-          onChange={(e) => setMenuSubtitle(e.target.value)}
-          className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
-          placeholder="Enter Menu Subtitle"
-        />
-        <input
-          type="color"
-          value={menuSubtitleColor}
-          onChange={(e) => setMenuSubtitleColor(e.target.value)}
-          className="w-10 h-10 mt-2 rounded-lg border border-gray-300"
-          title="Subtitle Text Color"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={menuSubtitle}
+            onChange={(e) => setMenuSubtitle(e.target.value)}
+            className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder="Enter Menu Subtitle"
+          />
+          <input
+            type="color"
+            value={menuSubtitleColor}
+            onChange={(e) => setMenuSubtitleColor(e.target.value)}
+            className="w-10 h-10 mt-1 rounded-lg border border-gray-300"
+            title="Subtitle Text Color"
+          />
+        </div>
       </div>
     </div>
 
@@ -2531,77 +2499,104 @@ const baseLabelStyles = `
             )}
 
             {/* Common fields for all variants */}
-            <div>
-  <label className="block text-stone-950 mb-2">Upload Hero Image</label>
-  <div className="space-y-2">
-    {image && (
-      <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden">
-        <Image src={image} alt="Uploaded" fill className="object-cover" />
-        <button
-          title="Delete main image"
-          onClick={() => handleDeleteImage('main')}
-          className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    )}
-    <input
-      type="file"
-      onChange={(e) => handleImageChange(e, 'main')}
-      className="w-full p-3 rounded-xl border border-slate-300"
-      accept="image/*"
-    />
-  </div>
-</div>
-
-<div>
-  <label className="block text-stone-950 mb-2">Upload Your Logo</label>
-  <div className="space-y-2">
-    {logo && (
-      <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden">
-        <Image src={logo} alt="Logo" fill className="object-cover" />
-        <button
-          onClick={() => handleDeleteImage('logo')}
-          className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    )}
-    <input
-      type="file"
-      onChange={(e) => handleImageChange(e, 'logo')}
-      className="w-full p-3 rounded-xl border border-slate-300"
-      accept="image/*"
-    />
-  </div>
-</div>
-            <div>
-              <label className="block text-stone-950 mb-2">QR Code URL</label>
-              <input
-                type="text"
-                value={qrUrl}
-                onChange={(e) => setQrUrl(e.target.value)}
-                className="w-full p-2 rounded-lg border border-slate-300"
-              />
-            </div>
-            <div className="space-y-6">
-    <div>
-      <label className="block text-stone-950 mb-2">Profile Picture</label>
+            <div className="p-6 space-y-6 bg-gradient-to-b from-gray-50 to-gray-100 shadow-lg rounded-2xl">
+  {/* Upload Hero Image */}
+  <div className="space-y-4">
+    <label className="block text-lg font-medium text-gray-900">Upload Hero Image</label>
+    <div className="space-y-2">
+      {image && (
+        <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+          <img src={image} alt="Uploaded Hero" className="object-cover w-full h-full" />
+          <button
+            title="Delete Hero Image"
+            onClick={() => handleDeleteImage('main')}
+            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
       <input
         type="file"
-        onChange={handleProfilePictureChange}
-        className="w-full p-2 rounded-lg border border-slate-300"
-        title="Upload a profile picture"
-        placeholder="Upload a profile picture"
+        onChange={(e) => handleImageChange(e, 'main')}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        accept="image/*"
       />
     </div>
   </div>
+
+  {/* Upload Logo */}
+  <div className="space-y-4">
+    <label className="block text-lg font-medium text-gray-900">Upload Your Logo</label>
+    <div className="space-y-2">
+      {logo && (
+        <div className="relative w-full h-32 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+          <img src={logo} alt="Logo" className="object-cover w-full h-full" />
+          <button
+            onClick={() => handleDeleteImage('logo')}
+            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+      <input
+        type="file"
+        onChange={(e) => handleImageChange(e, 'logo')}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        accept="image/*"
+      />
+    </div>
+  </div>
+
+  {/* QR Code URL */}
+  <div>
+    <label className="block text-lg font-medium text-gray-900">QR Code URL</label>
+    <input
+      type="text"
+      value={qrUrl}
+      title="Enter QR Code URL"
+      onChange={(e) => setQrUrl(e.target.value)}
+      className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter QR Code URL"
+    />
+  </div>
+
+  {/* Profile Picture */}
+  {/* <div className="space-y-4">
+    <label className="block text-lg font-medium text-gray-900">Upload Profile Picture</label>
+    <div className="space-y-2">
+    {profilePicture && (
+        <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+          <img src={profilePicture} alt="Uploaded Hero" className="object-cover w-full h-full" />
+          <button
+            title="Delete Hero Image"
+            onClick={() => handleDeleteImage('profilePicture')}
+            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+      <input
+        type="file"
+        onChange={handleProfilePictureChange}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        title="Upload a profile picture"
+        accept="image/*"
+      />
+    </div>
+  </div> */}
+</div>
+
+
+
 
 {/* Checkbox Example */}
 <div className={baseWrapperStyles}>
@@ -3527,61 +3522,63 @@ const baseLabelStyles = `
     {/* Add Menu card display */}
     {selectedVariant === 'menu' && (
   <div
-    className="space-y-6 p-4 sm:p-6 lg:p-8 bg-white shadow-xl rounded-3xl relative"
+    className="space-y-4 p-4 bg-white shadow-2xl rounded-b-none rounded-2xl relative"
     style={{
       backgroundColor: menuBackgroundColor || '#FFFFFF',
     }}
   >
     {/* Menu Header */}
-    <div className="text-center space-y-3">
+    <div className="text-center space-y-2">
       <h1
-        className="text-3xl sm:text-4xl font-bold tracking-tight"
+        className="text-4xl font-bold tracking-tight"
         style={{ color: menuTitleColor || '#333' }}
       >
         {menuTitle || 'Restaurant Menu'}
       </h1>
       {menuSubtitle && (
-        <p className="text-base sm:text-lg" style={{ color: menuSubtitleColor || '#666' }}>
-          {menuSubtitle}
+        <p className="text-lg" style={{ color: menuSubtitleColor || '#666' }}>
+          {menuSubtitle} 
         </p>
       )}
       {menuDate && !isDateOptional && (
-        <p className="text-sm sm:text-base" style={{ color: menuDateColor || '#666' }}>
+        <p className="text-sm" style={{ color: menuDateColor || '#666' }}>
           {new Date(menuDate).toLocaleDateString()}
         </p>
       )}
     </div>
 
     {/* Menu Categories */}
-    <div className="space-y-8">
+    <div className="space-y-6">
       {menuCategories && menuCategories.length > 0 ? (
         menuCategories.map((category, catIndex) => (
-          <div key={catIndex} className="space-y-6">
+          <div key={catIndex}>
             {/* Single Category Header */}
-            <div className="space-y-2">
+            <div className="mb-4">
               <h2
-                className="text-xl sm:text-2xl font-semibold border-b pb-2"
+                className="text-2xl font-semibold border-b pb-2"
                 style={{ color: category.textColor || '#555' }}
               >
                 {category.name || `Category ${catIndex + 1}`}
               </h2>
               {category.description && (
-                <p className="text-sm text-gray-500">{category.description}</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {category.description}
+                </p>
               )}
             </div>
 
             {/* Menu Items for Category */}
-            <div className="space-y-4">
+            <div className="space-y-6">
               {category.items && category.items.length > 0 ? (
                 category.items.map((item, itemIndex) => (
                   <div
                     key={itemIndex}
-                    className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-gray-50 rounded-lg shadow-sm"
+                    className="flex items-center space-x-4 p-4 rounded-lg shadow-sm"
                     style={{ backgroundColor: innerCardColor }}
                   >
                     {/* Item Image */}
                     {item.image && (
-                      <div className="w-20 h-20 overflow-hidden rounded-lg">
+                      <div className="w-16 h-16 overflow-hidden rounded-lg">
                         <img
                           src={URL.createObjectURL(item.image as File)}
                           alt={item.name || `Item ${itemIndex + 1}`}
@@ -3590,8 +3587,8 @@ const baseLabelStyles = `
                       </div>
                     )}
                     {/* Item Details */}
-                    <div className="flex-1 space-y-1">
-                      <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center">
                         <h3
                           className="text-lg font-medium"
                           style={{ color: item.textColor || '#333' }}
@@ -3599,9 +3596,7 @@ const baseLabelStyles = `
                           {item.name || `Item ${itemIndex + 1}`}
                         </h3>
                         <span className="text-sm font-semibold text-gray-600">
-                          {item.price
-                            ? formatCurrency(parseFloat(item.price), item.currency || 'USD')
-                            : formatCurrency(0, item.currency || 'USD')}
+                          {item.price ? formatCurrency(parseFloat(item.price), item.currency || 'USD') : formatCurrency(0, item.currency || 'USD')}
                         </span>
                       </div>
                       {item.description && (
@@ -3613,7 +3608,7 @@ const baseLabelStyles = `
                         </p>
                       )}
                       {item.tags && (
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="flex gap-2 mt-2">
                           {item.tags.split(',').map((tag, tagIndex) => (
                             <span
                               key={tagIndex}
@@ -3634,17 +3629,22 @@ const baseLabelStyles = `
           </div>
         ))
       ) : (
-        <p className="text-center text-gray-500">No categories to display.</p>
+        <p className="text-gray-500 text-center">No categories to display.</p>
       )}
     </div>
 
     {/* Special Section */}
-    {specialItemDescription && (
-      <div className="p-4 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-gray-900">Today's Special</h3>
-        <p className="text-sm text-gray-800 mt-1">{specialItemDescription}</p>
-      </div>
-    )}
+    {specialItemDescription &&  (
+    <div className="p-4 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-lg shadow-md">
+    <h3 className="text-lg font-semibold text-center text-gray-900">Today's Special</h3>
+    <p className="text-sm text-center text-gray-800 mt-1">{specialItemDescription}</p>
+  </div>
+)}
+{qrUrl && (
+  <div className="  flex items-center  w-full p-1 justify-end rounded-lg mt-2">
+    <QRCodeSVG value={qrUrl} size={40} />
+  </div>
+)}
   </div>
 )}
 
