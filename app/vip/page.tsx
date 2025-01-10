@@ -1355,7 +1355,7 @@ const baseLabelStyles = `
 {/* InviatationCard display */}
 {selectedVariant === 'invitation' && (
   <div
-    className="relative min-h-[600px] p-4 md:p-8 rounded-2xl shadow-2xl overflow-hidden"
+    className="relative min-h-[600px] p-6 md:p-8 rounded-2xl shadow-2xl overflow-hidden"
     style={{
       background:
         bgType === 'gradient'
@@ -1366,7 +1366,7 @@ const baseLabelStyles = `
     }}
   >
     {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-black/10 backdrop-blur-xl" />
+    <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
     <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
     <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
 
@@ -5122,7 +5122,7 @@ const baseLabelStyles = `
     }}
   >
     {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-black/10 backdrop-blur-xl" />
+    <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
     <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
     <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
 
