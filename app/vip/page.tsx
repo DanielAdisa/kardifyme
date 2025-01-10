@@ -436,7 +436,7 @@ const [socialMediaLinks, setSocialMediaLinks] = useState({
   facebook: '',
   twitter: '',
 });
-const [heroImage, setHeroImage] = useState<File | null>(null);
+
 
   const [price, setPrice] = useState('');
   const [currency, setCurrency] = useState('NGN');
@@ -521,6 +521,7 @@ const [menuItemPrice, setMenuItemPrice] = useState('');
 const [menuItemTags, setMenuItemTags] = useState('');
 const [menuItemImage, setMenuItemImage] = useState<File | null>(null);
 const [menuTitle, setMenuTitle] = useState('');
+const [heroImage, setHeroImage] = useState<string | null>(null);
 const [menuSubtitle, setMenuSubtitle] = useState('');
 const formatCurrency = (value: number, currency: string) => {
   return new Intl.NumberFormat('en-NG', {
@@ -3099,7 +3100,7 @@ const baseLabelStyles = `
           className="object-cover w-full h-full"
         />
         <button
-          onClick={() => setHeroImage('')}
+          onClick={() => setHeroImage(null)}
           className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
