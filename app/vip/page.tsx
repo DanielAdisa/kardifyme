@@ -394,6 +394,7 @@ type TextColors = {
 // };
 
 const CreateCard = () => {
+  
   const [occasion, setOccasion] = useState('');
   const [inviterName, setInviterName] = useState('');
   const [inviteeName, setInviteeName] = useState<string>('');
@@ -462,10 +463,24 @@ const [eventTime, setEventTime] = useState('');
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
 const [servings, setServings] = useState('');
-const [ingredients, setIngredients] = useState([{ item: '', amount: '' }]);
+interface Ingredient {
+  item: string;
+  amount: string;
+  backgroundColor?: string;
+  borderColor?: string;
+  textColor?: string;
+}
+
+const [ingredients, setIngredients] = useState<Ingredient[]>([{ 
+  item: '', 
+  amount: '', 
+  backgroundColor: '#ffffff', 
+  borderColor: '#000000', 
+  textColor: '#000000' 
+}]);
 const [instructions, setInstructions] = useState([{ step: '' }]);
 const [difficulty, setDifficulty] = useState('medium');
-const [chefTips, setChefTips] = useState('');
+
 const [profilePicture, setProfilePicture] = useState('');
 const [contractAddress, setContractAddress] = useState('');
 const [network, setNetwork] = useState('Ethereum');
@@ -511,6 +526,12 @@ const [backgroundColor, setBackgroundColor] = useState('#ffffff');
 const [affirmationText, setAffirmationText] = useState('');
 const [affirmationTime, setAffirmationTime] = useState('');
 const [affirmationDate, setAffirmationDate] = useState('');
+const [tips, setTips] = useState<string[]>([]);
+const [chefTips, setChefTips] = useState<string[]>([]);
+
+useEffect(() => {
+  setChefTips(tips); // Sync tips with chefTips for the display card
+}, [tips]);
 const [affirmationTextColor, setAffirmationTextColor] = useState('#000000');
 const [cardBackgroundColor, setCardBackgroundColor] = useState('#ffffff');
 const [categoryName, setCategoryName] = useState('');
@@ -519,6 +540,11 @@ const [menuItemName, setMenuItemName] = useState('');
 const [menuItemDescription, setMenuItemDescription] = useState('');
 const [menuItemPrice, setMenuItemPrice] = useState('');
 const [menuItemTags, setMenuItemTags] = useState('');
+const [inputStyles, setInputStyles] = useState({
+  backgroundColor: '#ffffff', // Default background color
+  borderColor: '#cccccc', // Default border color
+  textColor: '#000000', // Default text color
+});
 const [menuItemImage, setMenuItemImage] = useState<File | null>(null);
 const [menuTitle, setMenuTitle] = useState('');
 const [heroImage, setHeroImage] = useState<string | null>(null);
@@ -1593,7 +1619,6 @@ const baseLabelStyles = `
         : 'none',
     }}
   >
-
     <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
       {/* Left Column - Main Content */}
       <div className="space-y-8">
@@ -1618,18 +1643,28 @@ const baseLabelStyles = `
           </div>
         </div>
 
-        {/* Ingredients Section */}
-        <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
-          <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
-          <ul className="space-y-3" style={{ color: textColors.ingredients }}>
-            {ingredients.map((ing, idx) => (
-              <li key={idx} className="flex justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors">
-                <span className="font-medium">{ing.item}</span>
-                <span className="text-white/70 bg-white/10 px-3 py-1 rounded-full text-sm">{ing.amount}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Description Section */}
+        {description && (
+          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+            <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Description</h3>
+            <p className="text-white/90" style={{ color: textColors.description }}>
+              {description}
+            </p>
+          </div>
+        )}
+
+        {/* Ingredients Section Display */}
+          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+            <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
+            <ul className="space-y-3">
+              {ingredients.map((ing, idx) => (
+                <li key={idx} className="flex justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors" style={{ backgroundColor: ing.backgroundColor, borderColor: ing.borderColor, color: ing.textColor }}>
+                  <span className="font-medium">{ing.item}</span>
+                  <span className="text-white/70 bg-white/10 px-3 py-1 rounded-full text-sm">{ing.amount}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
         {/* Instructions Section */}
         <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
@@ -1645,9 +1680,12 @@ const baseLabelStyles = `
             ))}
           </ol>
         </div>
+
+        
+
       </div>
 
-      {/* Right Column - Image, Difficulty, Tips */}
+      {/* Right Column - Image, Difficulty */}
       <div className="space-y-8">
         {image && (
           <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
@@ -1660,22 +1698,13 @@ const baseLabelStyles = `
             />
           </div>
         )}
-
         <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20" style={{ backgroundColor: innerCardColor }}>
           <div className="text-center space-y-4">
             <span className={`px-4 py-2 rounded-xl text-sm font-medium inline-block ${getDifficultyColor(difficulty)}`}>
               {difficulty.toUpperCase()}
             </span>
-            {chefTips && (
-              <div className="p-4 bg-white/10 rounded-xl">
-                <p className="text-white/90 italic text-sm leading-relaxed" style={{ color: textColors.chefTips }}>
-                  💡 Chef's Tip: {chefTips}
-                </p>
-              </div>
-            )}
           </div>
         </div>
-
         {logo && (
           <div className="flex justify-center">
             <div className="relative w-20 h-20 transform hover:scale-110 transition-transform duration-300">
@@ -1688,10 +1717,25 @@ const baseLabelStyles = `
             </div>
           </div>
         )}
+        {/* Chef's Tips */}
+        {/* Chef's Tips */}
+        {chefTips && chefTips.length > 0 && (
+              <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
+                <h3 className="text-2xl font-semibold mb-4" style={{ color: textColors.sectionTitle }}>Chef's Tips</h3>
+                <ul className="space-y-4" style={{ color: textColors.chefTips }}>
+                  {chefTips.map((tip, index) => (
+                    <li key={index} className="text-white/90 italic text-sm leading-relaxed">
+                      💡 {tip}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
       </div>
     </div>
   </div>
 )}
+
 
 
 
@@ -3573,7 +3617,6 @@ const baseLabelStyles = `
           >
             <option value="gradient">Gradient</option>
             <option value="solid">Solid Color</option>
-            {/* <option value="image">Hero Image</option> */}
           </select>
         </div>
         {bgType === 'gradient' && (
@@ -3618,26 +3661,6 @@ const baseLabelStyles = `
             />
           </div>
         )}
-        {/* {bgType === 'image' && (
-          <div>
-            <label className="block text-stone-800 text-sm font-medium mb-2">Hero Image</label>
-            <input
-              type="file"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  const file = e.target.files[0];
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setHeroImage(reader.result as string);
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-              className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
-              accept="image/*"
-            />
-          </div>
-        )} */}
       </div>
     </div>
 
@@ -3741,136 +3764,199 @@ const baseLabelStyles = `
       </div>
     </div>
 
-    {/* Ingredients Section */}
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg>
-        Ingredients
-      </h3>
-      <div className="space-y-2">
-        {ingredients.map((ing, index) => (
-          <div key={index} className="flex items-center gap-2 group">
-            <div className="flex-1 flex gap-2">
-              <input
-                type="text"
-                value={ing.item}
-                onChange={(e) => {
-                  const newIngs = [...ingredients];
-                  newIngs[index].item = e.target.value;
-                  setIngredients(newIngs);
-                }}
-                className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
-                placeholder="Ingredient name"
-              />
-              <input
-                type="text"
-                value={ing.amount}
-                onChange={(e) => {
-                  const newIngs = [...ingredients];
-                  newIngs[index].amount = e.target.value;
-                  setIngredients(newIngs);
-                }}
-                className="w-32 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
-                placeholder="Amount"
-              />
-            </div>
-            <button
-              onClick={() => setIngredients(ingredients.filter((_, i) => i !== index))}
-              className="opacity-0 group-hover:opacity-100 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-opacity"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          </div>
-        ))}
+{/* Ingredients Section */}
+<div className="space-y-6 p-4 sm:p-6">
+  <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+    </svg>
+    Ingredients
+  </h3>
+
+  <div className="space-y-4">
+    {ingredients.map((ing, index) => (
+      <div key={index} className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row items-start sm:items-center gap-3 p-4 bg-white/10 rounded-xl shadow-md hover:shadow-xl transition-shadow">
+        {/* Inputs Container */}
+        <div className="w-full sm:flex-1 flex flex-col sm:flex-row gap-3">
+          <input
+            type="text"
+            value={ing.item}
+            onChange={(e) => {
+              const newIngs = [...ingredients];
+              newIngs[index].item = e.target.value;
+              setIngredients(newIngs);
+            }}
+            className="w-full p-4 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-shadow text-sm sm:text-base"
+            style={{
+              backgroundColor: ing.backgroundColor,
+              borderColor: ing.borderColor,
+              color: ing.textColor,
+            }}
+            placeholder="Ingredient name"
+          />
+          <input
+            type="text"
+            value={ing.amount}
+            onChange={(e) => {
+              const newIngs = [...ingredients];
+              newIngs[index].amount = e.target.value;
+              setIngredients(newIngs);
+            }}
+            className="w-full sm:w-32 p-4 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-shadow text-sm sm:text-base"
+            style={{
+              backgroundColor: ing.backgroundColor,
+              borderColor: ing.borderColor,
+              color: ing.textColor,
+            }}
+            placeholder="Amount"
+          />
+        </div>
+
+        {/* Color Controls (Pop-up for better mobile experience) */}
+        <div className="flex sm:w-auto flex-wrap items-center gap-2 text-xs sm:text-sm">
+          <label className="flex items-center gap-1">
+            <span className="font-semibold text-stone-800">BG</span>
+            <input
+              type="color"
+              value={ing.backgroundColor}
+              onChange={(e) => {
+                const newIngs = [...ingredients];
+                newIngs[index].backgroundColor = e.target.value;
+                setIngredients(newIngs);
+              }}
+              className="w-8 h-8 rounded cursor-pointer"
+            />
+          </label>
+          <label className="flex items-center gap-1">
+            <span className="font-semibold text-stone-800">Border</span>
+            <input
+              type="color"
+              value={ing.borderColor}
+              onChange={(e) => {
+                const newIngs = [...ingredients];
+                newIngs[index].borderColor = e.target.value;
+                setIngredients(newIngs);
+              }}
+              className="w-8 h-8 rounded cursor-pointer"
+            />
+          </label>
+          <label className="flex items-center gap-1">
+            <span className="font-semibold text-stone-800">Text</span>
+            <input
+              type="color"
+              value={ing.textColor}
+              onChange={(e) => {
+                const newIngs = [...ingredients];
+                newIngs[index].textColor = e.target.value;
+                setIngredients(newIngs);
+              }}
+              className="w-8 h-8 rounded cursor-pointer"
+            />
+          </label>
+        </div>
+
+        {/* Delete Button */}
         <button
-          onClick={() => setIngredients([...ingredients, { item: '', amount: '' }])}
-          className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium"
+          onClick={() => setIngredients(ingredients.filter((_, i) => i !== index))}
+          className="w-full sm:w-auto py-2 px-4 sm:p-2 text-red-500 rounded-xl sm:rounded-full border border-transparent hover:border-red-500 focus:ring-2 focus:ring-red-500 text-sm sm:text-base"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-          Add Ingredient
+          Remove
         </button>
       </div>
-    </div>
+    ))}
+
+    <button
+      onClick={() => setIngredients([...ingredients, { item: '', amount: '', backgroundColor: '#ffffff', borderColor: '#000000', textColor: '#000000' }])}
+      className="w-full sm:w-auto py-3 px-6 flex items-center justify-center gap-2 text-emerald-500 font-medium hover:bg-emerald-50 rounded-xl transition-colors text-sm sm:text-base"
+    >
+      <span>+ Add Ingredient</span>
+    </button>
+  </div>
+</div>
+
 
     {/* Instructions Section */}
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
         </svg>
         Instructions
       </h3>
       <div className="space-y-2">
-        {instructions.map((inst, index) => (
+        {instructions.map((instruction, index) => (
           <div key={index} className="flex items-center gap-2 group">
-            <span className="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-emerald-100 text-emerald-700 rounded-full font-medium">
-              {index + 1}
-            </span>
-            <input
-              type="text"
-              value={inst.step}
+            <textarea
+              value={instruction.step}
               onChange={(e) => {
-                const newInst = [...instructions];
-                newInst[index].step = e.target.value;
-                setInstructions(newInst);
+                const newSteps = [...instructions];
+                newSteps[index].step = e.target.value;
+                setInstructions(newSteps);
               }}
               className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
               placeholder={`Step ${index + 1}`}
+              rows={2}
             />
             <button
               onClick={() => setInstructions(instructions.filter((_, i) => i !== index))}
-              className="opacity-0 group-hover:opacity-100 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-opacity"
+              className="p-2 text-red-500 rounded-full border border-transparent hover:border-red-500 focus:ring-2 focus:ring-red-500"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
+              &times;
             </button>
           </div>
         ))}
         <button
           onClick={() => setInstructions([...instructions, { step: '' }])}
-          className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium"
+          className="flex items-center gap-2 text-emerald-500 font-medium hover:underline"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-          Add Step
+          + Add Step
         </button>
       </div>
     </div>
 
     {/* Chef's Tips Section */}
-    <div>
-      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2 mb-4">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-        </svg>
-        Chef's Tips
-      </h3>
-      <div className="flex items-center gap-2">
+    <div className="space-y-4">
+  <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+    </svg>
+    Chef's Tips
+  </h3>
+  <div className="space-y-2">
+    {tips.map((tip, index) => (
+      <div key={index} className="flex items-center gap-2 group">
         <textarea
-          value={chefTips}
-          onChange={(e) => setChefTips(e.target.value)}
-          className="flex-1 p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow min-h-[120px]"
-          placeholder="Share your expert tips and tricks..."
+          value={tip}
+          onChange={(e) => {
+            const newTips = [...tips];
+            newTips[index] = e.target.value;
+            setTips(newTips);
+          }}
+          className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          placeholder={`Tip ${index + 1}`}
+          rows={2}
         />
-        <input
-          type="color"
-          value={textColors.chefTips}
-          onChange={(e) => setTextColors({ ...textColors, chefTips: e.target.value })}
-          className="w-10 h-10 rounded-lg border border-slate-300"
-          title="Chef's Tips Text Color"
-        />
+        <button
+          onClick={() => setTips(tips.filter((_, i) => i !== index))}
+          className="p-2 text-red-500 rounded-full border border-transparent hover:border-red-500 focus:ring-2 focus:ring-red-500"
+        >
+          &times;
+        </button>
       </div>
-    </div>
+    ))}
+    <button
+      onClick={() => setTips([...tips, ''])}
+      className="flex items-center gap-2 text-emerald-500 font-medium hover:underline"
+    >
+      + Add Tip
+    </button>
+  </div>
+</div>
+
   </div>
 )}
+
+
 
 {selectedVariant === 'contract' && (
   <div className="space-y-6">
@@ -5547,12 +5633,11 @@ const baseLabelStyles = `
         : 'none',
     }}
   >
-
     <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
       {/* Left Column - Main Content */}
-      <div className="space-y-8">
+      <div className="space-y-4">
         {/* Header Section */}
-        <div className="text-center md:text-left space-y-4 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
+        <div className="text-center md:text-left space-y-4 p-4 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
           <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight" style={{ color: textColors.title }}>
             {title || 'Recipe Name'}
           </h2>
@@ -5572,18 +5657,28 @@ const baseLabelStyles = `
           </div>
         </div>
 
-        {/* Ingredients Section */}
-        <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
-          <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
-          <ul className="space-y-3" style={{ color: textColors.ingredients }}>
-            {ingredients.map((ing, idx) => (
-              <li key={idx} className="flex justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors">
-                <span className="font-medium">{ing.item}</span>
-                <span className="text-white/70 bg-white/10 px-3 py-1 rounded-full text-sm">{ing.amount}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Description Section */}
+        {description && (
+          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+            <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Description</h3>
+            <p className="text-white/90" style={{ color: textColors.description }}>
+              {description}
+            </p>
+          </div>
+        )}
+
+        {/* Ingredients Section Display */}
+          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+            <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
+            <ul className="space-y-3">
+              {ingredients.map((ing, idx) => (
+                <li key={idx} className="flex justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors" style={{ backgroundColor: ing.backgroundColor, borderColor: ing.borderColor, color: ing.textColor }}>
+                  <span className="font-medium">{ing.item}</span>
+                  <span className="text-white/70 bg-white/10 px-3 py-1 rounded-full text-sm">{ing.amount}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
         {/* Instructions Section */}
         <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
@@ -5599,10 +5694,13 @@ const baseLabelStyles = `
             ))}
           </ol>
         </div>
+
+        
+
       </div>
 
-      {/* Right Column - Image, Difficulty, Tips */}
-      <div className="space-y-8">
+      {/* Right Column - Image, Difficulty */}
+      <div className="space-y-4">
         {image && (
           <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
             <Image 
@@ -5614,22 +5712,13 @@ const baseLabelStyles = `
             />
           </div>
         )}
-
         <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20" style={{ backgroundColor: innerCardColor }}>
           <div className="text-center space-y-4">
             <span className={`px-4 py-2 rounded-xl text-sm font-medium inline-block ${getDifficultyColor(difficulty)}`}>
               {difficulty.toUpperCase()}
             </span>
-            {chefTips && (
-              <div className="p-4 bg-white/10 rounded-xl">
-                <p className="text-white/90 italic text-sm leading-relaxed" style={{ color: textColors.chefTips }}>
-                  💡 Chef's Tip: {chefTips}
-                </p>
-              </div>
-            )}
           </div>
         </div>
-
         {logo && (
           <div className="flex justify-center">
             <div className="relative w-20 h-20 transform hover:scale-110 transition-transform duration-300">
@@ -5642,6 +5731,20 @@ const baseLabelStyles = `
             </div>
           </div>
         )}
+        {/* Chef's Tips */}
+        {/* Chef's Tips */}
+        {chefTips && chefTips.length > 0 && (
+              <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
+                <h3 className="text-2xl font-semibold mb-4" style={{ color: textColors.sectionTitle }}>Chef's Tips</h3>
+                <ul className="space-y-4" style={{ color: textColors.chefTips }}>
+                  {chefTips.map((tip, index) => (
+                    <li key={index} className="text-white/90 italic text-sm leading-relaxed">
+                      💡 {tip}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
       </div>
     </div>
   </div>
