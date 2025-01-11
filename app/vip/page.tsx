@@ -1590,13 +1590,9 @@ const baseLabelStyles = `
         ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
         : bgType === 'solid'
         ? solidColor
-        : `url(${typeof heroImage === 'string' ? heroImage : heroImage ? URL.createObjectURL(heroImage) : ''}) no-repeat center center/cover`,
+        : 'none',
     }}
   >
-    {/* Enhanced Decorative Elements */}
-    <div className="absolute inset-0 bg-gradient-to-b r from-black/20 via-transparent to-black/20 backdrop-blur-sm" />
-    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
-    <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
 
     <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
       {/* Left Column - Main Content */}
@@ -3577,7 +3573,7 @@ const baseLabelStyles = `
           >
             <option value="gradient">Gradient</option>
             <option value="solid">Solid Color</option>
-            <option value="image">Hero Image</option>
+            {/* <option value="image">Hero Image</option> */}
           </select>
         </div>
         {bgType === 'gradient' && (
@@ -3622,7 +3618,7 @@ const baseLabelStyles = `
             />
           </div>
         )}
-        {bgType === 'image' && (
+        {/* {bgType === 'image' && (
           <div>
             <label className="block text-stone-800 text-sm font-medium mb-2">Hero Image</label>
             <input
@@ -3641,7 +3637,7 @@ const baseLabelStyles = `
               accept="image/*"
             />
           </div>
-        )}
+        )} */}
       </div>
     </div>
 
@@ -5548,13 +5544,9 @@ const baseLabelStyles = `
         ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
         : bgType === 'solid'
         ? solidColor
-        : `url(${typeof heroImage === 'string' ? heroImage : heroImage ? URL.createObjectURL(heroImage) : ''}) no-repeat center center/cover`,
+        : 'none',
     }}
   >
-    {/* Enhanced Decorative Elements */}
-    <div className="absolute inset-0 bg-gradient-to-b r from-black/20 via-transparent to-black/20 backdrop-blur-sm" />
-    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
-    <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
 
     <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
       {/* Left Column - Main Content */}
