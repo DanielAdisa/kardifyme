@@ -394,6 +394,8 @@ type TextColors = {
 // };
 
 const CreateCard = () => {
+  const [birthdayDate, setBirthdayDate] = useState('');
+  const [cardDate, setCardDate] = useState<string>('');
   
   const [occasion, setOccasion] = useState('');
   const [inviterName, setInviterName] = useState('');
@@ -525,6 +527,28 @@ const [dateNameColor, setDateNameColor] = useState('#000000');
 const [gradientFrom, setGradientFrom] = useState('#ff7e5f');
 const [gradientVia, setGradientVia] = useState('#feb47b');
 const [gradientTo, setGradientTo] = useState('#ff7e5f');
+interface BirthdayDate {
+  cardDate: string;
+  birthdayDate: string;
+}
+
+const calculateDaysUntilBirthday = (cardDate: string, birthdayDate: string): string => {
+  if (!cardDate || !birthdayDate) return '';
+
+  const card: Date = new Date(cardDate);
+  const birthday: Date = new Date(birthdayDate);
+
+  // Handle yearly rollover
+  if (birthday < card) {
+    birthday.setFullYear(card.getFullYear() + 1);
+  }
+
+  const differenceInTime: number = birthday.getTime() - card.getTime();
+  const differenceInDays: number = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
+
+  return differenceInDays > 0 ? `${differenceInDays} days left` : "It's the birthday today!";
+};
+
 const [backgroundColor, setBackgroundColor] = useState('#ffffff');
 const [affirmationText, setAffirmationText] = useState('');
 const [affirmationTime, setAffirmationTime] = useState('');
@@ -1974,99 +1998,100 @@ const baseLabelStyles = `
       )}
 
 
-    {/* Add birthday card display */}
-      {selectedVariant === "birthday" && (
-        <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4 rounded-2xl shadow-2xl rounded-b-md overflow-hidden animate-gradient-x">
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
-          <div className="absolute -top-28 -right-28 w-[28rem] h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-28 -left-28 w-[28rem] h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    {/* Add Birthday card display */}
+    {selectedVariant === "birthday" && (
+  <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-6 md:p-10 rounded-2xl shadow-xl overflow-hidden animate-gradient-x">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
+    <div className="absolute -top-28 -right-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
+    <div className="absolute -bottom-28 -left-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
+    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
-          <div className="relative z-10 space-y-10">
-            {/* Header */}
-            <div className="text-center">
-              <h2 className="text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
-                {wishType || "Happy Birthday!"}
-              </h2>
-              <p className="text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
-                {celebrantName || "Dear Friend"}
-              </p>
-              {age && (
-                <p className="text-3xl text-white/90 drop-shadow-lg">
-                  on your {age}
-                  <sup>th</sup> Birthday!
-                </p>
-              )}
-            </div>
+    <div className="relative z-10 space-y-8 sm:space-y-10">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
+          {wishType || "Happy Birthday!"}
+        </h2>
+        <p className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
+          {celebrantName || "Dear Friend"}
+        </p>
+        {age && (
+          <p className="text-lg sm:text-2xl md:text-3xl text-white/90 drop-shadow-lg">
+            on your {age}
+            <sup>th</sup> Birthday!
+          </p>
+        )}
+      </div>
 
-            {/* Main Image */}
-            {image && (
-              <div className="relative mx-auto w-72 h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
-                <Image
-                  src={image}
-                  alt="Birthday Memory"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
-
-            {/* Countdown Timer */}
-            <div className="text-center">
-              <p className="text-xl text-white/80">Your next birthday is in:</p>
-              <p className="text-4xl font-bold text-white tracking-wide">
-                {calculateDaysUntilNextBirthday(age)}
-              </p>
-            </div>
-
-            {/* Message */}
-            <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-lg">
-              <p className="text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
-                {message ||
-                  "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
-              </p>
-            </div>
-
-            {/* Social Media Share */}
-            <div className="text-center space-x-4">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Share on Facebook
-              </button>
-              <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Tweet
-              </button>
-              <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Share on Instagram
-              </button>
-            </div>
-
-            {/* Footer */}
-            <div className="flex justify-between items-center pt-6">
-              <div className="flex items-center gap-4">
-                {logo && (
-                  <div className="relative w-16 h-16 hover:scale-110 transition-transform duration-300">
-                    <Image
-                      src={logo}
-                      alt="Logo"
-                      fill
-                      className="rounded-full object-cover border-2 border-white/50"
-                    />
-                  </div>
-                )}
-                {qrUrl && (
-                  <div className="bg-white/95 p-2 rounded-xl shadow-lg">
-                    <QRCodeSVG value={qrUrl} size={48} />
-                  </div>
-                )}
-              </div>
-              <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md">
-                Celebrate with Kardify 🎉
-              </div>
-            </div>
-          </div>
+      {/* Main Image */}
+      {image && (
+        <div className="relative mx-auto w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
+          <Image
+            src={image}
+            alt="Birthday Memory"
+            fill
+            className="object-cover"
+          />
         </div>
       )}
+
+      {/* Countdown Timer */}
+      <div className="text-center">
+        <p className="text-sm sm:text-lg text-white/80">Your next birthday is in:</p>
+        <p className="text-3xl sm:text-4xl font-bold text-white tracking-wide">
+          {calculateDaysUntilBirthday(cardDate, birthdayDate)}
+        </p>
+      </div>
+
+      {/* Message */}
+      <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/20 shadow-lg">
+        <p className="text-lg sm:text-xl md:text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
+          {message ||
+            "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
+        </p>
+      </div>
+
+      {/* Social Media Share */}
+      <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Share on Facebook
+        </button>
+        <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Tweet
+        </button>
+        <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Share on Instagram
+        </button>
+      </div>
+
+      {/* Footer */}
+      <div className="flex flex-col sm:flex-row justify-between items-center pt-6 space-y-4 sm:space-y-0">
+        <div className="flex items-center gap-4">
+          {logo && (
+            <div className="relative w-12 h-12 sm:w-16 sm:h-16 hover:scale-110 transition-transform duration-300">
+              <Image
+                src={logo}
+                alt="Logo"
+                fill
+                className="rounded-full object-cover border-2 border-white/50"
+              />
+            </div>
+          )}
+          {qrUrl && (
+            <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+              <QRCodeSVG value={qrUrl} size={48} />
+            </div>
+          )}
+        </div>
+        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md text-center">
+          Celebrate with Kardify 🎉
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
     {/* Add Affirmations card display */}
     {selectedVariant === 'affirmations' && (
@@ -4305,48 +4330,106 @@ const baseLabelStyles = `
 )}
 
 
-{/* Add birthday input fields */}
+{/* Birthday Input Fields */}
 {selectedVariant === 'birthday' && (
   <div className="space-y-6">
+    {/* Name and Age Fields */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Celebrant's Name</label>
+      <div className="glass-effect">
+        <label htmlFor="celebrantName" className="block text-stone-950 mb-2 font-medium">
+          Celebrant's Name
+        </label>
         <input
           type="text"
+          id="celebrantName"
           value={celebrantName}
           onChange={(e) => setCelebrantName(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300"
+          className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
           placeholder="Enter name"
         />
       </div>
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Age</label>
+      <div className="glass-effect">
+        <label htmlFor="age" className="block text-stone-950 mb-2 font-medium">
+          Age
+        </label>
         <input
           type="number"
+          id="age"
           value={age}
           onChange={(e) => setAge(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300"
+          className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
           placeholder="Enter age"
         />
       </div>
     </div>
 
-    <div>
-      <label className="block text-stone-950 mb-2 font-medium">Birthday Message</label>
+    {/* Date Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="glass-effect">
+        <label htmlFor="cardDate" className="block text-stone-950 mb-2 font-medium">
+          Date of Card Generation
+        </label>
+        <input
+          type="date"
+          id="cardDate"
+          value={cardDate}
+          onChange={(e) => setCardDate(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
+      </div>
+      <div className="glass-effect">
+        <label htmlFor="birthdayDate" className="block text-stone-950 mb-2 font-medium">
+          Birthday Date
+        </label>
+        <input
+          type="date"
+          id="birthdayDate"
+          value={birthdayDate}
+          onChange={(e) => setBirthdayDate(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
+      </div>
+    </div>
+
+    {/* Days Until Birthday */}
+    <div className="glass-effect">
+      <label htmlFor="daysUntil" className="block text-stone-950 mb-2 font-medium">
+        Days Until Birthday
+      </label>
+      <input
+        type="text"
+        id="daysUntil"
+        value={calculateDaysUntilBirthday(cardDate, birthdayDate)}
+        readOnly
+        className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg text-stone-950"
+        placeholder="Days will be calculated automatically"
+      />
+    </div>
+
+    {/* Birthday Message Field */}
+    <div className="glass-effect">
+      <label htmlFor="birthdayMessage" className="block text-stone-950 mb-2 font-medium">
+        Birthday Message
+      </label>
       <textarea
+        id="birthdayMessage"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        className="w-full p-3 rounded-xl border border-slate-300 min-h-[100px]"
+        className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[100px]"
         placeholder="Write your birthday message..."
       />
     </div>
 
-    <div>
-      <label className="block text-stone-950 mb-2 font-medium">Wish Type</label>
+    {/* Wish Type Dropdown */}
+    <div className="glass-effect">
+      <label htmlFor="wishType" className="block text-stone-950 mb-2 font-medium">
+        Wish Type
+      </label>
       <select
+        id="wishType"
         value={wishType}
         onChange={(e) => setWishType(e.target.value)}
-        className="w-full p-3 rounded-xl border border-slate-300"
+        className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
       >
         <option>Happy Birthday</option>
         <option>Happy Birthday!</option>
@@ -4357,6 +4440,8 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
+
 
 
 
@@ -6062,99 +6147,99 @@ const baseLabelStyles = `
       )}
 
 
-    {/* Add birthday card display */}
-      {selectedVariant === "birthday" && (
-        <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4 rounded-2xl shadow-2xl rounded-b-md overflow-hidden animate-gradient-x">
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
-          <div className="absolute -top-28 -right-28 w-[28rem] h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-28 -left-28 w-[28rem] h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    {/* Add Birthday card display */}
+    {selectedVariant === "birthday" && (
+  <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-6 md:p-10 rounded-2xl shadow-xl overflow-hidden animate-gradient-x">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
+    <div className="absolute -top-28 -right-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
+    <div className="absolute -bottom-28 -left-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
+    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
-          <div className="relative z-10 space-y-10">
-            {/* Header */}
-            <div className="text-center">
-              <h2 className="text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
-                {wishType || "Happy Birthday!"}
-              </h2>
-              <p className="text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
-                {celebrantName || "Dear Friend"}
-              </p>
-              {age && (
-                <p className="text-3xl text-white/90 drop-shadow-lg">
-                  on your {age}
-                  <sup>th</sup> Birthday!
-                </p>
-              )}
-            </div>
+    <div className="relative z-10 space-y-8 sm:space-y-10">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
+          {wishType || "Happy Birthday!"}
+        </h2>
+        <p className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
+          {celebrantName || "Dear Friend"}
+        </p>
+        {age && (
+          <p className="text-lg sm:text-2xl md:text-3xl text-white/90 drop-shadow-lg">
+            on your {age}
+            <sup>th</sup> Birthday!
+          </p>
+        )}
+      </div>
 
-            {/* Main Image */}
-            {image && (
-              <div className="relative mx-auto w-72 h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
-                <Image
-                  src={image}
-                  alt="Birthday Memory"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
-
-            {/* Countdown Timer */}
-            <div className="text-center">
-              <p className="text-xl text-white/80">Your next birthday is in:</p>
-              <p className="text-4xl font-bold text-white tracking-wide">
-                {calculateDaysUntilNextBirthday(age)}
-              </p>
-            </div>
-
-            {/* Message */}
-            <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-lg">
-              <p className="text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
-                {message ||
-                  "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
-              </p>
-            </div>
-
-            {/* Social Media Share */}
-            <div className="text-center space-x-4">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Share on Facebook
-              </button>
-              <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Tweet
-              </button>
-              <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Share on Instagram
-              </button>
-            </div>
-
-            {/* Footer */}
-            <div className="flex justify-between items-center pt-6">
-              <div className="flex items-center gap-4">
-                {logo && (
-                  <div className="relative w-16 h-16 hover:scale-110 transition-transform duration-300">
-                    <Image
-                      src={logo}
-                      alt="Logo"
-                      fill
-                      className="rounded-full object-cover border-2 border-white/50"
-                    />
-                  </div>
-                )}
-                {qrUrl && (
-                  <div className="bg-white/95 p-2 rounded-xl shadow-lg">
-                    <QRCodeSVG value={qrUrl} size={48} />
-                  </div>
-                )}
-              </div>
-              <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md">
-                Celebrate with Kardify 🎉
-              </div>
-            </div>
-          </div>
+      {/* Main Image */}
+      {image && (
+        <div className="relative mx-auto w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
+          <Image
+            src={image}
+            alt="Birthday Memory"
+            fill
+            className="object-cover"
+          />
         </div>
       )}
+
+      {/* Countdown Timer */}
+      <div className="text-center">
+        <p className="text-sm sm:text-lg text-white/80">Your next birthday is in:</p>
+        <p className="text-3xl sm:text-4xl font-bold text-white tracking-wide">
+          {calculateDaysUntilBirthday(cardDate, birthdayDate)}
+        </p>
+      </div>
+
+      {/* Message */}
+      <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/20 shadow-lg">
+        <p className="text-lg sm:text-xl md:text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
+          {message ||
+            "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
+        </p>
+      </div>
+
+      {/* Social Media Share */}
+      <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Share on Facebook
+        </button>
+        <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Tweet
+        </button>
+        <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Share on Instagram
+        </button>
+      </div>
+
+      {/* Footer */}
+      <div className="flex flex-col sm:flex-row justify-between items-center pt-6 space-y-4 sm:space-y-0">
+        <div className="flex items-center gap-4">
+          {logo && (
+            <div className="relative w-12 h-12 sm:w-16 sm:h-16 hover:scale-110 transition-transform duration-300">
+              <Image
+                src={logo}
+                alt="Logo"
+                fill
+                className="rounded-full object-cover border-2 border-white/50"
+              />
+            </div>
+          )}
+          {qrUrl && (
+            <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+              <QRCodeSVG value={qrUrl} size={48} />
+            </div>
+          )}
+        </div>
+        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md text-center">
+          Celebrate with Kardify 🎉
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
     {/* Add Affirmations card display */}
     {selectedVariant === 'affirmations' && (
