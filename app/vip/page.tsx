@@ -1582,94 +1582,121 @@ const baseLabelStyles = `
       )}
 
     {/* Recipe Display */}
-      {selectedVariant === 'recipe' && (
-        <div className={`relative p-3 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-        style={{backgroundColor: backgroundColor,}}>
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 bg-black/10"></div>
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
-          
-          <div className="relative z-10 space-y-4">
-            {/* Header */}
-            <div className="text-center border-b border-white/20 pb-4">
-              <h2 className="text-4xl font-mono text-white mb-2">{title || 'Recipe Name'}</h2>
-              <div className="flex justify-center gap-4 text-white/90">
-                <span className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
-                  </svg>
-                  {cookingTime} mins
-                </span>
-                <span className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-                  </svg>
-                  Serves {servings}
-                </span>
-              </div>
-            </div>
+    {selectedVariant === 'recipe' && (
+  <div 
+    className="relative p-6 md:p-8 rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    style={{
+      background: bgType === 'gradient'
+        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : `url(${heroImage}) no-repeat center center/cover`,
+    }}
+  >
+    {/* Enhanced Decorative Elements */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20 backdrop-blur-sm" />
+    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
 
-            {/* Ingredients */}
-            <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
-              <h3 className="text-xl font-semibold text-white mb-4">Ingredients</h3>
-              <ul className="space-y-2 text-white/90">
-                {ingredients.map((ing, idx) => (
-                  <li key={idx} className="flex justify-between">
-                    <span>{ing.item}</span>
-                    <span className="text-white/70">{ing.amount}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Instructions */}
-            <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
-              <h3 className="text-xl font-semibold text-white mb-4">Instructions</h3>
-              <ol className="space-y-2 text-white/90 list-decimal list-inside">
-                {instructions.map((inst, idx) => (
-                  <li key={idx}>{inst.step}</li>
-                ))}
-              </ol>
-            </div>
-
-            {/* Chef's Tips */}
-            {chefTips && (
-              <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl">
-                <p className="text-white/90 italic">💡 Chef's Tip: {chefTips}</p>
-              </div>
-            )}
-
-            {/* Image and Difficulty */}
-            <div className="md:w-1/3 space-y-6">
-              {image && (
-                <div className="rounded-2xl overflow-hidden shadow-lg">
-                  <Image src={image} alt={title} width={300} height={300} className=" w-full h-[200px] object-cover object-top" />
-                </div>
-              )}
-              
-              <div className="bg-white/50 backdrop-blur-md p-4 rounded-lg">
-                <div className="text-center">
-                  <span className={`px-2 py-1 rounded-md text-sm font-medium ${getDifficultyColor(difficulty)}`}>
-        {difficulty.toUpperCase()}
-      </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-4 flex justify-between items-center">
-              {logo && (
-                <div className="relative w-16 h-16">
-                  <Image src={logo} alt="Logo" fill className="rounded-full object-cover border-2 border-white/50" />
-                </div>
-              )}
-              {/* <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
-                Kardify Recipe
-              </div> */}
-            </div>
+    <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
+      {/* Left Column - Main Content */}
+      <div className="space-y-8">
+        {/* Header Section */}
+        <div className="text-center md:text-left space-y-4 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight" style={{ color: textColors.title }}>
+            {title || 'Recipe Name'}
+          </h2>
+          <div className="flex flex-wrap justify-center md:justify-start gap-6 text-white/90" style={{ color: textColors.details }}>
+            <span className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-md">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+              </svg>
+              {cookingTime} mins
+            </span>
+            <span className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-md">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+              </svg>
+              Serves {servings}
+            </span>
           </div>
         </div>
-      )}
+
+        {/* Ingredients Section */}
+        <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+          <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
+          <ul className="space-y-3" style={{ color: textColors.ingredients }}>
+            {ingredients.map((ing, idx) => (
+              <li key={idx} className="flex justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors">
+                <span className="font-medium">{ing.item}</span>
+                <span className="text-white/70 bg-white/10 px-3 py-1 rounded-full text-sm">{ing.amount}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Instructions Section */}
+        <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+          <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Instructions</h3>
+          <ol className="space-y-4" style={{ color: textColors.instructions }}>
+            {instructions.map((inst, idx) => (
+              <li key={idx} className="flex gap-4 p-2 hover:bg-white/5 rounded-lg transition-colors">
+                <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/20 rounded-full">
+                  {idx + 1}
+                </span>
+                <span>{inst.step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      {/* Right Column - Image, Difficulty, Tips */}
+      <div className="space-y-8">
+        {image && (
+          <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
+            <Image 
+              src={image} 
+              alt={title} 
+              width={400} 
+              height={500} 
+              className="w-full h-[300px] object-cover hover:scale-110 transition-transform duration-700" 
+            />
+          </div>
+        )}
+
+        <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20" style={{ backgroundColor: innerCardColor }}>
+          <div className="text-center space-y-4">
+            <span className={`px-4 py-2 rounded-xl text-sm font-medium inline-block ${getDifficultyColor(difficulty)}`}>
+              {difficulty.toUpperCase()}
+            </span>
+            {chefTips && (
+              <div className="p-4 bg-white/10 rounded-xl">
+                <p className="text-white/90 italic text-sm leading-relaxed" style={{ color: textColors.chefTips }}>
+                  💡 Chef's Tip: {chefTips}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {logo && (
+          <div className="flex justify-center">
+            <div className="relative w-20 h-20 transform hover:scale-110 transition-transform duration-300">
+              <Image 
+                src={logo} 
+                alt="Logo" 
+                fill 
+                className="rounded-full object-cover border-2 border-white/50 shadow-lg" 
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
 
 
     {/* idcard Display */}
@@ -3531,148 +3558,323 @@ const baseLabelStyles = `
 
 {/* Recipe Input Fields */}
 {selectedVariant === 'recipe' && (
-  <div className="space-y-6">
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div>
-              <label className="block text-stone-950 mb-2">Title</label>
+  <div className="space-y-8 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
+    {/* Background Type Selection */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Background Type
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Background Type</label>
+          <select
+            value={bgType}
+            onChange={(e) => setBgType(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          >
+            <option value="gradient">Gradient</option>
+            <option value="solid">Solid Color</option>
+            <option value="image">Hero Image</option>
+          </select>
+        </div>
+        {bgType === 'gradient' && (
+          <>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
               <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 rounded-lg border border-slate-300"
-                title="Enter the title"
-                placeholder="Enter a title"
+                type="color"
+                value={gradientFrom}
+                onChange={(e) => setGradientFrom(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
               />
             </div>
             <div>
-              <label className="block text-stone-950 mb-2">Description</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full p-2 rounded-lg border border-slate-300"
-                title="Enter the description"
-                placeholder="Enter a description"
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
+              <input
+                type="color"
+                value={gradientVia}
+                onChange={(e) => setGradientVia(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
               />
             </div>
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Cooking Time (mins)</label>
-        <input
-          type="number"
-          value={cookingTime}
-          onChange={(e) => setCookingTime(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
-          placeholder="45"
-        />
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
+              <input
+                type="color"
+                value={gradientTo}
+                onChange={(e) => setGradientTo(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              />
+            </div>
+          </>
+        )}
+        {bgType === 'solid' && (
+          <div>
+            <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
+            <input
+              type="color"
+              value={solidColor}
+              onChange={(e) => setSolidColor(e.target.value)}
+              className="w-full h-10 rounded-lg border border-slate-300"
+            />
+          </div>
+        )}
+        {bgType === 'image' && (
+          <div>
+            <label className="block text-stone-800 text-sm font-medium mb-2">Hero Image</label>
+            <input
+              type="file"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  const file = e.target.files[0];
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setHeroImage(reader.result as string);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              accept="image/*"
+            />
+          </div>
+        )}
       </div>
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Servings</label>
-        <input
-          type="number"
-          value={servings}
-          onChange={(e) => setServings(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
-          placeholder="4"
-        />
+    </div>
+
+    {/* Basic Information Section */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Basic Information
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="col-span-full md:col-span-2">
+          <label className="block text-stone-800 text-sm font-medium mb-2">Recipe Title</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder="Enter a delicious recipe name"
+            />
+            <input
+              type="color"
+              value={textColors.title}
+              onChange={(e) => setTextColors({ ...textColors, title: e.target.value })}
+              className="w-10 h-10 rounded-lg border border-slate-300"
+              title="Title Text Color"
+            />
+          </div>
+        </div>
+        <div className="col-span-full md:col-span-2">
+          <label className="block text-stone-800 text-sm font-medium mb-2">Description</label>
+          <div className="flex items-center gap-2">
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder="Briefly describe your recipe..."
+              rows={3}
+            />
+            <input
+              type="color"
+              value={textColors.description}
+              onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
+              className="w-10 h-10 rounded-lg border border-slate-300"
+              title="Description Text Color"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Cooking Time (mins)</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              value={cookingTime}
+              onChange={(e) => setCookingTime(e.target.value)}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder="45"
+            />
+            <input
+              type="color"
+              value={textColors.details}
+              onChange={(e) => setTextColors({ ...textColors, details: e.target.value })}
+              className="w-10 h-10 rounded-lg border border-slate-300"
+              title="Details Text Color"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Servings</label>
+          <input
+            type="number"
+            value={servings}
+            onChange={(e) => setServings(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+            placeholder="4"
+          />
+        </div>
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Difficulty</label>
+          <select
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Inner Card Color</label>
+          <input
+            type="color"
+            value={innerCardColor}
+            onChange={(e) => setInnerCardColor(e.target.value)}
+            className="w-full h-10 rounded-lg border border-slate-300"
+          />
+        </div>
       </div>
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Difficulty</label>
-        <select
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
+    </div>
+
+    {/* Ingredients Section */}
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        Ingredients
+      </h3>
+      <div className="space-y-2">
+        {ingredients.map((ing, index) => (
+          <div key={index} className="flex items-center gap-2 group">
+            <div className="flex-1 flex gap-2">
+              <input
+                type="text"
+                value={ing.item}
+                onChange={(e) => {
+                  const newIngs = [...ingredients];
+                  newIngs[index].item = e.target.value;
+                  setIngredients(newIngs);
+                }}
+                className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+                placeholder="Ingredient name"
+              />
+              <input
+                type="text"
+                value={ing.amount}
+                onChange={(e) => {
+                  const newIngs = [...ingredients];
+                  newIngs[index].amount = e.target.value;
+                  setIngredients(newIngs);
+                }}
+                className="w-32 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+                placeholder="Amount"
+              />
+            </div>
+            <button
+              onClick={() => setIngredients(ingredients.filter((_, i) => i !== index))}
+              className="opacity-0 group-hover:opacity-100 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-opacity"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={() => setIngredients([...ingredients, { item: '', amount: '' }])}
+          className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium"
         >
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          Add Ingredient
+        </button>
       </div>
     </div>
 
-    <div>
-      <label className="block text-stone-950 mb-2 font-medium">Ingredients</label>
-      {ingredients.map((ing, index) => (
-        <div key={index} className="flex gap-2 mb-2">
-          <input
-            type="text"
-            value={ing.item}
-            onChange={(e) => {
-              const newIngs = [...ingredients];
-              newIngs[index].item = e.target.value;
-              setIngredients(newIngs);
-            }}
-            className="flex-1 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
-            placeholder="Ingredient"
-          />
-          <input
-            type="text"
-            value={ing.amount}
-            onChange={(e) => {
-              const newIngs = [...ingredients];
-              newIngs[index].amount = e.target.value;
-              setIngredients(newIngs);
-            }}
-            className="w-32 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
-            placeholder="Amount"
-          />
-          <button
-            onClick={() => setIngredients(ingredients.filter((_, i) => i !== index))}
-            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-          >
-            ×
-          </button>
-        </div>
-      ))}
-      <button
-        onClick={() => setIngredients([...ingredients, { item: '', amount: '' }])}
-        className="text-emerald-600 hover:text-emerald-700"
-      >
-        + Add Ingredient
-      </button>
+    {/* Instructions Section */}
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+        Instructions
+      </h3>
+      <div className="space-y-2">
+        {instructions.map((inst, index) => (
+          <div key={index} className="flex items-center gap-2 group">
+            <span className="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-emerald-100 text-emerald-700 rounded-full font-medium">
+              {index + 1}
+            </span>
+            <input
+              type="text"
+              value={inst.step}
+              onChange={(e) => {
+                const newInst = [...instructions];
+                newInst[index].step = e.target.value;
+                setInstructions(newInst);
+              }}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder={`Step ${index + 1}`}
+            />
+            <button
+              onClick={() => setInstructions(instructions.filter((_, i) => i !== index))}
+              className="opacity-0 group-hover:opacity-100 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-opacity"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={() => setInstructions([...instructions, { step: '' }])}
+          className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          Add Step
+        </button>
+      </div>
     </div>
 
+    {/* Chef's Tips Section */}
     <div>
-      <label className="block text-stone-950 mb-2 font-medium">Instructions</label>
-      {instructions.map((inst, index) => (
-        <div key={index} className="flex gap-2 mb-2">
-          <input
-            type="text"
-            value={inst.step}
-            onChange={(e) => {
-              const newInst = [...instructions];
-              newInst[index].step = e.target.value;
-              setInstructions(newInst);
-            }}
-            className="flex-1 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500"
-            placeholder={`Step ${index + 1}`}
-          />
-          <button
-            onClick={() => setInstructions(instructions.filter((_, i) => i !== index))}
-            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-          >
-            ×
-          </button>
-        </div>
-      ))}
-      <button
-        onClick={() => setInstructions([...instructions, { step: '' }])}
-        className="text-emerald-600 hover:text-emerald-700"
-      >
-        + Add Step
-      </button>
-    </div>
-
-    <div>
-      <label className="block text-stone-950 mb-2 font-medium">Chef's Tips</label>
-      <textarea
-        value={chefTips}
-        onChange={(e) => setChefTips(e.target.value)}
-        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 min-h-[100px]"
-        placeholder="Share your cooking tips..."
-      />
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2 mb-4">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+        Chef's Tips
+      </h3>
+      <div className="flex items-center gap-2">
+        <textarea
+          value={chefTips}
+          onChange={(e) => setChefTips(e.target.value)}
+          className="flex-1 p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow min-h-[120px]"
+          placeholder="Share your expert tips and tricks..."
+        />
+        <input
+          type="color"
+          value={textColors.chefTips}
+          onChange={(e) => setTextColors({ ...textColors, chefTips: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-slate-300"
+          title="Chef's Tips Text Color"
+        />
+      </div>
     </div>
   </div>
 )}
-
 
 {selectedVariant === 'contract' && (
   <div className="space-y-6">
@@ -5111,7 +5313,7 @@ const baseLabelStyles = `
 {/* invitationcard display */}
 {selectedVariant === 'invitation' && (
   <div
-    className="relative min-h-[600px] p-4 md:p-8 rounded-2xl shadow-2xl overflow-hidden"
+    className="relative min-h-[600px] p-6 md:p-10 rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
       background:
         bgType === 'gradient'
@@ -5121,31 +5323,31 @@ const baseLabelStyles = `
           : `url(${heroImage}) no-repeat center center/cover`,
     }}
   >
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 rounded-xl bg-black/10 backdrop-blur-xl" />
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+    {/* Enhanced Decorative Elements */}
+    <div className="absolute inset-0 z-10  rounded-2xl backdrop-blur-sm" />
+    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-puls" />
 
-    <div className="relative z-10 flex flex-col items-center gap-8">
-      {/* Logo */}
+    <div className="relative z-10 flex flex-col items-center gap-10">
+      {/* Logo with enhanced animation */}
       {logo && (
-        <div className="transform hover:scale-105 transition-transform duration-300">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white/30 shadow-xl overflow-hidden">
+        <div className="transform hover:scale-110 transition-all duration-500 hover:rotate-3">
+          <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white/40 shadow-2xl overflow-hidden backdrop-blur-sm">
             <img
               src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)}
               alt="Event Logo"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
             />
           </div>
         </div>
       )}
 
-      {/* Event Name */}
+      {/* Event Name with enhanced styling */}
       {eventName && (
-        <div className="w-full max-w-2xl transform hover:-translate-y-1 transition-all duration-300">
-          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+        <div className="w-full max-w-2xl transform hover:-translate-y-2 transition-all duration-500">
+          <div className="p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl hover:bg-white/15">
             <h3 
-              className="text-3xl md:text-5xl font-bold text-center tracking-tight" 
+              className="text-4xl md:text-6xl font-bold text-center tracking-tight drop-shadow-lg" 
               style={{ color: textColors.eventName }}
             >
               {eventName}
@@ -5154,11 +5356,11 @@ const baseLabelStyles = `
         </div>
       )}
 
-      {/* Event Details */}
-      <div className="space-y-4 text-center max-w-xl">
+      {/* Event Details with improved layout */}
+      <div className="space-y-4 text-center max-w-xl backdrop-blur-sm p-6 rounded-2xl bg-white/5">
         {eventDate && (
           <p 
-            className="text-xl md:text-2xl font-light"
+            className="text-2xl md:text-3xl font-light drop-shadow-lg"
             style={{ color: textColors.eventDate }}
           >
             Date: {eventDate}
@@ -5166,7 +5368,7 @@ const baseLabelStyles = `
         )}
         {eventTime && (
           <p 
-            className="text-lg md:text-xl"
+            className="text-xl md:text-2xl drop-shadow-lg"
             style={{ color: textColors.eventTime }}
           >
             Time: {eventTime}
@@ -5174,7 +5376,7 @@ const baseLabelStyles = `
         )}
         {eventLocation && (
           <p 
-            className="text-lg md:text-xl italic"
+            className="text-xl md:text-2xl italic drop-shadow-lg"
             style={{ color: textColors.eventLocation }}
           >
             Location: {eventLocation} 😊
@@ -5182,11 +5384,11 @@ const baseLabelStyles = `
         )}
       </div>
 
-      {/* Invitee and Inviter Names */}
-      <div className="space-y-4 text-center max-w-xl">
+      {/* Invitee and Inviter Names with enhanced styling */}
+      <div className="space-y-4 text-center max-w-xl bg-white/5 backdrop-blur-sm p-6 rounded-2xl">
         {inviteeName && (
           <p 
-            className="text-lg md:text-xl"
+            className="text-xl md:text-2xl drop-shadow-lg"
             style={{ color: textColors.inviteeName }}
           >
             Dear {inviteeName},
@@ -5194,7 +5396,7 @@ const baseLabelStyles = `
         )}
         {inviterName && (
           <p 
-            className="text-lg md:text-xl"
+            className="text-xl md:text-2xl drop-shadow-lg"
             style={{ color: textColors.inviterName }}
           >
             You are cordially invited by {inviterName}
@@ -5202,7 +5404,7 @@ const baseLabelStyles = `
         )}
         {occasion && (
           <p 
-            className="text-lg md:text-xl"
+            className="text-xl md:text-2xl drop-shadow-lg"
             style={{ color: textColors.occasion }}
           >
             to the occasion of {occasion}
@@ -5210,12 +5412,12 @@ const baseLabelStyles = `
         )}
       </div>
 
-      {/* Description */}
+      {/* Description with improved container */}
       {description && (
         <div className="w-full max-w-2xl">
-          <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+          <div className="p-8 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
             <p 
-              className="text-lg text-center whitespace-pre-wrap leading-relaxed"
+              className="text-lg md:text-xl text-center whitespace-pre-wrap leading-relaxed drop-shadow-lg"
               style={{ color: textColors.description }}
             >
               {description}
@@ -5224,17 +5426,17 @@ const baseLabelStyles = `
         </div>
       )}
 
-      {/* QR Code */}
+      {/* Enhanced QR Code section */}
       {qrUrl && (
-        <div className="mt-auto">
-          <div className="p-4 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-3">
+        <div className="mt-auto w-full max-w-xs">
+          <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-4 hover:bg-white/20 transition-colors duration-300">
             <QRCodeSVG 
               value={qrUrl} 
-              size={120}
-              className="rounded-xl"
+              size={150}
+              className="rounded-xl shadow-lg p-2 bg-white"
             />
             <p 
-              className="text-sm font-medium tracking-wide"
+              className="text-sm font-medium tracking-wider uppercase drop-shadow-lg"
               style={{ color: textColors.qrUrl }}
             >
               Scan to RSVP
@@ -5245,7 +5447,6 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
-
 
     {/* Budget Display */}
       {selectedVariant === 'budget' && (
@@ -5339,94 +5540,121 @@ const baseLabelStyles = `
       )}
 
     {/* Recipe Display */}
-      {selectedVariant === 'recipe' && (
-        <div className={`relative p-3 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-        style={{backgroundColor: backgroundColor,}}>
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 bg-black/10"></div>
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
-          
-          <div className="relative z-10 space-y-4">
-            {/* Header */}
-            <div className="text-center border-b border-white/20 pb-4">
-              <h2 className="text-4xl font-mono text-white mb-2">{title || 'Recipe Name'}</h2>
-              <div className="flex justify-center gap-4 text-white/90">
-                <span className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
-                  </svg>
-                  {cookingTime} mins
-                </span>
-                <span className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-                  </svg>
-                  Serves {servings}
-                </span>
-              </div>
-            </div>
+    {selectedVariant === 'recipe' && (
+  <div 
+    className="relative p-4 md:p-6 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    style={{
+      background: bgType === 'gradient'
+        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : `url(${heroImage}) no-repeat center center/cover`,
+    }}
+  >
+    {/* Enhanced Decorative Elements */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/20 rounded-2xl via-transparent to-black/20 backdrop-blur-sm" />
+    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
 
-            {/* Ingredients */}
-            <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
-              <h3 className="text-xl font-semibold text-white mb-4">Ingredients</h3>
-              <ul className="space-y-2 text-white/90">
-                {ingredients.map((ing, idx) => (
-                  <li key={idx} className="flex justify-between">
-                    <span>{ing.item}</span>
-                    <span className="text-white/70">{ing.amount}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Instructions */}
-            <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl">
-              <h3 className="text-xl font-semibold text-white mb-4">Instructions</h3>
-              <ol className="space-y-2 text-white/90 list-decimal list-inside">
-                {instructions.map((inst, idx) => (
-                  <li key={idx}>{inst.step}</li>
-                ))}
-              </ol>
-            </div>
-
-            {/* Chef's Tips */}
-            {chefTips && (
-              <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl">
-                <p className="text-white/90 italic">💡 Chef's Tip: {chefTips}</p>
-              </div>
-            )}
-
-            {/* Image and Difficulty */}
-            <div className="md:w-1/3 space-y-6">
-              {image && (
-                <div className="rounded-2xl overflow-hidden shadow-lg">
-                  <Image src={image} alt={title} width={300} height={300} className=" w-full h-[200px] object-cover object-top" />
-                </div>
-              )}
-              
-              <div className="bg-white/50 backdrop-blur-md p-4 rounded-lg">
-                <div className="text-center">
-                  <span className={`px-2 py-1 rounded-md text-sm font-medium ${getDifficultyColor(difficulty)}`}>
-        {difficulty.toUpperCase()}
-      </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-4 flex justify-between items-center">
-              {logo && (
-                <div className="relative w-16 h-16">
-                  <Image src={logo} alt="Logo" fill className="rounded-full object-cover border-2 border-white/50" />
-                </div>
-              )}
-              {/* <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm">
-                Kardify Recipe
-              </div> */}
-            </div>
+    <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
+      {/* Left Column - Main Content */}
+      <div className="space-y-8">
+        {/* Header Section */}
+        <div className="text-center md:text-left space-y-4 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight" style={{ color: textColors.title }}>
+            {title || 'Recipe Name'}
+          </h2>
+          <div className="flex flex-wrap justify-center md:justify-start gap-6 text-white/90" style={{ color: textColors.details }}>
+            <span className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-md">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+              </svg>
+              {cookingTime} mins
+            </span>
+            <span className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-md">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+              </svg>
+              Serves {servings}
+            </span>
           </div>
         </div>
-      )}
+
+        {/* Ingredients Section */}
+        <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+          <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
+          <ul className="space-y-3" style={{ color: textColors.ingredients }}>
+            {ingredients.map((ing, idx) => (
+              <li key={idx} className="flex justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors">
+                <span className="font-medium">{ing.item}</span>
+                <span className="text-white/70 bg-white/10 px-3 py-1 rounded-full text-sm">{ing.amount}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Instructions Section */}
+        <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+          <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Instructions</h3>
+          <ol className="space-y-4" style={{ color: textColors.instructions }}>
+            {instructions.map((inst, idx) => (
+              <li key={idx} className="flex gap-4 p-2 hover:bg-white/5 rounded-lg transition-colors">
+                <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/20 rounded-full">
+                  {idx + 1}
+                </span>
+                <span>{inst.step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      {/* Right Column - Image, Difficulty, Tips */}
+      <div className="space-y-8">
+        {image && (
+          <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
+            <Image 
+              src={image} 
+              alt={title} 
+              width={400} 
+              height={500} 
+              className="w-full h-[300px] object-cover hover:scale-110 transition-transform duration-700" 
+            />
+          </div>
+        )}
+
+        <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20" style={{ backgroundColor: innerCardColor }}>
+          <div className="text-center space-y-4">
+            <span className={`px-4 py-2 rounded-xl text-sm font-medium inline-block ${getDifficultyColor(difficulty)}`}>
+              {difficulty.toUpperCase()}
+            </span>
+            {chefTips && (
+              <div className="p-4 bg-white/10 rounded-xl">
+                <p className="text-white/90 italic text-sm leading-relaxed" style={{ color: textColors.chefTips }}>
+                  💡 Chef's Tip: {chefTips}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {logo && (
+          <div className="flex justify-center">
+            <div className="relative w-20 h-20 transform hover:scale-110 transition-transform duration-300">
+              <Image 
+                src={logo} 
+                alt="Logo" 
+                fill 
+                className="rounded-full object-cover border-2 border-white/50 shadow-lg" 
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
 
 
     {/* idcard Display */}
