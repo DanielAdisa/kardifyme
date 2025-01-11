@@ -469,6 +469,9 @@ interface Ingredient {
   backgroundColor?: string;
   borderColor?: string;
   textColor?: string;
+  amountBackgroundColor?: string;
+  amountBorderColor?: string;
+  amountTextColor?: string;
 }
 
 const [ingredients, setIngredients] = useState<Ingredient[]>([{ 
@@ -1660,7 +1663,7 @@ const baseLabelStyles = `
               {ingredients.map((ing, idx) => (
                 <li key={idx} className="flex justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors" style={{ backgroundColor: ing.backgroundColor, borderColor: ing.borderColor, color: ing.textColor }}>
                   <span className="font-medium">{ing.item}</span>
-                  <span className="text-white/70 bg-white/10 px-3 py-1 rounded-full text-sm">{ing.amount}</span>
+                  <span className="px-3 py-1 rounded-full text-sm" style={{ backgroundColor: ing.amountBackgroundColor, borderColor: ing.amountBorderColor, color: ing.amountTextColor }}>{ing.amount}</span>
                 </li>
               ))}
             </ul>
@@ -3764,7 +3767,7 @@ const baseLabelStyles = `
       </div>
     </div>
 
-{/* Ingredients Section */}
+    {/* Ingredients Section */}
 <div className="space-y-6 p-4 sm:p-6">
   <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3773,107 +3776,183 @@ const baseLabelStyles = `
     Ingredients
   </h3>
 
-  <div className="space-y-4">
+  <div className="space-y-6">
     {ingredients.map((ing, index) => (
-      <div key={index} className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row items-start sm:items-center gap-3 p-4 bg-white/10 rounded-xl shadow-md hover:shadow-xl transition-shadow">
-        {/* Inputs Container */}
-        <div className="w-full sm:flex-1 flex flex-col sm:flex-row gap-3">
-          <input
-            type="text"
-            value={ing.item}
-            onChange={(e) => {
-              const newIngs = [...ingredients];
-              newIngs[index].item = e.target.value;
-              setIngredients(newIngs);
-            }}
-            className="w-full p-4 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-shadow text-sm sm:text-base"
-            style={{
-              backgroundColor: ing.backgroundColor,
-              borderColor: ing.borderColor,
-              color: ing.textColor,
-            }}
-            placeholder="Ingredient name"
-          />
-          <input
-            type="text"
-            value={ing.amount}
-            onChange={(e) => {
-              const newIngs = [...ingredients];
-              newIngs[index].amount = e.target.value;
-              setIngredients(newIngs);
-            }}
-            className="w-full sm:w-32 p-4 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-shadow text-sm sm:text-base"
-            style={{
-              backgroundColor: ing.backgroundColor,
-              borderColor: ing.borderColor,
-              color: ing.textColor,
-            }}
-            placeholder="Amount"
-          />
-        </div>
+      <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
+        {/* Main Content */}
+        <div className="p-4 space-y-4">
+          {/* Inputs Container */}
+          <div className="flex flex-col gap-3">
+            <input
+              type="text"
+              value={ing.item}
+              onChange={(e) => {
+                const newIngs = [...ingredients];
+                newIngs[index].item = e.target.value;
+                setIngredients(newIngs);
+              }}
+              className="w-full p-4 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-shadow text-base"
+              style={{
+                backgroundColor: ing.backgroundColor,
+                borderColor: ing.borderColor,
+                color: ing.textColor,
+              }}
+              placeholder="Ingredient name"
+            />
+            <input
+              type="text"
+              value={ing.amount}
+              onChange={(e) => {
+                const newIngs = [...ingredients];
+                newIngs[index].amount = e.target.value;
+                setIngredients(newIngs);
+              }}
+              className="w-full sm:w-32 p-4 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-shadow text-base"
+              style={{
+                backgroundColor: ing.amountBackgroundColor,
+                borderColor: ing.amountBorderColor,
+                color: ing.amountTextColor,
+              }}
+              placeholder="Amount"
+            />
+          </div>
 
-        {/* Color Controls (Pop-up for better mobile experience) */}
-        <div className="flex sm:w-auto flex-wrap items-center gap-2 text-xs sm:text-sm">
-          <label className="flex items-center gap-1">
-            <span className="font-semibold text-stone-800">BG</span>
-            <input
-              type="color"
-              value={ing.backgroundColor}
-              onChange={(e) => {
-                const newIngs = [...ingredients];
-                newIngs[index].backgroundColor = e.target.value;
-                setIngredients(newIngs);
-              }}
-              className="w-8 h-8 rounded cursor-pointer"
-            />
-          </label>
-          <label className="flex items-center gap-1">
-            <span className="font-semibold text-stone-800">Border</span>
-            <input
-              type="color"
-              value={ing.borderColor}
-              onChange={(e) => {
-                const newIngs = [...ingredients];
-                newIngs[index].borderColor = e.target.value;
-                setIngredients(newIngs);
-              }}
-              className="w-8 h-8 rounded cursor-pointer"
-            />
-          </label>
-          <label className="flex items-center gap-1">
-            <span className="font-semibold text-stone-800">Text</span>
-            <input
-              type="color"
-              value={ing.textColor}
-              onChange={(e) => {
-                const newIngs = [...ingredients];
-                newIngs[index].textColor = e.target.value;
-                setIngredients(newIngs);
-              }}
-              className="w-8 h-8 rounded cursor-pointer"
-            />
-          </label>
-        </div>
+          {/* Actions Row */}
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
+            {/* Color Controls Toggle */}
+            <details className="w-full sm:w-auto">
+              <summary className="text-sm font-medium text-stone-800 cursor-pointer hover:text-emerald-500 transition-colors">
+                Customize Colors
+              </summary>
+              <div className="mt-3 p-3 bg-white/10 rounded-lg grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-stone-600">Ingredient</p>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">BG</span>
+                    <input
+                      type="color"
+                      value={ing.backgroundColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].backgroundColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">Border</span>
+                    <input
+                      type="color"
+                      value={ing.borderColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].borderColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">Text</span>
+                    <input
+                      type="color"
+                      value={ing.textColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].textColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    />
+                  </label>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-stone-600">Amount</p>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">BG</span>
+                    <input
+                      type="color"
+                      value={ing.amountBackgroundColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountBackgroundColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">Border</span>
+                    <input
+                      type="color"
+                      value={ing.amountBorderColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountBorderColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">Text</span>
+                    <input
+                      type="color"
+                      value={ing.amountTextColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountTextColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    />
+                  </label>
+                </div>
+                <button
+                  onClick={() => {
+                    const newIngs = [...ingredients];
+                    newIngs[index] = {
+                      ...newIngs[index],
+                      backgroundColor: '#ffffff',
+                      borderColor: '#000000',
+                      textColor: '#000000',
+                      amountBackgroundColor: '#ffffff',
+                      amountBorderColor: '#000000',
+                      amountTextColor: '#000000',
+                    };
+                    setIngredients(newIngs);
+                  }}
+                  className="text-sm text-red-500 hover:text-red-600 transition-colors"
+                >
+                  Reset Colors
+                </button>
+              </div>
+            </details>
 
-        {/* Delete Button */}
-        <button
-          onClick={() => setIngredients(ingredients.filter((_, i) => i !== index))}
-          className="w-full sm:w-auto py-2 px-4 sm:p-2 text-red-500 rounded-xl sm:rounded-full border border-transparent hover:border-red-500 focus:ring-2 focus:ring-red-500 text-sm sm:text-base"
-        >
-          Remove
-        </button>
+            {/* Delete Button */}
+            <button
+              onClick={() => setIngredients(ingredients.filter((_, i) => i !== index))}
+              className="flex items-center justify-center w-full sm:w-auto py-2 px-4 text-red-500 bg-red-50/10 rounded-xl hover:bg-red-50/20 transition-colors text-sm font-medium"
+            >
+              Remove Ingredient
+            </button>
+          </div>
+        </div>
       </div>
     ))}
 
     <button
-      onClick={() => setIngredients([...ingredients, { item: '', amount: '', backgroundColor: '#ffffff', borderColor: '#000000', textColor: '#000000' }])}
-      className="w-full sm:w-auto py-3 px-6 flex items-center justify-center gap-2 text-emerald-500 font-medium hover:bg-emerald-50 rounded-xl transition-colors text-sm sm:text-base"
+      onClick={() => setIngredients([...ingredients, { item: '', amount: '', backgroundColor: '#ffffff', borderColor: '#000000', textColor: '#000000', amountBackgroundColor: '#ffffff', amountBorderColor: '#000000', amountTextColor: '#000000' }])}
+      className="w-full sm:w-auto py-3 px-6 flex items-center justify-center gap-2 text-emerald-500 font-medium bg-emerald-50/10 hover:bg-emerald-50/20 rounded-xl transition-colors text-base"
     >
-      <span>+ Add Ingredient</span>
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+      </svg>
+      Add Ingredient
     </button>
   </div>
 </div>
-
 
     {/* Instructions Section */}
     <div className="space-y-4">
@@ -3916,46 +3995,44 @@ const baseLabelStyles = `
 
     {/* Chef's Tips Section */}
     <div className="space-y-4">
-  <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-    </svg>
-    Chef's Tips
-  </h3>
-  <div className="space-y-2">
-    {tips.map((tip, index) => (
-      <div key={index} className="flex items-center gap-2 group">
-        <textarea
-          value={tip}
-          onChange={(e) => {
-            const newTips = [...tips];
-            newTips[index] = e.target.value;
-            setTips(newTips);
-          }}
-          className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
-          placeholder={`Tip ${index + 1}`}
-          rows={2}
-        />
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+        </svg>
+        Chef's Tips
+      </h3>
+      <div className="space-y-2">
+        {tips.map((tip, index) => (
+          <div key={index} className="flex items-center gap-2 group">
+            <textarea
+              value={tip}
+              onChange={(e) => {
+                const newTips = [...tips];
+                newTips[index] = e.target.value;
+                setTips(newTips);
+              }}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder={`Tip ${index + 1}`}
+              rows={2}
+            />
+            <button
+              onClick={() => setTips(tips.filter((_, i) => i !== index))}
+              className="p-2 text-red-500 rounded-full border border-transparent hover:border-red-500 focus:ring-2 focus:ring-red-500"
+            >
+              &times;
+            </button>
+          </div>
+        ))}
         <button
-          onClick={() => setTips(tips.filter((_, i) => i !== index))}
-          className="p-2 text-red-500 rounded-full border border-transparent hover:border-red-500 focus:ring-2 focus:ring-red-500"
+          onClick={() => setTips([...tips, ''])}
+          className="flex items-center gap-2 text-emerald-500 font-medium hover:underline"
         >
-          &times;
+          + Add Tip
         </button>
       </div>
-    ))}
-    <button
-      onClick={() => setTips([...tips, ''])}
-      className="flex items-center gap-2 text-emerald-500 font-medium hover:underline"
-    >
-      + Add Tip
-    </button>
-  </div>
-</div>
-
+    </div>
   </div>
 )}
-
 
 
 {selectedVariant === 'contract' && (
@@ -5621,8 +5698,8 @@ const baseLabelStyles = `
         </div>
       )}
 
-    {/* Recipe Display */}
-    {selectedVariant === 'recipe' && (
+        {/* Recipe Display */}
+        {selectedVariant === 'recipe' && (
   <div 
     className="relative p-4 md:p-6 rounded-2xl rounded-b-none shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
@@ -5635,9 +5712,9 @@ const baseLabelStyles = `
   >
     <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
       {/* Left Column - Main Content */}
-      <div className="space-y-4">
+      <div className="space-y-8">
         {/* Header Section */}
-        <div className="text-center md:text-left space-y-4 p-4 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
+        <div className="text-center md:text-left space-y-4 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
           <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight" style={{ color: textColors.title }}>
             {title || 'Recipe Name'}
           </h2>
@@ -5672,9 +5749,9 @@ const baseLabelStyles = `
             <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
             <ul className="space-y-3">
               {ingredients.map((ing, idx) => (
-                <li key={idx} className="flex justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors" style={{ backgroundColor: ing.backgroundColor, borderColor: ing.borderColor, color: ing.textColor }}>
+                <li key={idx} className="flex w-full justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors" style={{ backgroundColor: ing.backgroundColor, borderColor: ing.borderColor, color: ing.textColor }}>
                   <span className="font-medium">{ing.item}</span>
-                  <span className="text-white/70 bg-white/10 px-3 py-1 rounded-full text-sm">{ing.amount}</span>
+                  <span className=" rounded-full text-sm" style={{ backgroundColor: ing.amountBackgroundColor, borderColor: ing.amountBorderColor, color: ing.amountTextColor }}>{ing.amount}</span>
                 </li>
               ))}
             </ul>
@@ -5700,7 +5777,7 @@ const baseLabelStyles = `
       </div>
 
       {/* Right Column - Image, Difficulty */}
-      <div className="space-y-4">
+      <div className="space-y-8">
         {image && (
           <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
             <Image 
@@ -5749,6 +5826,7 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
 
 
 
