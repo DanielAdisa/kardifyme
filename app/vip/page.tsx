@@ -1584,17 +1584,17 @@ const baseLabelStyles = `
     {/* Recipe Display */}
     {selectedVariant === 'recipe' && (
   <div 
-    className="relative p-6 md:p-8 rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    className="relative p-4 md:p-6 rounded-2xl rounded-b-none shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
       background: bgType === 'gradient'
         ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
         : bgType === 'solid'
         ? solidColor
-        : `url(${heroImage}) no-repeat center center/cover`,
+        : `url(${typeof heroImage === 'string' ? heroImage : heroImage ? URL.createObjectURL(heroImage) : ''}) no-repeat center center/cover`,
     }}
   >
     {/* Enhanced Decorative Elements */}
-    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20 backdrop-blur-sm" />
+    <div className="absolute inset-0 bg-gradient-to-b r from-black/20 via-transparent to-black/20 backdrop-blur-sm" />
     <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
     <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
 
@@ -1656,7 +1656,7 @@ const baseLabelStyles = `
         {image && (
           <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
             <Image 
-              src={image} 
+              src={typeof image === 'string' ? image : URL.createObjectURL(image)} 
               alt={title} 
               width={400} 
               height={500} 
@@ -1684,7 +1684,7 @@ const baseLabelStyles = `
           <div className="flex justify-center">
             <div className="relative w-20 h-20 transform hover:scale-110 transition-transform duration-300">
               <Image 
-                src={logo} 
+                src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)} 
                 alt="Logo" 
                 fill 
                 className="rounded-full object-cover border-2 border-white/50 shadow-lg" 
@@ -5542,17 +5542,17 @@ const baseLabelStyles = `
     {/* Recipe Display */}
     {selectedVariant === 'recipe' && (
   <div 
-    className="relative p-4 md:p-6 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    className="relative p-4 md:p-6 rounded-2xl rounded-b-none shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
       background: bgType === 'gradient'
         ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
         : bgType === 'solid'
         ? solidColor
-        : `url(${heroImage}) no-repeat center center/cover`,
+        : `url(${typeof heroImage === 'string' ? heroImage : heroImage ? URL.createObjectURL(heroImage) : ''}) no-repeat center center/cover`,
     }}
   >
     {/* Enhanced Decorative Elements */}
-    <div className="absolute inset-0 bg-gradient-to-b from-black/20 rounded-2xl via-transparent to-black/20 backdrop-blur-sm" />
+    <div className="absolute inset-0 bg-gradient-to-b r from-black/20 via-transparent to-black/20 backdrop-blur-sm" />
     <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
     <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
 
@@ -5614,7 +5614,7 @@ const baseLabelStyles = `
         {image && (
           <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
             <Image 
-              src={image} 
+              src={typeof image === 'string' ? image : URL.createObjectURL(image)} 
               alt={title} 
               width={400} 
               height={500} 
@@ -5642,7 +5642,7 @@ const baseLabelStyles = `
           <div className="flex justify-center">
             <div className="relative w-20 h-20 transform hover:scale-110 transition-transform duration-300">
               <Image 
-                src={logo} 
+                src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)} 
                 alt="Logo" 
                 fill 
                 className="rounded-full object-cover border-2 border-white/50 shadow-lg" 
