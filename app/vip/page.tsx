@@ -292,6 +292,8 @@ type TextColors = {
 // };
 
 const CreateCard = () => {
+  const [productImage, setProductImage] = useState<string>('');
+  const [cardProduct, setCardProduct] = useState<string | null>(null);
   const [ageBorderColor, setAgeBorderColor] = useState<string>('');
   const [ageBackground, setAgeBackground] = useState('');
   const [ageColor, setAgeColor] = useState('#000000'); // Add this line
@@ -359,6 +361,8 @@ const [solidColor, setSolidColor] = useState('#ffffff');
 const [eventName, setEventName] = useState('');
 
 const [eventTime, setEventTime] = useState('');
+const [productImageState, setProductImageState] = useState<string | null>(null);
+// const [heroImage, setHeroImage] = useState<string | null>(null);
 
   const [showBottomPart, setShowBottomPart] = useState(true);
   const [eventDate, setEventDate] = useState('');
@@ -983,6 +987,10 @@ const baseLabelStyles = `
 
 
 
+  // function setProductImage(image: string) {
+  //   setImage(image);
+  // }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-3">
 
@@ -1088,38 +1096,55 @@ const baseLabelStyles = `
           {/* Update the card content section */}
           {showBottomPart && (
             <div className={`p-2 ${selectedVariant === 'product' ? '' : ''}`}>
+
+
     {/* Product Variant */}
-        {selectedVariant === 'product' && (
-          <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-          style={{backgroundColor: backgroundColor,}}>
-            <div className="flex justify-between items-start">
-              <div className="space-y-3">
-                <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
-                <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-4 py-2 rounded-full inline-block">
-                  {formatCurrency(parseFloat(price), currency)}
-                </p>
+    {selectedVariant === 'product' && (
+  <div className={`relative p-3 pt-2 pb-2 rounded-2xl shadow-2xl overflow-hidden`} 
+    style={{ backgroundColor: backgroundColor }}>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Left Column: Image + QR */}
+      <div className="space-y-4">
+        {/* Product Image */}
+        {productImage && (
+          <div className="relative w-full h-80 bg-gray-200 rounded-xl overflow-hidden shadow-lg group">
+            <Image
+              src={productImage}
+              alt="Product Image"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-xl transition-transform duration-300 group-hover:scale-105"
+            />
+            {/* QR Code Overlay */}
+            {qrUrl && (
+              <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg">
+                <QRCodeSVG value={qrUrl} size={80} />
               </div>
-              {qrUrl && (
-                <div className="bg-white p-3 rounded-xl shadow-md">
-                  <QRCodeSVG value={qrUrl} size={80} />
-                </div>
-              )}
-            </div>
-            <div className="prose max-w-none">
-              <p className="text-lg text-stone-950 leading-relaxed">{description}</p>
-              <div className="mt-6 bg-gray-50 p-4 rounded-xl">
-                <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
-                <p className="text-stone-950 whitespace-pre-line">{largeDescription}</p>
-                
-              </div>
-            </div>
-            {/* <div className="mt-4 flex justify-end">
-              <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
-                Kardify Me+
-              </div>
-            </div> */}
+            )}
           </div>
         )}
+      </div>
+
+      {/* Right Column: Details */}
+      <div className="space-y-6">
+        <div className="space-y-4">
+          <h3 className="text-4xl font-bold text-stone-950">{title}</h3>
+          <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-6 py-2 rounded-full inline-block">
+            {formatCurrency(parseFloat(price), currency)}
+          </p>
+        </div>
+        
+        <div className="prose max-w-none space-y-6">
+          <p className="text-lg text-stone-950/90 leading-relaxed">{description}</p>
+          <div className="bg-stone-100/80 backdrop-blur-sm p-6 rounded-xl">
+            <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
+            <p className="text-stone-950/80 whitespace-pre-line">{largeDescription}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    )}
 
 
 
@@ -4625,8 +4650,111 @@ const baseLabelStyles = `
           <div className="space-y-6">
           {/* <TemplateSelector /> */}
 
-            {/* Product specific fields */}
-            {(selectedVariant === 'product' || selectedVariant === 'business' ) && (
+
+          {/* Product specific fields */}
+            {selectedVariant === 'product' && (
+              <>
+                <div>
+                  <label className={baseLabelStyles}>Inner BG Color</label>
+                  <input
+                    type="color"
+                    value={backgroundColor}
+                    onChange={(e) => setBackgroundColor(e.target.value)}
+                    className="w-full h-[45px] backdrop-blur-sm rounded-xl"
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Title</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                    title="Enter the title"
+                    placeholder="Enter a title"
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Description</label>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                    title="Enter the description"
+                    placeholder="Enter a description"
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Price</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-32 p-2 rounded-lg border border-slate-300"
+                    >
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="NGN">₦</option>
+                      <option value="GHC">GHC</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Detailed Description</label>
+                  <textarea
+                    value={largeDescription}
+                    onChange={(e) => setLargeDescription(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                    rows={4}
+                  />
+                </div>
+                <div>
+  <label className="block text-stone-950 mb-2">Product Image</label>
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProductImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    }}
+    className="w-full p-2 rounded-lg border border-slate-300"
+  />
+  {productImage && (
+    <div className="mt-4 relative">
+      <Image
+        src={productImage}
+        alt="Product Image"
+        width={500}
+        height={500}
+        className="rounded-lg"
+      />
+      <button
+        onClick={() => setProductImage('')}
+        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
+      >
+        ✕
+      </button>
+    </div>
+  )}
+</div>
+              </>
+            )}
+
+
+            {/* {(selectedVariant === 'product' || selectedVariant === 'business' ) && (
               <>
               <div>
         <label className={baseLabelStyles}>Inner BG Color</label>
@@ -4691,7 +4819,74 @@ const baseLabelStyles = `
                   />
                 </div>
               </>
-            )}
+            )} */}
+
+            {/* Business specific fields */}
+{selectedVariant === 'business' && (
+  <>
+    <div>
+      <label className={baseLabelStyles}>Inner BG Color</label>
+      <input
+        type="color"
+        value={backgroundColor}
+        onChange={(e) => setBackgroundColor(e.target.value)}
+        className="w-full h-[45px] backdrop-blur-sm rounded-xl"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Title</label>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        title="Enter the title"
+        placeholder="Enter a title"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Description</label>
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        title="Enter the description"
+        placeholder="Enter a description"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Price</label>
+      <div className="flex gap-2">
+        <input
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          className="w-full p-2 rounded-lg border border-slate-300"
+        />
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="w-32 p-2 rounded-lg border border-slate-300"
+        >
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+          <option value="NGN">₦</option>
+          <option value="GHC">GHC</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Detailed Description</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        rows={4}
+      />
+    </div>
+  </>
+)}
 
             {/* Event specific fields */}
             {selectedVariant === 'event' && (
@@ -4725,6 +4920,28 @@ const baseLabelStyles = `
                     onChange={(e) => setEventDate(e.target.value)}
                     className="w-full p-2 rounded-lg border border-slate-300"
                   />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Event Price</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-32 p-2 rounded-lg border border-slate-300"
+                    >
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="NGN">₦</option>
+                      <option value="GHC">GHC</option>
+                    </select>
+                  </div>
                 </div>
                 <div>
                   <label className="block text-stone-950 mb-2">Location</label>
@@ -5191,30 +5408,39 @@ const baseLabelStyles = `
             <div className="p-6 space-y-6 bg-gradient-to-b from-gray-50 to-gray-100 shadow-lg rounded-2xl">
   {/* Upload Hero Image */}
   <div className="space-y-4">
-    <label className="block text-lg font-medium text-gray-900">Upload Hero Image</label>
-    <div className="space-y-2">
-      {image && (
-        <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
-          <img src={image} alt="Uploaded Hero" className="object-cover w-full h-full" />
-          <button
-            title="Delete Hero Image"
-            onClick={() => handleDeleteImage('main')}
-            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      )}
-      <input
-        type="file"
-        onChange={(e) => handleImageChange(e, 'main')}
-        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-        accept="image/*"
-      />
-    </div>
+  <label className="block text-lg font-medium text-gray-900">Upload Hero Image</label>
+  <div className="space-y-2">
+    {heroImage && (
+      <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+        <img src={heroImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+        <button
+          title="Delete Hero Image"
+          onClick={() => setHeroImage('')}
+          className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    )}
+    <input
+      type="file"
+      onChange={(e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setHeroImage(reader.result as string);
+          };
+          reader.readAsDataURL(file);
+        }
+      }}
+      className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+      accept="image/*"
+    />
   </div>
+</div>
 
   {/* Upload Logo */}
   <div className="space-y-4">
@@ -5241,6 +5467,29 @@ const baseLabelStyles = `
       />
     </div>
   </div>
+                  {/* General Price */}
+                <div>
+                  <label className="block text-stone-950 mb-2">General Price</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-32 p-2 rounded-lg border border-slate-300"
+                    >
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="NGN">₦</option>
+                      <option value="GHC">GHC</option>
+                    </select>
+                  </div>
+                </div>
 
   {/* QR Code URL */}
   <div>
@@ -5456,108 +5705,121 @@ const baseLabelStyles = `
           {showBottomPart && (
             <div className={`p-2 ${selectedVariant === 'product' ? '' : ''}`}>
     {/* Product Variant */}
-        {selectedVariant === 'product' && (
-          <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-          style={{backgroundColor: backgroundColor,}}>
-            <div className="flex justify-between items-start">
-              <div className="space-y-3">
-                <h3 className="text-3xl font-bold text-stone-950">{title}</h3>
-                <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-4 py-2 rounded-full inline-block">
-                  {formatCurrency(parseFloat(price), currency)}
+    {selectedVariant === 'product' && (
+  <div className={`relative p-3 pt-2 pb-2 rounded-2xl shadow-2xl overflow-hidden`} 
+    style={{ backgroundColor: backgroundColor }}>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Left Column: Image + QR */}
+      <div className="space-y-4">
+        {/* Product Image */}
+        {productImage && (
+          <div className="relative w-full h-80 bg-gray-200 rounded-xl overflow-hidden shadow-lg group">
+            <Image
+              src={productImage}
+              alt="Product Image"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-xl transition-transform duration-300 group-hover:scale-105"
+            />
+            {/* QR Code Overlay */}
+            {qrUrl && (
+              <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg">
+                <QRCodeSVG value={qrUrl} size={80} />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Right Column: Details */}
+      <div className="space-y-6">
+        <div className="space-y-4">
+          <h3 className="text-4xl font-bold text-stone-950">{title}</h3>
+          <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-6 py-2 rounded-full inline-block">
+            {formatCurrency(parseFloat(price), currency)}
+          </p>
+        </div>
+        
+        <div className="prose max-w-none space-y-6">
+          <p className="text-lg text-stone-950/90 leading-relaxed">{description}</p>
+          <div className="bg-stone-100/80 backdrop-blur-sm p-6 rounded-xl">
+            <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
+            <p className="text-stone-950/80 whitespace-pre-line">{largeDescription}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    )}
+
+{selectedVariant === 'business' && (
+  <div
+    className="relative p-8 rounded-2xl shadow-2xl overflow-hidden group transition-all duration-300 hover:shadow-3xl"
+    style={{ 
+      background: `linear-gradient(to bottom right, ${backgroundColor}, ${backgroundColor}dd)`
+    }}
+  >
+    {/* Background Decorations */}
+    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl transform group-hover:scale-110 transition-transform duration-700"></div>
+    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+
+    <div className="relative z-10">
+      {/* Header Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3
+              className="text-4xl font-extrabold tracking-tight text-stone-50"
+              style={{ color: titleColor }}
+            >
+              {title}
+            </h3>
+            <div className="h-1 w-24 bg-gradient-to-r from-white/60 to-transparent rounded-full"></div>
+            <p
+              className="text-lg font-medium leading-relaxed text-stone-50/90"
+              style={{ color: titleColor }}
+            >
+              {description}
+            </p>
+          </div>
+        </div>
+        
+        {/* QR Code Section */}
+        {qrUrl && (
+          <div className="flex justify-end">
+            <div className="transition-transform transform group-hover:scale-105 duration-300">
+              <div className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-lg">
+                <QRCodeSVG value={qrUrl} size={120} />
+                <p className="text-xs text-center font-medium text-gray-600 mt-3">
+                  Scan to connect
                 </p>
               </div>
-              {qrUrl && (
-                <div className="bg-white p-3 rounded-xl shadow-md">
-                  <QRCodeSVG value={qrUrl} size={80} />
-                </div>
-              )}
-            </div>
-            <div className="prose max-w-none">
-              <p className="text-lg text-stone-950 leading-relaxed">{description}</p>
-              <div className="mt-6 bg-gray-50 p-4 rounded-xl">
-                <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
-                <p className="text-stone-950 whitespace-pre-line">{largeDescription}</p>
-                
-              </div>
-            </div>
-            {/* <div className="mt-4 flex justify-end">
-              <div className="text-xs w-fit px-2 py-1 rounded-full bg-slate-800 text-white">
-                Kardify Me+
-              </div>
-            </div> */}
-          </div>
-        )}
-
-    {/* Business Variant Display */}
-    <div className= "">
-
-      {/* Business Default Variant */}
-        {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
-          <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-            style={{ backgroundColor: backgroundColor }}>
-            <div className="flex justify-between items-start">
-              <div className="space-y-3">
-                <h3 className="text-3xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-                <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-              </div>
-              {qrUrl && (
-                <div className="bg-white p-2 rounded-xl shadow-md">
-                  <QRCodeSVG value={qrUrl} size={80} />
-                </div>
-              )}
-            </div>
-
-            <div className="prose max-w-full">
-              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
             </div>
           </div>
         )}
+      </div>
 
-      {/* Business Variant Style 1 */}
-        {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
-          <div className={`relative p-6 rounded-xl shadow-lg overflow-hidden`}
-            style={{ backgroundColor: backgroundColor }}>
-            <div className="flex justify-between items-start">
-              <div className="space-y-4">
-                <h3 className="text-4xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-                <p className="text-2xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-              </div>
-              {qrUrl && (
-                <div className="bg-white p-3 rounded-lg shadow-md">
-                  <QRCodeSVG value={qrUrl} size={80} />
-                </div>
-              )}
-            </div>
+      {/* Divider */}
+      <div className="my-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      </div>
 
-            <div className="prose max-w-full">
-              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
-            </div>
-          </div>
-        )}
-
-      {/* Business Variant Style 2 */}
-        {selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
-          <div className={`relative p-8 rounded-2xl shadow-2xl overflow-hidden`}
-            style={{ backgroundColor: backgroundColor }}>
-            <div className="flex justify-between items-start">
-              <div className="space-y-5">
-                <h3 className="text-5xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-                <p className="text-3xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-              </div>
-              {qrUrl && (
-                <div className="bg-white p-4 rounded-xl shadow-md">
-                  <QRCodeSVG value={qrUrl} size={80} />
-                </div>
-              )}
-            </div>
-
-            <div className="prose max-w-full">
-              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
-            </div>
-          </div>
-        )}
-
+      {/* Content Section */}
+      <div>
+        <p
+          className="text-base md:text-lg text-stone-50/80 leading-relaxed whitespace-pre-line"
+          style={{ color: titleColor }}
+        >
+          {largeDescription}
+        </p>
+      </div>
     </div>
+  </div>
+)}
+
+
+
 
     {/* Flyer Display */}
     {selectedVariant === 'flyer' && (
