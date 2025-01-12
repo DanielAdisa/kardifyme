@@ -1019,9 +1019,9 @@ const baseLabelStyles = `
           {/* Card Hero with responsive height */}
           {showTopPart && (
   <div className="relative rounded-xl w-full h-[150px] sm:h-[250px] md:h-[300px]">
-    {image ? (
+    {heroImage ? (
       <Image
-        src={image || place} // Set default image
+        src={heroImage || place} // Set default image
         alt={title || 'Card Image'}
         fill
         className={`object-cover rounded-t-2xl transition-transform duration-700 ${
@@ -5627,9 +5627,9 @@ const baseLabelStyles = `
           {/* Card Hero with responsive height */}
           {showTopPart && (
   <div className="relative rounded-xl w-full h-[150px] sm:h-[250px] md:h-[300px]">
-    {image ? (
+    {heroImage ? (
       <Image
-        src={image || place} // Set default image
+        src={heroImage || place} // Set default image
         alt={title || 'Card Image'}
         fill
         className={`object-cover rounded-t-2xl transition-transform duration-700 ${
@@ -5704,45 +5704,54 @@ const baseLabelStyles = `
           {/* Update the card content section */}
           {showBottomPart && (
             <div className={`p-2 ${selectedVariant === 'product' ? '' : ''}`}>
+
+
     {/* Product Variant */}
     {selectedVariant === 'product' && (
-  <div className={`relative p-3 pt-2 pb-2 rounded-2xl shadow-2xl overflow-hidden`} 
-    style={{ backgroundColor: backgroundColor }}>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+  <div className={`relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10`} 
+    style={{ backgroundColor: `${backgroundColor}dd` }}>
+    {/* Glass Background Effects */}
+    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5"></div>
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+    
+    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 z-10">
       {/* Left Column: Image + QR */}
-      <div className="space-y-4">
-        {/* Product Image */}
+      <div className="space-y-2">
         {productImage && (
-          <div className="relative w-full h-80 bg-gray-200 rounded-xl overflow-hidden shadow-lg group">
+          <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             <Image
               src={productImage}
               alt="Product Image"
               layout="fill"
               objectFit="cover"
-              className="rounded-xl transition-transform duration-300 group-hover:scale-105"
+              className="transition-transform duration-300 group-hover:scale-105"
             />
-            {/* QR Code Overlay */}
-            {qrUrl && (
-              <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg">
-                <QRCodeSVG value={qrUrl} size={80} />
-              </div>
-            )}
           </div>
         )}
       </div>
 
       {/* Right Column: Details */}
-      <div className="space-y-6">
-        <div className="space-y-4">
-          <h3 className="text-4xl font-bold text-stone-950">{title}</h3>
-          <p className="text-2xl font-semibold bg-stone-500/30 text-stone-950/80 px-6 py-2 rounded-full inline-block">
-            {formatCurrency(parseFloat(price), currency)}
-          </p>
+      <div className="space-y-2">
+        <div className="flex justify-between items-start backdrop-blur-sm bg-white/5 p-4 rounded-xl border border-white/10">
+          <div className="space-y-4">
+            <h3 className="text-4xl font-bold text-stone-950">{title}</h3>
+            <p className="text-2xl font-semibold bg-stone-500/20 backdrop-blur-sm text-stone-950/90 px-6 py-2 rounded-full inline-block">
+              {formatCurrency(parseFloat(price), currency)}
+            </p>
+          </div>
+          {qrUrl && (
+            <div className="bg-white/80 backdrop-blur-xl p-3 rounded-xl shadow-lg hover:scale-105 transition-transform">
+              <QRCodeSVG value={qrUrl} size={80} />
+            </div>
+          )}
         </div>
         
-        <div className="prose max-w-none space-y-6">
-          <p className="text-lg text-stone-950/90 leading-relaxed">{description}</p>
-          <div className="bg-stone-100/80 backdrop-blur-sm p-6 rounded-xl">
+        <div className="space-y-2">
+          <p className="text-lg text-stone-950/90 leading-relaxed backdrop-blur-sm bg-white/5 p-6 rounded-xl border border-white/10">
+            {description}
+          </p>
+          <div className="backdrop-blur-md bg-stone-50/10 p-6 rounded-xl border border-white/10">
             <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
             <p className="text-stone-950/80 whitespace-pre-line">{largeDescription}</p>
           </div>
@@ -5750,7 +5759,8 @@ const baseLabelStyles = `
       </div>
     </div>
   </div>
-    )}
+)}
+
 
 {selectedVariant === 'business' && (
   <div
