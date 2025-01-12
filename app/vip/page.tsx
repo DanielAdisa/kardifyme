@@ -1121,71 +1121,78 @@ const baseLabelStyles = `
           </div>
         )}
 
-    {/* Business Variant */}
-{selectedVariant === 'business' && selectedVariantStyle === 'default' && (
-  <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-    style={{ backgroundColor: backgroundColor }}>
-    <div className="flex justify-between items-start">
-      <div className="space-y-3">
-        <h3 className="text-3xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-        <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-      </div>
-      {qrUrl && (
-        <div className="bg-white p-2 rounded-xl shadow-md">
-          <QRCodeSVG value={qrUrl} size={80} />
-        </div>
-      )}
-    </div>
 
-    <div className="prose max-w-full">
-      <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
-    </div>
-  </div>
-)}
 
-  {/* Business Variant Style 1 */}
-{selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
-  <div className={`relative p-6 rounded-xl shadow-lg overflow-hidden`}
-    style={{ backgroundColor: backgroundColor }}>
-    <div className="flex justify-between items-start">
-      <div className="space-y-4">
-        <h3 className="text-4xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-        <p className="text-2xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-      </div>
-      {qrUrl && (
-        <div className="bg-white p-3 rounded-lg shadow-md">
-          <QRCodeSVG value={qrUrl} size={80} />
-        </div>
-      )}
-    </div>
+    {/* Business Variant Display */}
+    <div className= "">
 
-    <div className="prose max-w-full">
-      <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
-    </div>
-  </div>
-)}
+      {/* Business Default Variant */}
+        {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
+          <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+            style={{ backgroundColor: backgroundColor }}>
+            <div className="flex justify-between items-start">
+              <div className="space-y-3">
+                <h3 className="text-3xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+                <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+              </div>
+              {qrUrl && (
+                <div className="bg-white p-2 rounded-xl shadow-md">
+                  <QRCodeSVG value={qrUrl} size={80} />
+                </div>
+              )}
+            </div>
 
-{/* Business Variant Style 2 */}
-{selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
-  <div className={`relative p-8 rounded-2xl shadow-2xl overflow-hidden`}
-    style={{ backgroundColor: backgroundColor }}>
-    <div className="flex justify-between items-start">
-      <div className="space-y-5">
-        <h3 className="text-5xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-        <p className="text-3xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-      </div>
-      {qrUrl && (
-        <div className="bg-white p-4 rounded-xl shadow-md">
-          <QRCodeSVG value={qrUrl} size={80} />
-        </div>
-      )}
-    </div>
+            <div className="prose max-w-full">
+              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+            </div>
+          </div>
+        )}
 
-    <div className="prose max-w-full">
-      <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+      {/* Business Variant Style 1 */}
+        {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
+          <div className={`relative p-6 rounded-xl shadow-lg overflow-hidden`}
+            style={{ backgroundColor: backgroundColor }}>
+            <div className="flex justify-between items-start">
+              <div className="space-y-4">
+                <h3 className="text-4xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+                <p className="text-2xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+              </div>
+              {qrUrl && (
+                <div className="bg-white p-3 rounded-lg shadow-md">
+                  <QRCodeSVG value={qrUrl} size={80} />
+                </div>
+              )}
+            </div>
+
+            <div className="prose max-w-full">
+              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+            </div>
+          </div>
+        )}
+
+      {/* Business Variant Style 2 */}
+        {selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
+          <div className={`relative p-8 rounded-2xl shadow-2xl overflow-hidden`}
+            style={{ backgroundColor: backgroundColor }}>
+            <div className="flex justify-between items-start">
+              <div className="space-y-5">
+                <h3 className="text-5xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+                <p className="text-3xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+              </div>
+              {qrUrl && (
+                <div className="bg-white p-4 rounded-xl shadow-md">
+                  <QRCodeSVG value={qrUrl} size={80} />
+                </div>
+              )}
+            </div>
+
+            <div className="prose max-w-full">
+              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+            </div>
+          </div>
+        )}
+
     </div>
-  </div>
-)}
 
     {/* Flyer Display */}
     {selectedVariant === 'flyer' && (
@@ -5481,28 +5488,76 @@ const baseLabelStyles = `
           </div>
         )}
 
-    {/* Business Variant */}
-      {selectedVariant === 'business' && (
-        <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-        style={{backgroundColor: backgroundColor,}}>
-          <div className="flex justify-between items-start">
-            <div className="space-y-3">
-              <h3 className="text-3xl font-bold text-stone-50" style={{color: titleColor}}>{title}</h3>
-              <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{color: titleColor}}>{description}</p>
-            </div>
-            {qrUrl && (
-              <div className="bg-white p-2 rounded-xl shadow-md">
-                <QRCodeSVG value={qrUrl} size={80} />
+    {/* Business Variant Display */}
+    <div className= "">
+
+      {/* Business Default Variant */}
+        {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
+          <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+            style={{ backgroundColor: backgroundColor }}>
+            <div className="flex justify-between items-start">
+              <div className="space-y-3">
+                <h3 className="text-3xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+                <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
               </div>
-            )}
+              {qrUrl && (
+                <div className="bg-white p-2 rounded-xl shadow-md">
+                  <QRCodeSVG value={qrUrl} size={80} />
+                </div>
+              )}
+            </div>
+
+            <div className="prose max-w-full">
+              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+            </div>
           </div>
-          
-          <div className="prose max-w-full">
-            <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{color: titleColor}}>{largeDescription}</p>
+        )}
+
+      {/* Business Variant Style 1 */}
+        {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
+          <div className={`relative p-6 rounded-xl shadow-lg overflow-hidden`}
+            style={{ backgroundColor: backgroundColor }}>
+            <div className="flex justify-between items-start">
+              <div className="space-y-4">
+                <h3 className="text-4xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+                <p className="text-2xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+              </div>
+              {qrUrl && (
+                <div className="bg-white p-3 rounded-lg shadow-md">
+                  <QRCodeSVG value={qrUrl} size={80} />
+                </div>
+              )}
+            </div>
+
+            <div className="prose max-w-full">
+              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+            </div>
           </div>
-          
-        </div>
-      )}
+        )}
+
+      {/* Business Variant Style 2 */}
+        {selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
+          <div className={`relative p-8 rounded-2xl shadow-2xl overflow-hidden`}
+            style={{ backgroundColor: backgroundColor }}>
+            <div className="flex justify-between items-start">
+              <div className="space-y-5">
+                <h3 className="text-5xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+                <p className="text-3xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+              </div>
+              {qrUrl && (
+                <div className="bg-white p-4 rounded-xl shadow-md">
+                  <QRCodeSVG value={qrUrl} size={80} />
+                </div>
+              )}
+            </div>
+
+            <div className="prose max-w-full">
+              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+            </div>
+          </div>
+        )}
+
+    </div>
 
     {/* Flyer Display */}
     {selectedVariant === 'flyer' && (
