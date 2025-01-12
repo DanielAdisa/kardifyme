@@ -33,325 +33,223 @@ const cardVariants = {
   business: {
     templates: {
       modern: {
-        // background: 'bg-white',
         font: 'font-sans',
-        layout: 'p-2'
       },
       classic: {
-        // background: 'bg-stone-100',
         font: 'font-serif',
-        layout: 'p-1.5'
       },
       minimal: {
-        // background: 'bg-slate-50',
         font: 'font-mono',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   event: {
     templates: {
       classic: {
-        // background: 'bg-gradient-to-br from-blue-500 to-pink-500',
         font: 'font-sans',
-        layout: 'p-2'
       },
       bold: {
-        // background: 'bg-gradient-to-br from-purple-600 to-red-500',
         font: 'font-bold',
-        layout: 'p-1.5'
       },
       elegant: {
-        // background: 'bg-gradient-to-br from-indigo-500 to-pink-500',
         font: 'font-serif',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   product: {
     templates: {
       showcase: {
-        // background: 'bg-gradient-to-br from-slate-800 to-slate-900',
         font: 'font-sans',
-        layout: 'p-2'
       },
       grid: {
-        // background: 'bg-gradient-to-br from-gray-700 to-gray-800',
         font: 'font-mono',
-        layout: 'p-1.5'
       },
       minimal: {
-        // background: 'bg-gradient-to-br from-slate-600 to-slate-700',
         font: 'font-sans',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   invoice: {
     templates: {
       professional: {
-        // background: 'backdrop-blur-2xl bg-stone-600/30',
         font: 'font-sans',
-        layout: 'p-2'
       },
       simple: {
-        // background: 'bg-stone-500/30',
         font: 'font-mono',
-        layout: 'p-1.5'
       },
       detailed: {
-        // background: 'bg-stone-400/30',
         font: 'font-serif',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   receipt: {
     templates: {
       simple: {
-        // background: 'backdrop-blur-2xl bg-white/20',
         font: 'font-mono',
-        layout: 'p-2'
       },
       detailed: {
-        // background: 'bg-white/30',
         font: 'font-sans',
-        layout: 'p-1.5'
       },
       compact: {
-        // background: 'bg-white/40',
         font: 'font-serif',
-       layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   einvoice: {
     templates: {
       digital: {
-        // background: 'bg-gradient-to-tl from-orange-500 to-purple-700',
         font: 'font-sans',
-        layout: 'p-2'
       },
       modern: {
-        // background: 'bg-gradient-to-tl from-orange-400 to-purple-600',
         font: 'font-mono',
-        layout: 'p-1.5'
       },
       classic: {
-        // background: 'bg-gradient-to-tl from-orange-300 to-purple-500',
         font: 'font-serif',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   flyer: {
     templates: {
       bold: {
-        // background: 'bg-gradient-to-br from-yellow-500 to-red-500',
         font: 'font-sans',
-        layout: 'p-2'
       },
       creative: {
-        // background: 'bg-gradient-to-br from-yellow-400 to-red-400',
         font: 'font-sans',
-        layout: 'p-1.5'
       },
       minimal: {
-        // background: 'bg-gradient-to-br from-yellow-300 to-red-300',
         font: 'font-mono',
-       layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   recipe: {
     templates: {
       elegant: {
-        // background: 'bg-gradient-to-br from-emerald-500 to-teal-700',
         font: 'font-mono',
-        layout: 'p-2'
       },
       modern: {
-        // background: 'bg-gradient-to-br from-emerald-400 to-teal-600',
         font: 'font-sans',
-        layout: 'p-1.5'
       },
       classic: {
-        // background: 'bg-gradient-to-br from-emerald-300 to-teal-500',
         font: 'font-mono',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   contract: {
     templates: {
       formal: {
-        // background: 'bg-gradient-to-br from-blue-900 to-indigo-900',
         font: 'font-serif',
-        layout: 'p-1'
       },
       modern: {
-        // background: 'bg-gradient-to-br from-blue-800 to-indigo-800',
         font: 'font-mono',
-        layout: 'p-1.5'
       },
       simple: {
-        // background: 'bg-gradient-to-br from-blue-700 to-indigo-700',
         font: 'font-sans',
-       layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   birthday: {
     templates: {
       fun: {
-        // background: 'bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500',
         font: 'font-serif',
-        layout: 'p-2'
       },
       elegant: {
-        // background: 'bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400',
         font: 'font-sans',
-        layout: 'p-1.5'
       },
       minimal: {
-        // background: 'bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300',
         font: 'font-mono',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   budget: {
     templates: {
       clean: {
-        // background: 'bg-gradient-to-br from-green-500 via-teal-500 to-blue-500',
         font: 'font-serif',
-        layout: 'p-2'
       },
       detailed: {
-        // background: 'bg-gradient-to-br from-green-400 via-teal-400 to-blue-400',
         font: 'font-sans',
-        layout: 'p-1.5'
       },
       visual: {
-        // background: 'bg-gradient-to-br from-green-300 via-teal-300 to-blue-300',
         font: 'font-mono',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   idCard: {
     templates: {
       standard: {
-        // background: 'backdrop-blur-2xl bg-white/20',
         font: 'font-mono',
-        layout: 'p-2'
       },
       modern: {
-        // background: 'bg-white/30',
         font: 'font-sans',
-        layout: 'p-1.5'
       },
       minimal: {
-        // background: 'bg-white/40',
         font: 'font-serif',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   mood: {
     templates: {
       happy: {
-        // background: 'bg-gradient-to-br from-yellow-400 to-orange-500',
         font: 'font-sans',
-        layout: 'p-0.5'
       },
       calm: {
-        // background: 'bg-gradient-to-br from-blue-300 to-green-400',
         font: 'font-serif',
-        layout: 'p-0'
       },
       energetic: {
-        // background: 'bg-gradient-to-br from-red-400 to-pink-500',
         font: 'font-mono',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   affirmations: {
     templates: {
       modern: {
-        // background: 'bg-white',
         font: 'font-sans',
-        layout: 'p-1'
       },
       classic: {
-        // background: 'bg-stone-100',
         font: 'font-serif',
-        layout: 'p-0'
       },
       minimal: {
-        // background: 'bg-slate-50',
         font: 'font-mono',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   menu: {
     templates: {
       modern: {
-        // background: 'bg-white',
         font: 'font-serif',
-        layout: 'p-'
       },
       classic: {
-        // background: 'bg-stone-100',
         font: 'font-mono',
-        layout: 'p-0'
       },
       minimal: {
-        // background: 'bg-slate-50',
         font: 'font-sans',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   brand: {
     templates: {
       modern: {
-        // background: 'bg-white',
         font: 'font-serif',
-        layout: 'p-0'
       },
       classic: {
-        // background: 'bg-stone-100',
         font: 'font-mono',
-        layout: 'p-0'
       },
       minimal: {
-        // background: 'bg-slate-50',
         font: 'font-sans',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
   invitation: {
     templates: {
       modern: {
-        // background: 'bg-white',
         font: 'font-serif',
-        layout: 'p-0'
       },
       classic: {
-        // background: 'bg-stone-100',
         font: 'font-mono',
-        layout: 'p-0'
       },
       minimal: {
-        // background: 'bg-slate-50',
         font: 'font-sans',
-        layout: 'p-0'
-      }
-    }
+      },
+    },
   },
 };
 
@@ -394,8 +292,14 @@ type TextColors = {
 // };
 
 const CreateCard = () => {
+  const [ageBorderColor, setAgeBorderColor] = useState<string>('');
+  const [ageBackground, setAgeBackground] = useState('');
+  const [ageColor, setAgeColor] = useState('#000000'); // Add this line
+  const [celebrantNameBackground, setCelebrantNameBackground] = useState('');
+  const [celebrantNameColor, setCelebrantNameColor] = useState('#000000');
   const [birthdayDate, setBirthdayDate] = useState('');
   const [cardDate, setCardDate] = useState<string>('');
+  const [selectedVariantStyle, setSelectedVariantStyle] = useState<string>('default');
   
   const [occasion, setOccasion] = useState('');
   const [inviterName, setInviterName] = useState('');
@@ -462,6 +366,7 @@ const [eventTime, setEventTime] = useState('');
   const [eventType, setEventType] = useState('General Admission');
   type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
+  
   const cardRef = useRef<HTMLDivElement>(null);
   const [cookingTime, setCookingTime] = useState('');
 const [servings, setServings] = useState('');
@@ -547,6 +452,60 @@ const calculateDaysUntilBirthday = (cardDate: string, birthdayDate: string): str
   const differenceInDays: number = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
 
   return differenceInDays > 0 ? `${differenceInDays} days left` : "It's the birthday today!";
+};
+
+
+const [fieldValues, setFieldValues] = useState({
+  celebrantName: '',
+  age: '',
+  cardDate: '',
+  birthdayDate: '',
+  birthdayMessage: '',
+  daysUntil: '',
+});
+
+const [fieldColors, setFieldColors] = useState({
+  celebrantName: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+  age: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+  cardDate: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+  birthdayDate: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+  birthdayMessage: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+  daysUntil: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+});
+
+interface FieldValues {
+  celebrantName: string;
+  age: string;
+  cardDate: string;
+  birthdayDate: string;
+  birthdayMessage: string;
+  daysUntil: string;
+}
+
+const handleFieldChange = (field: keyof FieldValues, value: string): void => {
+  setFieldValues((prev: FieldValues) => ({ ...prev, [field]: value }));
+};
+
+interface FieldColor {
+  text: string;
+  border: string;
+  background: string;
+}
+
+interface FieldColors {
+  celebrantName: FieldColor;
+  age: FieldColor;
+  cardDate: FieldColor;
+  birthdayDate: FieldColor;
+  birthdayMessage: FieldColor;
+  daysUntil: FieldColor;
+}
+
+const updateFieldColor = (field: keyof FieldColors, type: keyof FieldColor, color: string): void => {
+  setFieldColors((prev: FieldColors) => ({
+    ...prev,
+    [field]: { ...prev[field], [type]: color },
+  }));
 };
 
 const [backgroundColor, setBackgroundColor] = useState('#ffffff');
@@ -1038,7 +997,6 @@ const baseLabelStyles = `
       ? (cardVariants[selectedVariant] as any)?.templates[selectedTemplate[selectedVariant]]?.background
       : (cardVariants[selectedVariant] as any)?.gradient}
     ${'templates' in (cardVariants[selectedVariant] as any) ? (cardVariants[selectedVariant] as any)?.templates[selectedTemplate[selectedVariant]]?.font : ''}
-    ${'templates' in cardVariants[selectedVariant] ? (cardVariants[selectedVariant] as any)?.templates[selectedTemplate[selectedVariant]]?.layout : ''}
     rounded-[20px] 
     shadow-[0_8px_32px_rgba(0,0,0,0.15)] 
     backdrop-blur-xl 
@@ -1164,27 +1122,70 @@ const baseLabelStyles = `
         )}
 
     {/* Business Variant */}
-      {selectedVariant === 'business' && (
-        <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-        style={{backgroundColor: backgroundColor,}}>
-          <div className="flex justify-between items-start">
-            <div className="space-y-3">
-              <h3 className="text-3xl font-bold text-stone-50" style={{color: titleColor}}>{title}</h3>
-              <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{color: titleColor}}>{description}</p>
-            </div>
-            {qrUrl && (
-              <div className="bg-white p-2 rounded-xl shadow-md">
-                <QRCodeSVG value={qrUrl} size={80} />
-              </div>
-            )}
-          </div>
-          
-          <div className="prose max-w-full">
-            <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{color: titleColor}}>{largeDescription}</p>
-          </div>
-          
+{selectedVariant === 'business' && selectedVariantStyle === 'default' && (
+  <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
+    style={{ backgroundColor: backgroundColor }}>
+    <div className="flex justify-between items-start">
+      <div className="space-y-3">
+        <h3 className="text-3xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+        <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+      </div>
+      {qrUrl && (
+        <div className="bg-white p-2 rounded-xl shadow-md">
+          <QRCodeSVG value={qrUrl} size={80} />
         </div>
       )}
+    </div>
+
+    <div className="prose max-w-full">
+      <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+    </div>
+  </div>
+)}
+
+  {/* Business Variant Style 1 */}
+{selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
+  <div className={`relative p-6 rounded-xl shadow-lg overflow-hidden`}
+    style={{ backgroundColor: backgroundColor }}>
+    <div className="flex justify-between items-start">
+      <div className="space-y-4">
+        <h3 className="text-4xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+        <p className="text-2xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+      </div>
+      {qrUrl && (
+        <div className="bg-white p-3 rounded-lg shadow-md">
+          <QRCodeSVG value={qrUrl} size={80} />
+        </div>
+      )}
+    </div>
+
+    <div className="prose max-w-full">
+      <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+    </div>
+  </div>
+)}
+
+{/* Business Variant Style 2 */}
+{selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
+  <div className={`relative p-8 rounded-2xl shadow-2xl overflow-hidden`}
+    style={{ backgroundColor: backgroundColor }}>
+    <div className="flex justify-between items-start">
+      <div className="space-y-5">
+        <h3 className="text-5xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+        <p className="text-3xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+      </div>
+      {qrUrl && (
+        <div className="bg-white p-4 rounded-xl shadow-md">
+          <QRCodeSVG value={qrUrl} size={80} />
+        </div>
+      )}
+    </div>
+
+    <div className="prose max-w-full">
+      <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+    </div>
+  </div>
+)}
 
     {/* Flyer Display */}
     {selectedVariant === 'flyer' && (
@@ -2295,8 +2296,11 @@ const baseLabelStyles = `
   </div>
 )}
 
-    {/* Event Variant */}
-      {selectedVariant === 'event' && (
+
+    {/* Event Related Display */}  
+    <div className="  ">
+    {/* Event Variant Default Style  */}
+      {selectedVariant === 'event' && selectedVariantStyle === 'default' && (
         <div className="bg-white/95 p-4 rounded-2xl rounded-b-md shadow-lg">
           <div className="flex justify-between items-start">
             <div className="space-y-4">
@@ -2339,6 +2343,111 @@ const baseLabelStyles = `
           </div> */}
         </div>
       )}
+
+    {/* Event Variant Style 1 - Elegant Design */}
+      {selectedVariant === 'event' && selectedVariantStyle === 'style1' && (
+        <div className="relative overflow-hidden bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 rounded-2xl shadow-2xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32 blur-3xl"></div>
+          <div className="relative p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
+              <div className="space-y-4 w-full sm:w-2/3">
+                <div className="inline-block px-4 py-2 bg-white/20 backdrop-blur-xl rounded-full text-sm font-medium text-white">
+                  🎉 Event Ticket
+                </div>
+                <h3 className="text-3xl sm:text-4xl font-bold text-white leading-tight">{title}</h3>
+                <div className="space-y-3">
+                  <p className="flex items-center text-white/90 text-base sm:text-lg">
+                    <span className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl mr-3">📅</span>
+                    {new Date(eventDate).toLocaleString()}
+                  </p>
+                  <p className="flex items-center text-white/90 text-base sm:text-lg">
+                    <span className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl mr-3">📍</span>
+                    {eventLocation}
+                  </p>
+                  {price && (
+                    <p className="flex items-center text-white/90 text-base sm:text-lg">
+                      <span className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl mr-3">💰</span>
+                      {formatCurrency(parseFloat(price), currency)}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {qrUrl && (
+                <div className="w-full sm:w-auto">
+                  <div className="bg-white/95 p-4 rounded-2xl shadow-lg backdrop-blur-xl transform transition hover:scale-105">
+                    <QRCodeSVG value={qrUrl} size={100} />
+                    <p className="text-xs text-center font-medium text-purple-900 mt-2">Scan to verify</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-8 bg-white/10 backdrop-blur-xl p-6 rounded-2xl">
+              <h4 className="text-xl font-semibold text-white mb-4">Event Details</h4>
+              <p className="text-white/90 whitespace-pre-line">{description}</p>
+              {largeDescription && (
+                <div className="mt-4 pt-4 border-t border-white/10 text-white/80 whitespace-pre-line">{largeDescription}</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+    {/* Event Variant Style 2 - Modern Dark Theme */}
+      {selectedVariant === 'event' && selectedVariantStyle === 'style2' && (
+        <div className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]"></div>
+          <div className="relative p-6 sm:p-8">
+            <div className="flex flex-col items-center text-center space-y-6">
+              <span className="inline-block px-4 py-1 bg-white/10 backdrop-blur-xl rounded-full text-xs font-medium text-white/80">
+                {new Date(eventDate).toLocaleString()}
+              </span>
+              <h3 className="text-4xl sm:text-5xl font-bold text-white bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                {title}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Date & Time</span>
+                  <p className="text-white font-medium">{new Date(eventDate).toLocaleString()}</p>
+                </div>
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Location</span>
+                  <p className="text-white font-medium">{eventLocation}</p>
+                </div>
+                {price && (
+                  <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                    <span className="block text-white/60 text-sm mb-1">Price</span>
+                    <p className="text-white font-medium">{formatCurrency(parseFloat(price), currency)}</p>
+                  </div>
+                )}
+              </div>
+              {qrUrl && (
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition"></div>
+                  <div className="relative bg-black p-4 rounded-xl">
+                    <QRCodeSVG value={qrUrl} size={120} />
+                    <p className="text-xs font-medium text-white/60 mt-2">Scan for verification</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-8 relative">
+              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              <div className="pt-8 space-y-4">
+                <h4 className="text-xl font-semibold text-white/90">Event Details</h4>
+                <p className="text-white/70 whitespace-pre-line leading-relaxed">{description}</p>
+                {largeDescription && (
+                  <div className="mt-6 pt-6 border-t border-white/10">
+                    <p className="text-white/60 whitespace-pre-line leading-relaxed">{largeDescription}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+
 
       {/* Mood */}
       {selectedVariant === 'mood' && (
@@ -2546,6 +2655,33 @@ const baseLabelStyles = `
       </div>
     </div>
   </div>
+
+  {/* Card Style Selector */}
+<div className="space-y-2">
+  <label className="block text-lg font-semibold text-gray-800">
+    Select Card Style
+    <span className="ml-2 text-gray-400 text-sm font-normal">Choose your style</span>
+  </label>
+  <div className="relative mt-1">
+    <select
+      value={selectedVariantStyle}
+      onChange={(e) => setSelectedVariantStyle(e.target.value)}
+      className="w-full p-4 pr-12 text-gray-700 bg-white rounded-2xl border border-gray-200 
+               shadow-sm appearance-none cursor-pointer transition-all duration-200
+               hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+    >
+      <option value="default">Default Style</option>
+      <option value="style1">Style 1</option>
+      <option value="style2">Style 2</option>
+      {/* Add more styles as needed */}
+    </select>
+    <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+      <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+  </div>
+</div>
 
   {/* Style Controls */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -4329,14 +4465,13 @@ const baseLabelStyles = `
   </div>
 )}
 
-
-{/* Birthday Input Fields */}
+{/* Add Birthday input fields */}
 {selectedVariant === 'birthday' && (
-  <div className="space-y-6">
+  <div className="space-y-6 p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
     {/* Name and Age Fields */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="glass-effect">
-        <label htmlFor="celebrantName" className="block text-stone-950 mb-2 font-medium">
+      <div className="relative">
+        <label htmlFor="celebrantName" className="block text-gray-800 text-sm font-medium mb-2">
           Celebrant's Name
         </label>
         <input
@@ -4344,12 +4479,41 @@ const baseLabelStyles = `
           id="celebrantName"
           value={celebrantName}
           onChange={(e) => setCelebrantName(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          style={{
+            color: celebrantNameColor,
+            background: celebrantNameBackground,
+            borderColor: celebrantNameColor,
+          }}
+          className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
           placeholder="Enter name"
         />
+        {/* Color Customization */}
+        <div className="mt-4 flex gap-4">
+          <input
+            type="color"
+            value={celebrantNameColor}
+            onChange={(e) => setCelebrantNameColor(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Text Color"
+          />
+          <input
+            type="color"
+            value={celebrantNameColor}
+            onChange={(e) => setCelebrantNameColor(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Border Color"
+          />
+          <input
+            type="text"
+            value={celebrantNameBackground}
+            onChange={(e) => setCelebrantNameBackground(e.target.value)}
+            className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+            placeholder="Background (color or gradient)"
+          />
+        </div>
       </div>
-      <div className="glass-effect">
-        <label htmlFor="age" className="block text-stone-950 mb-2 font-medium">
+      <div className="relative">
+        <label htmlFor="age" className="block text-gray-800 text-sm font-medium mb-2">
           Age
         </label>
         <input
@@ -4357,89 +4521,94 @@ const baseLabelStyles = `
           id="age"
           value={age}
           onChange={(e) => setAge(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          style={{
+            color: ageColor,
+            background: ageBackground,
+            borderColor: ageBorderColor,
+          }}
+          className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
           placeholder="Enter age"
         />
+        {/* Color Customization */}
+        <div className="mt-4 flex gap-4">
+          <input
+            type="color"
+            value={ageColor}
+            onChange={(e) => setAgeColor(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Text Color"
+          />
+          <input
+            type="color"
+            value={ageBorderColor}
+            onChange={(e) => setAgeBorderColor(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Border Color"
+          />
+          <input
+            type="text"
+            value={ageBackground}
+            onChange={(e) => setAgeBackground(e.target.value)}
+            className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+            placeholder="Background (color or gradient)"
+          />
+        </div>
       </div>
     </div>
 
-    {/* Date Fields */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="glass-effect">
-        <label htmlFor="cardDate" className="block text-stone-950 mb-2 font-medium">
-          Date of Card Generation
+    {/* Other fields (e.g., date, message) */}
+    {['cardDate', 'birthdayDate', 'birthdayMessage', 'daysUntil'].map((field) => (
+      <div key={field} className="relative">
+        <label
+          htmlFor={field}
+          className="block text-gray-800 text-sm font-medium mb-2 capitalize"
+        >
+          {field.replace(/([A-Z])/g, ' $1')}
         </label>
         <input
-          type="date"
-          id="cardDate"
-          value={cardDate}
-          onChange={(e) => setCardDate(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          type={field === 'birthdayMessage' ? 'textarea' : 'text'}
+          id={field}
+          value={fieldValues[field as keyof typeof fieldValues]}
+          onChange={(e) => handleFieldChange(field as keyof FieldValues, e.target.value)}
+          style={{
+            color: fieldColors[field as keyof typeof fieldColors].text,
+            background: fieldColors[field as keyof typeof fieldColors].background,
+            borderColor: fieldColors[field as keyof typeof fieldColors].border,
+          }}
+          className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 transition shadow-sm ${
+            field === 'birthdayMessage' ? 'min-h-[100px]' : ''
+          }`}
+          placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
         />
+        {/* Color Customization */}
+        <div className="mt-4 flex gap-4">
+          <input
+            type="color"
+            value={fieldColors[field].text}
+            onChange={(e) => updateFieldColor(field as keyof FieldColors, 'text', e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Text Color"
+          />
+          <input
+            type="color"
+            value={fieldColors[field].border}
+            onChange={(e) => updateFieldColor(field, 'border', e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Border Color"
+          />
+          <input
+            type="text"
+            value={fieldColors[field].background}
+            onChange={(e) => updateFieldColor(field, 'background', e.target.value)}
+            className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+            placeholder="Background (color or gradient)"
+          />
+        </div>
       </div>
-      <div className="glass-effect">
-        <label htmlFor="birthdayDate" className="block text-stone-950 mb-2 font-medium">
-          Birthday Date
-        </label>
-        <input
-          type="date"
-          id="birthdayDate"
-          value={birthdayDate}
-          onChange={(e) => setBirthdayDate(e.target.value)}
-          className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        />
-      </div>
-    </div>
-
-    {/* Days Until Birthday */}
-    <div className="glass-effect">
-      <label htmlFor="daysUntil" className="block text-stone-950 mb-2 font-medium">
-        Days Until Birthday
-      </label>
-      <input
-        type="text"
-        id="daysUntil"
-        value={calculateDaysUntilBirthday(cardDate, birthdayDate)}
-        readOnly
-        className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg text-stone-950"
-        placeholder="Days will be calculated automatically"
-      />
-    </div>
-
-    {/* Birthday Message Field */}
-    <div className="glass-effect">
-      <label htmlFor="birthdayMessage" className="block text-stone-950 mb-2 font-medium">
-        Birthday Message
-      </label>
-      <textarea
-        id="birthdayMessage"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[100px]"
-        placeholder="Write your birthday message..."
-      />
-    </div>
-
-    {/* Wish Type Dropdown */}
-    <div className="glass-effect">
-      <label htmlFor="wishType" className="block text-stone-950 mb-2 font-medium">
-        Wish Type
-      </label>
-      <select
-        id="wishType"
-        value={wishType}
-        onChange={(e) => setWishType(e.target.value)}
-        className="w-full p-3 rounded-xl border border-slate-300 bg-white/50 backdrop-blur-lg transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      >
-        <option>Happy Birthday</option>
-        <option>Happy Birthday!</option>
-        <option>Many Happy Returns</option>
-        <option>Feliz Cumpleaños</option>
-        <option>Joyeux Anniversaire</option>
-      </select>
-    </div>
+    ))}
   </div>
 )}
+
 
 
 
@@ -4656,7 +4825,7 @@ const baseLabelStyles = `
       />
     </div>
   </div>
-            )}
+)}
 
 
             {/* Menu specific fields */}
@@ -6443,8 +6612,10 @@ const baseLabelStyles = `
   </div>
 )}
 
-    {/* Event Variant */}
-      {selectedVariant === 'event' && (
+    {/* Event Related Display */}  
+    <div className="  ">
+    {/* Event Variant Default Style  */}
+      {selectedVariant === 'event' && selectedVariantStyle === 'default' && (
         <div className="bg-white/95 p-4 rounded-2xl rounded-b-md shadow-lg">
           <div className="flex justify-between items-start">
             <div className="space-y-4">
@@ -6487,6 +6658,109 @@ const baseLabelStyles = `
           </div> */}
         </div>
       )}
+
+    {/* Event Variant Style 1 - Elegant Design */}
+      {selectedVariant === 'event' && selectedVariantStyle === 'style1' && (
+        <div className="relative overflow-hidden bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 rounded-2xl shadow-2xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32 blur-3xl"></div>
+          <div className="relative p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
+              <div className="space-y-4 w-full sm:w-2/3">
+                <div className="inline-block px-4 py-2 bg-white/20 backdrop-blur-xl rounded-full text-sm font-medium text-white">
+                  🎉 Event Ticket
+                </div>
+                <h3 className="text-3xl sm:text-4xl font-bold text-white leading-tight">{title}</h3>
+                <div className="space-y-3">
+                  <p className="flex items-center text-white/90 text-base sm:text-lg">
+                    <span className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl mr-3">📅</span>
+                    {new Date(eventDate).toLocaleString()}
+                  </p>
+                  <p className="flex items-center text-white/90 text-base sm:text-lg">
+                    <span className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl mr-3">📍</span>
+                    {eventLocation}
+                  </p>
+                  {price && (
+                    <p className="flex items-center text-white/90 text-base sm:text-lg">
+                      <span className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl mr-3">💰</span>
+                      {formatCurrency(parseFloat(price), currency)}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {qrUrl && (
+                <div className="w-full sm:w-auto">
+                  <div className="bg-white/95 p-4 rounded-2xl shadow-lg backdrop-blur-xl transform transition hover:scale-105">
+                    <QRCodeSVG value={qrUrl} size={100} />
+                    <p className="text-xs text-center font-medium text-purple-900 mt-2">Scan to verify</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-8 bg-white/10 backdrop-blur-xl p-6 rounded-2xl">
+              <h4 className="text-xl font-semibold text-white mb-4">Event Details</h4>
+              <p className="text-white/90 whitespace-pre-line">{description}</p>
+              {largeDescription && (
+                <div className="mt-4 pt-4 border-t border-white/10 text-white/80 whitespace-pre-line">{largeDescription}</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+    {/* Event Variant Style 2 - Modern Dark Theme */}
+      {selectedVariant === 'event' && selectedVariantStyle === 'style2' && (
+        <div className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]"></div>
+          <div className="relative p-6 sm:p-8">
+            <div className="flex flex-col items-center text-center space-y-6">
+              <span className="inline-block px-4 py-1 bg-white/10 backdrop-blur-xl rounded-full text-xs font-medium text-white/80">
+                {new Date(eventDate).toLocaleString()}
+              </span>
+              <h3 className="text-4xl sm:text-5xl font-bold text-white bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                {title}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Date & Time</span>
+                  <p className="text-white font-medium">{new Date(eventDate).toLocaleString()}</p>
+                </div>
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Location</span>
+                  <p className="text-white font-medium">{eventLocation}</p>
+                </div>
+                {price && (
+                  <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                    <span className="block text-white/60 text-sm mb-1">Price</span>
+                    <p className="text-white font-medium">{formatCurrency(parseFloat(price), currency)}</p>
+                  </div>
+                )}
+              </div>
+              {qrUrl && (
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition"></div>
+                  <div className="relative bg-black p-4 rounded-xl">
+                    <QRCodeSVG value={qrUrl} size={120} />
+                    <p className="text-xs font-medium text-white/60 mt-2">Scan for verification</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-8 relative">
+              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              <div className="pt-8 space-y-4">
+                <h4 className="text-xl font-semibold text-white/90">Event Details</h4>
+                <p className="text-white/70 whitespace-pre-line leading-relaxed">{description}</p>
+                {largeDescription && (
+                  <div className="mt-6 pt-6 border-t border-white/10">
+                    <p className="text-white/60 whitespace-pre-line leading-relaxed">{largeDescription}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
 
       {/* Mood */}
       {selectedVariant === 'mood' && (
