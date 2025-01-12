@@ -4584,22 +4584,22 @@ const baseLabelStyles = `
         <div className="mt-4 flex gap-4">
           <input
             type="color"
-            value={fieldColors[field].text}
+            value={fieldColors[field as keyof typeof fieldColors].text}
             onChange={(e) => updateFieldColor(field as keyof FieldColors, 'text', e.target.value)}
             className="w-12 h-8 border rounded-lg"
             title="Text Color"
           />
           <input
             type="color"
-            value={fieldColors[field].border}
-            onChange={(e) => updateFieldColor(field, 'border', e.target.value)}
+            value={fieldColors[field as keyof typeof fieldColors].border}
+            onChange={(e) => updateFieldColor(field as keyof FieldColors, 'border', e.target.value)}
             className="w-12 h-8 border rounded-lg"
             title="Border Color"
           />
           <input
             type="text"
-            value={fieldColors[field].background}
-            onChange={(e) => updateFieldColor(field, 'background', e.target.value)}
+            value={fieldColors[field as keyof typeof fieldColors].background}
+            onChange={(e) => updateFieldColor(field as keyof FieldColors, 'background', e.target.value)}
             className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
             placeholder="Background (color or gradient)"
           />
