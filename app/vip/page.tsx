@@ -2644,7 +2644,31 @@ const baseLabelStyles = `
           {/* Other Inputs */}
 
           
-
+{/* Checkbox Example */}
+<div className=" bg-white/80 p-3 shadow-md rounded-xl">
+      <label className={baseLabelStyles}>Show Sections</label>
+        <div className=" border m-4 "/>
+      <div className="flex items-center justify-between">
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showTopPart}
+            onChange={(e) => setShowTopPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className=" text-slate-700 text-xs">Show Top Section</span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showBottomPart}
+            onChange={(e) => setShowBottomPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700 text-xs">Show Bottom Section</span>
+        </label>
+      </div>
+    </div>
 
           {/* Select Card Type */}
 
@@ -2705,6 +2729,8 @@ const baseLabelStyles = `
       <option value="default">Default Style</option>
       <option value="style1">Style 1</option>
       <option value="style2">Style 2</option>
+      <option value="style3">Style 3</option>
+      <option value="style4">Style 4</option>
       {/* Add more styles as needed */}
     </select>
     <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
@@ -5537,9 +5563,10 @@ const baseLabelStyles = `
 
 
 {/* Checkbox Example */}
-<div className={baseWrapperStyles}>
+<div className=" bg-white/80 p-3 shadow-md rounded-xl">
       <label className={baseLabelStyles}>Show Sections</label>
-      <div className="flex items-center gap-4">
+        <div className=" border m-4 "/>
+      <div className="flex items-center justify-between">
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -5547,7 +5574,7 @@ const baseLabelStyles = `
             onChange={(e) => setShowTopPart(e.target.checked)}
             className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />
-          <span className="text-slate-700">Show Top Section</span>
+          <span className=" text-slate-700 text-xs">Show Top Section</span>
         </label>
         <label className="flex items-center gap-2">
           <input
@@ -5556,7 +5583,7 @@ const baseLabelStyles = `
             onChange={(e) => setShowBottomPart(e.target.checked)}
             className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />
-          <span className="text-slate-700">Show Bottom Section</span>
+          <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
       </div>
     </div>
