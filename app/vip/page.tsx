@@ -540,6 +540,7 @@ const [inputStyles, setInputStyles] = useState({
 const [menuItemImage, setMenuItemImage] = useState<File | null>(null);
 const [menuTitle, setMenuTitle] = useState('');
 const [heroImage, setHeroImage] = useState<string | null>(null);
+const [eventImage, seteventImage] = useState<string | null>(null);
 const [menuSubtitle, setMenuSubtitle] = useState('');
 const formatCurrency = (value: number, currency: string) => {
   return new Intl.NumberFormat('en-NG', {
@@ -2498,11 +2499,11 @@ const baseLabelStyles = `
           <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]"></div>
           <div className="relative p-2 sm:p-4">
             <div className="flex flex-col items-center text-center space-y-6">
-            {Image && (
+            {eventImage && (
           <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             <Image
-              src={Image}
+              src={eventImage}
               alt="Product Image"
               layout="fill"
               objectFit="cover"
@@ -3582,6 +3583,41 @@ const baseLabelStyles = `
           title="Event Time Text Color"
         />
       </div>
+      {/* Event Image */}
+      {/* <div>
+      <label className="block text-gray-700 font-medium mb-2">Upload Event Image</label>
+      <div className="space-y-2">
+        {eventImage && (
+          <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden shadow-md">
+            <img src={typeof eventImage === 'string' ? eventImage : URL.createObjectURL(eventImage)} alt="Uploaded" className="object-cover w-full h-full" />
+            <button
+              title="Delete hero image"
+              onClick={() => seteventImage(null)}
+              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              const file = e.target.files[0];
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                seteventImage(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          accept="image/*"
+        />
+      </div>
+    </div> */}
       {/* Event Location */}
       <div>
         <label className="block text-gray-800 mb-1 text-sm">Event Location 😊</label>
@@ -5040,7 +5076,7 @@ const baseLabelStyles = `
 
             {/* Event specific fields */}
             {selectedVariant === 'event' && (
-              <>
+              <div className="bg-white/80 rounded-xl md:p-6 p-4">
               <div>
               <label className="block text-stone-950 mb-2">Title</label>
               <input
@@ -5070,6 +5106,40 @@ const baseLabelStyles = `
                     onChange={(e) => setEventDate(e.target.value)}
                     className="w-full p-2 rounded-lg border border-slate-300"
                   />
+                </div>
+                <div className="space-y-4">
+  <label className="block text-lg font-medium text-gray-900">Upload Event Image</label>
+  <div className="space-y-2">
+                {eventImage && (
+                  <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+                    <img src={eventImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+                    <button
+                      title="Delete Hero Image"
+                      onClick={() => seteventImage('')}
+                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        seteventImage(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  accept="image/*"
+                />
+              </div>
                 </div>
                 <div>
                   <label className="block text-stone-950 mb-2">Event Price</label>
@@ -5120,8 +5190,8 @@ const baseLabelStyles = `
         placeholder="Enter flyer details, features, or event information"
       />
     </div>
-              </>
-            )}
+              </div>
+  )}
 
             {/* MOOD SPECIFIC FIELDS */}
             {selectedVariant === 'mood' && (
