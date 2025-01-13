@@ -7327,6 +7327,73 @@ const baseLabelStyles = `
           </div>
         </div>
       )}
+
+      {/* Event Variant Style 3 - Modern Dark Theme */}
+      {selectedVariant === 'event' && selectedVariantStyle === 'style3' && (
+        <div className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]"></div>
+          <div className="relative p-2 sm:p-4">
+            <div className="flex flex-col items-center text-center space-y-6">
+            {eventImage && (
+          <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <Image
+              src={eventImage}
+              alt="Product Image"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        )}
+              <span className="inline-block px-4 py-1 bg-white/10 backdrop-blur-xl rounded-full text-xs font-medium text-white/80">
+                {new Date(eventDate).toLocaleString()}
+              </span>
+              <h3 className="text-4xl sm:text-5xl font-bold text-white bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                {title}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Date & Time</span>
+                  <p className="text-white font-medium">{new Date(eventDate).toLocaleString()}</p>
+                </div>
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Location</span>
+                  <p className="text-white font-medium">{eventLocation}</p>
+                </div>
+                {price && (
+                  <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                    <span className="block text-white/60 text-sm mb-1">Price</span>
+                    <p className="text-white font-medium">{formatCurrency(parseFloat(price), currency)}</p>
+                  </div>
+                )}
+              </div>
+              {qrUrl && (
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition"></div>
+                  <div className="relative bg-black p-4 rounded-xl">
+                    <QRCodeSVG value={qrUrl} size={120} />
+                    <p className="text-xs font-medium text-white/60 mt-2">Scan for verification</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-8 relative">
+              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              <div className="pt-8 space-y-4">
+                <h4 className="text-xl font-semibold text-white/90">Event Details</h4>
+                <p className="text-white/70 whitespace-pre-line leading-relaxed">{description}</p>
+                {largeDescription && (
+                  <div className="mt-6 pt-6 border-t border-white/10">
+                    <p className="text-white/60 whitespace-pre-line leading-relaxed">{largeDescription}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
 
       {/* Mood */}
