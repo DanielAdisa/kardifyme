@@ -292,6 +292,8 @@ type TextColors = {
 // };
 
 const CreateCard = () => {
+  const [showfooterPart, setshowfooterPart] = useState(true);
+  const [footerColor, setFooterColor] = useState<string>('#FFFFFF'); // Default color
   const [productImage, setProductImage] = useState<string>('');
   const [cardProduct, setCardProduct] = useState<string | null>(null);
   const [ageBorderColor, setAgeBorderColor] = useState<string>('');
@@ -635,6 +637,8 @@ const [cardColor, setCardColor] = useState({
   invitation: '#ffeb3b',
 });
 
+const [footerCardColor, setfooterCardColor] = useState('#ffffff')
+
 const [selectedTemplate, setSelectedTemplate] = useState({
   business: 'minimal',
   event: 'elegant',
@@ -712,8 +716,8 @@ const saveSignature = (
 
 
 
-  const CURRENT_PASSWORD = 'epicgames';
-  const PASSWORD_VERSION = '6'; // Increment this version whenever the password changes
+  const CURRENT_PASSWORD = 'epicgamesandgames';
+  const PASSWORD_VERSION = '7'; // Increment this version whenever the password changes
   
   // Update handleLogin to check password version
   const handleLogin = () => {
@@ -1441,41 +1445,51 @@ const baseLabelStyles = `
 {/* InviatationCard display */}
 {selectedVariant === 'invitation' && (
   <div
-    className="relative min-h-[600px] p-6 md:p-8 rounded-2xl shadow-2xl overflow-hidden"
+    className="relative min-h-[600px] p-4 md:p-10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
       background:
         bgType === 'gradient'
           ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
           : bgType === 'solid'
           ? solidColor
-          : `url(${heroImage}) no-repeat center center/cover`,
+          : "",
     }}
   >
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+    {/* Enhanced Decorative Elements */}
+    {/* <div className="absolute inset-0 z-10  rounded-2xl backdrop-blur-sm" />
+    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-puls" /> */}
 
-    <div className="relative z-10 flex flex-col items-center gap-8">
-      {/* Logo */}
+    {/* Background Image with Parallax */}
+    {heroImage && (
+      <div
+        className="absolu inset-0 bg-cover bg-center backdrop-blur-2xl opacity-30 transform transition-transform duration-1000 hover:scale-105"
+        style={{
+          backgroundImage: `url(${typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)})`,
+        }}
+      ></div>
+    )}
+
+    <div className="relative z-10 flex flex-col items-center gap-10">
+      {/* Logo with enhanced animation */}
       {logo && (
-        <div className="transform hover:scale-105 transition-transform duration-300">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white/30 shadow-xl overflow-hidden">
+        <div className="transform hover:scale-110 transition-all duration-500 hover:rotate-3">
+          <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white/40 shadow-2xl overflow-hidden backdrop-blur-sm">
             <img
               src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)}
               alt="Event Logo"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
             />
           </div>
         </div>
       )}
 
-      {/* Event Name */}
+      {/* Event Name with enhanced styling */}
       {eventName && (
-        <div className="w-full max-w-2xl transform hover:-translate-y-1 transition-all duration-300">
-          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+        <div className="w-full max-w-2xl transform hover:-translate-y-2 transition-all duration-500">
+          <div className="p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl hover:bg-white/15">
             <h3 
-              className="text-3xl md:text-5xl font-bold text-center tracking-tight" 
+              className="text-4xl md:text-6xl font-bold text-center tracking-tight drop-shadow-lg" 
               style={{ color: textColors.eventName }}
             >
               {eventName}
@@ -1484,11 +1498,11 @@ const baseLabelStyles = `
         </div>
       )}
 
-      {/* Event Details */}
-      <div className="space-y-4 text-center max-w-xl">
+      {/* Event Details with improved layout */}
+      <div className="space-y-4 text-center max-w-xl backdrop-blur-sm p-6 rounded-2xl bg-white/5">
         {eventDate && (
           <p 
-            className="text-xl md:text-2xl font-light"
+            className="text-2xl md:text-3xl font-light drop-shadow-lg"
             style={{ color: textColors.eventDate }}
           >
             Date: {eventDate}
@@ -1496,7 +1510,7 @@ const baseLabelStyles = `
         )}
         {eventTime && (
           <p 
-            className="text-lg md:text-xl"
+            className="text-xl md:text-2xl drop-shadow-lg"
             style={{ color: textColors.eventTime }}
           >
             Time: {eventTime}
@@ -1504,7 +1518,7 @@ const baseLabelStyles = `
         )}
         {eventLocation && (
           <p 
-            className="text-lg md:text-xl italic"
+            className="text-xl md:text-2xl italic drop-shadow-lg"
             style={{ color: textColors.eventLocation }}
           >
             Location: {eventLocation} 😊
@@ -1512,11 +1526,11 @@ const baseLabelStyles = `
         )}
       </div>
 
-      {/* Invitee and Inviter Names */}
-      <div className="space-y-4 text-center max-w-xl">
+      {/* Invitee and Inviter Names with enhanced styling */}
+      <div className="space-y-4 text-center max-w-xl bg-white/5 backdrop-blur-sm p-6 rounded-2xl">
         {inviteeName && (
           <p 
-            className="text-lg md:text-xl"
+            className="text-xl md:text-2xl drop-shadow-lg"
             style={{ color: textColors.inviteeName }}
           >
             Dear {inviteeName},
@@ -1524,7 +1538,7 @@ const baseLabelStyles = `
         )}
         {inviterName && (
           <p 
-            className="text-lg md:text-xl"
+            className="text-xl md:text-2xl drop-shadow-lg"
             style={{ color: textColors.inviterName }}
           >
             You are cordially invited by {inviterName}
@@ -1532,7 +1546,7 @@ const baseLabelStyles = `
         )}
         {occasion && (
           <p 
-            className="text-lg md:text-xl"
+            className="text-xl md:text-2xl drop-shadow-lg"
             style={{ color: textColors.occasion }}
           >
             to the occasion of {occasion}
@@ -1540,12 +1554,12 @@ const baseLabelStyles = `
         )}
       </div>
 
-      {/* Description */}
+      {/* Description with improved container */}
       {description && (
         <div className="w-full max-w-2xl">
-          <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+          <div className="p-8 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
             <p 
-              className="text-lg text-center whitespace-pre-wrap leading-relaxed"
+              className="text-lg md:text-xl text-center whitespace-pre-wrap leading-relaxed drop-shadow-lg"
               style={{ color: textColors.description }}
             >
               {description}
@@ -1554,17 +1568,17 @@ const baseLabelStyles = `
         </div>
       )}
 
-      {/* QR Code */}
+      {/* Enhanced QR Code section */}
       {qrUrl && (
-        <div className="mt-auto">
-          <div className="p-4 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-3">
+        <div className="mt-auto w-full max-w-xs">
+          <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-4 hover:bg-white/20 transition-colors duration-300">
             <QRCodeSVG 
               value={qrUrl} 
-              size={120}
-              className="rounded-xl"
+              size={150}
+              className="rounded-xl shadow-lg p-2 bg-white"
             />
             <p 
-              className="text-sm font-medium tracking-wide"
+              className="text-sm font-medium tracking-wider uppercase drop-shadow-lg"
               style={{ color: textColors.qrUrl }}
             >
               Scan to RSVP
@@ -2477,6 +2491,75 @@ const baseLabelStyles = `
           </div>
         </div>
       )}
+
+       {/* Event Variant Style 3 - Modern Dark Theme */}
+       {selectedVariant === 'event' && selectedVariantStyle === 'style3' && (
+        <div className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]"></div>
+          <div className="relative p-2 sm:p-4">
+            <div className="flex flex-col items-center text-center space-y-6">
+            {Image && (
+          <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <Image
+              src={Image}
+              alt="Product Image"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        )}
+              <span className="inline-block px-4 py-1 bg-white/10 backdrop-blur-xl rounded-full text-xs font-medium text-white/80">
+                {new Date(eventDate).toLocaleString()}
+              </span>
+              <h3 className="text-4xl sm:text-5xl font-bold text-white bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                {title}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Date & Time</span>
+                  <p className="text-white font-medium">{new Date(eventDate).toLocaleString()}</p>
+                </div>
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Location</span>
+                  <p className="text-white font-medium">{eventLocation}</p>
+                </div>
+                {price && (
+                  <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                    <span className="block text-white/60 text-sm mb-1">Price</span>
+                    <p className="text-white font-medium">{formatCurrency(parseFloat(price), currency)}</p>
+                  </div>
+                )}
+              </div>
+              {qrUrl && (
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition"></div>
+                  <div className="relative bg-black p-4 rounded-xl">
+                    <QRCodeSVG value={qrUrl} size={120} />
+                    <p className="text-xs font-medium text-white/60 mt-2">Scan for verification</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-8 relative">
+              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              <div className="pt-8 space-y-4">
+                <h4 className="text-xl font-semibold text-white/90">Event Details</h4>
+                <p className="text-white/70 whitespace-pre-line leading-relaxed">{description}</p>
+                {largeDescription && (
+                  <div className="mt-6 pt-6 border-t border-white/10">
+                    <p className="text-white/60 whitespace-pre-line leading-relaxed">{largeDescription}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+
     </div>
 
 
@@ -2621,11 +2704,14 @@ const baseLabelStyles = `
       )}
 
     {/* Footer */}
-      <div className="mt-2 flex justify-end">
-      <div className="text-xs rounded-t-none w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50" style={{color: titleColor}}>
-       Powered by KardifyMe+
-      </div>
-      </div>
+    {showfooterPart && (
+
+          <div className="mt-2 flex justify-end">
+          <div className="text-xs rounded-t-none w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50"  style={{backgroundColor: footerCardColor, color: footerColor,}}>
+          Powered by KardifyMe
+          </div>
+          </div>
+    )}
       </div>
         
           )}
@@ -2667,12 +2753,21 @@ const baseLabelStyles = `
           />
           <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showfooterPart}
+            onChange={(e) => setshowfooterPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700 text-xs">Show App Signature</span>
+        </label>
       </div>
     </div>
 
           {/* Select Card Type */}
 
-          <div className="space-y-4 bg-gradient-to-br from-white to-gray-50/80 p-4 md:p-8 rounded-3xl shadow-xl border border-gray-100">
+          <div className="space-y-4 bg-gradient-to-br from-white to-gray-50/80 p-4 md:p-8 rounded-xl shadow-xl border border-gray-100">
   {/* Card Type Selector */}
   <div className="space-y-2">
     <label className="block text-lg font-semibold text-gray-800">
@@ -2744,7 +2839,7 @@ const baseLabelStyles = `
   {/* Style Controls */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
     {/* Card Color Picker */}
-    <div className="space-y-2 bg-white p-1 rounded-2xl border border-gray-100 shadow-sm">
+    <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
         Card Color
         <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
@@ -2764,7 +2859,7 @@ const baseLabelStyles = `
     </div>
 
     {/* Template Selector */}
-    <div className="space-y-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+    <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
         Template Style
         <span className="ml-2 text-sm text-gray-400">Choose Font</span>
@@ -2789,7 +2884,7 @@ const baseLabelStyles = `
   </div>
 
   {/* Text Color Picker */}
-  <div className="space-y-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+  <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
     <label className="block font-medium text-gray-700">
       Text Color
       <span className="ml-2 text-sm text-gray-400">Set font color</span>
@@ -2802,9 +2897,38 @@ const baseLabelStyles = `
         className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
       />
-      <div className="absolute inset-0 rounded-xl ring-2 ring-gray-200 pointer-events-none 
-                    transition-opacity opacity-0 group-hover:opacity-100" />
+      
     </div>
+
+    <label className="block font-medium text-gray-700">
+      Footer Text Color Picker
+      <span className="ml-2 text-sm text-gray-400">Set footer font color</span>
+    </label>
+    <div className="relative group">
+      <input
+        type="color"
+        value={footerColor}
+        onChange={(e) => setFooterColor(e.target.value)}
+        className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+                 hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+      />
+      
+    </div>
+
+    <label className="block font-medium text-gray-700">
+    Footer Card Color Picker
+          <span className="ml-2 text-sm text-gray-400">Set Footer Color</span>
+    </label>
+      <div className="relative group">
+          <input
+            type="color"
+            value={footerCardColor}
+            onChange={(e) => setfooterCardColor(e.target.value)}
+            className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+                 hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+          />
+      </div>
+        
   </div>
 </div>
  
@@ -4849,8 +4973,8 @@ const baseLabelStyles = `
 
             {/* Business specific fields */}
 {selectedVariant === 'business' && (
-  <>
-    <div>
+  <div className='space-y-4 bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg'>
+    <div className="">
       <label className={baseLabelStyles}>Inner BG Color</label>
       <input
         type="color"
@@ -4911,7 +5035,7 @@ const baseLabelStyles = `
         rows={4}
       />
     </div>
-  </>
+  </div>
 )}
 
             {/* Event specific fields */}
@@ -5585,6 +5709,15 @@ const baseLabelStyles = `
           />
           <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showfooterPart}
+            onChange={(e) => setshowfooterPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700 text-xs">Show App Signature</span>
+        </label>
       </div>
     </div>
 
@@ -5791,7 +5924,7 @@ const baseLabelStyles = `
 
 {selectedVariant === 'business' && (
   <div
-    className="relative p-8 rounded-2xl shadow-2xl overflow-hidden group transition-all duration-300 hover:shadow-3xl"
+    className="relative p-4 rounded-2xl shadow-2xl overflow-hidden group transition-all duration-300 hover:shadow-3xl"
     style={{ 
       background: `linear-gradient(to bottom right, ${backgroundColor}, ${backgroundColor}dd)`
     }}
@@ -5913,13 +6046,13 @@ const baseLabelStyles = `
       {/* QR Code & Price */}
       <div className="flex flex-wrap justify-center gap-6">
         {qrUrl && (
-          <div className="backdrop-blur-2xl shadow-md bg-black/20 p-2 rounded-lg  h-fit  shadow-md">
+          <div className="backdrop-blur-2xl shadow-md bg-white/90 p-2 rounded-lg  h-fit  shadow-md">
             <QRCodeSVG value={qrUrl} size={120} className=' mx-auto' />
             <p
-              className="text-sm text-gray-700 mt-2"
-              style={{ color: titleColor }}
+              className="text-sm text-black mt-2"
+              
             >
-              Scan for details
+              Scan for more
             </p>
           </div>
         )}
@@ -5929,7 +6062,7 @@ const baseLabelStyles = `
             className="text-sm text-gray-700 mb-1"
             style={{ color: titleColor }}
           >
-            Entry Fee
+            Admission Fee
           </p>
           <p
             className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent"
@@ -6080,20 +6213,30 @@ const baseLabelStyles = `
 {/* invitationcard display */}
 {selectedVariant === 'invitation' && (
   <div
-    className="relative min-h-[600px] p-6 md:p-10 rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    className="relative min-h-[600px] p-4 md:p-10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
       background:
         bgType === 'gradient'
           ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
           : bgType === 'solid'
           ? solidColor
-          : `url(${heroImage}) no-repeat center center/cover`,
+          : "",
     }}
   >
     {/* Enhanced Decorative Elements */}
     <div className="absolute inset-0 z-10  rounded-2xl backdrop-blur-sm" />
     <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-pulse" />
     <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-puls" />
+
+    {/* Background Image with Parallax */}
+    {heroImage && (
+      <div
+        className="absolu inset-0 bg-cover bg-center backdrop-blur-2xl opacity-30 transform transition-transform duration-1000 hover:scale-105"
+        style={{
+          backgroundImage: `url(${typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)})`,
+        }}
+      ></div>
+    )}
 
     <div className="relative z-10 flex flex-col items-center gap-10">
       {/* Logo with enhanced animation */}
@@ -7256,11 +7399,14 @@ const baseLabelStyles = `
       )}
 
     {/* Footer */}
-      <div className="mt-2 flex justify-end">
-      <div className="text-xs rounded-t-none w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50" style={{color: titleColor}}>
-       Powered by KardifyMe+
-      </div>
-      </div>
+              {showfooterPart && (
+
+          <div className="mt-2 flex justify-end">
+          <div className="text-xs rounded-t-none w-full text-center rounded-b-2xl px-1 py-2 rounded-md bg-slate-800/40 text-stone-50"  style={{backgroundColor: footerCardColor, color: footerColor,}}>
+          Powered by KardifyMe
+          </div>
+          </div>
+          )}
       </div>
         
           )}
