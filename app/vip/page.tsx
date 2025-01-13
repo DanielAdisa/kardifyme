@@ -39,7 +39,7 @@ const cardVariants = {
         font: 'font-serif',
       },
       minimal: {
-        font: 'font-mono',
+        font: 'font-sans',
       },
     },
   },
@@ -1157,26 +1157,74 @@ const baseLabelStyles = `
     <div className= "">
 
       {/* Business Default Variant */}
-        {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
-          <div className={`relative p-4 rounded-t-xl rounded-b-xl rounded-2xl shadow-2xl overflow-hidden`}
-            style={{ backgroundColor: backgroundColor }}>
-            <div className="flex justify-between items-start">
-              <div className="space-y-3">
-                <h3 className="text-3xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-                <p className="text-xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-              </div>
-              {qrUrl && (
-                <div className="bg-white p-2 rounded-xl shadow-md">
-                  <QRCodeSVG value={qrUrl} size={80} />
-                </div>
-              )}
-            </div>
+      {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
+  <div
+    className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
+    style={{
+      background: bgType === 'gradient'
+        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : 'none',
+    }}
+  >
+    {/* Background Decorations */}
+    <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent pointer-events-none"></div>
+    <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl transition-transform duration-500 transform group-hover:scale-110"></div>
+    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-xl"></div>
 
-            <div className="prose max-w-full">
-              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+    {/* Card Content */}
+    <div className="relative z-10">
+      {/* Header Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        {/* Title and Description */}
+        <div className="space-y-4">
+          <h3
+            className="text-2xl md:text-3xl font-bold tracking-tight text-stone-50"
+            style={{ color: titleColor }}
+          >
+            {title}
+          </h3>
+          <div className="h-1 w-20 bg-gradient-to-r from-white/50 to-transparent rounded-full"></div>
+          <p
+            className="text-sm md:text-base leading-relaxed text-stone-50/90"
+            style={{ color: titleColor }}
+          >
+            {description}
+          </p>
+        </div>
+
+        {/* QR Code */}
+        {qrUrl && (
+          <div className="flex justify-center md:justify-end">
+            <div className="bg-white/90 p-4 rounded-2xl shadow-md backdrop-blur-sm transform transition-transform duration-300 group-hover:scale-105">
+              <QRCodeSVG value={qrUrl} size={100} />
+              <p className="text-xs text-center font-medium text-gray-600 mt-2">
+                Scan to connect
+              </p>
             </div>
           </div>
         )}
+      </div>
+
+      {/* Divider */}
+      <div className="my-6">
+        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      </div>
+
+      {/* Content Section */}
+      <div>
+        <p
+          className="text-sm md:text-base leading-relaxed text-stone-50/80 whitespace-pre-line"
+          style={{ color: titleColor }}
+        >
+          {largeDescription}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Business Variant Style 1 */}
         {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
@@ -5010,7 +5058,17 @@ const baseLabelStyles = `
             {/* Business specific fields */}
 {selectedVariant === 'business' && (
   <div className='space-y-4 bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg'>
-    <div className="">
+    
+    {/* Background Type Selection */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Background Type
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* <div className="">
       <label className={baseLabelStyles}>Inner BG Color</label>
       <input
         type="color"
@@ -5018,6 +5076,61 @@ const baseLabelStyles = `
         onChange={(e) => setBackgroundColor(e.target.value)}
         className="w-full h-[45px] backdrop-blur-sm rounded-xl"
       />
+    </div> */}
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Background Type</label>
+          <select
+            value={bgType}
+            onChange={(e) => setBgType(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          >
+            <option value="gradient">Gradient</option>
+            <option value="solid">Solid Color</option>
+          </select>
+        </div>
+        {bgType === 'gradient' && (
+          <>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
+              <input
+                type="color"
+                value={gradientFrom}
+                onChange={(e) => setGradientFrom(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
+              <input
+                type="color"
+                value={gradientVia}
+                onChange={(e) => setGradientVia(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
+              <input
+                type="color"
+                value={gradientTo}
+                onChange={(e) => setGradientTo(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              />
+            </div>
+          </>
+        )}
+        {bgType === 'solid' && (
+          <div>
+            <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
+            <input
+              type="color"
+              value={solidColor}
+              onChange={(e) => setSolidColor(e.target.value)}
+              className="w-full h-10 rounded-lg border border-slate-300"
+            />
+          </div>
+        )}
+      </div>
     </div>
     <div>
       <label className="block text-stone-950 mb-2">Title</label>
@@ -5992,71 +6105,124 @@ const baseLabelStyles = `
 )}
 
 
-{selectedVariant === 'business' && (
-  <div
-    className="relative p-4 rounded-2xl shadow-2xl overflow-hidden group transition-all duration-300 hover:shadow-3xl"
-    style={{ 
-      background: `linear-gradient(to bottom right, ${backgroundColor}, ${backgroundColor}dd)`
-    }}
-  >
-    {/* Background Decorations */}
-    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl transform group-hover:scale-110 transition-transform duration-700"></div>
-    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+        {/* Business Variant Display */}
+        <div className= "">
 
-    <div className="relative z-10">
-      {/* Header Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div className="space-y-6">
+        {/* Business Default Variant */}
+        {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
+        <div
+        className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
+        style={{
+        background: bgType === 'gradient'
+          ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+          : bgType === 'solid'
+          ? solidColor
+          : 'none',
+        }}
+        >
+        {/* Background Decorations */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent pointer-events-none"></div>
+        <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl transition-transform duration-500 transform group-hover:scale-110"></div>
+        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-xl"></div>
+
+        {/* Card Content */}
+        <div className="relative z-10">
+        {/* Header Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          {/* Title and Description */}
           <div className="space-y-4">
             <h3
-              className="text-4xl font-extrabold tracking-tight text-stone-50"
+              className="text-2xl md:text-3xl font-bold tracking-tight text-stone-50"
               style={{ color: titleColor }}
             >
               {title}
             </h3>
-            <div className="h-1 w-24 bg-gradient-to-r from-white/60 to-transparent rounded-full"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-white/50 to-transparent rounded-full"></div>
             <p
-              className="text-lg font-medium leading-relaxed text-stone-50/90"
+              className="text-sm md:text-base leading-relaxed text-stone-50/90"
               style={{ color: titleColor }}
             >
               {description}
             </p>
           </div>
-        </div>
-        
-        {/* QR Code Section */}
-        {qrUrl && (
-          <div className="flex justify-end">
-            <div className="transition-transform transform group-hover:scale-105 duration-300">
-              <div className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-lg">
-                <QRCodeSVG value={qrUrl} size={120} />
-                <p className="text-xs text-center font-medium text-gray-600 mt-3">
+
+          {/* QR Code */}
+          {qrUrl && (
+            <div className="flex justify-center md:justify-end">
+              <div className="bg-white/90 p-2 rounded-2xl shadow-md backdrop-blur-sm transform transition-transform duration-300 group-hover:scale-105">
+                <QRCodeSVG value={qrUrl} size={100} />
+                <p className="text-xs text-center font-medium text-gray-600 mt-2">
                   Scan to connect
                 </p>
               </div>
             </div>
-          </div>
+          )}
+        </div>
+
+        {/* Divider */}
+        <div className="my-6">
+          <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        </div>
+
+        {/* Content Section */}
+        <div>
+          <p
+            className="text-sm md:text-base leading-relaxed text-stone-50/80 whitespace-pre-line"
+            style={{ color: titleColor }}
+          >
+            {largeDescription}
+          </p>
+        </div>
+        </div>
+        </div>
         )}
-      </div>
 
-      {/* Divider */}
-      <div className="my-8">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-      </div>
 
-      {/* Content Section */}
-      <div>
-        <p
-          className="text-base md:text-lg text-stone-50/80 leading-relaxed whitespace-pre-line"
-          style={{ color: titleColor }}
-        >
-          {largeDescription}
-        </p>
-      </div>
-    </div>
-  </div>
-)}
+        {/* Business Variant Style 1 */}
+          {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
+            <div className={`relative p-6 rounded-xl shadow-lg overflow-hidden`}
+              style={{ backgroundColor: backgroundColor }}>
+              <div className="flex justify-between items-start">
+                <div className="space-y-4">
+                  <h3 className="text-4xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+                  <p className="text-2xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+                </div>
+                {qrUrl && (
+                  <div className="bg-white p-3 rounded-lg shadow-md">
+                    <QRCodeSVG value={qrUrl} size={80} />
+                  </div>
+                )}
+              </div>
+
+              <div className="prose max-w-full">
+                <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+              </div>
+            </div>
+          )}
+
+        {/* Business Variant Style 2 */}
+          {selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
+            <div className={`relative p-8 rounded-2xl shadow-2xl overflow-hidden`}
+              style={{ backgroundColor: backgroundColor }}>
+              <div className="flex justify-between items-start">
+                <div className="space-y-5">
+                  <h3 className="text-5xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
+                  <p className="text-3xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+                </div>
+                {qrUrl && (
+                  <div className="bg-white p-4 rounded-xl shadow-md">
+                    <QRCodeSVG value={qrUrl} size={80} />
+                  </div>
+                )}
+              </div>
+
+              <div className="prose max-w-full">
+                <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+              </div>
+            </div>
+          )}
+
+        </div>
 
 
 
