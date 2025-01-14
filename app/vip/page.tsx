@@ -1941,7 +1941,7 @@ const baseLabelStyles = `
 
         {/* QR Code */}
         {qrUrl && (
-          <div className="backdrop-blur-lg bg-white/15 p-3 rounded-xl">
+          <div className="backdrop-blur-lg bg-white/70 p-3 rounded-xl">
             <QRCodeSVG value={qrUrl} size={80} />
           </div>
         )}
@@ -7298,7 +7298,7 @@ const baseLabelStyles = `
 
         {/* QR Code */}
         {qrUrl && (
-          <div className="backdrop-blur-lg bg-white/15 p-3 rounded-xl">
+          <div className="backdrop-blur-lg bg-white/70 p-3 rounded-xl">
             <QRCodeSVG value={qrUrl} size={80} />
           </div>
         )}
@@ -7328,7 +7328,7 @@ const baseLabelStyles = `
     {/* Background Image with Parallax */}
     {heroImage && (
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-45 transform transition-transform duration-1000 hover:scale-105"
+        className="absolute inset-0 bg-cover bg-center opacity-30 transform transition-transform duration-1000 hover:scale-105"
         style={{
           backgroundImage: `url(${typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)})`,
         }}
