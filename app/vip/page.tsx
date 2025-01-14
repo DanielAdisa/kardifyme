@@ -1525,120 +1525,311 @@ const baseLabelStyles = `
             </div>
     {/* Business Variant Display Finish */} 
 
-    {/* Flyer Display */}
-{selectedVariant === 'flyer' && selectedVariantStyle === 'default' && (
-  <div
-    className="relative p-2 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
-    style={{
-      background: bgType === 'gradient'
-        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-        : bgType === 'solid'
-        ? solidColor
-        : '#1a1a1a',
-    }}
-  >
-    {/* Background Image */}
-    {backgroundImage && (
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-50"
-        style={{
-          backgroundImage: `url(${typeof backgroundImage === 'string' ? backgroundImage : URL.createObjectURL(backgroundImage)})`,
-        }}
-      ></div>
-    )}
+    {/* Flyer Display Start */}
 
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-400/20 rounded-full blur-[150px]"></div>
-    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-500/20 rounded-full blur-[150px]"></div>
 
-    {/* Flyer Content */}
-    <div className="relative z-10 space-y-8 text-center text-white">
-      {/* Title */}
-      <h3
-        className="text-4xl md:text-5xl font-extrabold uppercase tracking-wide"
-        style={{ color: titleColor }}
-      >
-        {title || "Celebrate in Style!"}
-      </h3>
+    <>
 
-      {/* Subheading */}
-      <p
-        className="text-lg md:text-xl text-white/90"
-        style={{ color: descriptionColor }}
-      >
-        {description || "An unforgettable evening awaits!"}
-      </p>
+        {selectedVariant === 'flyer' && selectedVariantStyle === 'default' && (
+          <div
+            className="relative p-2 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
+            style={{
+              background: bgType === 'gradient'
+                ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                : bgType === 'solid'
+                ? solidColor
+                : '#1a1a1a',
+            }}
+          >
+            {/* Background Image */}
+            {backgroundImage && (
+              <div
+                className="absolute inset-0 bg-cover bg-center opacity-50"
+                style={{
+                  backgroundImage: `url(${typeof backgroundImage === 'string' ? backgroundImage : URL.createObjectURL(backgroundImage)})`,
+                }}
+              ></div>
+            )}
 
-      {/* Flyer Image */}
-      {flyerImage && (
-        <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-lg">
-          <Image
-            src={flyerImage}
-            alt="Event Image"
-            layout="fill"
-            objectFit="cover"
-            className="transition-transform duration-300 hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-        </div>
-      )}
+            {/* Decorative Elements */}
+            <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
+            <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-400/20 rounded-full blur-[150px]"></div>
+            <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-500/20 rounded-full blur-[150px]"></div>
 
-      {/* Main Content */}
-      <div className="p-6 rounded-xl bg-black/50 backdrop-blur-lg shadow-md">
-        <p
-          className="text-base md:text-lg leading-relaxed whitespace-pre-wrap"
-          style={{ color: titleColor }}
-        >
-          {largeDescription ||
-            "Join us for live music, entertainment, and memories to last a lifetime!"}
-        </p>
-      </div>
+            {/* Flyer Content */}
+            <div className="relative z-10 space-y-8 text-center text-white">
+              {/* Title */}
+              <h3
+                className="text-4xl md:text-5xl font-extrabold uppercase tracking-wide"
+                style={{ color: titleColor }}
+              >
+                {title || "Celebrate in Style!"}
+              </h3>
 
-      {/* QR Code & Price */}
-      <div className="flex flex-wrap justify-center gap-6">
-        {qrUrl && (
-          <div className="bg-white/80 p-4 rounded-lg shadow-md backdrop-blur-md">
-            <QRCodeSVG value={qrUrl} size={100} />
-            <p className="text-xs text-black mt-2 font-medium">
-              Scan for Details
-            </p>
+              {/* Subheading */}
+              <p
+                className="text-lg md:text-xl text-white/90"
+                style={{ color: descriptionColor }}
+              >
+                {description || "An unforgettable evening awaits!"}
+              </p>
+
+              {/* Flyer Image */}
+              {flyerImage && (
+                <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-lg">
+                  <Image
+                    src={flyerImage}
+                    alt="Event Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="transition-transform duration-300 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                </div>
+              )}
+
+              {/* Main Content */}
+              <div className="p-6 rounded-xl bg-black/50 backdrop-blur-lg shadow-md">
+                <p
+                  className="text-base md:text-lg leading-relaxed whitespace-pre-wrap"
+                  style={{ color: titleColor }}
+                >
+                  {largeDescription ||
+                    "Join us for live music, entertainment, and memories to last a lifetime!"}
+                </p>
+              </div>
+
+              {/* QR Code & Price */}
+              <div className="flex flex-wrap justify-center gap-6">
+                {qrUrl && (
+                  <div className="bg-white/80 p-4 rounded-lg shadow-md backdrop-blur-md">
+                    <QRCodeSVG value={qrUrl} size={100} />
+                    <p className="text-xs text-black mt-2 font-medium">
+                      Scan for Details
+                    </p>
+                  </div>
+                )}
+                {price && !isNaN(parseFloat(price)) && (
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 shadow-lg text-center">
+                    <p
+                      className="text-sm font-medium text-white mb-2"
+                      style={{ color: titleColor }}
+                    >
+                      Admission Fee
+                    </p>
+                    <p
+                      className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+                      style={{ color: titleColor }}
+                    >
+                      {formatCurrency(parseFloat(price), currency)}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Logo */}
+              {logo && (
+                <div className="flex justify-center mt-6">
+                  <div className="relative w-20 h-20">
+                    <Image
+                      src={logo}
+                      alt="Logo"
+                      fill
+                      className="rounded-full object-cover border-2 border-white/50 shadow-md"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
-        {price && !isNaN(parseFloat(price)) && (
-          <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 shadow-lg text-center">
-            <p
-              className="text-sm font-medium text-white mb-2"
-              style={{ color: titleColor }}
-            >
-              Admission Fee
-            </p>
-            <p
-              className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
-              style={{ color: titleColor }}
-            >
-              {formatCurrency(parseFloat(price), currency)}
-            </p>
+
+
+        {selectedVariant === 'flyer' && selectedVariantStyle === 'style1' && (
+              <div
+                className="relative p-4 rounded-2xl shadow-xl overflow-hidden " style={{
+                  background: bgType === 'gradient'
+                    ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                    : bgType === 'solid'
+                    ? solidColor
+                    : '#1a1a1a',
+                }}
+              >
+                {/* Background Image */}
+                {backgroundImage && (
+                  <div
+                    className="absolute inset-0 bg-cover bg-center opacity-30"
+                    style={{
+                      backgroundImage: `url(${typeof backgroundImage === 'string' ? backgroundImage : URL.createObjectURL(backgroundImage)})`,
+                    }}
+                  ></div>
+                )}
+
+                {/* Decorative Elements */}
+                {/* <div className="absolute inset-0 bg-black/40"></div>
+                <div className="absolute -top-20 -right-20 w-96 h-96 bg-yellow-400/30 rounded-full blur-[150px]"></div>
+                <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-pink-500/30 rounded-full blur-[150px]"></div> */}
+
+                {/* Flyer Content */}
+                <div className="relative z-10 space-y-8 text-center text-white">
+                  {/* Title */}
+                  <h3 className="text-5xl font-extrabold uppercase tracking-wide">
+                    {title || "Celebrate in Style!"}
+                  </h3>
+
+                  {/* Subheading */}
+                  <p className="text-lg md:text-xl text-white/80">
+                    {description || "An unforgettable evening awaits!"}
+                  </p>
+
+                  {/* Flyer Image */}
+                  {flyerImage && (
+                    <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-lg">
+                      <Image
+                        src={flyerImage}
+                        alt="Event Image"
+                        layout="fill"
+                        objectFit="cover"
+                        className="transition-transform duration-300 hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    </div>
+                  )}
+
+                  {/* Main Content */}
+                  <div className="p-6 rounded-xl bg-black/50 backdrop-blur-lg shadow-md">
+                    <p className="text-lg leading-relaxed whitespace-pre-wrap">
+                      {largeDescription ||
+                        "Join us for live music, entertainment, and memories to last a lifetime!"}
+                    </p>
+                  </div>
+
+                  {/* QR Code & Price */}
+                  <div className="flex flex-wrap justify-center gap-6">
+                    {qrUrl && (
+                      <div className="bg-white/80 p-4 rounded-lg shadow-md backdrop-blur-md">
+                        <QRCodeSVG value={qrUrl} size={100} />
+                        <p className="text-xs text-black mt-2 font-medium">Scan for Details</p>
+                      </div>
+                    )}
+                    {price && !isNaN(parseFloat(price)) && (
+                      <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 shadow-lg text-center">
+                        <p className="text-sm font-medium text-white mb-2">Admission Fee</p>
+                        <p className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                          {formatCurrency(parseFloat(price), currency)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Logo */}
+                  {logo && (
+                    <div className="flex justify-center mt-6">
+                      <div className="relative w-20 h-20">
+                        <Image
+                          src={logo}
+                          alt="Logo"
+                          layout="fill"
+                          className="rounded-full object-cover border-2 border-white/50 shadow-md"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+        )}
+
+        {selectedVariant === 'flyer' && selectedVariantStyle === 'style2' && (
+          <div className="relative p-4 rounded-2xl shadow-xl overflow-hidden bg-gray-900">
+            {/* Background Image */}
+            {backgroundImage && (
+              <div
+                className="absolute inset-0 bg-cover bg-center opacity-40"
+                style={{
+                  backgroundImage: `url(${typeof backgroundImage === 'string' ? backgroundImage : URL.createObjectURL(backgroundImage)})`,
+                }}
+              ></div>
+            )}
+
+            {/* Decorative Elements */}
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-800/60 to-transparent"></div>
+
+            {/* Flyer Content */}
+            <div className="relative z-10 space-y-8 text-center text-white">
+              {/* Title */}
+              <h3 className="text-4xl font-extrabold tracking-wide">
+                {title || "Modern Event"}
+              </h3>
+
+              {/* Subheading */}
+              <p className="text-lg md:text-xl text-white/80">
+                {description || "Experience the future of entertainment"}
+              </p>
+
+              {/* Flyer Image */}
+              {flyerImage && (
+                <div className="relative w-full h-56 rounded-xl overflow-hidden shadow-md">
+                  <Image
+                    src={flyerImage}
+                    alt="Event Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="transition-transform duration-300 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
+                </div>
+              )}
+
+              {/* Main Content */}
+              <div className="p-6 rounded-xl bg-black/50 backdrop-blur-md shadow-lg">
+                <p className="text-base leading-relaxed whitespace-pre-wrap">
+                  {largeDescription ||
+                    "Immerse yourself in a world of unforgettable experiences and vibrant energy!"}
+                </p>
+              </div>
+
+              {/* QR Code & Price */}
+              <div className="flex  justify-center gap-4">
+                {qrUrl && (
+                  <div className="bg-gray-100 w-1/3 p-3 mx-auto  rounded-lg shadow-md backdrop-blur-md">
+                    <QRCodeSVG value={qrUrl} size={100} />
+                    <p className="text-xs text-gray-800 mt-2">Scan for More Info</p>
+                  </div>
+                )}
+                {price && !isNaN(parseFloat(price)) && (
+                  <div className="p-4 w-2/3 rounded-xl bg-gradient-to-r from-green-500 to-blue-500 shadow-lg text-center">
+                    <p className="text-sm text-white mb-2">Ticket Price</p>
+                    <p className="text-3xl font-bold text-white">
+                      {formatCurrency(parseFloat(price), currency)}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Logo */}
+              {logo && (
+                <div className="flex justify-center mt-6">
+                  <div className="relative w-16 h-16">
+                    <Image
+                      src={logo}
+                      alt="Logo"
+                      layout="fill"
+                      className="rounded-full object-cover shadow-md"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
-      </div>
 
-      {/* Logo */}
-      {logo && (
-        <div className="flex justify-center mt-6">
-          <div className="relative w-20 h-20">
-            <Image
-              src={logo}
-              alt="Logo"
-              fill
-              className="rounded-full object-cover border-2 border-white/50 shadow-md"
-            />
-          </div>
-        </div>
-      )}
-    </div>
-  </div>
-)}
+
+
+
+
+    </>
+
+     {/* Flyer Display End */}    
 
 
 {/* brandcard display */}
@@ -1762,7 +1953,7 @@ const baseLabelStyles = `
 {/* InviatationCard display */}
 {selectedVariant === 'invitation' && (
   <div
-    className="relative min-h-[600px] p-4 md:p-10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    className="relative min-h-[600px] p-2 md:p-10 bg-cover bg-center rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
       background:
         bgType === 'gradient'
@@ -1780,7 +1971,7 @@ const baseLabelStyles = `
     {/* Background Image with Parallax */}
     {heroImage && (
       <div
-        className="absolu inset-0 bg-cover bg-center backdrop-blur-2xl opacity-30 transform transition-transform duration-1000 hover:scale-105"
+        className="absolute inset-0 bg-cover bg-center opacity-45 transform transition-transform duration-1000 hover:scale-105"
         style={{
           backgroundImage: `url(${typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)})`,
         }}
@@ -1804,9 +1995,9 @@ const baseLabelStyles = `
       {/* Event Name with enhanced styling */}
       {eventName && (
         <div className="w-full max-w-2xl transform hover:-translate-y-2 transition-all duration-500">
-          <div className="p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl hover:bg-white/15">
+          <div className="p-4 bg-white/40 backdrop-blur-xl  rounded-2xl border border-white/20 shadow-2xl hover:bg-white/15">
             <h3 
-              className="text-4xl md:text-6xl font-bold text-center tracking-tight drop-shadow-lg" 
+              className="text-4xl md:text-6xl font-bold text-center whitespace-pre-line tracking-tight drop-shadow-lg" 
               style={{ color: textColors.eventName }}
             >
               {eventName}
@@ -1816,7 +2007,7 @@ const baseLabelStyles = `
       )}
 
       {/* Event Details with improved layout */}
-      <div className="space-y-4 text-center max-w-xl backdrop-blur-sm p-6 rounded-2xl bg-white/5">
+      <div className="space-y-4 text-center max-w-xl backdrop-blur-sm p-4 rounded-2xl bg-white/40">
         {eventDate && (
           <p 
             className="text-2xl md:text-3xl font-light drop-shadow-lg"
@@ -1844,7 +2035,7 @@ const baseLabelStyles = `
       </div>
 
       {/* Invitee and Inviter Names with enhanced styling */}
-      <div className="space-y-4 text-center max-w-xl bg-white/5 backdrop-blur-sm p-6 rounded-2xl">
+      <div className="space-y-4 text-center max-w-xl bg-white/40 backdrop-blur-sm p-4 rounded-2xl">
         {inviteeName && (
           <p 
             className="text-xl md:text-2xl drop-shadow-lg"
@@ -1874,7 +2065,7 @@ const baseLabelStyles = `
       {/* Description with improved container */}
       {description && (
         <div className="w-full max-w-2xl">
-          <div className="p-8 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
+          <div className="p-4 bg-white/40 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
             <p 
               className="text-lg md:text-xl text-center whitespace-pre-wrap leading-relaxed drop-shadow-lg"
               style={{ color: textColors.description }}
@@ -1888,7 +2079,7 @@ const baseLabelStyles = `
       {/* Enhanced QR Code section */}
       {qrUrl && (
         <div className="mt-auto w-full max-w-xs">
-          <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-4 hover:bg-white/20 transition-colors duration-300">
+          <div className="p-6 bg-white/65 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-4 hover:bg-white/20 transition-colors duration-300">
             <QRCodeSVG 
               value={qrUrl} 
               size={150}
@@ -3364,6 +3555,79 @@ const baseLabelStyles = `
 {/* Flyer Input Fields */}
 {selectedVariant === 'flyer' && (
   <div className="space-y-6 bg-white/90 p-4 rounded-xl">
+    {/* Background Type Selection */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Background Type
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* <div className="">
+      <label className={baseLabelStyles}>Inner BG Color</label>
+      <input
+        type="color"
+        value={backgroundColor}
+        onChange={(e) => setBackgroundColor(e.target.value)}
+        className="w-full h-[45px] backdrop-blur-sm rounded-xl"
+      />
+    </div> */}
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Background Type</label>
+          <select
+            value={bgType}
+            onChange={(e) => setBgType(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          >
+            <option value="gradient">Gradient</option>
+            <option value="solid">Solid Color</option>
+          </select>
+        </div>
+        {bgType === 'gradient' && (
+          <>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
+              <input
+                type="color"
+                value={gradientFrom}
+                onChange={(e) => setGradientFrom(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
+              <input
+                type="color"
+                value={gradientVia}
+                onChange={(e) => setGradientVia(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
+              <input
+                type="color"
+                value={gradientTo}
+                onChange={(e) => setGradientTo(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              />
+            </div>
+          </>
+        )}
+        {bgType === 'solid' && (
+          <div>
+            <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
+            <input
+              type="color"
+              value={solidColor}
+              onChange={(e) => setSolidColor(e.target.value)}
+              className="w-full h-10 rounded-lg border border-slate-300"
+            />
+          </div>
+        )}
+      </div>
+    </div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Title</label>
@@ -7043,10 +7307,10 @@ const baseLabelStyles = `
   </div>
 )}
 
-{/* invitationcard display */}
+{/* InviatationCard display */}
 {selectedVariant === 'invitation' && (
   <div
-    className="relative min-h-[600px] p-4 md:p-10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    className="relative min-h-[600px] p-2 md:p-10 bg-cover bg-center rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
       background:
         bgType === 'gradient'
@@ -7057,14 +7321,14 @@ const baseLabelStyles = `
     }}
   >
     {/* Enhanced Decorative Elements */}
-    <div className="absolute inset-0 z-10  rounded-2xl backdrop-blur-sm" />
+    {/* <div className="absolute inset-0 z-10  rounded-2xl backdrop-blur-sm" />
     <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-pulse" />
-    <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-puls" />
+    <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl animate-puls" /> */}
 
     {/* Background Image with Parallax */}
     {heroImage && (
       <div
-        className="absolu inset-0 bg-cover bg-center backdrop-blur-2xl opacity-30 transform transition-transform duration-1000 hover:scale-105"
+        className="absolute inset-0 bg-cover bg-center opacity-45 transform transition-transform duration-1000 hover:scale-105"
         style={{
           backgroundImage: `url(${typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)})`,
         }}
@@ -7088,9 +7352,9 @@ const baseLabelStyles = `
       {/* Event Name with enhanced styling */}
       {eventName && (
         <div className="w-full max-w-2xl transform hover:-translate-y-2 transition-all duration-500">
-          <div className="p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl hover:bg-white/15">
+          <div className="p-4 bg-white/40 backdrop-blur-xl  rounded-2xl border border-white/20 shadow-2xl hover:bg-white/15">
             <h3 
-              className="text-4xl md:text-6xl font-bold text-center tracking-tight drop-shadow-lg" 
+              className="text-4xl md:text-6xl font-bold text-center whitespace-pre-line tracking-tight drop-shadow-lg" 
               style={{ color: textColors.eventName }}
             >
               {eventName}
@@ -7100,7 +7364,7 @@ const baseLabelStyles = `
       )}
 
       {/* Event Details with improved layout */}
-      <div className="space-y-4 text-center max-w-xl backdrop-blur-sm p-6 rounded-2xl bg-white/5">
+      <div className="space-y-4 text-center max-w-xl backdrop-blur-sm p-4 rounded-2xl bg-white/40">
         {eventDate && (
           <p 
             className="text-2xl md:text-3xl font-light drop-shadow-lg"
@@ -7128,7 +7392,7 @@ const baseLabelStyles = `
       </div>
 
       {/* Invitee and Inviter Names with enhanced styling */}
-      <div className="space-y-4 text-center max-w-xl bg-white/5 backdrop-blur-sm p-6 rounded-2xl">
+      <div className="space-y-4 text-center max-w-xl bg-white/40 backdrop-blur-sm p-4 rounded-2xl">
         {inviteeName && (
           <p 
             className="text-xl md:text-2xl drop-shadow-lg"
@@ -7158,7 +7422,7 @@ const baseLabelStyles = `
       {/* Description with improved container */}
       {description && (
         <div className="w-full max-w-2xl">
-          <div className="p-8 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
+          <div className="p-4 bg-white/40 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
             <p 
               className="text-lg md:text-xl text-center whitespace-pre-wrap leading-relaxed drop-shadow-lg"
               style={{ color: textColors.description }}
@@ -7172,7 +7436,7 @@ const baseLabelStyles = `
       {/* Enhanced QR Code section */}
       {qrUrl && (
         <div className="mt-auto w-full max-w-xs">
-          <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-4 hover:bg-white/20 transition-colors duration-300">
+          <div className="p-6 bg-white/65 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-4 hover:bg-white/20 transition-colors duration-300">
             <QRCodeSVG 
               value={qrUrl} 
               size={150}
@@ -7190,6 +7454,7 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
 
     {/* Budget Display */}
       {selectedVariant === 'budget' && (
