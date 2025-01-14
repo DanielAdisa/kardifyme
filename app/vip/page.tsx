@@ -541,6 +541,7 @@ const [menuItemImage, setMenuItemImage] = useState<File | null>(null);
 const [menuTitle, setMenuTitle] = useState('');
 const [heroImage, setHeroImage] = useState<string | null>(null);
 const [eventImage, seteventImage] = useState<string | null>(null);
+const [flyerImage, setflyerImage] = useState<string | null>(null);
 const [menuSubtitle, setMenuSubtitle] = useState('');
 const formatCurrency = (value: number, currency: string) => {
   return new Intl.NumberFormat('en-NG', {
@@ -1527,7 +1528,7 @@ const baseLabelStyles = `
     {/* Flyer Display */}
     {selectedVariant === 'flyer' && (
   <div
-    className="relative p-3 rounded-b-none rounded-2xl shadow-2xl overflow-hidden"
+    className="relative p-2 rounded-b-none rounded-2xl shadow-2xl overflow-hidden"
     style={{
       background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
     }}
@@ -1547,6 +1548,18 @@ const baseLabelStyles = `
     <div className="absolute -top-20 -right-20 w-80 h-80 bg-yellow-400/30 rounded-full blur-3xl"></div>
     <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-500/30 rounded-full blur-3xl"></div>
 
+    {flyerImage && (
+          <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <Image
+              src={flyerImage}
+              alt="Product Image"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        )}
     {/* Flyer Content */}
     <div className="relative z-10 h-full space-y-8 text-center">
       {/* Title */}
@@ -1579,13 +1592,13 @@ const baseLabelStyles = `
       {/* QR Code & Price */}
       <div className="flex flex-wrap justify-center gap-6">
         {qrUrl && (
-          <div className="backdrop-blur-2xl shadow-md bg-black/20 p-2 rounded-lg  h-fit  shadow-md">
+          <div className="backdrop-blur-2xl shadow-md bg-white/90 p-2 rounded-lg  h-fit  shadow-md">
             <QRCodeSVG value={qrUrl} size={120} className=' mx-auto' />
             <p
-              className="text-sm text-gray-700 mt-2"
-              style={{ color: titleColor }}
+              className="text-sm text-black mt-2"
+              
             >
-              Scan for details
+              Scan for more
             </p>
           </div>
         )}
@@ -1595,7 +1608,7 @@ const baseLabelStyles = `
             className="text-sm text-gray-700 mb-1"
             style={{ color: titleColor }}
           >
-            Entry Fee
+            Admission Fee
           </p>
           <p
             className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent"
@@ -1622,7 +1635,7 @@ const baseLabelStyles = `
       )}
     </div>
   </div>
-)}
+    )}
 
 
 {/* brandcard display */}
@@ -3347,7 +3360,7 @@ const baseLabelStyles = `
 
 {/* Flyer Input Fields */}
 {selectedVariant === 'flyer' && (
-  <div className="space-y-6">
+  <div className="space-y-6 bg-white/90 p-4 rounded-xl">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Title</label>
@@ -3460,24 +3473,62 @@ const baseLabelStyles = `
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Upload Image</label>
-        <input
-          type="file"
-          onChange={(e) => handleImageChange(e, 'main')}
-          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
-          accept="image/*"
-        />
-      </div>
-      <div>
-        <label className="block text-stone-950 mb-2 font-medium">Upload Logo</label>
-        <input
-          type="file"
-          onChange={(e) => handleImageChange(e, 'logo')}
-          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
-          accept="image/*"
-        />
-      </div>
+    <div className="space-y-4">
+  <label className="block text-lg font-medium text-gray-900">Upload Flyer Image</label>
+  <div className="space-y-2">
+                {flyerImage && (
+                  <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+                    <img src={flyerImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+                    <button
+                      title="Delete Hero Image"
+                      onClick={() => setflyerImage('')}
+                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setflyerImage(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  accept="image/*"
+                />
+              </div>
+                </div>
+      <div className="space-y-2">
+      {logo && (
+        <div className="relative w-full h-32 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+          <img src={logo} alt="Logo" className="object-cover w-full h-full" />
+          <button
+            onClick={() => handleDeleteImage('logo')}
+            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+      <label className="block text-lg font-medium text-gray-900">Upload Flyer Logo</label>
+      <input
+        type="file"
+        onChange={(e) => handleImageChange(e, 'logo')}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        accept="image/*"
+      />
+    </div>
     </div>
   </div>
 )}
@@ -6733,7 +6784,7 @@ const baseLabelStyles = `
     {/* Flyer Display */}
     {selectedVariant === 'flyer' && (
   <div
-    className="relative p-3 rounded-b-none rounded-2xl shadow-2xl overflow-hidden"
+    className="relative p-2 rounded-b-none rounded-2xl shadow-2xl overflow-hidden"
     style={{
       background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
     }}
@@ -6753,6 +6804,18 @@ const baseLabelStyles = `
     <div className="absolute -top-20 -right-20 w-80 h-80 bg-yellow-400/30 rounded-full blur-3xl"></div>
     <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-500/30 rounded-full blur-3xl"></div>
 
+    {flyerImage && (
+          <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <Image
+              src={flyerImage}
+              alt="Product Image"
+              layout="fill"
+              objectFit="cover"
+              className="transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        )}
     {/* Flyer Content */}
     <div className="relative z-10 h-full space-y-8 text-center">
       {/* Title */}
@@ -6828,7 +6891,7 @@ const baseLabelStyles = `
       )}
     </div>
   </div>
-)}
+    )}
 
 
 {/* brandcard display */}
