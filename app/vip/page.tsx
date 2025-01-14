@@ -747,9 +747,195 @@ const saveSignature = (
         qrUrl: '#000000',
         price: '#ffffff',
       });
+      setshowfooterPart(parsedState.showfooterPart || false);
+      setFooterColor(parsedState.footerColor || '#FFFFFF');
+      setProductImage(parsedState.productImage || '');
+      setCardProduct(parsedState.cardProduct || null);
+      setAgeBorderColor(parsedState.ageBorderColor || '');
+      setAgeBackground(parsedState.ageBackground || '');
+      setAgeColor(parsedState.ageColor || '#000000');
+      setCelebrantNameBackground(parsedState.celebrantNameBackground || '');
+      setCelebrantNameColor(parsedState.celebrantNameColor || '#000000');
+      setBirthdayDate(parsedState.birthdayDate || '');
+      setCardDate(parsedState.cardDate || '');
+      setOccasion(parsedState.occasion || '');
+      setInviterName(parsedState.inviterName || '');
+      setInviteeName(parsedState.inviteeName || '');
+      setAffirmationTitle(parsedState.affirmationTitle || '');
+      setBrandName(parsedState.brandName || '');
+      setTagline(parsedState.tagline || '');
+      setOrderPolicies(parsedState.orderPolicies || '');
+      setContactInfo(parsedState.contactInfo || '');
+      setSocialMediaLinks(parsedState.socialMediaLinks || {
+        instagram: '',
+        facebook: '',
+        twitter: '',
+      });
+      setIncludeBottomPart(parsedState.includeBottomPart || false);
+      setInvoiceNumber(parsedState.invoiceNumber || '');
+      setItems(parsedState.items || [{ description: '', amount: 0 }]);
+      setTaxRate(parsedState.taxRate || 0);
+      setDueDate(parsedState.dueDate || '');
+      setEventName(parsedState.eventName || '');
+      setEventTime(parsedState.eventTime || '');
+      setProductImageState(parsedState.productImageState || null);
+      setShowBottomPart(parsedState.showBottomPart || false);
+      setEventDate(parsedState.eventDate || '');
+      setEventLocation(parsedState.eventLocation || '');
+      setEventType(parsedState.eventType || 'General Admission');
+      setCookingTime(parsedState.cookingTime || '');
+      setServings(parsedState.servings || '');
+      setIngredients(parsedState.ingredients || [{ 
+        item: '', 
+        amount: '', 
+        backgroundColor: '#ffffff', 
+        borderColor: '#000000', 
+        textColor: '#000000' 
+      }]);
+      setInstructions(parsedState.instructions || [{ step: '' }]);
+      setDifficulty(parsedState.difficulty || 'medium');
+      setProfilePicture(parsedState.profilePicture || '');
+      setContractAddress(parsedState.contractAddress || '');
+      setNetwork(parsedState.network || 'Ethereum');
+      setContractType(parsedState.contractType || 'ERC20');
+      setValidUntil(parsedState.validUntil || '');
+      setContractDetails(parsedState.contractDetails || [{ key: '', value: '' }]);
+      setWitnesses(parsedState.witnesses || [{ name: '', signature: '' }]);
+      setParty1Name(parsedState.party1Name || '');
+      setParty2Name(parsedState.party2Name || '');
+      setParty1Sign(parsedState.party1Sign || '');
+      setParty2Sign(parsedState.party2Sign || '');
+      setContractTerms(parsedState.contractTerms || '');
+      setContractDate(parsedState.contractDate || '');
+      setContractValue(parsedState.contractValue || '');
+      setCelebrantName(parsedState.celebrantName || '');
+      setAge(parsedState.age || '');
+      setMenuTitleColor(parsedState.menuTitleColor || '#333');
+      setMenuSubtitleColor(parsedState.menuSubtitleColor || '#666');
+      setMenuDateColor(parsedState.menuDateColor || '#666');
+      setInnerCardColor(parsedState.innerCardColor || '#ffffff');
+      setMessage(parsedState.message || '');
+      setWishType(parsedState.wishType || 'Happy Birthday');
+      setBudgetCategories(parsedState.budgetCategories || [{ category: '', amount: 0 }]);
+      setTotalBudget(parsedState.totalBudget || 0);
+      setRemainingBudget(parsedState.remainingBudget || 0);
+      setShowTopPart(parsedState.showTopPart || false);
+      setMoodPicture(parsedState.moodPicture || '');
+      setMoodSmiley(parsedState.moodSmiley || '😊');
+      setDate(parsedState.date || '');
+      setName(parsedState.name || '');
+      setTitleColor(parsedState.titleColor || '#000000');
+      setMenuDate(parsedState.menuDate || null);
+      setIsDateOptional(parsedState.isDateOptional || false);
+      setSubtitleColor(parsedState.subtitleColor || '#000000');
+      setDescriptionColor(parsedState.descriptionColor || '#000000');
+      setDateNameColor(parsedState.dateNameColor || '#000000');
+      setFieldValues(parsedState.fieldValues || {
+        celebrantName: '',
+        age: '',
+        cardDate: '',
+        birthdayDate: '',
+        birthdayMessage: '',
+        daysUntil: '',
+      });
+      setFieldColors(parsedState.fieldColors || {
+        celebrantName: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+        age: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+        cardDate: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+        birthdayDate: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+        birthdayMessage: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+        daysUntil: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+      });
+      setBackgroundColor(parsedState.backgroundColor || '#ffffff');
+      setAffirmationText(parsedState.affirmationText || '');
+      setAffirmationTime(parsedState.affirmationTime || '');
+      setAffirmationDate(parsedState.affirmationDate || '');
+      setTips(parsedState.tips || []);
+      setChefTips(parsedState.chefTips || []);
+      setAffirmationTextColor(parsedState.affirmationTextColor || '#000000');
+      setCardBackgroundColor(parsedState.cardBackgroundColor || '#ffffff');
+      setCategoryName(parsedState.categoryName || '');
+      setCategoryDescription(parsedState.categoryDescription || '');
+      setMenuItemName(parsedState.menuItemName || '');
+      setMenuItemDescription(parsedState.menuItemDescription || '');
+      setMenuItemPrice(parsedState.menuItemPrice || '');
+      setMenuItemTags(parsedState.menuItemTags || '');
+      setInputStyles(parsedState.inputStyles || {
+        backgroundColor: '#ffffff',
+        borderColor: '#cccccc',
+        textColor: '#000000',
+      });
+      setMenuItemImage(parsedState.menuItemImage || null);
+      setMenuTitle(parsedState.menuTitle || '');
+      setHeroImage(parsedState.heroImage || null);
+      seteventImage(parsedState.eventImage || null);
+      setflyerImage(parsedState.flyerImage || null);
+      setMenuSubtitle(parsedState.menuSubtitle || '');
+      setMenuCategories(parsedState.menuCategories || []);
+      setSpecialItemDescription(parsedState.specialItemDescription || '');
+      setMenuBackgroundColor(parsedState.menuBackgroundColor || '#FFFFFF');
+      setCategoryTextColor(parsedState.categoryTextColor || '#555');
+      setItemTitleColor(parsedState.itemTitleColor || '#333');
+      setItemDescriptionColor(parsedState.itemDescriptionColor || '#555');
+      setShowIDCard(parsedState.showIDCard || false);
+      setIDCardDetails(parsedState.idCardDetails || {
+        name: '',
+        idNumber: '',
+        department: '',
+        issueDate: '',
+        expiryDate: '',
+        photo: ''
+      });
+      setParty1Signature(parsedState.party1Signature || '');
+      setParty2Signature(parsedState.party2Signature || '');
+      setBudgetState(parsedState.budgetState || {
+        totalBudget: 0,
+        categories: [],
+        monthYear: new Date().toISOString().slice(0, 7),
+        currency: 'NGN'
+      });
+      setCardColor(parsedState.cardColor || {
+        business: '#ffffff',
+        event: '#ff5733',
+        product: '#33ff57',
+        invoice: '#3357ff',
+        receipt: '#ffffff',
+        einvoice: '#ff33f5',
+        flyer: '#f5ff33',
+        recipe: '#33fff5',
+        contract: '#000000',
+        birthday: '#ff33a8',
+        budget: '#33ffa8',
+        idCard: '#ffffff',
+        mood: '#ffeb3b',
+        affirmations: '#ffeb3b',
+        menu: '#ffffff',
+        brand: '#ffffff',
+        invitation: '#ffeb3b',
+      });
+      setfooterCardColor(parsedState.footerCardColor || '#ffffff');
+      setSelectedTemplate(parsedState.selectedTemplate || {
+        business: 'minimal',
+        event: 'elegant',
+        product: 'grid',
+        invoice: 'detailed',
+        receipt: 'compact',
+        einvoice: 'classic',
+        flyer: 'minimal',
+        recipe: 'classic',
+        contract: 'simple',
+        birthday: 'elegant',
+        budget: 'visual',
+        idCard: 'minimal',
+        mood: 'energetic',
+        affirmations: 'minimal',
+        menu: 'minimal',
+        brand: 'minimal',
+        invitation: 'minimal',
+      });
     }
   }, []);
-
+  
   useEffect(() => {
     const pageState = {
       selectedVariant,
@@ -768,8 +954,118 @@ const saveSignature = (
       gradientTo,
       solidColor,
       textColors,
+      showfooterPart,
+      footerColor,
+      productImage,
+      cardProduct,
+      ageBorderColor,
+      ageBackground,
+      ageColor,
+      celebrantNameBackground,
+      celebrantNameColor,
+      birthdayDate,
+      cardDate,
+      occasion,
+      inviterName,
+      inviteeName,
+      affirmationTitle,
+      brandName,
+      tagline,
+      orderPolicies,
+      contactInfo,
+      socialMediaLinks,
+      includeBottomPart,
+      invoiceNumber,
+      items,
+      taxRate,
+      dueDate,
+      eventName,
+      eventTime,
+      productImageState,
+      showBottomPart,
+      eventDate,
+      eventLocation,
+      eventType,
+      cookingTime,
+      servings,
+      ingredients,
+      instructions,
+      difficulty,
+      profilePicture,
+      contractAddress,
+      network,
+      contractType,
+      validUntil,
+      contractDetails,
+      witnesses,
+      party1Name,
+      party2Name,
+      party1Sign,
+      party2Sign,
+      contractTerms,
+      contractDate,
+      contractValue,
+      celebrantName,
+      age,
+      menuTitleColor,
+      menuSubtitleColor,
+      menuDateColor,
+      innerCardColor,
+      message,
+      wishType,
+      budgetCategories,
+      totalBudget,
+      remainingBudget,
+      showTopPart,
+      moodPicture,
+      moodSmiley,
+      date,
+      name,
+      titleColor,
+      menuDate,
+      isDateOptional,
+      subtitleColor,
+      descriptionColor,
+      dateNameColor,
+      fieldValues,
+      fieldColors,
+      backgroundColor,
+      affirmationText,
+      affirmationTime,
+      affirmationDate,
+      tips,
+      chefTips,
+      affirmationTextColor,
+      cardBackgroundColor,
+      categoryName,
+      categoryDescription,
+      menuItemName,
+      menuItemDescription,
+      menuItemPrice,
+      menuItemTags,
+      inputStyles,
+      menuItemImage,
+      menuTitle,
+      heroImage,
+      eventImage,
+      flyerImage,
+      menuSubtitle,
+      menuCategories,
+      specialItemDescription,
+      menuBackgroundColor,
+      categoryTextColor,
+      itemTitleColor,
+      itemDescriptionColor,
+      showIDCard,
+      idCardDetails,
+      party1Signature,
+      party2Signature,
+      budgetState,
+      cardColor,
+      footerCardColor,
+      selectedTemplate,
     };
-
+  
     localStorage.setItem('pageState', JSON.stringify(pageState));
   }, [
     selectedVariant,
@@ -788,6 +1084,116 @@ const saveSignature = (
     gradientTo,
     solidColor,
     textColors,
+    showfooterPart,
+    footerColor,
+    productImage,
+    cardProduct,
+    ageBorderColor,
+    ageBackground,
+    ageColor,
+    celebrantNameBackground,
+    celebrantNameColor,
+    birthdayDate,
+    cardDate,
+    occasion,
+    inviterName,
+    inviteeName,
+    affirmationTitle,
+    brandName,
+    tagline,
+    orderPolicies,
+    contactInfo,
+    socialMediaLinks,
+    includeBottomPart,
+    invoiceNumber,
+    items,
+    taxRate,
+    dueDate,
+    eventName,
+    eventTime,
+    productImageState,
+    showBottomPart,
+    eventDate,
+    eventLocation,
+    eventType,
+    cookingTime,
+    servings,
+    ingredients,
+    instructions,
+    difficulty,
+    profilePicture,
+    contractAddress,
+    network,
+    contractType,
+    validUntil,
+    contractDetails,
+    witnesses,
+    party1Name,
+    party2Name,
+    party1Sign,
+    party2Sign,
+    contractTerms,
+    contractDate,
+    contractValue,
+    celebrantName,
+    age,
+    menuTitleColor,
+    menuSubtitleColor,
+    menuDateColor,
+    innerCardColor,
+    message,
+    wishType,
+    budgetCategories,
+    totalBudget,
+    remainingBudget,
+    showTopPart,
+    moodPicture,
+    moodSmiley,
+    date,
+    name,
+    titleColor,
+    menuDate,
+    isDateOptional,
+    subtitleColor,
+    descriptionColor,
+    dateNameColor,
+    fieldValues,
+    fieldColors,
+    backgroundColor,
+    affirmationText,
+    affirmationTime,
+    affirmationDate,
+    tips,
+    chefTips,
+    affirmationTextColor,
+    cardBackgroundColor,
+    categoryName,
+    categoryDescription,
+    menuItemName,
+    menuItemDescription,
+    menuItemPrice,
+    menuItemTags,
+    inputStyles,
+    menuItemImage,
+    menuTitle,
+    heroImage,
+    eventImage,
+    flyerImage,
+    menuSubtitle,
+    menuCategories,
+    specialItemDescription,
+    menuBackgroundColor,
+    categoryTextColor,
+    itemTitleColor,
+    itemDescriptionColor,
+    showIDCard,
+    idCardDetails,
+    party1Signature,
+    party2Signature,
+    budgetState,
+    cardColor,
+    footerCardColor,
+    selectedTemplate,
   ]);
 
   
