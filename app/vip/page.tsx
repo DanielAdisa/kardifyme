@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from 'react';
+import { SketchPicker } from 'react-color';
 import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
@@ -3760,20 +3761,20 @@ const baseLabelStyles = `
   {/* Style Controls */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
     {/* Card Color Picker */}
-    <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
+    <div className="space-y-2 bg-white p-4 mx-auto rounded-2xl border border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
         Card Color
         <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
       </label>
       <div className="relative group">
-        <input
-          type="color"
-          value={cardColor[selectedVariant]}
-          onChange={(e) => setCardColor({ ...cardColor, [selectedVariant]: e.target.value })}
-          className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
-                   hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
-          title="Select card color"
-        />
+        <div title="Select card color">
+          <SketchPicker
+            color={cardColor[selectedVariant]}
+            onChange={(color) => setCardColor({ ...cardColor, [selectedVariant]: color.hex })}
+            className="w-full h-fit p-4 cursor-pointer transition-transform duration-200 
+                     "
+          />
+        </div>
         <div className="absolute inset-0 rounded-xl ring-2 ring-gray-200 pointer-events-none 
                       transition-opacity opacity-0 group-hover:opacity-100" />
       </div>
