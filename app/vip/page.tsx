@@ -3760,7 +3760,7 @@ const baseLabelStyles = `
 
   {/* Style Controls */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-    {/* Card Color Picker */}
+    {/* Card Color Picker1 */}
     <div className="space-y-2 bg-white p-4 mx-auto rounded-2xl border border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
         Card Color
