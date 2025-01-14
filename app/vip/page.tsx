@@ -1153,124 +1153,376 @@ const baseLabelStyles = `
 
 
 
-    {/* Business Variant Display */}
-    <div className= "">
+    {/* Business Variant Display Start */}
+                <div className= "">
 
-      {/* Business Default Variant */}
-      {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
-  <div
-    className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
-    style={{
-      background: bgType === 'gradient'
-        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-        : bgType === 'solid'
-        ? solidColor
-        : 'none',
-    }}
-  >
-    {/* Background Decorations */}
-    <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent pointer-events-none"></div>
-    <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl transition-transform duration-500 transform group-hover:scale-110"></div>
-    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-xl"></div>
+            {/* Business Default Variant */}
+            {/* Business Default Variant */}
+              {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
+            <div
+            className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
+            style={{
+              background: bgType === 'gradient'
+                ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                : bgType === 'solid'
+                ? solidColor
+                : 'none',
+            }}
+            >
+            {/* Background Decorations */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent pointer-events-none"></div>
+            <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl transition-transform duration-500 transform group-hover:scale-110"></div>
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-xl"></div>
 
-    {/* Card Content */}
-    <div className="relative z-10">
-      {/* Header Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        {/* Title and Description */}
-        <div className="space-y-4">
-          <h3
-            className="text-2xl md:text-3xl font-bold tracking-tight text-stone-50"
-            style={{ color: titleColor }}
-          >
-            {title}
-          </h3>
-          <div className="h-1 w-20 bg-gradient-to-r from-white/50 to-transparent rounded-full"></div>
-          <p
-            className="text-sm md:text-base leading-relaxed text-stone-50/90"
-            style={{ color: titleColor }}
-          >
-            {description}
-          </p>
-        </div>
+            {/* Card Content */}
+            <div className="relative z-10">
+              {/* Header Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                {/* Title and Description */}
+                <div className="flex w-full  justify-between items-center">
+                  <div className="w-1/3">
+                {logo && (
+                    <div className="flex justify-center mt-">
+                      <div className="relative w-20 h-20">
+                        <Image
+                          src={logo}
+                          alt="Logo"
+                          fill
+                          className="rounded-full object-cover border-2 border-white/50 shadow-md"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  </div>
+                  <div className=' w-2/3'>
+                    <h3
+                      className="text-2xl md:text-3xl font-bold tracking-tight text-stone-50"
+                      style={{ color: titleColor }}
+                    >
+                      {title}
+                    </h3>
+                    <div className="h-1 w-20 bg-gradient-to-r from-white/50 to-transparent rounded-full"></div>
+                    <p
+                      className="text-sm md:text-base leading-relaxed text-stone-50/90"
+                      style={{ color: titleColor }}
+                    >
+                      {description}
+                    </p>
+                  </div>
+                  
 
-        {/* QR Code */}
-        {qrUrl && (
-          <div className="flex justify-center md:justify-end">
-            <div className="bg-white/90 p-4 rounded-2xl shadow-md backdrop-blur-sm transform transition-transform duration-300 group-hover:scale-105">
-              <QRCodeSVG value={qrUrl} size={100} />
-              <p className="text-xs text-center font-medium text-gray-600 mt-2">
-                Scan to connect
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
+                </div>
 
-      {/* Divider */}
-      <div className="my-6">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-      </div>
-
-      {/* Content Section */}
-      <div>
-        <p
-          className="text-sm md:text-base leading-relaxed text-stone-50/80 whitespace-pre-line"
-          style={{ color: titleColor }}
-        >
-          {largeDescription}
-        </p>
-      </div>
-    </div>
-  </div>
-)}
-
-
-      {/* Business Variant Style 1 */}
-        {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
-          <div className={`relative p-6 rounded-xl shadow-lg overflow-hidden`}
-            style={{ backgroundColor: backgroundColor }}>
-            <div className="flex justify-between items-start">
-              <div className="space-y-4">
-                <h3 className="text-4xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-                <p className="text-2xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
+                {/* QR Code */}
+                {qrUrl && (
+                  <div className="flex justify-center md:justify-end">
+                    <div className="bg-white/90 p-4 rounded-2xl shadow-md backdrop-blur-sm transform transition-transform duration-300 group-hover:scale-105">
+                      <QRCodeSVG value={qrUrl} size={100} />
+                      <p className="text-xs text-center font-medium text-gray-600 mt-2">
+                        Scan to connect
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
-              {qrUrl && (
-                <div className="bg-white p-3 rounded-lg shadow-md">
-                  <QRCodeSVG value={qrUrl} size={80} />
+
+              {/* Divider */}
+              <div className="my-6">
+                <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              </div>
+
+              {/* Content Section */}
+              <div>
+                <p
+                  className="text-sm md:text-base leading-relaxed text-stone-50/80 whitespace-pre-line"
+                  style={{ color: titleColor }}
+                >
+                  {largeDescription}
+                </p>
+              </div>
+            </div>
+            </div>
+              )}
+
+
+            {/* Business Variant Style 1 */}
+            {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
+              <div
+                className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
+                style={{
+                  background: bgType === 'gradient'
+                    ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                    : bgType === 'solid'
+                    ? solidColor
+                    : 'none',
+                }}
+              >
+                {/* Background Decorations */}
+                <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent pointer-events-none"></div>
+                <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl transition-transform duration-500 transform group-hover:scale-110"></div>
+                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-xl"></div>
+
+                {/* Card Content */}
+                <div className="relative z-10 space-y-6">
+                  {/* Header Section */}
+                  <div className="flex items-center gap-4">
+                    {/* Logo */}
+                    {logo && (
+                      <div className="w-16 h-16 bg-white/10 p-1 rounded-full shadow-md flex items-center justify-center">
+                        <img
+                          src={logo}
+                          alt="Logo"
+                          className="rounded-full object-cover w-full h-full"
+                        />
+                      </div>
+                    )}
+
+                    {/* Title and Description */}
+                    <div className="flex-1 space-y-2">
+                      <h3
+                        className="text-xl md:text-2xl font-bold tracking-tight text-stone-50"
+                        style={{ color: titleColor }}
+                      >
+                        {title}
+                      </h3>
+                      <p
+                        className="text-sm md:text-base leading-relaxed text-stone-50/80"
+                        style={{ color: titleColor }}
+                      >
+                        {description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* QR Code */}
+                  {qrUrl && (
+                    <div className="flex justify-center">
+                      <div className="bg-white/90 p-4 rounded-2xl shadow-md backdrop-blur-sm transition-transform transform group-hover:scale-105 duration-300">
+                        <QRCodeSVG value={qrUrl} size={100} />
+                        <p className="text-xs text-center font-medium text-gray-600 mt-2">
+                          Scan to connect
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Divider */}
+                  <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+
+                  {/* Content Section */}
+                  <div>
+                    <p
+                      className="text-sm md:text-base leading-relaxed text-stone-50/80 whitespace-pre-line"
+                      style={{ color: titleColor }}
+                    >
+                      {largeDescription}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+
+            {/* Business Variant Style 2 */}
+            {selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
+              <div
+                className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl bg-white"
+                style={{
+                  background: bgType === 'gradient'
+                    ? `linear-gradient(to bottom, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                    : bgType === 'solid'
+                    ? solidColor
+                    : '#f8f9fa',
+                }}
+              >
+                {/* Background Decorations */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-200/30 to-transparent pointer-events-none"></div>
+                <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-gray-300/20 rounded-full blur-2xl"></div>
+
+                {/* Card Content */}
+                <div className="relative z-10 text-center space-y-4">
+                  {/* Logo */}
+                  {logo && (
+                    <div className="flex justify-center">
+                      <img
+                        src={logo}
+                        alt="Logo"
+                        className="w-16 h-16 rounded-full border-2 border-gray-300"
+                      />
+                    </div>
+                  )}
+
+                  {/* Title and Description */}
+                  <h3
+                    className="text-2xl font-bold text-gray-900 tracking-tight"
+                    style={{ color: titleColor }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    className="text-sm text-gray-600"
+                    style={{ color: titleColor }}
+                  >
+                    {description}
+                  </p>
+
+                  {/* Divider */}
+                  <div className="w-16 mx-auto h-0.5 bg-gray-300"></div>
+
+                  {/* Content */}
+                  <p
+                    className="text-sm text-gray-800 leading-relaxed whitespace-pre-line"
+                    style={{ color: titleColor }}
+                  >
+                    {largeDescription}
+                  </p>
+
+                  {/* QR Code */}
+                  {qrUrl && (
+                    <div className="mt-4 flex p-2 bg-white/90 w-fit mx-auto rounded-xl justify-center">
+                      <QRCodeSVG value={qrUrl} size={80} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+
+              {/* Business Variant Style 3 */}
+              {selectedVariant === 'business' && selectedVariantStyle === 'style3' && (
+                <div
+                  className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
+                  style={{
+                    background: bgType === 'gradient'
+                      ? `linear-gradient(to right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                      : bgType === 'solid'
+                      ? solidColor
+                      : '#f4f4f5',
+                  }}
+                >
+                  {/* Background Decorations */}
+                  <div className="absolute -top-16 -right-16 w-40 h-40 bg-white/20 rounded-full blur-xl"></div>
+                  <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-lg"></div>
+
+                  {/* Card Content */}
+                  <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    {/* Logo and Basic Info */}
+                    <div className="space-y-4">
+                      {logo && (
+                        <div className="flex justify-center">
+                          <img
+                            src={logo}
+                            alt="Logo"
+                            className="w-20 h-20 rounded-full border-2 border-gray-200 shadow-md"
+                          />
+                        </div>
+                      )}
+                      <h3
+                        className="text-xl md:text-2xl font-bold text-gray-900"
+                        style={{ color: titleColor }}
+                      >
+                        {title}
+                      </h3>
+                      <p
+                        className="text-sm text-gray-700"
+                        style={{ color: titleColor }}
+                      >
+                        {description}
+                      </p>
+                    </div>
+
+                    {/* QR Code and Large Description */}
+                    <div className="space-y-6">
+                      {qrUrl && (
+                        <div className="flex justify-center md:justify-end">
+                          <div className="bg-white/90 p-4 rounded-lg shadow-md backdrop-blur-sm transform transition-transform duration-300 group-hover:scale-105">
+                            <QRCodeSVG value={qrUrl} size={100} />
+                            <p className="text-xs text-center font-medium text-gray-600 mt-2">
+                              Scan to Connect
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      <p
+                        className="text-sm md:text-base leading-relaxed text-gray-800 whitespace-pre-line"
+                        style={{ color: titleColor }}
+                      >
+                        {largeDescription}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
-            </div>
 
-            <div className="prose max-w-full">
-              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
-            </div>
-          </div>
-        )}
 
-      {/* Business Variant Style 2 */}
-        {selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
-          <div className={`relative p-8 rounded-2xl shadow-2xl overflow-hidden`}
-            style={{ backgroundColor: backgroundColor }}>
-            <div className="flex justify-between items-start">
-              <div className="space-y-5">
-                <h3 className="text-5xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-                <p className="text-3xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-              </div>
-              {qrUrl && (
-                <div className="bg-white p-4 rounded-xl shadow-md">
-                  <QRCodeSVG value={qrUrl} size={80} />
+
+              {/* Business Variant Style 4 */}
+              {selectedVariant === 'business' && selectedVariantStyle === 'style4' && (
+                <div
+                  className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-gray-800 to-gray-900 text-white"
+                  style={{
+                    background: bgType === 'gradient'
+                      ? `linear-gradient(to bottom, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                      : bgType === 'solid'
+                      ? solidColor
+                      : '#f8f9fa',
+                  }}>
+                  {/* Floating Decorations */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none"></div>
+                  <div className="absolute -top-16 -left-16 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                  <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+
+                  {/* Card Content */}
+                  <div className="relative z-10 space-y-6">
+                    {/* Logo and Title */}
+                    {logo && (
+                      <div className="flex justify-center">
+                        <img
+                          src={logo}
+                          alt="Logo"
+                          className="w-20 h-20 rounded-full border-2 border-gray-500 shadow-md"
+                        />
+                      </div>
+                    )}
+                    <h3
+                      className="text-2xl font-bold text-center tracking-wide"
+                      style={{ color: titleColor }}
+                    >
+                      {title}
+                    </h3>
+                    <p
+                      className="text-sm text-center"
+                      style={{ color: titleColor }}
+                    >
+                      {description}
+                    </p>
+
+                    {/* Divider */}
+                    <div className="w-16 mx-auto h-0.5 bg-white/20"></div>
+
+                    {/* QR Code */}
+                    {qrUrl && (
+                      <div className="flex justify-center">
+                        <div className="bg-white/20 p-4 rounded-lg shadow-md">
+                          <QRCodeSVG value={qrUrl} size={100} />
+                          <p className="text-xs text-center mt-2 text-gray-300">
+                            Scan to Connect
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Large Description */}
+                    <div className="text-sm md:text-base leading-relaxed text-gray-200 whitespace-pre-line">
+                      <p style={{ color: titleColor }}>{largeDescription}</p>
+                    </div>
+                  </div>
                 </div>
               )}
-            </div>
 
-            <div className="prose max-w-full">
-              <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
-            </div>
-          </div>
-        )}
 
-    </div>
+            </div>
+    {/* Business Variant Display Finish */} 
 
     {/* Flyer Display */}
     {selectedVariant === 'flyer' && (
@@ -6105,21 +6357,22 @@ const baseLabelStyles = `
 )}
 
 
-        {/* Business Variant Display */}
+      {/* Business Variant Display Start */}
         <div className= "">
 
         {/* Business Default Variant */}
-        {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
-        <div
+        {/* Business Default Variant */}
+          {selectedVariant === 'business' && selectedVariantStyle === 'default' && (
+      <div
         className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
         style={{
-        background: bgType === 'gradient'
-          ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-          : bgType === 'solid'
-          ? solidColor
-          : 'none',
+          background: bgType === 'gradient'
+            ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+            : bgType === 'solid'
+            ? solidColor
+            : 'none',
         }}
-        >
+      >
         {/* Background Decorations */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent pointer-events-none"></div>
         <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl transition-transform duration-500 transform group-hover:scale-110"></div>
@@ -6127,103 +6380,353 @@ const baseLabelStyles = `
 
         {/* Card Content */}
         <div className="relative z-10">
-        {/* Header Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-          {/* Title and Description */}
-          <div className="space-y-4">
-            <h3
-              className="text-2xl md:text-3xl font-bold tracking-tight text-stone-50"
-              style={{ color: titleColor }}
-            >
-              {title}
-            </h3>
-            <div className="h-1 w-20 bg-gradient-to-r from-white/50 to-transparent rounded-full"></div>
-            <p
-              className="text-sm md:text-base leading-relaxed text-stone-50/90"
-              style={{ color: titleColor }}
-            >
-              {description}
-            </p>
-          </div>
-
-          {/* QR Code */}
-          {qrUrl && (
-            <div className="flex justify-center md:justify-end">
-              <div className="bg-white/90 p-2 rounded-2xl shadow-md backdrop-blur-sm transform transition-transform duration-300 group-hover:scale-105">
-                <QRCodeSVG value={qrUrl} size={100} />
-                <p className="text-xs text-center font-medium text-gray-600 mt-2">
-                  Scan to connect
+          {/* Header Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            {/* Title and Description */}
+            <div className="flex w-full  justify-between items-center">
+              <div className="w-1/3">
+            {logo && (
+                <div className="flex justify-center mt-">
+                  <div className="relative w-20 h-20">
+                    <Image
+                      src={logo}
+                      alt="Logo"
+                      fill
+                      className="rounded-full object-cover border-2 border-white/50 shadow-md"
+                    />
+                  </div>
+                </div>
+              )}
+              </div>
+              <div className=' w-2/3'>
+                <h3
+                  className="text-2xl md:text-3xl font-bold tracking-tight text-stone-50"
+                  style={{ color: titleColor }}
+                >
+                  {title}
+                </h3>
+                <div className="h-1 w-20 bg-gradient-to-r from-white/50 to-transparent rounded-full"></div>
+                <p
+                  className="text-sm md:text-base leading-relaxed text-stone-50/90"
+                  style={{ color: titleColor }}
+                >
+                  {description}
                 </p>
               </div>
+              
+
             </div>
+
+            {/* QR Code */}
+            {qrUrl && (
+              <div className="flex justify-center md:justify-end">
+                <div className="bg-white/90 p-4 rounded-2xl shadow-md backdrop-blur-sm transform transition-transform duration-300 group-hover:scale-105">
+                  <QRCodeSVG value={qrUrl} size={100} />
+                  <p className="text-xs text-center font-medium text-gray-600 mt-2">
+                    Scan to connect
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Divider */}
+          <div className="my-6">
+            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          </div>
+
+          {/* Content Section */}
+          <div>
+            <p
+              className="text-sm md:text-base leading-relaxed text-stone-50/80 whitespace-pre-line"
+              style={{ color: titleColor }}
+            >
+              {largeDescription}
+            </p>
+          </div>
+        </div>
+      </div>
           )}
-        </div>
-
-        {/* Divider */}
-        <div className="my-6">
-          <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-        </div>
-
-        {/* Content Section */}
-        <div>
-          <p
-            className="text-sm md:text-base leading-relaxed text-stone-50/80 whitespace-pre-line"
-            style={{ color: titleColor }}
-          >
-            {largeDescription}
-          </p>
-        </div>
-        </div>
-        </div>
-        )}
 
 
         {/* Business Variant Style 1 */}
-          {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
-            <div className={`relative p-6 rounded-xl shadow-lg overflow-hidden`}
-              style={{ backgroundColor: backgroundColor }}>
-              <div className="flex justify-between items-start">
-                <div className="space-y-4">
-                  <h3 className="text-4xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-                  <p className="text-2xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-                </div>
-                {qrUrl && (
-                  <div className="bg-white p-3 rounded-lg shadow-md">
-                    <QRCodeSVG value={qrUrl} size={80} />
+        {selectedVariant === 'business' && selectedVariantStyle === 'style1' && (
+          <div
+            className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
+            style={{
+              background: bgType === 'gradient'
+                ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                : bgType === 'solid'
+                ? solidColor
+                : 'none',
+            }}
+          >
+            {/* Background Decorations */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent pointer-events-none"></div>
+            <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl transition-transform duration-500 transform group-hover:scale-110"></div>
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-xl"></div>
+
+            {/* Card Content */}
+            <div className="relative z-10 space-y-6">
+              {/* Header Section */}
+              <div className="flex items-center gap-4">
+                {/* Logo */}
+                {logo && (
+                  <div className="w-16 h-16 bg-white/10 p-1 rounded-full shadow-md flex items-center justify-center">
+                    <img
+                      src={logo}
+                      alt="Logo"
+                      className="rounded-full object-cover w-full h-full"
+                    />
                   </div>
                 )}
+
+                {/* Title and Description */}
+                <div className="flex-1 space-y-2">
+                  <h3
+                    className="text-xl md:text-2xl font-bold tracking-tight text-stone-50"
+                    style={{ color: titleColor }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    className="text-sm md:text-base leading-relaxed text-stone-50/80"
+                    style={{ color: titleColor }}
+                  >
+                    {description}
+                  </p>
+                </div>
               </div>
 
-              <div className="prose max-w-full">
-                <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+              {/* QR Code */}
+              {qrUrl && (
+                <div className="flex justify-center">
+                  <div className="bg-white/90 p-4 rounded-2xl shadow-md backdrop-blur-sm transition-transform transform group-hover:scale-105 duration-300">
+                    <QRCodeSVG value={qrUrl} size={100} />
+                    <p className="text-xs text-center font-medium text-gray-600 mt-2">
+                      Scan to connect
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Divider */}
+              <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+
+              {/* Content Section */}
+              <div>
+                <p
+                  className="text-sm md:text-base leading-relaxed text-stone-50/80 whitespace-pre-line"
+                  style={{ color: titleColor }}
+                >
+                  {largeDescription}
+                </p>
               </div>
             </div>
-          )}
+          </div>
+        )}
+
 
         {/* Business Variant Style 2 */}
-          {selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
-            <div className={`relative p-8 rounded-2xl shadow-2xl overflow-hidden`}
-              style={{ backgroundColor: backgroundColor }}>
-              <div className="flex justify-between items-start">
-                <div className="space-y-5">
-                  <h3 className="text-5xl font-bold text-stone-50" style={{ color: titleColor }}>{title}</h3>
-                  <p className="text-3xl font-medium whitespace-pre-line text-stone-50" style={{ color: titleColor }}>{description}</p>
-                </div>
-                {qrUrl && (
-                  <div className="bg-white p-4 rounded-xl shadow-md">
-                    <QRCodeSVG value={qrUrl} size={80} />
-                  </div>
-                )}
-              </div>
+        {selectedVariant === 'business' && selectedVariantStyle === 'style2' && (
+          <div
+            className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl bg-white"
+            style={{
+              background: bgType === 'gradient'
+                ? `linear-gradient(to bottom, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                : bgType === 'solid'
+                ? solidColor
+                : '#f8f9fa',
+            }}
+          >
+            {/* Background Decorations */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-200/30 to-transparent pointer-events-none"></div>
+            <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-gray-300/20 rounded-full blur-2xl"></div>
 
-              <div className="prose max-w-full">
-                <p className="text-lg text-stone-50 whitespace-pre-line leading-relaxed" style={{ color: titleColor }}>{largeDescription}</p>
+            {/* Card Content */}
+            <div className="relative z-10 text-center space-y-4">
+              {/* Logo */}
+              {logo && (
+                <div className="flex justify-center">
+                  <img
+                    src={logo}
+                    alt="Logo"
+                    className="w-16 h-16 rounded-full border-2 border-gray-300"
+                  />
+                </div>
+              )}
+
+              {/* Title and Description */}
+              <h3
+                className="text-2xl font-bold text-gray-900 tracking-tight"
+                style={{ color: titleColor }}
+              >
+                {title}
+              </h3>
+              <p
+                className="text-sm text-gray-600"
+                style={{ color: titleColor }}
+              >
+                {description}
+              </p>
+
+              {/* Divider */}
+              <div className="w-16 mx-auto h-0.5 bg-gray-300"></div>
+
+              {/* Content */}
+              <p
+                className="text-sm text-gray-800 leading-relaxed whitespace-pre-line"
+                style={{ color: titleColor }}
+              >
+                {largeDescription}
+              </p>
+
+              {/* QR Code */}
+              {qrUrl && (
+                <div className="mt-4 flex p-2 bg-white/90 w-fit mx-auto rounded-xl justify-center">
+                  <QRCodeSVG value={qrUrl} size={80} />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+
+          {/* Business Variant Style 3 */}
+          {selectedVariant === 'business' && selectedVariantStyle === 'style3' && (
+            <div
+              className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl"
+              style={{
+                background: bgType === 'gradient'
+                  ? `linear-gradient(to right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                  : bgType === 'solid'
+                  ? solidColor
+                  : '#f4f4f5',
+              }}
+            >
+              {/* Background Decorations */}
+              <div className="absolute -top-16 -right-16 w-40 h-40 bg-white/20 rounded-full blur-xl"></div>
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-lg"></div>
+
+              {/* Card Content */}
+              <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                {/* Logo and Basic Info */}
+                <div className="space-y-4">
+                  {logo && (
+                    <div className="flex justify-center">
+                      <img
+                        src={logo}
+                        alt="Logo"
+                        className="w-20 h-20 rounded-full border-2 border-gray-200 shadow-md"
+                      />
+                    </div>
+                  )}
+                  <h3
+                    className="text-xl md:text-2xl font-bold text-gray-900"
+                    style={{ color: titleColor }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    className="text-sm text-gray-700"
+                    style={{ color: titleColor }}
+                  >
+                    {description}
+                  </p>
+                </div>
+
+                {/* QR Code and Large Description */}
+                <div className="space-y-6">
+                  {qrUrl && (
+                    <div className="flex justify-center md:justify-end">
+                      <div className="bg-white/90 p-4 rounded-lg shadow-md backdrop-blur-sm transform transition-transform duration-300 group-hover:scale-105">
+                        <QRCodeSVG value={qrUrl} size={100} />
+                        <p className="text-xs text-center font-medium text-gray-600 mt-2">
+                          Scan to Connect
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <p
+                    className="text-sm md:text-base leading-relaxed text-gray-800 whitespace-pre-line"
+                    style={{ color: titleColor }}
+                  >
+                    {largeDescription}
+                  </p>
+                </div>
               </div>
             </div>
           )}
 
-        </div>
 
+
+          {/* Business Variant Style 4 */}
+          {selectedVariant === 'business' && selectedVariantStyle === 'style4' && (
+            <div
+              className="relative p-4 rounded-2xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-gray-800 to-gray-900 text-white"
+              style={{
+                background: bgType === 'gradient'
+                  ? `linear-gradient(to bottom, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                  : bgType === 'solid'
+                  ? solidColor
+                  : '#f8f9fa',
+              }}>
+              {/* Floating Decorations */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none"></div>
+              <div className="absolute -top-16 -left-16 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+              <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+
+              {/* Card Content */}
+              <div className="relative z-10 space-y-6">
+                {/* Logo and Title */}
+                {logo && (
+                  <div className="flex justify-center">
+                    <img
+                      src={logo}
+                      alt="Logo"
+                      className="w-20 h-20 rounded-full border-2 border-gray-500 shadow-md"
+                    />
+                  </div>
+                )}
+                <h3
+                  className="text-2xl font-bold text-center tracking-wide"
+                  style={{ color: titleColor }}
+                >
+                  {title}
+                </h3>
+                <p
+                  className="text-sm text-center"
+                  style={{ color: titleColor }}
+                >
+                  {description}
+                </p>
+
+                {/* Divider */}
+                <div className="w-16 mx-auto h-0.5 bg-white/20"></div>
+
+                {/* QR Code */}
+                {qrUrl && (
+                  <div className="flex justify-center">
+                    <div className="bg-white/20 p-4 rounded-lg shadow-md">
+                      <QRCodeSVG value={qrUrl} size={100} />
+                      <p className="text-xs text-center mt-2 text-gray-300">
+                        Scan to Connect
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Large Description */}
+                <div className="text-sm md:text-base leading-relaxed text-gray-200 whitespace-pre-line">
+                  <p style={{ color: titleColor }}>{largeDescription}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+
+        </div>
+      {/* Business Variant Display Finish */}   
 
 
 
