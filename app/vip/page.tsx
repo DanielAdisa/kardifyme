@@ -8,6 +8,7 @@ import place from "@/public/12.jpg"
 import SignatureCanvas from 'react-signature-canvas';
 import type ReactSignatureCanvas from 'react-signature-canvas';
 
+
 import { ethers } from 'ethers';
 import { ClockIcon, CalendarIcon } from '@heroicons/react/24/outline';
 
@@ -264,18 +265,6 @@ const currencyOptions = [
 
 type SocialMediaPlatform = 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube';
 
-// type TextColors = {
-//   [key in SocialMediaPlatform]: string;
-// };
-
-// type TextColors = {
-//   brandName: string;
-//   tagline: string;
-//   description: string;
-//   orderPolicies: string;
-//   contactInfo: string;
-//   [key: string]: string;
-// };
 
 type TextColors = {
   brandName: string;
@@ -286,10 +275,6 @@ type TextColors = {
   [key: string]: string;
 };
 
-// type TextColors = {
-//   tagline: string;
-//   // Add other properties as needed
-// };
 
 const CreateCard = () => {
   const [showfooterPart, setshowfooterPart] = useState(true);
@@ -320,16 +305,6 @@ const CreateCard = () => {
     contactInfo: string;
   }
   
-  // const textColors: TextColors = {
-  //   facebook: '#3b5998',
-  //   twitter: '#1da1f2',
-  //   instagram: '#e1306c',
-  //   linkedin: '#0077b5',
-  //   youtube: '#ff0000',
-  // description: '#000000',
-  // orderPolicies: '#000000',
-  // contactInfo: '#000000',
-  // };
   const [affirmationTitle, setAffirmationTitle] = useState('');
   const [backgroundImage, setBackgroundImage] = useState<string>('');
   const [title, setTitle] = useState('');
@@ -578,15 +553,7 @@ const [specialItemDescription, setSpecialItemDescription] = useState('');
 // const [specialItemImage, setSpecialItemImageState] = useState<string | null>(null);
 const [menuBackgroundColor, setMenuBackgroundColor] = useState('#FFFFFF');
 
-// function setSpecialItemImage(file: File): void {
-//   if (file) {
-//     const reader = new FileReader();
-//     reader.onload = (event) => {
-//       setSpecialItemImageState(event.target?.result as string);
-//     };
-//     reader.readAsDataURL(file);
-//   }
-// }
+
 
 
 const [categoryTextColor, setCategoryTextColor] = useState('#555');
@@ -733,6 +700,7 @@ const saveSignature = (
     }
   };
 
+
   interface DifficultyColorMap {
     easy: string;
     medium: string;
@@ -753,7 +721,74 @@ const saveSignature = (
 
   
   
-  
+  useEffect(() => {
+    const savedState = localStorage.getItem('pageState');
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      setSelectedVariant(parsedState.selectedVariant || 'business');
+      setSelectedVariantStyle(parsedState.selectedVariantStyle || 'default');
+      setTitle(parsedState.title || '');
+      setDescription(parsedState.description || '');
+      setLargeDescription(parsedState.largeDescription || '');
+      setQrUrl(parsedState.qrUrl || '');
+      setPrice(parsedState.price || '');
+      setCurrency(parsedState.currency || 'USD');
+      setLogo(parsedState.logo || null);
+      setBackgroundImage(parsedState.backgroundImage || null);
+      setBgType(parsedState.bgType || 'solid');
+      setGradientFrom(parsedState.gradientFrom || '#000000');
+      setGradientVia(parsedState.gradientVia || '#000000');
+      setGradientTo(parsedState.gradientTo || '#000000');
+      setSolidColor(parsedState.solidColor || '#ffffff');
+      setTextColors(parsedState.textColors || {
+        title: '#ffffff',
+        description: '#ffffff',
+        largeDescription: '#ffffff',
+        qrUrl: '#000000',
+        price: '#ffffff',
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const pageState = {
+      selectedVariant,
+      selectedVariantStyle,
+      title,
+      description,
+      largeDescription,
+      qrUrl,
+      price,
+      currency,
+      logo,
+      backgroundImage,
+      bgType,
+      gradientFrom,
+      gradientVia,
+      gradientTo,
+      solidColor,
+      textColors,
+    };
+
+    localStorage.setItem('pageState', JSON.stringify(pageState));
+  }, [
+    selectedVariant,
+    selectedVariantStyle,
+    title,
+    description,
+    largeDescription,
+    qrUrl,
+    price,
+    currency,
+    logo,
+    backgroundImage,
+    bgType,
+    gradientFrom,
+    gradientVia,
+    gradientTo,
+    solidColor,
+    textColors,
+  ]);
 
   
   // Add effect to check stored auth and version
@@ -908,33 +943,7 @@ const baseLabelStyles = `
     }
   };
 
-  // const TemplateSelector = () => (
-  //   <div className="space-y-4 mb-6">
-  //     <select
-  //       value={selectedTemplate[selectedVariant]}
-  //       onChange={(e) => setSelectedTemplate({
-  //         ...selectedTemplate,
-  //         [selectedVariant]: e.target.value
-  //       })}
-  //       className="w-full p-2 rounded-lg border"
-  //     >
-  //       {Object.keys(cardVariants[selectedVariant].templates).map((template) => (
-  //         <option key={template} value={template}>
-  //           {template.charAt(0).toUpperCase() + template.slice(1)}
-  //         </option>
-  //       ))}
-  //     </select>
-  //     <input
-  //       type="color"
-  //       value={cardColor[selectedVariant]}
-  //       onChange={(e) => setCardColor({
-  //         ...cardColor,
-  //         [selectedVariant]: e.target.value
-  //       })}
-  //       className="w-full h-10 rounded-lg"
-  //     />
-  //   </div>
-  // );
+
 
   function calculateDaysUntilNextBirthday(age: string): React.ReactNode {
     // If no age provided, return placeholder text
@@ -974,17 +983,7 @@ const baseLabelStyles = `
       return "Calculate your birthday countdown";
     }
   }
-  // const [specialItemImage, setSpecialItemImageState] = useState<string | null>(null);
 
-  // function setSpecialItemImage(file: File): void {
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => {
-  //       setSpecialItemImageState(e.target?.result as string);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
   
   interface MenuItem {
     name: string;
@@ -993,9 +992,7 @@ const baseLabelStyles = `
 
 
 
-  // function setProductImage(image: string) {
-  //   setImage(image);
-  // }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-20 p-3">
