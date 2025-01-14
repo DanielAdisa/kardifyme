@@ -1998,7 +1998,7 @@ const baseLabelStyles = `
                     objectFit="cover"
                     className="transition-transform duration-300 hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent"></div>
                 </div>
               )}
 
