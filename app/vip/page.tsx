@@ -708,6 +708,16 @@ const saveSignature = (
     [key: string]: string; // For default case
   }
 
+  const [dummyState, setDummyState] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDummyState(prev => prev + 1);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const getDifficultyColor = (difficulty: string): string => {
     const colorMap: DifficultyColorMap = {
       easy: 'bg-green-200 text-green-800',
@@ -934,7 +944,7 @@ const saveSignature = (
         invitation: 'minimal',
       });
     }
-  }, []);
+  }, [dummyState]);
   
   useEffect(() => {
     const pageState = {
