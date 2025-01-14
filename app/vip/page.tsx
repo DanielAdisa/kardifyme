@@ -923,7 +923,7 @@ const saveSignature = (
         brand: '#ffffff',
         invitation: '#ffeb3b',
       });
-      setfooterCardColor(parsedState.footerCardColor || '#ffffff');
+      setfooterCardColor(parsedState.footerCardColor || '#000');
       setSelectedTemplate(parsedState.selectedTemplate || {
         business: 'minimal',
         event: 'elegant',
