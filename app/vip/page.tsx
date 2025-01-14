@@ -606,7 +606,7 @@ const [cardColor, setCardColor] = useState({
   invitation: '#ffeb3b',
 });
 
-const [footerCardColor, setfooterCardColor] = useState('#ffffff')
+const [footerCardColor, setfooterCardColor] = useState('#000')
 
 const [selectedTemplate, setSelectedTemplate] = useState({
   business: 'minimal',
