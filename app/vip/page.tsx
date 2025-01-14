@@ -331,7 +331,7 @@ const CreateCard = () => {
   // contactInfo: '#000000',
   // };
   const [affirmationTitle, setAffirmationTitle] = useState('');
-  const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
+  const [backgroundImage, setBackgroundImage] = useState<string>('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [largeDescription, setLargeDescription] = useState('');
@@ -1526,97 +1526,100 @@ const baseLabelStyles = `
     {/* Business Variant Display Finish */} 
 
     {/* Flyer Display */}
-    {selectedVariant === 'flyer' && (
+{selectedVariant === 'flyer' && selectedVariantStyle === 'default' && (
   <div
-    className="relative p-2 rounded-b-none rounded-2xl shadow-2xl overflow-hidden"
+    className="relative p-2 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
     style={{
-      background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
+      background: bgType === 'gradient'
+        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : '#1a1a1a',
     }}
   >
     {/* Background Image */}
     {backgroundImage && (
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-40"
+        className="absolute inset-0 bg-cover bg-center opacity-50"
         style={{
-          backgroundImage: `url(${URL.createObjectURL(backgroundImage)})`,
+          backgroundImage: `url(${typeof backgroundImage === 'string' ? backgroundImage : URL.createObjectURL(backgroundImage)})`,
         }}
       ></div>
     )}
 
     {/* Decorative Elements */}
     <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
-    <div className="absolute -top-20 -right-20 w-80 h-80 bg-yellow-400/30 rounded-full blur-3xl"></div>
-    <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-500/30 rounded-full blur-3xl"></div>
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-400/20 rounded-full blur-[150px]"></div>
+    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-500/20 rounded-full blur-[150px]"></div>
 
-    {flyerImage && (
-          <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            <Image
-              src={flyerImage}
-              alt="Product Image"
-              layout="fill"
-              objectFit="cover"
-              className="transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-        )}
     {/* Flyer Content */}
-    <div className="relative z-10 h-full space-y-8 text-center">
+    <div className="relative z-10 space-y-8 text-center text-white">
       {/* Title */}
       <h3
-        className="text-5xl font-bold text-white"
+        className="text-4xl md:text-5xl font-extrabold uppercase tracking-wide"
         style={{ color: titleColor }}
       >
-        {title || "Party All Night!"}
+        {title || "Celebrate in Style!"}
       </h3>
 
-      {/* Description */}
+      {/* Subheading */}
       <p
-        className="text-2xl text-white/90"
-        style={{ color: titleColor }}
+        className="text-lg md:text-xl text-white/90"
+        style={{ color: descriptionColor }}
       >
-        {description || "Join us for an unforgettable evening!"}
+        {description || "An unforgettable evening awaits!"}
       </p>
 
+      {/* Flyer Image */}
+      {flyerImage && (
+        <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-lg">
+          <Image
+            src={flyerImage}
+            alt="Event Image"
+            layout="fill"
+            objectFit="cover"
+            className="transition-transform duration-300 hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        </div>
+      )}
+
       {/* Main Content */}
-      <div className=" p-6 rounded-xl bg-black/20 backdrop-blur-2xl shadow-md">
+      <div className="p-6 rounded-xl bg-black/50 backdrop-blur-lg shadow-md">
         <p
-          className="text-xl whitespace-pre-wrap text-white"
+          className="text-base md:text-lg leading-relaxed whitespace-pre-wrap"
           style={{ color: titleColor }}
         >
           {largeDescription ||
-            "Live music, drinks, and amazing vibes. Don't miss it!"}
+            "Join us for live music, entertainment, and memories to last a lifetime!"}
         </p>
       </div>
 
       {/* QR Code & Price */}
       <div className="flex flex-wrap justify-center gap-6">
         {qrUrl && (
-          <div className="backdrop-blur-2xl shadow-md bg-white/90 p-2 rounded-lg  h-fit  shadow-md">
-            <QRCodeSVG value={qrUrl} size={120} className=' mx-auto' />
-            <p
-              className="text-sm text-black mt-2"
-              
-            >
-              Scan for more
+          <div className="bg-white/80 p-4 rounded-lg shadow-md backdrop-blur-md">
+            <QRCodeSVG value={qrUrl} size={100} />
+            <p className="text-xs text-black mt-2 font-medium">
+              Scan for Details
             </p>
           </div>
         )}
         {price && !isNaN(parseFloat(price)) && (
-          <div className="backdrop-blur-2xl shadow-md bg-black/20 p-4 flex-1 rounded-2xl text-center shadow-md flex flex-col justify-center items-center">
-          <p
-            className="text-sm text-gray-700 mb-1"
-            style={{ color: titleColor }}
-          >
-            Admission Fee
-          </p>
-          <p
-            className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent"
-            style={{ color: titleColor }}
-          >
-            {formatCurrency(parseFloat(price), currency)}
-          </p>
-        </div>
+          <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 shadow-lg text-center">
+            <p
+              className="text-sm font-medium text-white mb-2"
+              style={{ color: titleColor }}
+            >
+              Admission Fee
+            </p>
+            <p
+              className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+              style={{ color: titleColor }}
+            >
+              {formatCurrency(parseFloat(price), currency)}
+            </p>
+          </div>
         )}
       </div>
 
@@ -1628,14 +1631,14 @@ const baseLabelStyles = `
               src={logo}
               alt="Logo"
               fill
-              className="rounded-xl object-cover border-2 border-white/50 shadow-md"
+              className="rounded-full object-cover border-2 border-white/50 shadow-md"
             />
           </div>
         </div>
       )}
     </div>
   </div>
-    )}
+)}
 
 
 {/* brandcard display */}
@@ -3425,16 +3428,39 @@ const baseLabelStyles = `
       {/* Background Image Upload */}
     <div>
       <label className="block text-gray-800 font-medium mb-2">Upload Background Image</label>
-      <input
-        type="file"
-        onChange={(e) => {
-          if (e.target.files) {
-            setBackgroundImage(e.target.files[0]);
-          }
-        }}
-        className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
-        accept="image/*"
-      />
+      
+      <div className="space-y-2">
+                {backgroundImage && (
+                  <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+                    <img src={backgroundImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+                    <button
+                      title="Delete Hero Image"
+                      onClick={() => setBackgroundImage('')}
+                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setBackgroundImage(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  accept="image/*"
+                />
+              </div>
+
     </div>
     </div>
 
@@ -6782,97 +6808,101 @@ const baseLabelStyles = `
 
 
     {/* Flyer Display */}
-    {selectedVariant === 'flyer' && (
+{/* Flyer Display */}
+{selectedVariant === 'flyer' && selectedVariantStyle === 'default' && (
   <div
-    className="relative p-2 rounded-b-none rounded-2xl shadow-2xl overflow-hidden"
+    className="relative p-2 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
     style={{
-      background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
+      background: bgType === 'gradient'
+        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : '#1a1a1a',
     }}
   >
     {/* Background Image */}
     {backgroundImage && (
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-40"
+        className="absolute inset-0 bg-cover bg-center opacity-50"
         style={{
-          backgroundImage: `url(${URL.createObjectURL(backgroundImage)})`,
+          backgroundImage: `url(${typeof backgroundImage === 'string' ? backgroundImage : URL.createObjectURL(backgroundImage)})`,
         }}
       ></div>
     )}
 
     {/* Decorative Elements */}
     <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
-    <div className="absolute -top-20 -right-20 w-80 h-80 bg-yellow-400/30 rounded-full blur-3xl"></div>
-    <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-500/30 rounded-full blur-3xl"></div>
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-400/20 rounded-full blur-[150px]"></div>
+    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-500/20 rounded-full blur-[150px]"></div>
 
-    {flyerImage && (
-          <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            <Image
-              src={flyerImage}
-              alt="Product Image"
-              layout="fill"
-              objectFit="cover"
-              className="transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-        )}
     {/* Flyer Content */}
-    <div className="relative z-10 h-full space-y-8 text-center">
+    <div className="relative z-10 space-y-8 text-center text-white">
       {/* Title */}
       <h3
-        className="text-5xl font-bold text-white"
+        className="text-4xl md:text-5xl font-extrabold uppercase tracking-wide"
         style={{ color: titleColor }}
       >
-        {title || "Party All Night!"}
+        {title || "Celebrate in Style!"}
       </h3>
 
-      {/* Description */}
+      {/* Subheading */}
       <p
-        className="text-2xl text-white/90"
-        style={{ color: titleColor }}
+        className="text-lg md:text-xl text-white/90"
+        style={{ color: descriptionColor }}
       >
-        {description || "Join us for an unforgettable evening!"}
+        {description || "An unforgettable evening awaits!"}
       </p>
 
+      {/* Flyer Image */}
+      {flyerImage && (
+        <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-lg">
+          <Image
+            src={flyerImage}
+            alt="Event Image"
+            layout="fill"
+            objectFit="cover"
+            className="transition-transform duration-300 hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        </div>
+      )}
+
       {/* Main Content */}
-      <div className=" p-6 rounded-xl bg-black/20 backdrop-blur-2xl shadow-md">
+      <div className="p-6 rounded-xl bg-black/50 backdrop-blur-lg shadow-md">
         <p
-          className="text-xl whitespace-pre-wrap text-white"
+          className="text-base md:text-lg leading-relaxed whitespace-pre-wrap"
           style={{ color: titleColor }}
         >
           {largeDescription ||
-            "Live music, drinks, and amazing vibes. Don't miss it!"}
+            "Join us for live music, entertainment, and memories to last a lifetime!"}
         </p>
       </div>
 
       {/* QR Code & Price */}
       <div className="flex flex-wrap justify-center gap-6">
         {qrUrl && (
-          <div className="backdrop-blur-2xl shadow-md bg-white/90 p-2 rounded-lg  h-fit  shadow-md">
-            <QRCodeSVG value={qrUrl} size={120} className=' mx-auto' />
-            <p
-              className="text-sm text-black mt-2"
-              
-            >
-              Scan for more
+          <div className="bg-white/80 p-4 rounded-lg shadow-md backdrop-blur-md">
+            <QRCodeSVG value={qrUrl} size={100} />
+            <p className="text-xs text-black mt-2 font-medium">
+              Scan for Details
             </p>
           </div>
         )}
         {price && !isNaN(parseFloat(price)) && (
-          <div className="backdrop-blur-2xl shadow-md bg-black/20 p-4 flex-1 rounded-2xl text-center shadow-md flex flex-col justify-center items-center">
-          <p
-            className="text-sm text-gray-700 mb-1"
-            style={{ color: titleColor }}
-          >
-            Admission Fee
-          </p>
-          <p
-            className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent"
-            style={{ color: titleColor }}
-          >
-            {formatCurrency(parseFloat(price), currency)}
-          </p>
-        </div>
+          <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 shadow-lg text-center">
+            <p
+              className="text-sm font-medium text-white mb-2"
+              style={{ color: titleColor }}
+            >
+              Admission Fee
+            </p>
+            <p
+              className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+              style={{ color: titleColor }}
+            >
+              {formatCurrency(parseFloat(price), currency)}
+            </p>
+          </div>
         )}
       </div>
 
@@ -6884,14 +6914,15 @@ const baseLabelStyles = `
               src={logo}
               alt="Logo"
               fill
-              className="rounded-xl object-cover border-2 border-white/50 shadow-md"
+              className="rounded-full object-cover border-2 border-white/50 shadow-md"
             />
           </div>
         </div>
       )}
     </div>
   </div>
-    )}
+)}
+
 
 
 {/* brandcard display */}
