@@ -1,13 +1,15 @@
 "use client";
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { SketchPicker } from 'react-color';
 import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { Switch } from '@headlessui/react';
 import place from "@/public/12.jpg"
 import SignatureCanvas from 'react-signature-canvas';
 import type ReactSignatureCanvas from 'react-signature-canvas';
+import { useLocalStorageState } from '@/hooks/useLocalStorageState';
 
 
 import { ethers } from 'ethers';
@@ -253,6 +255,19 @@ const cardVariants = {
       },
     },
   },
+  resume: {
+    templates: {
+      modern: {
+        font: 'font-serif',
+      },
+      classic: {
+        font: 'font-mono',
+      },
+      minimal: {
+        font: 'font-sans',
+      },
+    },
+  },
 };
 
 // Add currency options
@@ -277,7 +292,21 @@ type TextColors = {
 };
 
 
+
 const CreateCard = () => {
+  const [gradYear, setGradYear] = useState('');
+  const [institution, setInstitution] = useState('');
+  const [degree, setDegree] = useState('');
+  const [duration, setDuration] = useState('');
+  const [role, setRole] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [skills, setSkills] = useState<{ value: string }[]>([]);
+  const [location, setLocation] = useState('');
+  const [phone, setPhone] = useState('');
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [email, setEmail] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [fullName, setFullName] = useState('');
   const [showfooterPart, setshowfooterPart] = useState(true);
   const [footerColor, setFooterColor] = useState<string>('#FFFFFF'); // Default color
   const [productImage, setProductImage] = useState<string>('');
@@ -346,7 +375,7 @@ const [productImageState, setProductImageState] = useState<string | null>(null);
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   
   const cardRef = useRef<HTMLDivElement>(null);
@@ -372,11 +401,19 @@ const [ingredients, setIngredients] = useState<Ingredient[]>([{
 }]);
 const [instructions, setInstructions] = useState([{ step: '' }]);
 const [difficulty, setDifficulty] = useState('medium');
+const [celebrantNameBorderColor, setCelebrantNameBorderColor] = useState('#000000');
+
+
+const [workExperience, setWorkExperience] = useState([{ companyName: '', role: '', duration: '' }]);
+
+
+
 
 const [profilePicture, setProfilePicture] = useState('');
 const [contractAddress, setContractAddress] = useState('');
 const [network, setNetwork] = useState('Ethereum');
 const [contractType, setContractType] = useState('ERC20');
+
 const [validUntil, setValidUntil] = useState('');
 const [contractDetails, setContractDetails] = useState([{ key: '', value: '' }]);
 const [witnesses, setWitnesses] = useState([{ name: '', signature: '' }]);
@@ -489,6 +526,11 @@ const updateFieldColor = (field: keyof FieldColors, type: keyof FieldColor, colo
     [field]: { ...prev[field], [type]: color },
   }));
 };
+
+
+// const [education, setEducation] = useState([{ degree: '', institution: '', gradYear: '' }]);
+// const [hobbies, setHobbies] = useState(['']);
+
 
 const [backgroundColor, setBackgroundColor] = useState('#ffffff');
 const [affirmationText, setAffirmationText] = useState('');
@@ -605,8 +647,49 @@ const [cardColor, setCardColor] = useState({
   menu: '#ffffff',
   brand: '#ffffff',
   invitation: '#ffeb3b',
+  resume: '#ffffff',
 });
+// const [education, setEducation] = useState([{ degree: '', institution: '', gradYear: '' }]);
+// const [hobbies, setHobbies] = useState(['']);
 
+// Define interfaces for education and hobbies
+interface Education {
+  degree: string;
+  institution: string;
+  gradYear: string;
+}
+
+interface HobbyUpdateParams {
+  index: number;
+  value: string;
+}
+
+// Initialize state with type annotations
+const [education, setEducation] = useState<Education[]>([{ degree: '', institution: '', gradYear: '' }]);
+const [hobbies, setHobbies] = useState<string[]>(['']);
+
+// Functions to handle education fields
+const addEducation = (): void => setEducation([...education, { degree: '', institution: '', gradYear: '' }]);
+const removeEducation = (index: number): void => setEducation(education.filter((_, i) => i !== index));
+const updateEducation = (index: number, field: keyof Education, value: string): void => {
+  const newEducation = [...education];
+  newEducation[index][field] = value;
+  setEducation(newEducation);
+};
+
+// Functions to handle hobbies fields
+const addHobby = (): void => setHobbies([...hobbies, '']);
+const removeHobby = (index: number): void => setHobbies(hobbies.filter((_, i) => i !== index));
+interface HobbyUpdateParams {
+  index: number;
+  value: string;
+}
+
+const updateHobby = ({ index, value }: HobbyUpdateParams): void => {
+  const newHobbies = [...hobbies];
+  newHobbies[index] = value;
+  setHobbies(newHobbies);
+};
 const [footerCardColor, setfooterCardColor] = useState('#000')
 
 const [selectedTemplate, setSelectedTemplate] = useState({
@@ -627,6 +710,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   menu: 'minimal',
   brand: 'minimal',
   invitation: 'minimal',
+  resume: 'minimal',
 });
 
 const templateOptions = {
@@ -647,6 +731,7 @@ const templateOptions = {
   menu: ['modern', 'classic', 'minimal'],
   brand: ['modern', 'classic', 'minimal'],
   invitation: ['modern', 'classic', 'minimal'],
+  resume: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -758,6 +843,20 @@ const saveSignature = (
         qrUrl: '#000000',
         price: '#ffffff',
       });
+       setBgType(parsedState.bgType || 'solid');
+      setSolidColor(parsedState.solidColor || '#ffffff');
+      setGradientFrom(parsedState.gradientFrom || '#000000');
+      setGradientVia(parsedState.gradientVia || '#000000');
+      setGradientTo(parsedState.gradientTo || '#000000');
+      setFullName(parsedState.fullName || '');
+      setJobTitle(parsedState.jobTitle || '');
+      setEmail(parsedState.email || '');
+      setPhone(parsedState.phone || '');
+      setLocation(parsedState.location || '');
+      setSkills(parsedState.skills || [{ value: '' }]);
+      setWorkExperience(parsedState.workExperience || [{ companyName: '', role: '', duration: '' }]);
+      setEducation(parsedState.education || [{ degree: '', institution: '', gradYear: '' }]);
+      setHobbies(parsedState.hobbies || ['']);
       setshowfooterPart(parsedState.showfooterPart || false);
       setFooterColor(parsedState.footerColor || '#FFFFFF');
       setProductImage(parsedState.productImage || '');
@@ -966,6 +1065,15 @@ const saveSignature = (
       solidColor,
       textColors,
       showfooterPart,
+      fullName,
+      jobTitle,
+      email,
+      phone,
+      location,
+      skills,
+      workExperience,
+      education,
+      hobbies,
       footerColor,
       productImage,
       cardProduct,
@@ -1088,6 +1196,7 @@ const saveSignature = (
     price,
     currency,
     logo,
+    bgType, solidColor, gradientFrom, gradientVia, gradientTo, fullName, jobTitle, email, phone, location, skills, workExperience, education, hobbies,
     backgroundImage,
     bgType,
     gradientFrom,
@@ -1207,6 +1316,291 @@ const saveSignature = (
     selectedTemplate,
   ]);
 
+  const [cardState, setCardState] = useLocalStorageState('cardState', {
+    selectedVariant: 'business',
+    selectedVariantStyle: 'default',
+    title: '',
+    description: '',
+    largeDescription: '',
+    qrUrl: '',
+    price: '',
+    currency: 'USD',
+    logo: null,
+    backgroundImage: null,
+    bgType: 'solid',
+    gradientFrom: '#000000',
+    gradientVia: '#000000',
+    gradientTo: '#000000',
+    solidColor: '#ffffff',
+    textColors: {
+      title: '#ffffff',
+      description: '#ffffff',
+      largeDescription: '#ffffff',
+      qrUrl: '#000000',
+      price: '#ffffff',
+    },
+    showfooterPart: false,
+    footerColor: '#FFFFFF',
+    productImage: '',
+    cardProduct: null,
+    ageBorderColor: '',
+    ageBackground: '',
+    ageColor: '#000000',
+    celebrantNameBackground: '',
+    celebrantNameColor: '#000000',
+    birthdayDate: '',
+    cardDate: '',
+    occasion: '',
+    inviterName: '',
+    inviteeName: '',
+    affirmationTitle: '',
+    brandName: '',
+    tagline: '',
+    orderPolicies: '',
+    contactInfo: '',
+    socialMediaLinks: {
+      instagram: '',
+      facebook: '',
+      twitter: '',
+    },
+    includeBottomPart: false,
+    invoiceNumber: '',
+    items: [{ description: '', amount: 0 }],
+    taxRate: 0,
+    dueDate: '',
+    eventName: '',
+    eventTime: '',
+    productImageState: null,
+    showBottomPart: false,
+    eventDate: '',
+    eventLocation: '',
+    eventType: 'General Admission',
+    cookingTime: '',
+    servings: '',
+    ingredients: [{ item: '', amount: '', backgroundColor: '#ffffff', borderColor: '#000000', textColor: '#000000' }],
+    instructions: [{ step: '' }],
+    difficulty: 'medium',
+    profilePicture: '',
+    contractAddress: '',
+    network: 'Ethereum',
+    contractType: 'ERC20',
+    validUntil: '',
+    contractDetails: [{ key: '', value: '' }],
+    witnesses: [{ name: '', signature: '' }],
+    party1Name: '',
+    party2Name: '',
+    party1Sign: '',
+    party2Sign: '',
+    contractTerms: '',
+    contractDate: '',
+    contractValue: '',
+    celebrantName: '',
+    age: '',
+    menuTitleColor: '#333',
+    menuSubtitleColor: '#666',
+    menuDateColor: '#666',
+    innerCardColor: '#ffffff',
+    message: '',
+    wishType: 'Happy Birthday',
+    budgetCategories: [{ category: '', amount: 0 }],
+    totalBudget: 0,
+    remainingBudget: 0,
+    showTopPart: false,
+    moodPicture: '',
+    moodSmiley: '😊',
+    date: '',
+    name: '',
+    titleColor: '#000000',
+    menuDate: null,
+    isDateOptional: false,
+    subtitleColor: '#000000',
+    descriptionColor: '#000000',
+    dateNameColor: '#000000',
+    fieldValues: {
+      celebrantName: '',
+      age: '',
+      cardDate: '',
+      birthdayDate: '',
+      birthdayMessage: '',
+      daysUntil: '',
+    },
+    fieldColors: {
+      celebrantName: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+      age: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+      cardDate: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+      birthdayDate: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+      birthdayMessage: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+      daysUntil: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
+    },
+    backgroundColor: '#ffffff',
+    affirmationText: '',
+    affirmationTime: '',
+    affirmationDate: '',
+    tips: [],
+    chefTips: [],
+    affirmationTextColor: '#000000',
+    cardBackgroundColor: '#ffffff',
+    categoryName: '',
+    categoryDescription: '',
+    menuItemName: '',
+    menuItemDescription: '',
+    menuItemPrice: '',
+    menuItemTags: '',
+    inputStyles: {
+      backgroundColor: '#ffffff',
+      borderColor: '#cccccc',
+      textColor: '#000000',
+    },
+    menuItemImage: null,
+    menuTitle: '',
+    heroImage: null,
+    eventImage: null,
+    flyerImage: null,
+    menuSubtitle: '',
+    menuCategories: [],
+    specialItemDescription: '',
+    menuBackgroundColor: '#FFFFFF',
+    categoryTextColor: '#555',
+    itemTitleColor: '#333',
+    itemDescriptionColor: '#555',
+    showIDCard: false,
+    idCardDetails: {
+      name: '',
+      idNumber: '',
+      department: '',
+      issueDate: '',
+      expiryDate: '',
+      photo: ''
+    },
+    party1Signature: '',
+    party2Signature: '',
+    budgetState: {
+      totalBudget: 0,
+      categories: [],
+      monthYear: new Date().toISOString().slice(0, 7),
+      currency: 'NGN'
+    },
+    cardColor: {
+      business: '#ffffff',
+      event: '#ff5733',
+      product: '#33ff57',
+      invoice: '#3357ff',
+      receipt: '#ffffff',
+      einvoice: '#ff33f5',
+      flyer: '#f5ff33',
+      recipe: '#33fff5',
+      contract: '#000000',
+      birthday: '#ff33a8',
+      budget: '#33ffa8',
+      idCard: '#ffffff',
+      mood: '#ffeb3b',
+      affirmations: '#ffeb3b',
+      menu: '#ffffff',
+      brand: '#ffffff',
+      invitation: '#ffeb3b',
+      resume: '#ffffff',
+    },
+    footerCardColor: '#000',
+    selectedTemplate: {
+      business: 'minimal',
+      event: 'elegant',
+      product: 'grid',
+      invoice: 'detailed',
+      receipt: 'compact',
+      einvoice: 'classic',
+      flyer: 'minimal',
+      recipe: 'classic',
+      contract: 'simple',
+      birthday: 'elegant',
+      budget: 'visual',
+      idCard: 'minimal',
+      mood: 'energetic',
+      affirmations: 'minimal',
+      menu: 'minimal',
+      brand: 'minimal',
+      invitation: 'minimal',
+      resume: 'minimal',
+    }
+  });
+
+  const addSkill = () => setSkills([...skills, { value: '' }]);
+  const removeSkill = (index: number): void => setSkills(skills.filter((_, i) => i !== index));
+  interface Skill {
+    value: string;
+  }
+
+  const updateSkill = (index: number, value: string): void => {
+    const newSkills: Skill[] = [...skills];
+    newSkills[index].value = value;
+    setSkills(newSkills);
+  };
+
+  const addWorkExperience = () => setWorkExperience([...workExperience, { companyName: '', role: '', duration: '' }]);
+  interface WorkExperience {
+    companyName: string;
+    role: string;
+    duration: string;
+  }
+
+  const removeWorkExperience = (index: number): void => 
+    setWorkExperience(workExperience.filter((_: WorkExperience, i: number) => i !== index));
+  interface WorkExperienceField {
+    companyName: string;
+    role: string;
+    duration: string;
+  }
+
+  const updateWorkExperience = (
+    index: number, 
+    field: keyof WorkExperienceField, 
+    value: string
+  ): void => {
+    const newWorkExperience = [...workExperience];
+    newWorkExperience[index][field] = value;
+    setWorkExperience(newWorkExperience);
+  };
+
+  // const addEducation = () => setEducation([...education, { degree: '', institution: '', gradYear: '' }]);
+  // interface Education {
+  //   degree: string;
+  //   institution: string;
+  //   gradYear: string;
+  // }
+
+  // const removeEducation = (index: number): void => setEducation(education.filter((_: Education, i: number) => i !== index));
+  // interface EducationField {
+  //   degree: string;
+  //   institution: string;
+  //   gradYear: string;
+  // }
+
+  // const updateEducation = (
+  //   index: number, 
+  //   field: keyof EducationField, 
+  //   value: string
+  // ): void => {
+  //   const newEducation = [...education];
+  //   newEducation[index][field] = value;
+  //   setEducation(newEducation);
+  // };
+
+  // const addHobby = () => setHobbies([...hobbies, '']);
+  // const removeHobby = (index: number): void => setHobbies(hobbies.filter((_, i: number) => i !== index));
+  // interface HobbyUpdateParams {
+  //   index: number;
+  //   value: string;
+  // }
+
+  // const updateHobby = ({ index, value }: HobbyUpdateParams): void => {
+  //   const newHobbies: string[] = [...hobbies];
+  //   newHobbies[index] = value;
+  //   setHobbies(newHobbies);
+  // };
+
+  const updateCardState = (updates: Partial<typeof cardState>) => {
+    setCardState(prev => ({ ...prev, ...updates }));
+  };
+
   
   // Add effect to check stored auth and version
   useEffect(() => {
@@ -1292,14 +1686,8 @@ const saveSignature = (
     try {
       const content = cardRef.current;
       const dataUrl = await toPng(content, {
-        quality: 100,
-        pixelRatio: window.devicePixelRatio || 10,
-        width: content.offsetWidth,
-        height: content.offsetHeight,
-        style: {
-          transform: 'scale(1)',
-          transformOrigin: 'top left',
-        },
+        quality: 10,
+        pixelRatio: 10
       });
       const link = document.createElement('a');
       link.download = `${title || 'card'}-${Date.now()}.png`;
@@ -1520,7 +1908,7 @@ const baseLabelStyles = `
 
     {/* Product Variant */}
     {selectedVariant === 'product' && (
-  <div className={`relative p-3 pt-2 pb-2 rounded-2xl shadow-2xl overflow-hidden`} 
+  <div className={`relative p-3 pt-2 pb-2 rounded-2xl shadow-2xl overflow-hidden`}
     style={{ backgroundColor: backgroundColor }}>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* Left Column: Image + QR */}
@@ -1567,6 +1955,160 @@ const baseLabelStyles = `
     )}
 
 
+{selectedVariant === 'resume' && (
+  <div
+    className="relative min-h-[600px] p-4 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    style={{
+      background:
+        bgType === 'gradient'
+          ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+          : bgType === 'solid'
+          ? solidColor
+          : "#f9f9f9",
+    }}
+  >
+    <div className="relative z-10 flex flex-col items-center gap-8 text-center">
+      {/* Profile Picture */}
+      {profilePicture && (
+        <div className="transform hover:scale-110 transition-all duration-500">
+          <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
+            <img
+              src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)}
+              alt="Profile Picture"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Full Name and Job Title */}
+      <div>
+        {fullName && (
+          <h2
+            className="text-4xl md:text-5xl font-bold tracking-tight"
+            style={{ color: textColors.fullName }}
+          >
+            {fullName}
+          </h2>
+        )}
+        {jobTitle && (
+          <p
+            className="text-xl md:text-2xl font-light mt-1"
+            style={{ color: textColors.jobTitle }}
+          >
+            {jobTitle}
+          </p>
+        )}
+      </div>
+
+      {/* Contact Information */}
+      <div className="space-y-2 text-sm md:text-base">
+        {email && (
+          <p className="flex items-center justify-center gap-2">
+            <span className="font-medium">Email:</span>
+            <a
+              href={`mailto:${email}`}
+              className="underline hover:text-blue-500 transition-colors"
+              style={{ color: textColors.email }}
+            >
+              {email}
+            </a>
+          </p>
+        )}
+        {phone && (
+          <p className="flex items-center justify-center gap-2">
+            <span className="font-medium">Phone:</span>
+            <span style={{ color: textColors.phone }}>{phone}</span>
+          </p>
+        )}
+        {location && (
+          <p className="flex items-center justify-center gap-2">
+            <span className="font-medium">Location:</span>
+            <span style={{ color: textColors.location }}>{location}</span>
+          </p>
+        )}
+      </div>
+
+      {/* Skills */}
+{skills.length > 0 && (
+  <div className="w-full max-w-2xl">
+    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
+      Skills
+    </h3>
+    <ul className="flex flex-wrap justify-center gap-2 text-sm md:text-base">
+      {skills.map((skill, index) => (
+        <li
+          key={index}
+          className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md"
+          style={{ color: textColors.skills }}
+        >
+          {skill.value.trim()}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+      {/* Work Experience */}
+      {workExperience.length > 0 && (
+        <div className="w-full max-w-2xl text-left space-y-4">
+          <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+            Work Experience
+          </h3>
+          {workExperience.map((experience, index) => (
+            <div key={index} className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+              <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
+                {experience.companyName}
+              </p>
+              <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
+                {experience.role}
+              </p>
+              <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
+                {experience.duration}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Education */}
+{education.length > 0 && (
+  <div className="w-full max-w-2xl text-left space-y-4">
+    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+      Education
+    </h3>
+    {education.map((edu, index) => (
+      <div key={index} className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+        <p className="font-medium text-base md:text-lg" style={{ color: textColors.degree }}>
+          {edu.degree}
+        </p>
+        <p className="text-sm md:text-base italic" style={{ color: textColors.institution }}>
+          {edu.institution}
+        </p>
+        <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
+          {edu.gradYear}
+        </p>
+      </div>
+    ))}
+  </div>
+)}
+
+      {/* Hobbies */}
+      {hobbies.length > 0 && (
+  <div className="w-full max-w-2xl text-left space-y-4">
+    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
+      Hobbies
+    </h3>
+    <div className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+      <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
+        {hobbies.join(', ')}
+      </p>
+    </div>
+  </div>
+)}
+    </div>
+  </div>
+)}
 
     {/* Business Variant Display Start */}
                 <div className= "">
@@ -2683,10 +3225,10 @@ const baseLabelStyles = `
 
       {/* Right Column - Image, Difficulty */}
       <div className="space-y-8">
-        {image && (
+      {heroImage && (
           <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
             <Image 
-              src={typeof image === 'string' ? image : URL.createObjectURL(image)} 
+              src={heroImage} 
               alt={title} 
               width={400} 
               height={500} 
@@ -3480,6 +4022,80 @@ const baseLabelStyles = `
         </div>
       )}
 
+{/* Event Variant Style 4 - Playful and Fun Theme */}
+{selectedVariant === 'event' && selectedVariantStyle === 'style4' && (
+        <div
+          className="relative rounded-2xl shadow-2xl overflow-hidden"
+          style={{
+            background: bgType === 'gradient'
+              ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+              : bgType === 'solid'
+              ? solidColor
+              : 'none',
+          }}
+        >
+          <div className="absolute inset-0 bg-confetti-pattern opacity-20"></div>
+          <div className="relative p-6 sm:p-8">
+            <div className="flex flex-col items-center text-center space-y-6">
+              {eventImage && (
+                <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                  <Image
+                    src={eventImage}
+                    alt="Event Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              )}
+              <span className="inline-block px-4 py-1 bg-white/10 backdrop-blur-xl rounded-full text-xs font-medium text-white/80">
+                {new Date(eventDate).toLocaleString()}
+              </span>
+              <h3 className="text-4xl sm:text-5xl font-bold text-white bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                {title}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Date & Time</span>
+                  <p className="text-white font-medium">{new Date(eventDate).toLocaleString()}</p>
+                </div>
+                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                  <span className="block text-white/60 text-sm mb-1">Location</span>
+                  <p className="text-white font-medium">{eventLocation}</p>
+                </div>
+                {price && (
+                  <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl">
+                    <span className="block text-white/60 text-sm mb-1">Price</span>
+                    <p className="text-white font-medium">{formatCurrency(parseFloat(price), currency)}</p>
+                  </div>
+                )}
+              </div>
+              {qrUrl && (
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition"></div>
+                  <div className="relative bg-black p-4 rounded-xl">
+                    <QRCodeSVG value={qrUrl} size={120} />
+                    <p className="text-xs font-medium text-white/60 mt-2">Scan for verification</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-8 relative">
+              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              <div className="pt-8 space-y-4">
+                <h4 className="text-xl font-semibold text-white/90">Event Details</h4>
+                <p className="text-white/70 whitespace-pre-line leading-relaxed">{description}</p>
+                {largeDescription && (
+                  <div className="mt-6 pt-6 border-t border-white/10">
+                    <p className="text-white/60 whitespace-pre-line leading-relaxed">{largeDescription}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
 
     </div>
@@ -3654,6 +4270,12 @@ const baseLabelStyles = `
           
 {/* Checkbox Example */}
 <div className=" bg-white/80 p-3 shadow-md rounded-xl">
+      <input 
+        value={cardState.title}
+        onChange={e => updateCardState({ title: e.target.value })}
+        title="Enter card title"
+        placeholder="Card Title"
+      />
       <label className={baseLabelStyles}>Show Sections</label>
         <div className=" border m-4 "/>
       <div className="flex items-center justify-between">
@@ -3698,6 +4320,7 @@ const baseLabelStyles = `
     </label>
     <div className="relative mt-1">
       <select
+        title="Select card type"
         value={selectedVariant}
         onChange={(e) => setSelectedVariant(e.target.value as VariantType)}
         className="w-full p-4 pr-12 text-gray-700 bg-white rounded-2xl border border-gray-200 
@@ -3720,6 +4343,7 @@ const baseLabelStyles = `
         <option value="affirmations">💬 Affirmations</option>
         <option value="brand">🏷️ Brand Card</option>
         <option value="invitation">💌 Invitation</option>
+        <option value="resume">💬 Resume</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3809,15 +4433,14 @@ const baseLabelStyles = `
   <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
     <label className="block font-medium text-gray-700">
       Text Color
-      <span className="ml-2 text-sm text-gray-400">Set font color</span>
+      <span className="ml-2 w-full text-sm text-gray-400">Set font color</span>
     </label>
     <div className="relative group">
-      <input
-        type="color"
-        value={titleColor}
-        onChange={(e) => setTitleColor(e.target.value)}
-        className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
-                 hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+      <SketchPicker
+        color={titleColor}
+        onChange={(color) => setTitleColor(color.hex)}
+        className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                  border border-gray-200"
       />
       
     </div>
@@ -3827,13 +4450,19 @@ const baseLabelStyles = `
       <span className="ml-2 text-sm text-gray-400">Set footer font color</span>
     </label>
     <div className="relative group">
-      <input
+    <SketchPicker
+        color={footerColor}
+        onChange={(color) => setFooterColor(color.hex)}
+        className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                  border border-gray-200"
+      />
+      {/* <input
         type="color"
         value={footerColor}
         onChange={(e) => setFooterColor(e.target.value)}
         className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
-      />
+      /> */}
       
     </div>
 
@@ -3842,12 +4471,18 @@ const baseLabelStyles = `
           <span className="ml-2 text-sm text-gray-400">Set Footer Color</span>
     </label>
       <div className="relative group">
-          <input
+          {/* <input
             type="color"
             value={footerCardColor}
             onChange={(e) => setfooterCardColor(e.target.value)}
             className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+          /> */}
+          <SketchPicker
+            color={footerCardColor}
+            onChange={(color) => setfooterCardColor(color.hex)}
+            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                      border border-gray-200"
           />
       </div>
         
@@ -4002,29 +4637,47 @@ const baseLabelStyles = `
           <>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientFrom}
                 onChange={(e) => setGradientFrom(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientFrom}
+                onChange={(color) => setGradientFrom(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientVia}
                 onChange={(e) => setGradientVia(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientVia}
+                onChange={(color) => setGradientVia(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientTo}
                 onChange={(e) => setGradientTo(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientTo}
+                onChange={(color) => setGradientTo(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
           </>
@@ -4032,11 +4685,17 @@ const baseLabelStyles = `
         {bgType === 'solid' && (
           <div>
             <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
-            <input
+            {/* <input
               type="color"
               value={solidColor}
               onChange={(e) => setSolidColor(e.target.value)}
               className="w-full h-10 rounded-lg border border-slate-300"
+            /> */}
+            <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
             />
           </div>
         )}
@@ -4078,30 +4737,48 @@ const baseLabelStyles = `
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div>
         <label className="block text-stone-950 mb-2">Gradient From</label>
-        <input
+        {/* <input
           type="color"
           value={gradientFrom}
           onChange={(e) => setGradientFrom(e.target.value)}
           className="w-full h-10 rounded-lg border border-slate-300"
+        /> */}
+        <SketchPicker
+              color={gradientFrom}
+              onChange={(color) => setGradientFrom(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
       <div>
         <label className="block text-stone-950 mb-2">Gradient Via</label>
-        <input
+        {/* <input
           type="color"
           value={gradientVia}
           onChange={(e) => setGradientVia(e.target.value)}
           className="w-full h-10 rounded-lg border border-slate-300"
-        />
+        /> */}
       </div>
+      <SketchPicker
+              color={gradientVia}
+              onChange={(color) => setGradientVia(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
       <div>
         <label className="block text-stone-950 mb-2">Gradient To</label>
-        <input
+        {/* <input
           type="color"
           value={gradientTo}
           onChange={(e) => setGradientTo(e.target.value)}
           className="w-full h-10 rounded-lg border border-slate-300"
-        />
+        /> */}
+        <SketchPicker
+              color={gradientTo}
+              onChange={(color) => setGradientTo(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
       </div>
       {/* Background Image Upload */}
     <div>
@@ -4243,7 +4920,7 @@ const baseLabelStyles = `
     {/* Brand Name */}
     <div>
       <label className="block text-gray-700 font-medium mb-2">Brand Name</label>
-      <div className="flex items-center gap-2">
+      <div className="items-center gap-2">
         <input
           type="text"
           value={brandName}
@@ -4251,20 +4928,25 @@ const baseLabelStyles = `
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
           placeholder="Enter brand name"
         />
-        <input
-          type="color"
-          value={textColors.brandName}
-          onChange={(e) => setTextColors({ ...textColors, brandName: e.target.value })}
-          className="w-10 h-10 rounded-lg border border-gray-300"
-          title="Brand Name Text Color"
+        <SketchPicker
+          color={textColors.brandName}
+          onChange={(color) => setTextColors({ ...textColors, brandName: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
+        {/* <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            /> */}
       </div>
     </div>
 
     {/* Tagline */}
     <div>
       <label className="block text-gray-700 font-medium mb-2">Tagline</label>
-      <div className="flex items-center gap-2">
+      <div className=" gap-2">
         <input
           type="text"
           value={tagline}
@@ -4272,12 +4954,18 @@ const baseLabelStyles = `
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
           placeholder="Enter tagline"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.tagline}
           onChange={(e) => setTextColors({ ...textColors, tagline: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300"
           title="Tagline Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.tagline}
+          onChange={(color) => setTextColors({ ...textColors, tagline: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
     </div>
@@ -4292,12 +4980,18 @@ const baseLabelStyles = `
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
           placeholder="Enter description"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.description}
           onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300"
           title="Description Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.description}
+          onChange={(color) => setTextColors({ ...textColors, description: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
     </div>
@@ -4312,12 +5006,19 @@ const baseLabelStyles = `
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
           placeholder="Enter order policies"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.orderPolicies}
           onChange={(e) => setTextColors({ ...textColors, orderPolicies: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300"
           title="Order Policies Text Color"
+        /> */}
+
+        <SketchPicker
+            color={textColors.orderPolicies}
+            onChange={(color) => setTextColors({ ...textColors, orderPolicies: color.hex })}
+            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
         />
       </div>
     </div>
@@ -4333,12 +5034,19 @@ const baseLabelStyles = `
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
           placeholder="Enter contact information"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.contactInfo}
           onChange={(e) => setTextColors({ ...textColors, contactInfo: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300"
           title="Contact Information Text Color"
+        /> */}
+
+        <SketchPicker
+            color={textColors.contactInfo}
+            onChange={(color) => setTextColors({ ...textColors, contactInfo: color.hex })}
+            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
         />
       </div>
     </div>
@@ -4356,13 +5064,19 @@ const baseLabelStyles = `
               className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
               placeholder={`Enter ${platform} link`}
             />
-            <input
-              type="color"
-              value={textColors[platform as keyof typeof textColors]}
-              onChange={(e) => setTextColors({ ...textColors, [platform]: e.target.value })}
-              className="w-10 h-10 rounded-lg border border-gray-300"
-              title={`${platform.charAt(0).toUpperCase() + platform.slice(1)} Text Color`}
+            <SketchPicker
+              color={textColors[platform as keyof typeof textColors]}
+              onChange={(color) => setTextColors({ ...textColors, [platform]: color.hex })}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
             />
+        {/* <SketchPicker
+            color={textColors.orderPolicies}
+            onChange={(color) => setTextColors({ ...textColors, orderPolicies: color.hex })}
+            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+        /> */}
+            
           </div>
         ))}
       </div>
@@ -4443,30 +5157,48 @@ const baseLabelStyles = `
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div>
         <label className="block text-gray-700 font-medium mb-2">Gradient From</label>
-        <input
+        {/* <input
           type="color"
           value={gradientFrom}
           onChange={(e) => setGradientFrom(e.target.value)}
           className="w-full h-10 rounded-lg border border-gray-300"
-        />
+        /> */}
+        <SketchPicker
+              color={gradientFrom}
+              onChange={(color) => setGradientFrom(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
       </div>
       <div>
         <label className="block text-gray-700 font-medium mb-2">Gradient Via</label>
-        <input
+        {/* <input
           type="color"
           value={gradientVia}
           onChange={(e) => setGradientVia(e.target.value)}
           className="w-full h-10 rounded-lg border border-gray-300"
-        />
+        /> */}
+        <SketchPicker
+              color={gradientVia}
+              onChange={(color) => setGradientVia(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
       </div>
       <div>
         <label className="block text-gray-700 font-medium mb-2">Gradient To</label>
-        <input
+        {/* <input
           type="color"
           value={gradientTo}
           onChange={(e) => setGradientTo(e.target.value)}
           className="w-full h-10 rounded-lg border border-gray-300"
-        />
+        /> */}
+        <SketchPicker
+              color={gradientTo}
+              onChange={(color) => setGradientTo(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
       </div>
     </div>
 
@@ -4506,30 +5238,48 @@ const baseLabelStyles = `
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         <div>
           <label className="block text-gray-800 mb-1 text-sm">Gradient From</label>
-          <input
+          {/* <input
             type="color"
             value={gradientFrom}
             onChange={(e) => setGradientFrom(e.target.value)}
             className="w-full h-10 rounded-lg border border-gray-300 bg-white"
-          />
+          /> */}
+          <SketchPicker
+              color={gradientFrom}
+              onChange={(color) => setGradientFrom(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
         </div>
         <div>
           <label className="block text-gray-800 mb-1 text-sm">Gradient Via</label>
-          <input
+          {/* <input
             type="color"
             value={gradientVia}
             onChange={(e) => setGradientVia(e.target.value)}
             className="w-full h-10 rounded-lg border border-gray-300 bg-white"
-          />
+          /> */}
+          <SketchPicker
+              color={gradientVia}
+              onChange={(color) => setGradientVia(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
         </div>
         <div>
           <label className="block text-gray-800 mb-1 text-sm">Gradient To</label>
-          <input
+          {/* <input
             type="color"
             value={gradientTo}
             onChange={(e) => setGradientTo(e.target.value)}
             className="w-full h-10 rounded-lg border border-gray-300 bg-white"
-          />
+          /> */}
+          <SketchPicker
+              color={gradientTo}
+              onChange={(color) => setGradientTo(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
         </div>
       </div>
     )}
@@ -4538,12 +5288,18 @@ const baseLabelStyles = `
     {bgType === 'solid' && (
       <div>
         <label className="block text-gray-800 mb-1 text-sm">Solid Background Color</label>
-        <input
+        {/* <input
           type="color"
           value={solidColor}
           onChange={(e) => setSolidColor(e.target.value)}
           className="w-full h-10 rounded-lg border border-gray-300 bg-white"
-        />
+        /> */}
+        <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
       </div>
     )}
 
@@ -4596,12 +5352,18 @@ const baseLabelStyles = `
           onChange={(e) => setEventName(e.target.value)}
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.eventName}
           onChange={(e) => setTextColors({ ...textColors, eventName: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
           title="Event Name Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.eventName}
+          onChange={(color) => setTextColors({ ...textColors, eventName: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
       {/* Event Date */}
@@ -4613,12 +5375,18 @@ const baseLabelStyles = `
           onChange={(e) => setEventDate(e.target.value)}
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.eventDate}
           onChange={(e) => setTextColors({ ...textColors, eventDate: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
           title="Event Date Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.eventDate}
+          onChange={(color) => setTextColors({ ...textColors, eventDate: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
       {/* Event Time */}
@@ -4630,12 +5398,18 @@ const baseLabelStyles = `
           onChange={(e) => setEventTime(e.target.value)}
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.eventTime}
           onChange={(e) => setTextColors({ ...textColors, eventTime: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
           title="Event Time Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.eventTime}
+          onChange={(color) => setTextColors({ ...textColors, eventTime: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
       {/* Event Image */}
@@ -4681,12 +5455,18 @@ const baseLabelStyles = `
           onChange={(e) => setEventLocation(e.target.value)}
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.eventLocation}
           onChange={(e) => setTextColors({ ...textColors, eventLocation: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
           title="Event Location Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.eventLocation}
+          onChange={(color) => setTextColors({ ...textColors, eventLocation: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
     </div>
@@ -4701,12 +5481,18 @@ const baseLabelStyles = `
           onChange={(e) => setInviteeName(e.target.value)}
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.inviteeName}
           onChange={(e) => setTextColors({ ...textColors, inviteeName: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
           title="Invitee Name Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.inviteeName}
+          onChange={(color) => setTextColors({ ...textColors, inviteeName: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
       {/* Inviter Name */}
@@ -4717,12 +5503,18 @@ const baseLabelStyles = `
           onChange={(e) => setInviterName(e.target.value)}
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.inviterName}
           onChange={(e) => setTextColors({ ...textColors, inviterName: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
           title="Inviter Name Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.inviterName}
+          onChange={(color) => setTextColors({ ...textColors, inviterName: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
       {/* Occasion */}
@@ -4733,12 +5525,18 @@ const baseLabelStyles = `
           onChange={(e) => setOccasion(e.target.value)}
           className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
         />
-        <input
+        {/* <input
           type="color"
           value={textColors.occasion}
           onChange={(e) => setTextColors({ ...textColors, occasion: e.target.value })}
           className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
           title="Occasion Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.occasion}
+          onChange={(color) => setTextColors({ ...textColors, occasion: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
         />
       </div>
     </div>
@@ -4752,13 +5550,19 @@ const baseLabelStyles = `
         className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
         rows={3}
       />
-      <input
+      {/* <input
         type="color"
         value={textColors.description}
         onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
         className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
         title="Description Text Color"
-      />
+      /> */}
+      <SketchPicker
+          color={textColors.description}
+          onChange={(color) => setTextColors({ ...textColors, description: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
     </div>
 
     {/* QR Code */}
@@ -5035,7 +5839,7 @@ const baseLabelStyles = `
 
 {/* Recipe Input Fields */}
 {selectedVariant === 'recipe' && (
-  <div className="space-y-8 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
+  <div className="space-y-8 p-4 bg-white/70 backdrop-blur-md rounded-xl border border-white/10">
     {/* Background Type Selection */}
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
@@ -5060,29 +5864,47 @@ const baseLabelStyles = `
           <>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientFrom}
                 onChange={(e) => setGradientFrom(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientFrom}
+                onChange={(color) => setGradientFrom(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientVia}
                 onChange={(e) => setGradientVia(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientVia}
+                onChange={(color) => setGradientVia(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientTo}
                 onChange={(e) => setGradientTo(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientTo}
+                onChange={(color) => setGradientTo(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
           </>
@@ -5090,12 +5912,18 @@ const baseLabelStyles = `
         {bgType === 'solid' && (
           <div>
             <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
-            <input
+            {/* <input
               type="color"
               value={solidColor}
               onChange={(e) => setSolidColor(e.target.value)}
               className="w-full h-10 rounded-lg border border-slate-300"
-            />
+            /> */}
+            <SketchPicker
+                color={solidColor}
+                onChange={(color) => setSolidColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
           </div>
         )}
       </div>
@@ -5112,7 +5940,7 @@ const baseLabelStyles = `
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="col-span-full md:col-span-2">
           <label className="block text-stone-800 text-sm font-medium mb-2">Recipe Title</label>
-          <div className="flex items-center gap-2">
+          <div className=" gap-2">
             <input
               type="text"
               value={title}
@@ -5120,18 +5948,24 @@ const baseLabelStyles = `
               className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
               placeholder="Enter a delicious recipe name"
             />
-            <input
+            {/* <input
               type="color"
               value={textColors.title}
               onChange={(e) => setTextColors({ ...textColors, title: e.target.value })}
               className="w-10 h-10 rounded-lg border border-slate-300"
               title="Title Text Color"
+            /> */}
+            <SketchPicker
+              color={textColors.title}
+              onChange={(color) => setTextColors({ ...textColors, title: color.hex })}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                            border border-gray-200"
             />
           </div>
         </div>
         <div className="col-span-full md:col-span-2">
           <label className="block text-stone-800 text-sm font-medium mb-2">Description</label>
-          <div className="flex items-center gap-2">
+          <div className=" gap-2">
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -5139,31 +5973,43 @@ const baseLabelStyles = `
               placeholder="Briefly describe your recipe..."
               rows={3}
             />
-            <input
+            {/* <input
               type="color"
               value={textColors.description}
               onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
               className="w-10 h-10 rounded-lg border border-slate-300"
               title="Description Text Color"
+            /> */}
+            <SketchPicker
+              color={textColors.description}
+              onChange={(color) => setTextColors({ ...textColors, description: color.hex })}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                            border border-gray-200"
             />
           </div>
         </div>
         <div>
           <label className="block text-stone-800 text-sm font-medium mb-2">Cooking Time (mins)</label>
-          <div className="flex items-center gap-2">
+          <div className=" gap-2">
             <input
               type="number"
               value={cookingTime}
               onChange={(e) => setCookingTime(e.target.value)}
-              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
               placeholder="45"
             />
-            <input
+            {/* <input
               type="color"
               value={textColors.details}
               onChange={(e) => setTextColors({ ...textColors, details: e.target.value })}
               className="w-10 h-10 rounded-lg border border-slate-300"
               title="Details Text Color"
+            /> */}
+            <SketchPicker
+              color={textColors.details}
+              onChange={(color) => setTextColors({ ...textColors, details: color.hex })}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                            border border-gray-200"
             />
           </div>
         </div>
@@ -5191,12 +6037,18 @@ const baseLabelStyles = `
         </div>
         <div>
           <label className="block text-stone-800 text-sm font-medium mb-2">Inner Card Color</label>
-          <input
+          {/* <input
             type="color"
             value={innerCardColor}
             onChange={(e) => setInnerCardColor(e.target.value)}
             className="w-full h-10 rounded-lg border border-slate-300"
-          />
+          /> */}
+          <SketchPicker
+                color={innerCardColor}
+                onChange={(color) => setInnerCardColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
         </div>
       </div>
     </div>
@@ -5263,20 +6115,20 @@ const baseLabelStyles = `
                   <p className="text-xs font-medium text-stone-600">Ingredient</p>
                   <label className="flex items-center gap-2">
                     <span className="text-xs">BG</span>
-                    <input
-                      type="color"
-                      value={ing.backgroundColor}
-                      onChange={(e) => {
+                    <SketchPicker
+                      color={ing.backgroundColor}
+                      onChange={(color) => {
                         const newIngs = [...ingredients];
-                        newIngs[index].backgroundColor = e.target.value;
+                        newIngs[index].backgroundColor = color.hex;
                         setIngredients(newIngs);
                       }}
-                      className="w-10 h-10 rounded-lg cursor-pointer"
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
                     />
                   </label>
                   <label className="flex items-center gap-2">
                     <span className="text-xs">Border</span>
-                    <input
+                    {/* <input
                       type="color"
                       value={ing.borderColor}
                       onChange={(e) => {
@@ -5285,11 +6137,21 @@ const baseLabelStyles = `
                         setIngredients(newIngs);
                       }}
                       className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.borderColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].borderColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
                     />
                   </label>
                   <label className="flex items-center gap-2">
                     <span className="text-xs">Text</span>
-                    <input
+                    {/* <input
                       type="color"
                       value={ing.textColor}
                       onChange={(e) => {
@@ -5298,6 +6160,16 @@ const baseLabelStyles = `
                         setIngredients(newIngs);
                       }}
                       className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.textColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].textColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
                     />
                   </label>
                 </div>
@@ -5305,7 +6177,7 @@ const baseLabelStyles = `
                   <p className="text-xs font-medium text-stone-600">Amount</p>
                   <label className="flex items-center gap-2">
                     <span className="text-xs">BG</span>
-                    <input
+                    {/* <input
                       type="color"
                       value={ing.amountBackgroundColor}
                       onChange={(e) => {
@@ -5314,11 +6186,21 @@ const baseLabelStyles = `
                         setIngredients(newIngs);
                       }}
                       className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.amountBackgroundColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountBackgroundColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
                     />
                   </label>
                   <label className="flex items-center gap-2">
                     <span className="text-xs">Border</span>
-                    <input
+                    {/* <input
                       type="color"
                       value={ing.amountBorderColor}
                       onChange={(e) => {
@@ -5327,11 +6209,21 @@ const baseLabelStyles = `
                         setIngredients(newIngs);
                       }}
                       className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.amountBorderColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountBorderColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
                     />
                   </label>
                   <label className="flex items-center gap-2">
                     <span className="text-xs">Text</span>
-                    <input
+                    {/* <input
                       type="color"
                       value={ing.amountTextColor}
                       onChange={(e) => {
@@ -5340,6 +6232,16 @@ const baseLabelStyles = `
                         setIngredients(newIngs);
                       }}
                       className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.amountTextColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountTextColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
                     />
                   </label>
                 </div>
@@ -5716,22 +6618,34 @@ const baseLabelStyles = `
         <label className="block text-gray-900 mb-1 text-sm">
           Affirmation Text Color
         </label>
-        <input
+        {/* <input
           type="color"
           value={affirmationTextColor}
           onChange={(e) => setAffirmationTextColor(e.target.value)}
           className="w-full h-10 rounded-lg border border-gray-300"
+        /> */}
+        <SketchPicker
+                color={affirmationTextColor}
+                onChange={(color) => setAffirmationTextColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
         />
       </div>
       <div>
         <label className="block text-gray-900 mb-1 text-sm">
           Card Background Color
         </label>
-        <input
+        {/* <input
           type="color"
           value={cardBackgroundColor}
           onChange={(e) => setCardBackgroundColor(e.target.value)}
           className="w-full h-10 rounded-lg border border-gray-300"
+        /> */}
+        <SketchPicker
+                color={cardBackgroundColor}
+                onChange={(color) => setCardBackgroundColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
         />
       </div>
     </div>
@@ -5740,147 +6654,163 @@ const baseLabelStyles = `
 
 {/* Add Birthday input fields */}
 {selectedVariant === 'birthday' && (
-  <div className="space-y-6 p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
-    {/* Name and Age Fields */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="relative">
-        <label htmlFor="celebrantName" className="block text-gray-800 text-sm font-medium mb-2">
-          Celebrant's Name
-        </label>
-        <input
-          type="text"
-          id="celebrantName"
-          value={celebrantName}
-          onChange={(e) => setCelebrantName(e.target.value)}
-          style={{
-            color: celebrantNameColor,
-            background: celebrantNameBackground,
-            borderColor: celebrantNameColor,
-          }}
-          className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
-          placeholder="Enter name"
-        />
-        {/* Color Customization */}
-        <div className="mt-4 flex gap-4">
-          <input
-            type="color"
-            value={celebrantNameColor}
-            onChange={(e) => setCelebrantNameColor(e.target.value)}
-            className="w-12 h-8 border rounded-lg"
-            title="Text Color"
-          />
-          <input
-            type="color"
-            value={celebrantNameColor}
-            onChange={(e) => setCelebrantNameColor(e.target.value)}
-            className="w-12 h-8 border rounded-lg"
-            title="Border Color"
-          />
-          <input
-            type="text"
-            value={celebrantNameBackground}
-            onChange={(e) => setCelebrantNameBackground(e.target.value)}
-            className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-            placeholder="Background (color or gradient)"
-          />
-        </div>
-      </div>
-      <div className="relative">
-        <label htmlFor="age" className="block text-gray-800 text-sm font-medium mb-2">
-          Age
-        </label>
-        <input
-          type="number"
-          id="age"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          style={{
-            color: ageColor,
-            background: ageBackground,
-            borderColor: ageBorderColor,
-          }}
-          className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
-          placeholder="Enter age"
-        />
-        {/* Color Customization */}
-        <div className="mt-4 flex gap-4">
-          <input
-            type="color"
-            value={ageColor}
-            onChange={(e) => setAgeColor(e.target.value)}
-            className="w-12 h-8 border rounded-lg"
-            title="Text Color"
-          />
-          <input
-            type="color"
-            value={ageBorderColor}
-            onChange={(e) => setAgeBorderColor(e.target.value)}
-            className="w-12 h-8 border rounded-lg"
-            title="Border Color"
-          />
-          <input
-            type="text"
-            value={ageBackground}
-            onChange={(e) => setAgeBackground(e.target.value)}
-            className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-            placeholder="Background (color or gradient)"
-          />
-        </div>
-      </div>
-    </div>
+        <div className="space-y-6 p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+          {/* Name and Age Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="relative">
+              <label htmlFor="celebrantName" className="block text-gray-800 text-sm font-medium mb-2">
+                Celebrant's Name
+              </label>
+              <input
+                type="text"
+                id="celebrantName"
+                value={celebrantName}
+                onChange={(e) => setCelebrantName(e.target.value)}
+                style={{
+                  color: celebrantNameColor,
+                  background: celebrantNameBackground,
+                  borderColor: celebrantNameBorderColor,
+                }}
+                className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
+                placeholder="Enter name"
+              />
+              {/* Color Customization */}
+              <div className="mt-4 flex flex-col gap-4">
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Text Color</label>
+                  <SketchPicker
+                    color={celebrantNameColor}
+                    onChange={(color) => setCelebrantNameColor(color.hex)}
+                    className="w-full h-fit mx-auto rounded-xl p-4 cursor-pointer transition-transform duration-200 border border-gray-200"
+                  />
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Border Color</label>
+                  <input
+                    type="color"
+                    value={celebrantNameBorderColor}
+                    onChange={(e) => setCelebrantNameBorderColor(e.target.value)}
+                    className="w-12 h-8 border rounded-lg"
+                    title="Border Color"
+                  />
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Background</label>
+                  <input
+                    type="text"
+                    value={celebrantNameBackground}
+                    onChange={(e) => setCelebrantNameBackground(e.target.value)}
+                    className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Background (color or gradient)"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <label htmlFor="age" className="block text-gray-800 text-sm font-medium mb-2">
+                Age
+              </label>
+              <input
+                type="number"
+                id="age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                style={{
+                  color: ageColor,
+                  background: ageBackground,
+                  borderColor: ageBorderColor,
+                }}
+                className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
+                placeholder="Enter age"
+              />
+              {/* Color Customization */}
+              <div className="mt-4 flex flex-col gap-4">
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Text Color</label>
+                  <input
+                    type="color"
+                    value={ageColor}
+                    onChange={(e) => setAgeColor(e.target.value)}
+                    className="w-12 h-8 border rounded-lg"
+                    title="Text Color"
+                  />
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Border Color</label>
+                  <input
+                    type="color"
+                    value={ageBorderColor}
+                    onChange={(e) => setAgeBorderColor(e.target.value)}
+                    className="w-12 h-8 border rounded-lg"
+                    title="Border Color"
+                  />
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Background</label>
+                  <input
+                    type="text"
+                    value={ageBackground}
+                    onChange={(e) => setAgeBackground(e.target.value)}
+                    className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Background (color or gradient)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
-    {/* Other fields (e.g., date, message) */}
-    {['cardDate', 'birthdayDate', 'birthdayMessage', 'daysUntil'].map((field) => (
-      <div key={field} className="relative">
-        <label
-          htmlFor={field}
-          className="block text-gray-800 text-sm font-medium mb-2 capitalize"
-        >
-          {field.replace(/([A-Z])/g, ' $1')}
-        </label>
-        <input
-          type={field === 'birthdayMessage' ? 'textarea' : 'text'}
-          id={field}
-          value={fieldValues[field as keyof typeof fieldValues]}
-          onChange={(e) => handleFieldChange(field as keyof FieldValues, e.target.value)}
-          style={{
-            color: fieldColors[field as keyof typeof fieldColors].text,
-            background: fieldColors[field as keyof typeof fieldColors].background,
-            borderColor: fieldColors[field as keyof typeof fieldColors].border,
-          }}
-          className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 transition shadow-sm ${
-            field === 'birthdayMessage' ? 'min-h-[100px]' : ''
-          }`}
-          placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
-        />
-        {/* Color Customization */}
-        <div className="mt-4 flex gap-4">
-          <input
-            type="color"
-            value={fieldColors[field as keyof typeof fieldColors].text}
-            onChange={(e) => updateFieldColor(field as keyof FieldColors, 'text', e.target.value)}
-            className="w-12 h-8 border rounded-lg"
-            title="Text Color"
-          />
-          <input
-            type="color"
-            value={fieldColors[field as keyof typeof fieldColors].border}
-            onChange={(e) => updateFieldColor(field as keyof FieldColors, 'border', e.target.value)}
-            className="w-12 h-8 border rounded-lg"
-            title="Border Color"
-          />
-          <input
-            type="text"
-            value={fieldColors[field as keyof typeof fieldColors].background}
-            onChange={(e) => updateFieldColor(field as keyof FieldColors, 'background', e.target.value)}
-            className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-            placeholder="Background (color or gradient)"
-          />
+          {/* Other fields (e.g., date, message) */}
+          {['cardDate', 'birthdayDate', 'birthdayMessage', 'daysUntil'].map((field) => (
+            <div key={field} className="relative">
+              <label
+                htmlFor={field}
+                className="block text-gray-800 text-sm font-medium mb-2 capitalize"
+              >
+                {field.replace(/([A-Z])/g, ' $1')}
+              </label>
+              <input
+                type={field === 'birthdayMessage' ? 'textarea' : field === 'cardDate' || field === 'birthdayDate' ? 'date' : 'text'}
+                id={field}
+                value={fieldValues[field as keyof typeof fieldValues]}
+                onChange={(e) => handleFieldChange(field as keyof FieldValues, e.target.value)}
+                style={{
+                  color: fieldColors[field as keyof typeof fieldColors].text,
+                  background: fieldColors[field as keyof typeof fieldColors].background,
+                  borderColor: fieldColors[field as keyof typeof fieldColors].border,
+                }}
+                className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 transition shadow-sm ${
+                  field === 'birthdayMessage' ? 'min-h-[100px]' : ''
+                }`}
+                placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
+              />
+              {/* Color Customization */}
+              <div className="mt-4 flex gap-4">
+                <input
+                  type="color"
+                  value={fieldColors[field as keyof typeof fieldColors].text}
+                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'text', e.target.value)}
+                  className="w-12 h-8 border rounded-lg"
+                  title="Text Color"
+                />
+                <input
+                  type="color"
+                  value={fieldColors[field as keyof typeof fieldColors].border}
+                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'border', e.target.value)}
+                  className="w-12 h-8 border rounded-lg"
+                  title="Border Color"
+                />
+                <input
+                  type="text"
+                  value={fieldColors[field as keyof typeof fieldColors].background}
+                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'background', e.target.value)}
+                  className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Background (color or gradient)"
+                />
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    ))}
-  </div>
-)}
+      )}
 
 
 
@@ -6099,29 +7029,47 @@ const baseLabelStyles = `
           <>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientFrom}
                 onChange={(e) => setGradientFrom(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientFrom}
+                onChange={(color) => setGradientFrom(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientVia}
                 onChange={(e) => setGradientVia(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientVia}
+                onChange={(color) => setGradientVia(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
-              <input
+              {/* <input
                 type="color"
                 value={gradientTo}
                 onChange={(e) => setGradientTo(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientTo}
+                onChange={(color) => setGradientTo(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
               />
             </div>
           </>
@@ -6129,12 +7077,18 @@ const baseLabelStyles = `
         {bgType === 'solid' && (
           <div>
             <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
-            <input
+            {/* <input
               type="color"
               value={solidColor}
               onChange={(e) => setSolidColor(e.target.value)}
               className="w-full h-10 rounded-lg border border-slate-300"
-            />
+            /> */}
+            <SketchPicker
+                color={solidColor}
+                onChange={(color) => setSolidColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
           </div>
         )}
       </div>
@@ -6193,6 +7147,316 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
+
+            {/* Resume specific fields */}
+{selectedVariant === 'resume' && (
+  <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+ 
+      {/* Background Type Selection */}
+  <div className="space-y-4 p-4">
+      {/* Background Type Selection */}
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2">Background Type</label>
+      <Switch.Group>
+        <div className="flex items-center space-x-4">
+          <Switch.Label className="mr-2">Solid Color</Switch.Label>
+          <Switch
+            checked={bgType === 'gradient'}
+            onChange={() => setBgType(bgType === 'solid' ? 'gradient' : 'solid')}
+            className={`${
+              bgType === 'gradient' ? 'bg-blue-600' : 'bg-gray-200'
+            } relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out`}
+          >
+            <span
+              className={`${
+                bgType === 'gradient' ? 'translate-x-6' : 'translate-x-1'
+              } inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out`}
+            />
+          </Switch>
+          <Switch.Label className="ml-2">Gradient</Switch.Label>
+        </div>
+      </Switch.Group>
+    </div>
+
+    {/* Background Color Picker */}
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2">
+        {bgType === 'solid' ? 'Solid Color' : 'Gradient Colors'}
+      </label>
+      <button
+        type="button"
+        onClick={() => setShowColorPicker(!showColorPicker)}
+        className="p-2 bg-blue-500 text-white rounded-lg"
+      >
+        {showColorPicker ? 'Hide Color Picker' : 'Show Color Picker'}
+      </button>
+      {showColorPicker && (
+        <div className="mt-4">
+          {bgType === 'solid' ? (
+            <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+            />
+          ) : (
+            <div className="space-y-6 w-full mx-auto">
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">From</label>
+                <SketchPicker
+                  color={gradientFrom}
+                  onChange={(color) => setGradientFrom(color.hex)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Via</label>
+                <SketchPicker
+                  color={gradientVia}
+                  onChange={(color) => setGradientVia(color.hex)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">To</label>
+                <SketchPicker
+                  color={gradientTo}
+                  onChange={(color) => setGradientTo(color.hex)}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+    </div>
+
+
+     {/* Full Name */}
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">Full Name</label>
+    <input
+      type="text"
+      value={fullName}
+      onChange={(e) => setFullName(e.target.value)}
+      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter your full name"
+    />
+  </div>
+
+  {/* Job Title */}
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">Job Title</label>
+    <input
+      type="text"
+      value={jobTitle}
+      onChange={(e) => setJobTitle(e.target.value)}
+      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter your job title"
+    />
+  </div>
+
+  {/* Contact Information */}
+  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div>
+      <label className="block text-gray-800 mb-1 font-medium">Email Address</label>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter your email address"
+      />
+    </div>
+    <div>
+      <label className="block text-gray-800 mb-1 font-medium">Phone Number</label>
+      <input
+        type="text"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter your phone number"
+      />
+    </div>
+  </div>
+
+  {/* Location */}
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">Location</label>
+    <input
+      type="text"
+      value={location}
+      onChange={(e) => setLocation(e.target.value)}
+      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter your location"
+    />
+  </div>
+
+  {/* Skills */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Skills</label>
+  {skills.map((skill, index) => (
+    <div key={index} className="flex items-center space-x-2 mb-2">
+      <input
+        type="text"
+        value={skill.value}
+        onChange={(e) => updateSkill(index, e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter skill"
+      />
+      <button
+        type="button"
+        onClick={() => removeSkill(index)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addSkill}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Skill
+  </button>
+</div>
+
+  {/* Work Experience */}
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">Work Experience</label>
+    {workExperience.map((experience, index) => (
+      <div key={index} className="space-y-2 mb-4">
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Company Name</label>
+          <input
+            type="text"
+            value={experience.companyName}
+            onChange={(e) => updateWorkExperience(index, 'companyName', e.target.value)}
+            className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter company name"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Role/Position</label>
+          <input
+            type="text"
+            value={experience.role}
+            onChange={(e) => updateWorkExperience(index, 'role', e.target.value)}
+            className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your role"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Duration</label>
+          <input
+            type="text"
+            value={experience.duration}
+            onChange={(e) => updateWorkExperience(index, 'duration', e.target.value)}
+            className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g., Jan 2022 - Dec 2024"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={() => removeWorkExperience(index)}
+          className="p-2 bg-red-500 text-white rounded-lg"
+        >
+          Remove
+        </button>
+      </div>
+    ))}
+    <button
+      type="button"
+      onClick={addWorkExperience}
+      className="p-2 bg-blue-500 text-white rounded-lg"
+    >
+      Add Work Experience
+    </button>
+  </div>
+
+  {/* Education */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Education</label>
+  {education.map((edu, index) => (
+    <div key={index} className="space-y-2 mb-4">
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Degree</label>
+        <input
+          type="text"
+          value={edu.degree}
+          onChange={(e) => updateEducation(index, 'degree', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter your degree"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Institution</label>
+        <input
+          type="text"
+          value={edu.institution}
+          onChange={(e) => updateEducation(index, 'institution', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter institution name"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Graduation Year</label>
+        <input
+          type="text"
+          value={edu.gradYear}
+          onChange={(e) => updateEducation(index, 'gradYear', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter graduation year"
+        />
+      </div>
+      <button
+        type="button"
+        onClick={() => removeEducation(index)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addEducation}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Education
+  </button>
+</div>
+
+  {/* Hobbies */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Hobbies</label>
+  {hobbies.map((hobby, index) => (
+    <div key={index} className="flex items-center space-x-2 mb-2">
+      <input
+        type="text"
+        value={hobby}
+        onChange={(e) => updateHobby({ index, value: e.target.value })}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter hobby"
+      />
+      <button
+        type="button"
+        onClick={() => removeHobby(index)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addHobby}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Hobby
+  </button>
+</div>
+</div>
+)}
+
 
             {/* Event specific fields */}
             {selectedVariant === 'event' && (
@@ -6845,7 +8109,7 @@ const baseLabelStyles = `
   </div>
 
   {/* Profile Picture */}
-  {/* <div className="space-y-4">
+  <div className="space-y-4">
     <label className="block text-lg font-medium text-gray-900">Upload Profile Picture</label>
     <div className="space-y-2">
     {profilePicture && (
@@ -6870,7 +8134,7 @@ const baseLabelStyles = `
         accept="image/*"
       />
     </div>
-  </div> */}
+  </div>
 </div>
 
 
@@ -7058,7 +8322,7 @@ const baseLabelStyles = `
 
     {/* Product Variant */}
     {selectedVariant === 'product' && (
-  <div className={`relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10`} 
+  <div className={`relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10`}
     style={{ backgroundColor: `${backgroundColor}dd` }}>
     {/* Glass Background Effects */}
     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5"></div>
@@ -7526,7 +8790,7 @@ const baseLabelStyles = `
       {/* Subheading */}
       <p
         className="text-lg md:text-xl text-white/90"
-        style={{ color: descriptionColor }}
+        style={{ color: titleColor }}
       >
         {description || "An unforgettable evening awaits!"}
       </p>
@@ -7557,9 +8821,9 @@ const baseLabelStyles = `
       </div>
 
       {/* QR Code & Price */}
-      <div className="flex flex-wrap justify-center gap-6">
+      <div className="flex flex-wrap justify-center gap-4">
         {qrUrl && (
-          <div className="bg-white/80 p-4 rounded-lg shadow-md backdrop-blur-md">
+          <div className="bg-white/90 mx-auto p-4 rounded-lg shadow-md backdrop-blur-md">
             <QRCodeSVG value={qrUrl} size={100} />
             <p className="text-xs text-black mt-2 font-medium">
               Scan for Details
@@ -8041,10 +9305,10 @@ const baseLabelStyles = `
 
       {/* Right Column - Image, Difficulty */}
       <div className="space-y-8">
-        {image && (
+        {heroImage && (
           <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
             <Image 
-              src={typeof image === 'string' ? image : URL.createObjectURL(image)} 
+              src={heroImage} 
               alt={title} 
               width={400} 
               height={500} 
@@ -8091,7 +9355,160 @@ const baseLabelStyles = `
 )}
 
 
+{selectedVariant === 'resume' && (
+  <div
+    className="relative min-h-[600px] p-6 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    style={{
+      background:
+        bgType === 'gradient'
+          ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+          : bgType === 'solid'
+          ? solidColor
+          : "#f9f9f9",
+    }}
+  >
+    <div className="relative z-10 flex flex-col items-center gap-8 text-center">
+      {/* Profile Picture */}
+      {profilePicture && (
+        <div className="transform hover:scale-110 transition-all duration-500">
+          <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
+            <img
+              src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)}
+              alt="Profile Picture"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
 
+      {/* Full Name and Job Title */}
+      <div>
+        {fullName && (
+          <h2
+            className="text-4xl md:text-5xl font-bold tracking-tight"
+            style={{ color: textColors.fullName }}
+          >
+            {fullName}
+          </h2>
+        )}
+        {jobTitle && (
+          <p
+            className="text-xl md:text-2xl font-light mt-1"
+            style={{ color: textColors.jobTitle }}
+          >
+            {jobTitle}
+          </p>
+        )}
+      </div>
+
+      {/* Contact Information */}
+      <div className="space-y-2 text-sm md:text-base">
+        {email && (
+          <p className="flex items-center justify-center gap-2">
+            <span className="font-medium">Email:</span>
+            <a
+              href={`mailto:${email}`}
+              className="underline hover:text-blue-500 transition-colors"
+              style={{ color: textColors.email }}
+            >
+              {email}
+            </a>
+          </p>
+        )}
+        {phone && (
+          <p className="flex items-center justify-center gap-2">
+            <span className="font-medium">Phone:</span>
+            <span style={{ color: textColors.phone }}>{phone}</span>
+          </p>
+        )}
+        {location && (
+          <p className="flex items-center justify-center gap-2">
+            <span className="font-medium">Location:</span>
+            <span style={{ color: textColors.location }}>{location}</span>
+          </p>
+        )}
+      </div>
+
+      {/* Skills */}
+{skills.length > 0 && (
+  <div className="w-full max-w-2xl">
+    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
+      Skills
+    </h3>
+    <ul className="flex flex-wrap justify-center gap-2 text-sm md:text-base">
+      {skills.map((skill, index) => (
+        <li
+          key={index}
+          className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md"
+          style={{ color: textColors.skills }}
+        >
+          {skill.value.trim()}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+      {/* Work Experience */}
+      {workExperience.length > 0 && (
+        <div className="w-full max-w-2xl text-left space-y-4">
+          <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+            Work Experience
+          </h3>
+          {workExperience.map((experience, index) => (
+            <div key={index} className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+              <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
+                {experience.companyName}
+              </p>
+              <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
+                {experience.role}
+              </p>
+              <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
+                {experience.duration}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Education */}
+{education.length > 0 && (
+  <div className="w-full max-w-2xl text-left space-y-4">
+    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+      Education
+    </h3>
+    {education.map((edu, index) => (
+      <div key={index} className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+        <p className="font-medium text-base md:text-lg" style={{ color: textColors.degree }}>
+          {edu.degree}
+        </p>
+        <p className="text-sm md:text-base italic" style={{ color: textColors.institution }}>
+          {edu.institution}
+        </p>
+        <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
+          {edu.gradYear}
+        </p>
+      </div>
+    ))}
+  </div>
+)}
+
+      {/* Hobbies */}
+      {hobbies.length > 0 && (
+  <div className="w-full max-w-2xl text-left space-y-4">
+    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
+      Hobbies
+    </h3>
+    <div className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+      <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
+        {hobbies.join(', ')}
+      </p>
+    </div>
+  </div>
+)}
+    </div>
+  </div>
+)}
 
     {/* idcard Display */}
       {selectedVariant === 'idCard' && showIDCard && (
@@ -8327,97 +9744,97 @@ const baseLabelStyles = `
 
     {/* Add Birthday card display */}
     {selectedVariant === "birthday" && (
-  <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-6 md:p-10 rounded-2xl shadow-xl overflow-hidden animate-gradient-x">
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
-    <div className="absolute -top-28 -right-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
-    <div className="absolute -bottom-28 -left-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
-    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-6 md:p-10 rounded-2xl shadow-xl overflow-hidden animate-gradient-x">
+          {/* Decorative Elements */}
+          <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
+          <div className="absolute -top-28 -right-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-28 -left-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
-    <div className="relative z-10 space-y-8 sm:space-y-10">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
-          {wishType || "Happy Birthday!"}
-        </h2>
-        <p className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
-          {celebrantName || "Dear Friend"}
-        </p>
-        {age && (
-          <p className="text-lg sm:text-2xl md:text-3xl text-white/90 drop-shadow-lg">
-            on your {age}
-            <sup>th</sup> Birthday!
-          </p>
-        )}
-      </div>
+          <div className="relative z-10 space-y-8 sm:space-y-10">
+            {/* Header */}
+            <div className="text-center">
+              <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
+                {wishType || "Happy Birthday!"}
+              </h2>
+              <p className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
+                {celebrantName || "Dear Friend"}
+              </p>
+              {age && (
+                <p className="text-lg sm:text-2xl md:text-3xl text-white/90 drop-shadow-lg">
+                  on your {age}
+                  <sup>th</sup> Birthday!
+                </p>
+              )}
+            </div>
 
-      {/* Main Image */}
-      {image && (
-        <div className="relative mx-auto w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
-          <Image
-            src={image}
-            alt="Birthday Memory"
-            fill
-            className="object-cover"
-          />
+            {/* Main Image */}
+            {image && (
+              <div className="relative mx-auto w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
+                <Image
+                  src={image}
+                  alt="Birthday Memory"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+
+            {/* Countdown Timer */}
+            <div className="text-center">
+              <p className="text-sm sm:text-lg text-white/80">Your next birthday is in:</p>
+              <p className="text-3xl sm:text-4xl font-bold text-white tracking-wide">
+                {calculateDaysUntilBirthday(cardDate, birthdayDate)}
+              </p>
+            </div>
+
+            {/* Message */}
+            <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/20 shadow-lg">
+              <p className="text-lg sm:text-xl md:text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
+                {message ||
+                  "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
+              </p>
+            </div>
+
+            {/* Social Media Share */}
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+                Share on Facebook
+              </button>
+              <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+                Tweet
+              </button>
+              <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+                Share on Instagram
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="flex flex-col sm:flex-row justify-between items-center pt-6 space-y-4 sm:space-y-0">
+              <div className="flex items-center gap-4">
+                {logo && (
+                  <div className="relative w-12 h-12 sm:w-16 sm:h-16 hover:scale-110 transition-transform duration-300">
+                    <Image
+                      src={logo}
+                      alt="Logo"
+                      fill
+                      className="rounded-full object-cover border-2 border-white/50"
+                    />
+                  </div>
+                )}
+                {qrUrl && (
+                  <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+                    <QRCodeSVG value={qrUrl} size={48} />
+                  </div>
+                )}
+              </div>
+              <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md text-center">
+                Celebrate with Kardify 🎉
+              </div>
+            </div>
+          </div>
         </div>
       )}
-
-      {/* Countdown Timer */}
-      <div className="text-center">
-        <p className="text-sm sm:text-lg text-white/80">Your next birthday is in:</p>
-        <p className="text-3xl sm:text-4xl font-bold text-white tracking-wide">
-          {calculateDaysUntilBirthday(cardDate, birthdayDate)}
-        </p>
-      </div>
-
-      {/* Message */}
-      <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/20 shadow-lg">
-        <p className="text-lg sm:text-xl md:text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
-          {message ||
-            "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
-        </p>
-      </div>
-
-      {/* Social Media Share */}
-      <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-        <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-          Share on Facebook
-        </button>
-        <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-          Tweet
-        </button>
-        <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-          Share on Instagram
-        </button>
-      </div>
-
-      {/* Footer */}
-      <div className="flex flex-col sm:flex-row justify-between items-center pt-6 space-y-4 sm:space-y-0">
-        <div className="flex items-center gap-4">
-          {logo && (
-            <div className="relative w-12 h-12 sm:w-16 sm:h-16 hover:scale-110 transition-transform duration-300">
-              <Image
-                src={logo}
-                alt="Logo"
-                fill
-                className="rounded-full object-cover border-2 border-white/50"
-              />
-            </div>
-          )}
-          {qrUrl && (
-            <div className="bg-white/95 p-2 rounded-xl shadow-lg">
-              <QRCodeSVG value={qrUrl} size={48} />
-            </div>
-          )}
-        </div>
-        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md text-center">
-          Celebrate with Kardify 🎉
-        </div>
-      </div>
-    </div>
-  </div>
-)}
 
     {/* Add Affirmations card display */}
     {selectedVariant === 'affirmations' && (
@@ -8813,9 +10230,9 @@ const baseLabelStyles = `
               {qrUrl && (
                 <div className="relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition"></div>
-                  <div className="relative bg-black p-4 rounded-xl">
+                  <div className="relative bg-white p-4 rounded-xl">
                     <QRCodeSVG value={qrUrl} size={120} />
-                    <p className="text-xs font-medium text-white/60 mt-2">Scan for verification</p>
+                    <p className="text-xs font-medium text-black/60 mt-2">Scan for verification</p>
                   </div>
                 </div>
               )}
