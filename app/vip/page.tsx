@@ -4,12 +4,18 @@ import { SketchPicker } from 'react-color';
 import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
+import html2canvas from 'html2canvas';
 import Image from 'next/image';
 import { Switch } from '@headlessui/react';
 import place from "@/public/12.jpg"
+import domtoimage from 'dom-to-image';
+
+
+import jsPDF from 'jspdf';
 import SignatureCanvas from 'react-signature-canvas';
 import type ReactSignatureCanvas from 'react-signature-canvas';
 import { useLocalStorageState } from '@/hooks/useLocalStorageState';
+
 
 
 import { ethers } from 'ethers';
@@ -473,6 +479,69 @@ const calculateDaysUntilBirthday = (cardDate: string, birthdayDate: string): str
   return differenceInDays > 0 ? `${differenceInDays} days left` : "It's the birthday today!";
 };
 
+const generatePDF = async () => {
+  if (!cardRef.current) return;
+  setIsLoading(true);
+  
+  try {
+    const content = cardRef.current;
+    const { width, height } = content.getBoundingClientRect();
+    
+    // Increase quality with higher DPI
+    const scale = 2; // Increase resolution
+    const scaledWidth = width * scale;
+    const scaledHeight = height * scale;
+    
+    const imgData = await domtoimage.toPng(content, {
+      width: scaledWidth,
+      height: scaledHeight,
+      quality: 8,
+      style: {
+        transform: `scale(${scale})`,
+        'transform-origin': 'top left',
+        '-webkit-font-smoothing': 'antialiased',
+        'text-rendering': 'optimizeLegibility'
+      },
+      cacheBust: true
+    });
+
+    const pdf = new jsPDF({
+      orientation: width > height ? 'landscape' : 'portrait',
+      unit: 'px',
+      format: [width, height],
+      compress: true,
+      precision: 100
+    });
+
+    const img = new window.Image();
+    img.src = imgData;
+
+    await new Promise((resolve) => {
+      img.onload = () => {
+        pdf.addImage(
+          img, 
+          'PNG', 
+          0, 
+          0, 
+          width, 
+          height, 
+          undefined, 
+          'FAST'
+        );
+        resolve(null);
+      };
+    });
+
+    pdf.save(`${title || 'card'}-${Date.now()}.pdf`);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    alert('Failed to generate PDF. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
 
 const [fieldValues, setFieldValues] = useState({
   celebrantName: '',
@@ -771,20 +840,20 @@ const saveSignature = (
 
 
 
-  const CURRENT_PASSWORD = 'epicgamesandgames';
-  const PASSWORD_VERSION = '7'; // Increment this version whenever the password changes
+  // const CURRENT_PASSWORD = 'epicgamesandgames';
+  // const PASSWORD_VERSION = '7'; // Increment this version whenever the password changes
   
-  // Update handleLogin to check password version
-  const handleLogin = () => {
-    if (password === CURRENT_PASSWORD) {
-      setIsAuthenticated(true);
-      // Save to localStorage to persist login with version
-      localStorage.setItem('isAuth', 'true');
-      localStorage.setItem('passwordVersion', PASSWORD_VERSION);
-    } else {
-      alert('Incorrect password');
-    }
-  };
+  // // Update handleLogin to check password version
+  // const handleLogin = () => {
+  //   if (password === CURRENT_PASSWORD) {
+  //     setIsAuthenticated(true);
+  //     // Save to localStorage to persist login with version
+  //     localStorage.setItem('isAuth', 'true');
+  //     localStorage.setItem('passwordVersion', PASSWORD_VERSION);
+  //   } else {
+  //     alert('Incorrect password');
+  //   }
+  // };
 
 
   interface DifficultyColorMap {
@@ -1602,50 +1671,50 @@ const saveSignature = (
   };
 
   
-  // Add effect to check stored auth and version
-  useEffect(() => {
-    const auth = localStorage.getItem('isAuth');
-    const storedVersion = localStorage.getItem('passwordVersion');
-    if (auth === 'true' && storedVersion === PASSWORD_VERSION) {
-      setIsAuthenticated(true);
-    } else {
-      // Clear auth if version mismatch
-      localStorage.removeItem('isAuth');
-      localStorage.removeItem('passwordVersion');
-    } 
-  }, []);
+  // // Add effect to check stored auth and version
+  // useEffect(() => {
+  //   const auth = localStorage.getItem('isAuth');
+  //   const storedVersion = localStorage.getItem('passwordVersion');
+  //   if (auth === 'true' && storedVersion === PASSWORD_VERSION) {
+  //     setIsAuthenticated(true);
+  //   } else {
+  //     // Clear auth if version mismatch
+  //     localStorage.removeItem('isAuth');
+  //     localStorage.removeItem('passwordVersion');
+  //   } 
+  // }, []);
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full m-4"
-        >
-          <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">Enter Password</h1>
-          <div className="space-y-4">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-              className="w-full p-3 rounded-lg border border-gray-300"
-              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-            />
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleLogin}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-            >
-              Access Card Creator
-            </motion.button>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+  //       <motion.div 
+  //         initial={{ opacity: 0, y: 20 }}
+  //         animate={{ opacity: 1, y: 0 }}
+  //         className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full m-4"
+  //       >
+  //         <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">Enter Password</h1>
+  //         <div className="space-y-4">
+  //           <input
+  //             type="password"
+  //             value={password}
+  //             onChange={(e) => setPassword(e.target.value)}
+  //             placeholder="Enter password"
+  //             className="w-full p-3 rounded-lg border border-gray-300"
+  //             onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+  //           />
+  //           <motion.button
+  //             whileHover={{ scale: 1.02 }}
+  //             whileTap={{ scale: 0.98 }}
+  //             onClick={handleLogin}
+  //             className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+  //           >
+  //             Access Card Creator
+  //           </motion.button>
+  //         </div>
+  //       </motion.div>
+  //     </div>
+  //   );
+  // }
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -1725,15 +1794,15 @@ const baseLabelStyles = `
 `;
 
 
-  const handlePrint = () => {
-    if (!cardRef.current) return;
-    const printContent = cardRef.current.innerHTML;
-    const originalContent = document.body.innerHTML;
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
-    window.location.reload();
-  };
+  // const handlePrint = () => {
+  //   if (!cardRef.current) return;
+  //   const printContent = cardRef.current.innerHTML;
+  //   const originalContent = document.body.innerHTML;
+  //   document.body.innerHTML = printContent;
+  //   cardRef.print();
+  //   document.body.innerHTML = originalContent;
+  //   window.location.reload();
+  // };
 
   // Utility function to format currency
 
@@ -8179,7 +8248,8 @@ const baseLabelStyles = `
         </div>
 
       {/* Submit Button */}
-    <div className="pt-4">
+    <div className="pt-4 space-y-4">
+    
       <button
         onClick={generateImage}
         disabled={isLoading}
@@ -8197,6 +8267,7 @@ const baseLabelStyles = `
           disabled:hover:translate-y-0
         "
       >
+        
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
@@ -8208,6 +8279,24 @@ const baseLabelStyles = `
         ) : (
           'Download Card'
         )}
+      </button>
+      <button
+        onClick={generatePDF}
+        className="
+          w-full py-4 px-8
+          bg-gradient-to-r from-lime-600 to-green-600
+          hover:from-green-700 hover:to-lime-700
+          text-white font-medium
+          rounded-xl
+          shadow-lg shadow-blue-500/25
+          hover:shadow-blue-500/40
+          transform hover:-translate-y-0.5
+          transition-all duration-200
+          disabled:opacity-50 disabled:cursor-not-allowed
+          disabled:hover:translate-y-0
+        "
+      >
+        Generate PDF
       </button>
     </div>
 
