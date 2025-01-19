@@ -12,7 +12,7 @@ const Header = () => (
           <Link href="/create" className="text-stone-800 hover:text-blue-600">
             Create Card
           </Link>
-          <Link href="/vip" className="text-stone-800 hover:text-blue-600">
+          <Link href="/advanced" className="text-stone-800 hover:text-blue-600">
             Advanced Cards
           </Link>
           {/* <Link href="/templates" className="text-gray-700 hover:text-blue-600">

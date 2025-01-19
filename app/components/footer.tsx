@@ -8,7 +8,7 @@ const Footer = () => (
           <h3 className="text-lg font-semibold mb-4">Product</h3>
           <ul className="space-y-2">
             <li><Link href="/create" className="hover:text-white">Create Card</Link></li>
-            <li><Link href="/vip" className="hover:text-white">Advanced Cards</Link></li>
+            <li><Link href="/advanced" className="hover:text-white">Advanced Cards</Link></li>
             {/* <li><Link href="/pricing" className="hover:text-white">Pricing</Link></li> */}
           </ul>
         </div>

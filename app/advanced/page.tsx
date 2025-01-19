@@ -1937,7 +1937,7 @@ const baseLabelStyles = `
       className="absolute bottom-0 p-4 sm:p-6 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent"
     >
       <h1 className={`text-xl md:text-6xl ${'titleFont' in cardVariants[selectedVariant] ? cardVariants[selectedVariant].titleFont : 'default-font'} text-white mb-2 tracking-tight`}>
-        {title || 'Untitled'}
+        {title || 'Hero Image'}
       </h1>
       <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl whitespace-pre-line font-light ">
         {description}
@@ -4366,7 +4366,7 @@ const baseLabelStyles = `
           />
           <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
-        <label className="flex items-center gap-2">
+        {/* <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={showfooterPart}
@@ -4374,7 +4374,7 @@ const baseLabelStyles = `
             className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />
           <span className="text-slate-700 text-xs">Show App Signature</span>
-        </label>
+        </label> */}
       </div>
     </div>
 
@@ -8232,7 +8232,7 @@ const baseLabelStyles = `
           />
           <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
-        <label className="flex items-center gap-2">
+        {/* <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={showfooterPart}
@@ -8240,7 +8240,7 @@ const baseLabelStyles = `
             className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />
           <span className="text-slate-700 text-xs">Show App Signature</span>
-        </label>
+        </label> */}
       </div>
     </div>
 
@@ -8371,7 +8371,7 @@ const baseLabelStyles = `
       className="absolute bottom-0 p-4 sm:p-6 w-full bg-gradient-to-t from-black/80 via-black/50 to-transparent"
     >
       <h1 className={`text-xl md:text-6xl ${'titleFont' in cardVariants[selectedVariant] ? cardVariants[selectedVariant].titleFont : 'default-font'} text-white mb-2 tracking-tight`}>
-        {title || 'Untitled'}
+        {title || 'Hero Image'}
       </h1>
       <p className="text-base sm:text-xl md:text-2xl text-white/80 max-w-3xl whitespace-pre-line font-light ">
         {description}
