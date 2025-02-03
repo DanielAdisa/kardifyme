@@ -1931,7 +1931,7 @@ const baseLabelStyles = `
 
       {/* input fields */}
       {isMobile ? <div className="  md:w-1/3 md:h-full w-full h-2/6 flex flex-col space-y-4 overflow-y-auto overflow-x-hidden border-r border-gray-200 p-4">
-      <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+      <h1 className="md:text-4xl text-xl font-bold mb-8 text-center bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
     Create Your Card
   </h1>
         {/* input fields */}
