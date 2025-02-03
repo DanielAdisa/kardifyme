@@ -1924,13 +1924,13 @@ const baseLabelStyles = `
 
 
   return (
-    <div className="flex w-full md flex-col-reverse md:flex-row h-screen  p-3">
+    <div className="flex w-full md flex-col-reverse md:flex-row h-screen justify-center items-center p-3">
 
 
 
 
       {/* input fields */}
-      {isMobile ? <div className="  md:w-1/3 md:h-full w-full h-3/6 flex flex-col space-y-4 overflow-y-auto overflow-x-hidden border-r border-gray-200 p-4">
+      {isMobile ? <div className="  md:w-1/3 md:h-full w-full h-2/6 flex flex-col space-y-4 overflow-y-auto overflow-x-hidden border-r border-gray-200 p-4">
       <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
     Create Your Card
   </h1>
@@ -9964,7 +9964,7 @@ const baseLabelStyles = `
       
 
       {/* Add responsive card container */}
-      <div className="flex-1 md:h-full h-3/6  md:max-w-3xl w-full overflow-scroll   flex md:mx-auto items-center justify-center rounded-lg shadow-md p-8 m-4 md:mb-4">
+      <div className="flex-1 md:h-full h-4/6  md:max-w-3xl w-full md:pt-[20px] pt-[250px] overflow-scroll place-content-start   flex md:mx-auto items-center justify-center rounded-lg shadow-md p-8 m-4 md:mb-4">
       <motion.div
   ref={cardRef}
   initial={{ opacity: 0, y: 20 }}
