@@ -340,7 +340,16 @@ const CreateCard = () => {
     orderPolicies: string;
     contactInfo: string;
   }
-  
+  const [isMobile, setIsMobile] = useState(false);
+  const checkScreenSize = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
+
+  useEffect(() => {
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
   const [affirmationTitle, setAffirmationTitle] = useState('');
   const [backgroundImage, setBackgroundImage] = useState<string>('');
   const [title, setTitle] = useState('');
@@ -1915,13 +1924,13 @@ const baseLabelStyles = `
 
 
   return (
-    <div className="flex w-full flex-col-reverse md:flex-row h-screen pt-20 p-3">
+    <div className="flex w-full md flex-col-reverse md:flex-row h-screen  p-3">
 
 
 
 
       {/* input fields */}
-      <div className="  md:w-1/3 md:h-full w-full h-1/3 overflow-y-auto overflow-x-hidden border-r border-gray-200 p-4">
+      {isMobile ? <div className="  md:w-1/3 md:h-full w-full h-3/6 flex flex-col space-y-4 overflow-y-auto overflow-x-hidden border-r border-gray-200 p-4">
       <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
     Create Your Card
   </h1>
@@ -5936,10 +5945,4026 @@ const baseLabelStyles = `
     </div>
 
         
+      </div> : <div className="  md:w-1/3 md:h-full w-full h-1/3 overflow-y-auto overflow-x-hidden border-r border-gray-200 p-4">
+      <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+    Create Your Card
+  </h1>
+        {/* input fields */}
+        <div className="space-y-4">
+          {/* Other Inputs */}
+
+          
+{/* Checkbox Example */}
+<div className=" bg-white/80 p-3 shadow-md rounded-xl">
+      {/* <input 
+        value={cardState.title}
+        onChange={e => updateCardState({ title: e.target.value })}
+        title="Enter card title"
+        placeholder="Card Title"
+      /> */}
+      <label className={baseLabelStyles}>Show Sections</label>
+        <div className=" border m-4 "/>
+      <div className="flex items-center justify-between">
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showTopPart}
+            onChange={(e) => setShowTopPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className=" text-slate-700 text-xs">Show Top Section</span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showBottomPart}
+            onChange={(e) => setShowBottomPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700 text-xs">Show Bottom Section</span>
+        </label>
+        {/* <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showfooterPart}
+            onChange={(e) => setshowfooterPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700 text-xs">Show App Signature</span>
+        </label> */}
+      </div>
+    </div>
+
+          {/* Select Card Type */}
+
+          <div className="space-y-4 bg-gradient-to-br from-white to-gray-50/80 p-4 md:p-8 rounded-xl shadow-xl border border-gray-100">
+  {/* Card Type Selector */}
+  <div className="space-y-2">
+    <label className="block text-lg font-semibold text-gray-800">
+      Select Card Type
+      <span className="ml-2 text-gray-400 text-sm font-normal">Choose your design</span>
+    </label>
+    <div className="relative mt-1">
+      <select
+        title="Select card type"
+        value={selectedVariant}
+        onChange={(e) => setSelectedVariant(e.target.value as VariantType)}
+        className="w-full p-4 pr-12 text-gray-700 bg-white rounded-2xl border border-gray-200 
+                 shadow-sm appearance-none cursor-pointer transition-all duration-200
+                 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+      >
+        <option value="business">💼 Business Card</option>
+        <option value="event">🎫 Event Ticket</option>
+        <option value="product">🛍️ Product Showcase</option>
+        <option value="invoice">📄 Invoice</option>
+        <option value="receipt">🧾 Receipt</option>
+        <option value="einvoice">📧 E-Invoice</option>
+        <option value="flyer">📜 E-Flyer</option>
+        <option value="recipe">🍲 Recipe</option>
+        <option value="contract">📜 Contract</option>
+        <option value="birthday">🎂 Birthday</option>
+        <option value="budget">💰 Budget</option>
+        <option value="idCard">🆔 ID Card</option>
+        <option value="mood">🌈 Mood Board</option>
+        <option value="affirmations">💬 Affirmations</option>
+        <option value="brand">🏷️ Brand Card</option>
+        <option value="invitation">💌 Invitation</option>
+        <option value="resume">💬 Resume</option>
+      </select>
+      <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+        <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {/* Card Style Selector */}
+<div className="space-y-2">
+  <label className="block text-lg font-semibold text-gray-800">
+    Select Card Style
+    <span className="ml-2 text-gray-400 text-sm font-normal">Choose your style</span>
+  </label>
+  <div className="relative mt-1">
+    <select
+      value={selectedVariantStyle}
+      onChange={(e) => setSelectedVariantStyle(e.target.value)}
+      className="w-full p-4 pr-12 text-gray-700 bg-white rounded-2xl border border-gray-200 
+               shadow-sm appearance-none cursor-pointer transition-all duration-200
+               hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+    >
+      <option value="default">Default Style</option>
+      <option value="style1">Style 1</option>
+      <option value="style2">Style 2</option>
+      <option value="style3">Style 3</option>
+      <option value="style4">Style 4</option>
+      {/* Add more styles as needed */}
+    </select>
+    <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+      <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+  {/* Style Controls */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    {/* Card Color Picker1 */}
+    <div className="space-y-2 bg-white p-4 mx-auto rounded-2xl border border-gray-100 shadow-sm">
+      <label className="block font-medium text-gray-700">
+        Card Color
+        <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
+      </label>
+      <div className="relative group">
+        <div title="Select card color">
+          <SketchPicker
+            color={cardColor[selectedVariant]}
+            onChange={(color) => setCardColor({ ...cardColor, [selectedVariant]: color.hex })}
+            className="w-full h-fit p-4 cursor-pointer transition-transform duration-200 
+                     "
+          />
+        </div>
+        <div className="absolute inset-0 rounded-xl ring-2 ring-gray-200 pointer-events-none 
+                      transition-opacity opacity-0 group-hover:opacity-100" />
+      </div>
+    </div>
+
+    {/* Template Selector */}
+    <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
+      <label className="block font-medium text-gray-700">
+        Template Style
+        <span className="ml-2 text-sm text-gray-400">Choose Font</span>
+      </label>
+      <select
+        value={selectedTemplate[selectedVariant]}
+        onChange={(e) => setSelectedTemplate({
+          ...selectedTemplate,
+          [selectedVariant]: e.target.value
+        })}
+        className="w-full p-3 text-gray-700 bg-white rounded-xl border border-gray-200 
+                 shadow-sm appearance-none cursor-pointer transition-all duration-200
+                 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+      >
+        {templateOptions[selectedVariant].map((template) => (
+          <option key={template} value={template}>
+            {template.charAt(0).toUpperCase() + template.slice(1)}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* Text Color Picker */}
+  <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
+    <label className="block font-medium text-gray-700">
+      Text Color
+      <span className="ml-2 w-full text-sm text-gray-400">Set font color</span>
+    </label>
+    <div className="relative group">
+      <SketchPicker
+        color={titleColor}
+        onChange={(color) => setTitleColor(color.hex)}
+        className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                  border border-gray-200"
+      />
+      
+    </div>
+
+    <label className="block font-medium text-gray-700">
+      Footer Text Color Picker
+      <span className="ml-2 text-sm text-gray-400">Set footer font color</span>
+    </label>
+    <div className="relative group">
+    <SketchPicker
+        color={footerColor}
+        onChange={(color) => setFooterColor(color.hex)}
+        className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                  border border-gray-200"
+      />
+      {/* <input
+        type="color"
+        value={footerColor}
+        onChange={(e) => setFooterColor(e.target.value)}
+        className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+                 hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+      /> */}
+      
+    </div>
+
+    <label className="block font-medium text-gray-700">
+    Footer Card Color Picker
+          <span className="ml-2 text-sm text-gray-400">Set Footer Color</span>
+    </label>
+      <div className="relative group">
+          {/* <input
+            type="color"
+            value={footerCardColor}
+            onChange={(e) => setfooterCardColor(e.target.value)}
+            className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+                 hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+          /> */}
+          <SketchPicker
+            color={footerCardColor}
+            onChange={(color) => setfooterCardColor(color.hex)}
+            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                      border border-gray-200"
+          />
+      </div>
+        
+  </div>
+</div>
+ 
+   {/* Conditional Inputs based on Variant */}
+   {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-stone-950 mb-2">
+                  {selectedVariant === 'invoice' || selectedVariant === 'einvoice' ? 'Invoice Number' : 'Receipt Number'}
+                </label>
+                <input
+                  type="text"
+                  value={invoiceNumber}
+                  onChange={(e) => setInvoiceNumber(e.target.value)}
+                  className="w-full p-2 rounded-lg border border-slate-300 bg-white text-slate-900"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-stone-950 mb-2">Items</label>
+                {items.map((item, index) => (
+                  <div key={index} className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={item.description}
+                      onChange={(e) => {
+                        const newItems = [...items];
+                        newItems[index].description = e.target.value;
+                        setItems(newItems);
+                      }}
+                      title="Enter item description"
+                      placeholder="Description"
+                      className="flex-1 p-2 rounded-lg border border-slate-300"
+                    />
+                    <input
+                      type="number"
+                      value={item.amount}
+                      onChange={(e) => {
+                        const newItems = [...items];
+                        newItems[index].amount = parseFloat(e.target.value);
+                        setItems(newItems);
+                      }}
+                      title="Enter item amount"
+                      placeholder="Amount"
+                      className="w-32 p-2 rounded-lg border border-slate-300"
+                    />
+                    <button
+                      title="Delete item"
+                      onClick={() => {
+                        const newItems = items.filter((_, i) => i !== index);
+                        setItems(newItems);
+                      }}
+                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                <button
+                  onClick={() => setItems([...items, { description: '', amount: 0 }])}
+                  className="text-blue-500 hover:text-blue-600"
+                >
+                  + Add Item
+                </button>
+              </div>
+
+              {(selectedVariant === 'invoice' || selectedVariant === 'einvoice') && (
+                <>
+                  <div>
+                    <label className="block text-stone-950 mb-2">Tax Rate (%)</label>
+                    <input
+                      type="number"
+                      value={taxRate}
+                      onChange={(e) => setTaxRate(parseFloat(e.target.value))}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-stone-950 mb-2">Due Date</label>
+                    <input
+                      type="date"
+                      value={dueDate}
+                      onChange={(e) => setDueDate(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                  </div>
+                  <div>
+      <label className="block text-stone-950 mb-2 font-medium">Invoice Details</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
+        placeholder="Enter flyer details, features, or event information"
+      />
+    </div>
+                </>
+              )}
+              <div>
+                <label className="block text-stone-950 mb-2">Currency</label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full p-2 rounded-lg border border-slate-300"
+                >
+                  {currencyOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
+
+{/* Flyer Input Fields */}
+{selectedVariant === 'flyer' && (
+  <div className="space-y-6 bg-white/90 p-4 rounded-xl">
+    {/* Background Type Selection */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Background Type
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* <div className="">
+      <label className={baseLabelStyles}>Inner BG Color</label>
+      <input
+        type="color"
+        value={backgroundColor}
+        onChange={(e) => setBackgroundColor(e.target.value)}
+        className="w-full h-[45px] backdrop-blur-sm rounded-xl"
+      />
+    </div> */}
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Background Type</label>
+          <select
+            value={bgType}
+            onChange={(e) => setBgType(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          >
+            <option value="gradient">Gradient</option>
+            <option value="solid">Solid Color</option>
+          </select>
+        </div>
+        {bgType === 'gradient' && (
+          <>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
+              {/* <input
+                type="color"
+                value={gradientFrom}
+                onChange={(e) => setGradientFrom(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientFrom}
+                onChange={(color) => setGradientFrom(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
+              {/* <input
+                type="color"
+                value={gradientVia}
+                onChange={(e) => setGradientVia(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientVia}
+                onChange={(color) => setGradientVia(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
+              {/* <input
+                type="color"
+                value={gradientTo}
+                onChange={(e) => setGradientTo(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientTo}
+                onChange={(color) => setGradientTo(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+          </>
+        )}
+        {bgType === 'solid' && (
+          <div>
+            <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
+            {/* <input
+              type="color"
+              value={solidColor}
+              onChange={(e) => setSolidColor(e.target.value)}
+              className="w-full h-10 rounded-lg border border-slate-300"
+            /> */}
+            <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Title</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          placeholder="Enter eye-catching title"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Tagline</label>
+        <input
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          placeholder="Add a captivating tagline"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Main Content</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
+        placeholder="Enter flyer details, features, or event information"
+      />
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2">Gradient From</label>
+        {/* <input
+          type="color"
+          value={gradientFrom}
+          onChange={(e) => setGradientFrom(e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300"
+        /> */}
+        <SketchPicker
+              color={gradientFrom}
+              onChange={(color) => setGradientFrom(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2">Gradient Via</label>
+        {/* <input
+          type="color"
+          value={gradientVia}
+          onChange={(e) => setGradientVia(e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300"
+        /> */}
+      </div>
+      <SketchPicker
+              color={gradientVia}
+              onChange={(color) => setGradientVia(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+      <div>
+        <label className="block text-stone-950 mb-2">Gradient To</label>
+        {/* <input
+          type="color"
+          value={gradientTo}
+          onChange={(e) => setGradientTo(e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300"
+        /> */}
+        <SketchPicker
+              color={gradientTo}
+              onChange={(color) => setGradientTo(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+      </div>
+      {/* Background Image Upload */}
+    <div>
+      <label className="block text-gray-800 font-medium mb-2">Upload Background Image</label>
+      
+      <div className="space-y-2">
+                {backgroundImage && (
+                  <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+                    <img src={backgroundImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+                    <button
+                      title="Delete Hero Image"
+                      onClick={() => setBackgroundImage('')}
+                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setBackgroundImage(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  accept="image/*"
+                />
+              </div>
+
+    </div>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Price</label>
+        <div className="flex gap-2">
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+            placeholder="Enter price"
+          />
+          <select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            className="w-32 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          >
+            {currencyOptions.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">QR Code URL</label>
+        <input
+          type="url"
+          value={qrUrl}
+          onChange={(e) => setQrUrl(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all"
+          placeholder="Enter URL for QR code"
+        />
+      </div>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="space-y-4">
+  <label className="block text-lg font-medium text-gray-900">Upload Flyer Image</label>
+  <div className="space-y-2">
+                {flyerImage && (
+                  <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+                    <img src={flyerImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+                    <button
+                      title="Delete Hero Image"
+                      onClick={() => setflyerImage('')}
+                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setflyerImage(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  accept="image/*"
+                />
+              </div>
+                </div>
+      <div className="space-y-2">
+      {logo && (
+        <div className="relative w-full h-32 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+          <img src={logo} alt="Logo" className="object-cover w-full h-full" />
+          <button
+            onClick={() => handleDeleteImage('logo')}
+            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+      <label className="block text-lg font-medium text-gray-900">Upload Flyer Logo</label>
+      <input
+        type="file"
+        onChange={(e) => handleImageChange(e, 'logo')}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        accept="image/*"
+      />
+    </div>
+    </div>
+  </div>
+)}
+
+{/* BRandcard field */}
+{selectedVariant === 'brand' && (
+  <div className="space-y-6 bg-white p-6 shadow-lg rounded-2xl">
+    {/* Brand Name */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Brand Name</label>
+      <div className="items-center gap-2">
+        <input
+          type="text"
+          value={brandName}
+          onChange={(e) => setBrandName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter brand name"
+        />
+        <SketchPicker
+          color={textColors.brandName}
+          onChange={(color) => setTextColors({ ...textColors, brandName: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+        {/* <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            /> */}
+      </div>
+    </div>
+
+    {/* Tagline */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Tagline</label>
+      <div className=" gap-2">
+        <input
+          type="text"
+          value={tagline}
+          onChange={(e) => setTagline(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter tagline"
+        />
+        {/* <input
+          type="color"
+          value={textColors.tagline}
+          onChange={(e) => setTextColors({ ...textColors, tagline: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Tagline Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.tagline}
+          onChange={(color) => setTextColors({ ...textColors, tagline: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+    </div>
+
+    {/* Description */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Description</label>
+      <div className="flex items-center gap-2">
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter description"
+        />
+        {/* <input
+          type="color"
+          value={textColors.description}
+          onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Description Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.description}
+          onChange={(color) => setTextColors({ ...textColors, description: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+    </div>
+
+    {/* Order Policies */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Order Policies</label>
+      <div className="flex items-center gap-2">
+        <textarea
+          value={orderPolicies}
+          onChange={(e) => setOrderPolicies(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter order policies"
+        />
+        {/* <input
+          type="color"
+          value={textColors.orderPolicies}
+          onChange={(e) => setTextColors({ ...textColors, orderPolicies: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Order Policies Text Color"
+        /> */}
+
+        <SketchPicker
+            color={textColors.orderPolicies}
+            onChange={(color) => setTextColors({ ...textColors, orderPolicies: color.hex })}
+            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+        />
+      </div>
+    </div>
+
+    {/* Contact Information */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Contact Information</label>
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={contactInfo}
+          onChange={(e) => setContactInfo(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter contact information"
+        />
+        {/* <input
+          type="color"
+          value={textColors.contactInfo}
+          onChange={(e) => setTextColors({ ...textColors, contactInfo: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300"
+          title="Contact Information Text Color"
+        /> */}
+
+        <SketchPicker
+            color={textColors.contactInfo}
+            onChange={(color) => setTextColors({ ...textColors, contactInfo: color.hex })}
+            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+        />
+      </div>
+    </div>
+
+    {/* Social Media Links */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Social Media Links</label>
+      <div className="space-y-2">
+        {Object.keys(socialMediaLinks).map((platform) => (
+          <div key={platform} className="flex items-center gap-2">
+            <input
+              type="text"
+              value={socialMediaLinks[platform as keyof typeof socialMediaLinks]}
+              onChange={(e) => setSocialMediaLinks({ ...socialMediaLinks, [platform]: e.target.value })}
+              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+              placeholder={`Enter ${platform} link`}
+            />
+            <SketchPicker
+              color={textColors[platform as keyof typeof textColors]}
+              onChange={(color) => setTextColors({ ...textColors, [platform]: color.hex })}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+            />
+        {/* <SketchPicker
+            color={textColors.orderPolicies}
+            onChange={(color) => setTextColors({ ...textColors, orderPolicies: color.hex })}
+            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+        /> */}
+            
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Hero Image */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Upload Hero Image</label>
+      <div className="space-y-2">
+        {heroImage && (
+          <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden shadow-md">
+            <img src={typeof heroImage === 'string' ? heroImage : URL.createObjectURL(heroImage)} alt="Uploaded" className="object-cover w-full h-full" />
+            <button
+              title="Delete hero image"
+              onClick={() => setHeroImage(null)}
+              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              const file = e.target.files[0];
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setHeroImage(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          accept="image/*"
+        />
+      </div>
+    </div>
+
+    {/* Logo */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Upload Your Logo</label>
+      <div className="space-y-2">
+        {logo && (
+          <div className="relative w-full h-32 bg-gray-100 rounded-xl overflow-hidden shadow-md">
+            <img src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)} alt="Logo" className="object-cover w-full h-full" />
+            <button
+              onClick={() => setLogo('')}
+              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              const file = e.target.files[0];
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setLogo(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          accept="image/*"
+        />
+      </div>
+    </div>
+
+    {/* Background Gradient */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Gradient From</label>
+        {/* <input
+          type="color"
+          value={gradientFrom}
+          onChange={(e) => setGradientFrom(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        /> */}
+        <SketchPicker
+              color={gradientFrom}
+              onChange={(color) => setGradientFrom(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+      </div>
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Gradient Via</label>
+        {/* <input
+          type="color"
+          value={gradientVia}
+          onChange={(e) => setGradientVia(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        /> */}
+        <SketchPicker
+              color={gradientVia}
+              onChange={(color) => setGradientVia(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+      </div>
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Gradient To</label>
+        {/* <input
+          type="color"
+          value={gradientTo}
+          onChange={(e) => setGradientTo(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        /> */}
+        <SketchPicker
+              color={gradientTo}
+              onChange={(color) => setGradientTo(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+      </div>
+    </div>
+
+    {/* QR Code URL */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">QR Code URL</label>
+      <input
+        type="text"
+        value={qrUrl}
+        onChange={(e) => setQrUrl(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter QR Code URL"
+      />
+    </div>
+  </div>
+)}
+
+{/* Invitation input field */}
+{selectedVariant === 'invitation' && (
+  <div className="space-y-6 p-4 backdrop-blur-3xl bg-black/30 rounded-lg shadow-lg">
+    {/* Background Type Selection */}
+    <div>
+      <label className="block text-gray-800 mb-2 font-medium">Background Type</label>
+      <select
+        value={bgType}
+        onChange={(e) => setBgType(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+      >
+        <option value="gradient">Gradient</option>
+        <option value="solid">Solid Color</option>
+        <option value="image">Hero Image</option>
+      </select>
+    </div>
+
+    {/* Gradient Background Inputs */}
+    {bgType === 'gradient' && (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Gradient From</label>
+          {/* <input
+            type="color"
+            value={gradientFrom}
+            onChange={(e) => setGradientFrom(e.target.value)}
+            className="w-full h-10 rounded-lg border border-gray-300 bg-white"
+          /> */}
+          <SketchPicker
+              color={gradientFrom}
+              onChange={(color) => setGradientFrom(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+        </div>
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Gradient Via</label>
+          {/* <input
+            type="color"
+            value={gradientVia}
+            onChange={(e) => setGradientVia(e.target.value)}
+            className="w-full h-10 rounded-lg border border-gray-300 bg-white"
+          /> */}
+          <SketchPicker
+              color={gradientVia}
+              onChange={(color) => setGradientVia(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+        </div>
+        <div>
+          <label className="block text-gray-800 mb-1 text-sm">Gradient To</label>
+          {/* <input
+            type="color"
+            value={gradientTo}
+            onChange={(e) => setGradientTo(e.target.value)}
+            className="w-full h-10 rounded-lg border border-gray-300 bg-white"
+          /> */}
+          <SketchPicker
+              color={gradientTo}
+              onChange={(color) => setGradientTo(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+        </div>
+      </div>
+    )}
+
+    {/* Solid Color Background Input */}
+    {bgType === 'solid' && (
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Solid Background Color</label>
+        {/* <input
+          type="color"
+          value={solidColor}
+          onChange={(e) => setSolidColor(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300 bg-white"
+        /> */}
+        <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+            />
+      </div>
+    )}
+
+    {/* Hero Image Background Input */}
+    {bgType === 'image' && (
+  <div>
+    <label className="block text-gray-800 mb-1 text-sm">Upload Hero Image</label>
+    <input
+      type="file"
+      onChange={(e) => {
+        if (e.target.files && e.target.files[0]) {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setHeroImage(reader.result as string);
+          };
+          reader.readAsDataURL(file);
+        }
+      }}
+      className="w-full p-3 rounded-lg border border-gray-300 bg-white"
+      accept="image/*"
+    />
+    {heroImage && (
+      <div className="relative mt-4 w-full h-64 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+        <img
+          src={heroImage}
+          alt="Hero"
+          className="object-cover w-full h-full"
+        />
+        <button
+          onClick={() => setHeroImage(null)}
+          className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    )}
+  </div>
+)}
+
+    {/* Event Information */}
+    <div className="space-y-4">
+      {/* Event Name */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Event Name</label>
+        <textarea
+          value={eventName}
+          onChange={(e) => setEventName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        {/* <input
+          type="color"
+          value={textColors.eventName}
+          onChange={(e) => setTextColors({ ...textColors, eventName: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Event Name Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.eventName}
+          onChange={(color) => setTextColors({ ...textColors, eventName: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+      {/* Event Date */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Event Date</label>
+        <input
+          type="date"
+          value={eventDate}
+          onChange={(e) => setEventDate(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        {/* <input
+          type="color"
+          value={textColors.eventDate}
+          onChange={(e) => setTextColors({ ...textColors, eventDate: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Event Date Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.eventDate}
+          onChange={(color) => setTextColors({ ...textColors, eventDate: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+      {/* Event Time */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Event Time</label>
+        <input
+          type="time"
+          value={eventTime}
+          onChange={(e) => setEventTime(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        {/* <input
+          type="color"
+          value={textColors.eventTime}
+          onChange={(e) => setTextColors({ ...textColors, eventTime: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Event Time Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.eventTime}
+          onChange={(color) => setTextColors({ ...textColors, eventTime: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+      {/* Event Image */}
+      {/* <div>
+      <label className="block text-gray-700 font-medium mb-2">Upload Event Image</label>
+      <div className="space-y-2">
+        {eventImage && (
+          <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden shadow-md">
+            <img src={typeof eventImage === 'string' ? eventImage : URL.createObjectURL(eventImage)} alt="Uploaded" className="object-cover w-full h-full" />
+            <button
+              title="Delete hero image"
+              onClick={() => seteventImage(null)}
+              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              const file = e.target.files[0];
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                seteventImage(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+          className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          accept="image/*"
+        />
+      </div>
+    </div> */}
+      {/* Event Location */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Event Location 😊</label>
+        <textarea
+          value={eventLocation}
+          onChange={(e) => setEventLocation(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        {/* <input
+          type="color"
+          value={textColors.eventLocation}
+          onChange={(e) => setTextColors({ ...textColors, eventLocation: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Event Location Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.eventLocation}
+          onChange={(color) => setTextColors({ ...textColors, eventLocation: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+    </div>
+
+    {/* Invitee and Inviter Information */}
+    <div className="space-y-4">
+      {/* Invitee Name */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Invitee Name</label>
+        <textarea
+          value={inviteeName}
+          onChange={(e) => setInviteeName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        {/* <input
+          type="color"
+          value={textColors.inviteeName}
+          onChange={(e) => setTextColors({ ...textColors, inviteeName: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Invitee Name Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.inviteeName}
+          onChange={(color) => setTextColors({ ...textColors, inviteeName: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+      {/* Inviter Name */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Inviter Name</label>
+        <textarea
+          value={inviterName}
+          onChange={(e) => setInviterName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        {/* <input
+          type="color"
+          value={textColors.inviterName}
+          onChange={(e) => setTextColors({ ...textColors, inviterName: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Inviter Name Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.inviterName}
+          onChange={(color) => setTextColors({ ...textColors, inviterName: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+      {/* Occasion */}
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Occasion</label>
+        <textarea
+          value={occasion}
+          onChange={(e) => setOccasion(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        />
+        {/* <input
+          type="color"
+          value={textColors.occasion}
+          onChange={(e) => setTextColors({ ...textColors, occasion: e.target.value })}
+          className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+          title="Occasion Text Color"
+        /> */}
+        <SketchPicker
+          color={textColors.occasion}
+          onChange={(color) => setTextColors({ ...textColors, occasion: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+      </div>
+    </div>
+
+    {/* Description */}
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">Description</label>
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+        rows={3}
+      />
+      {/* <input
+        type="color"
+        value={textColors.description}
+        onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
+        className="w-10 h-10 rounded-lg border border-gray-300 mt-2 bg-white"
+        title="Description Text Color"
+      /> */}
+      <SketchPicker
+          color={textColors.description}
+          onChange={(color) => setTextColors({ ...textColors, description: color.hex })}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                        border border-gray-200"
+        />
+    </div>
+
+    {/* QR Code */}
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">QR Code URL</label>
+      <input
+        type="url"
+        value={qrUrl}
+        onChange={(e) => setQrUrl(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 bg-white"
+      />
+    </div>
+
+    {/* Logo Upload */}
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">Upload Logo</label>
+      <input
+        type="file"
+        onChange={(e) => {
+          if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setLogo(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+          }
+        }}
+        className="w-full p-3 rounded-lg border border-gray-300 bg-white"
+        accept="image/*"
+      />
+    </div>
+  </div>
+)}
+
+
+
+{/* Budget Input Field */}
+{selectedVariant === 'budget' && (
+  <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Month & Year</label>
+        <input
+          type="month"
+          value={budgetState.monthYear}
+          onChange={(e) => setBudgetState({...budgetState, monthYear: e.target.value})}
+          className="w-full p-3 rounded-xl border border-slate-300"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Currency</label>
+        <select
+          value={budgetState.currency}
+          onChange={(e) => setBudgetState({...budgetState, currency: e.target.value})}
+          className="w-full p-3 rounded-xl border border-slate-300"
+        >
+          {currencyOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Total Budget</label>
+      <input
+        type="number"
+        value={budgetState.totalBudget}
+        onChange={(e) => setBudgetState({...budgetState, totalBudget: parseFloat(e.target.value)})}
+        className="w-full p-3 rounded-xl border border-slate-300"
+        placeholder="Enter total budget"
+      />
+    </div>
+
+    <div className="space-y-4">
+      <label className="block text-stone-950 mb-2 font-medium">Budget Categories</label>
+      {budgetState.categories.map((category, index) => (
+        <div key={category.id} className="flex gap-2">
+          <input
+            type="text"
+            value={category.name}
+            onChange={(e) => {
+              const newCategories = [...budgetState.categories];
+              newCategories[index].name = e.target.value;
+              setBudgetState({...budgetState, categories: newCategories});
+            }}
+            className="flex-1 p-3 rounded-xl border border-slate-300"
+            placeholder="Category name"
+          />
+          <input
+            type="number"
+            value={category.amount}
+            onChange={(e) => {
+              const newCategories = [...budgetState.categories];
+              newCategories[index].amount = parseFloat(e.target.value);
+              setBudgetState({...budgetState, categories: newCategories});
+            }}
+            className="w-32 p-3 rounded-xl border border-slate-300"
+            placeholder="Amount"
+          />
+          <button
+            onClick={() => {
+              const newCategories = budgetState.categories.filter((_, i) => i !== index);
+              setBudgetState({...budgetState, categories: newCategories});
+            }}
+            className="p-3 text-red-500 hover:bg-red-50 rounded-xl"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={() => {
+          setBudgetState({
+            ...budgetState,
+            categories: [
+              ...budgetState.categories,
+              { id: crypto.randomUUID(), name: '', amount: 0 }
+            ]
+          });
+        }}
+        className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
+      >
+        Add Category
+      </button>
+    </div>
+  </div>
+)}
+
+{/* // Add to the form section where other inputs are present */}
+{selectedVariant === 'idCard' && (
+  <div className="space-y-6 bg-white p-4 shadow-lg rounded-2xl">
+  {/* Show ID Card Toggle */}
+  <div className="flex items-center gap-2">
+    <input
+      type="checkbox"
+      checked={showIDCard}
+      onChange={(e) => setShowIDCard(e.target.checked)}
+      className="w-5 h-5 accent-blue-500"
+    />
+    <label className="text-gray-800 font-semibold">Show ID Card</label>
+  </div>
+
+  {showIDCard && (
+    <div className="space-y-4 bg-gray-50 p- rounded-lg shadow-md">
+      {/* Input Fields */}
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Name</label>
+        <input
+          type="text"
+          value={idCardDetails.name}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, name: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter name"
+        />
       </div>
 
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">ID Number</label>
+        <input
+          type="text"
+          value={idCardDetails.idNumber}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, idNumber: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter ID number"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Department</label>
+        <input
+          type="text"
+          value={idCardDetails.department}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, department: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter department"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Title</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter a title"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Description</label>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+          placeholder="Enter a description"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Issue Date</label>
+        <input
+          type="date"
+          value={idCardDetails.issueDate}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, issueDate: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Expiry Date</label>
+        <input
+          type="date"
+          value={idCardDetails.expiryDate}
+          onChange={(e) => setIDCardDetails({ ...idCardDetails, expiryDate: e.target.value })}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Photo</label>
+        {idCardDetails.photo ? (
+          <div className="relative w-32 h-32 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+            <img src={idCardDetails.photo} alt="ID Card Photo" className="object-cover w-full h-full" />
+            <button
+              onClick={() => setIDCardDetails({ ...idCardDetails, photo: '' })}
+              className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        ) : (
+          <input
+            type="file"
+            onChange={(e) => {
+              if (!e.target.files) return;
+              const file = e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setIDCardDetails({ ...idCardDetails, photo: reader.result as string });
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring focus:ring-blue-200 bg-white shadow-sm"
+            accept="image/*"
+          />
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+)}
+
+{/* Recipe Input Fields */}
+{selectedVariant === 'recipe' && (
+  <div className="space-y-8 p-4 bg-white/70 backdrop-blur-md rounded-xl border border-white/10">
+    {/* Background Type Selection */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Background Type
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Background Type</label>
+          <select
+            value={bgType}
+            onChange={(e) => setBgType(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          >
+            <option value="gradient">Gradient</option>
+            <option value="solid">Solid Color</option>
+          </select>
+        </div>
+        {bgType === 'gradient' && (
+          <>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
+              {/* <input
+                type="color"
+                value={gradientFrom}
+                onChange={(e) => setGradientFrom(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientFrom}
+                onChange={(color) => setGradientFrom(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
+              {/* <input
+                type="color"
+                value={gradientVia}
+                onChange={(e) => setGradientVia(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientVia}
+                onChange={(color) => setGradientVia(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
+              {/* <input
+                type="color"
+                value={gradientTo}
+                onChange={(e) => setGradientTo(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientTo}
+                onChange={(color) => setGradientTo(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+          </>
+        )}
+        {bgType === 'solid' && (
+          <div>
+            <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
+            {/* <input
+              type="color"
+              value={solidColor}
+              onChange={(e) => setSolidColor(e.target.value)}
+              className="w-full h-10 rounded-lg border border-slate-300"
+            /> */}
+            <SketchPicker
+                color={solidColor}
+                onChange={(color) => setSolidColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* Basic Information Section */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Basic Information
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="col-span-full md:col-span-2">
+          <label className="block text-stone-800 text-sm font-medium mb-2">Recipe Title</label>
+          <div className=" gap-2">
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder="Enter a delicious recipe name"
+            />
+            {/* <input
+              type="color"
+              value={textColors.title}
+              onChange={(e) => setTextColors({ ...textColors, title: e.target.value })}
+              className="w-10 h-10 rounded-lg border border-slate-300"
+              title="Title Text Color"
+            /> */}
+            <SketchPicker
+              color={textColors.title}
+              onChange={(color) => setTextColors({ ...textColors, title: color.hex })}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                            border border-gray-200"
+            />
+          </div>
+        </div>
+        <div className="col-span-full md:col-span-2">
+          <label className="block text-stone-800 text-sm font-medium mb-2">Description</label>
+          <div className=" gap-2">
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder="Briefly describe your recipe..."
+              rows={3}
+            />
+            {/* <input
+              type="color"
+              value={textColors.description}
+              onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
+              className="w-10 h-10 rounded-lg border border-slate-300"
+              title="Description Text Color"
+            /> */}
+            <SketchPicker
+              color={textColors.description}
+              onChange={(color) => setTextColors({ ...textColors, description: color.hex })}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                            border border-gray-200"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Cooking Time (mins)</label>
+          <div className=" gap-2">
+            <input
+              type="number"
+              value={cookingTime}
+              onChange={(e) => setCookingTime(e.target.value)}
+              className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder="45"
+            />
+            {/* <input
+              type="color"
+              value={textColors.details}
+              onChange={(e) => setTextColors({ ...textColors, details: e.target.value })}
+              className="w-10 h-10 rounded-lg border border-slate-300"
+              title="Details Text Color"
+            /> */}
+            <SketchPicker
+              color={textColors.details}
+              onChange={(color) => setTextColors({ ...textColors, details: color.hex })}
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                            border border-gray-200"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Servings</label>
+          <input
+            type="number"
+            value={servings}
+            onChange={(e) => setServings(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+            placeholder="4"
+          />
+        </div>
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Difficulty</label>
+          <select
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Inner Card Color</label>
+          {/* <input
+            type="color"
+            value={innerCardColor}
+            onChange={(e) => setInnerCardColor(e.target.value)}
+            className="w-full h-10 rounded-lg border border-slate-300"
+          /> */}
+          <SketchPicker
+                color={innerCardColor}
+                onChange={(color) => setInnerCardColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+        </div>
+      </div>
+    </div>
+
+    {/* Ingredients Section */}
+<div className="space-y-6 p-4 sm:p-6">
+  <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+    </svg>
+    Ingredients
+  </h3>
+
+  <div className="space-y-6">
+    {ingredients.map((ing, index) => (
+      <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
+        {/* Main Content */}
+        <div className="p-4 space-y-4">
+          {/* Inputs Container */}
+          <div className="flex flex-col gap-3">
+            <input
+              type="text"
+              value={ing.item}
+              onChange={(e) => {
+                const newIngs = [...ingredients];
+                newIngs[index].item = e.target.value;
+                setIngredients(newIngs);
+              }}
+              className="w-full p-4 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-shadow text-base"
+              style={{
+                backgroundColor: ing.backgroundColor,
+                borderColor: ing.borderColor,
+                color: ing.textColor,
+              }}
+              placeholder="Ingredient name"
+            />
+            <input
+              type="text"
+              value={ing.amount}
+              onChange={(e) => {
+                const newIngs = [...ingredients];
+                newIngs[index].amount = e.target.value;
+                setIngredients(newIngs);
+              }}
+              className="w-full sm:w-32 p-4 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-shadow text-base"
+              style={{
+                backgroundColor: ing.amountBackgroundColor,
+                borderColor: ing.amountBorderColor,
+                color: ing.amountTextColor,
+              }}
+              placeholder="Amount"
+            />
+          </div>
+
+          {/* Actions Row */}
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
+            {/* Color Controls Toggle */}
+            <details className="w-full sm:w-auto">
+              <summary className="text-sm font-medium text-stone-800 cursor-pointer hover:text-emerald-500 transition-colors">
+                Customize Colors
+              </summary>
+              <div className="mt-3 p-3 bg-white/10 rounded-lg grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-stone-600">Ingredient</p>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">BG</span>
+                    <SketchPicker
+                      color={ing.backgroundColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].backgroundColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">Border</span>
+                    {/* <input
+                      type="color"
+                      value={ing.borderColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].borderColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.borderColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].borderColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">Text</span>
+                    {/* <input
+                      type="color"
+                      value={ing.textColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].textColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.textColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].textColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+                    />
+                  </label>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-stone-600">Amount</p>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">BG</span>
+                    {/* <input
+                      type="color"
+                      value={ing.amountBackgroundColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountBackgroundColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.amountBackgroundColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountBackgroundColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">Border</span>
+                    {/* <input
+                      type="color"
+                      value={ing.amountBorderColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountBorderColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.amountBorderColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountBorderColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span className="text-xs">Text</span>
+                    {/* <input
+                      type="color"
+                      value={ing.amountTextColor}
+                      onChange={(e) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountTextColor = e.target.value;
+                        setIngredients(newIngs);
+                      }}
+                      className="w-10 h-10 rounded-lg cursor-pointer"
+                    /> */}
+                    <SketchPicker
+                      color={ing.amountTextColor}
+                      onChange={(color) => {
+                        const newIngs = [...ingredients];
+                        newIngs[index].amountTextColor = color.hex;
+                        setIngredients(newIngs);
+                      }}
+                     className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+                    />
+                  </label>
+                </div>
+                <button
+                  onClick={() => {
+                    const newIngs = [...ingredients];
+                    newIngs[index] = {
+                      ...newIngs[index],
+                      backgroundColor: '#ffffff',
+                      borderColor: '#000000',
+                      textColor: '#000000',
+                      amountBackgroundColor: '#ffffff',
+                      amountBorderColor: '#000000',
+                      amountTextColor: '#000000',
+                    };
+                    setIngredients(newIngs);
+                  }}
+                  className="text-sm text-red-500 hover:text-red-600 transition-colors"
+                >
+                  Reset Colors
+                </button>
+              </div>
+            </details>
+
+            {/* Delete Button */}
+            <button
+              onClick={() => setIngredients(ingredients.filter((_, i) => i !== index))}
+              className="flex items-center justify-center w-full sm:w-auto py-2 px-4 text-red-500 bg-red-50/10 rounded-xl hover:bg-red-50/20 transition-colors text-sm font-medium"
+            >
+              Remove Ingredient
+            </button>
+          </div>
+        </div>
+      </div>
+    ))}
+
+    <button
+      onClick={() => setIngredients([...ingredients, { item: '', amount: '', backgroundColor: '#ffffff', borderColor: '#000000', textColor: '#000000', amountBackgroundColor: '#ffffff', amountBorderColor: '#000000', amountTextColor: '#000000' }])}
+      className="w-full sm:w-auto py-3 px-6 flex items-center justify-center gap-2 text-emerald-500 font-medium bg-emerald-50/10 hover:bg-emerald-50/20 rounded-xl transition-colors text-base"
+    >
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+      </svg>
+      Add Ingredient
+    </button>
+  </div>
+</div>
+
+    {/* Instructions Section */}
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+        Instructions
+      </h3>
+      <div className="space-y-2">
+        {instructions.map((instruction, index) => (
+          <div key={index} className="flex items-center gap-2 group">
+            <textarea
+              value={instruction.step}
+              onChange={(e) => {
+                const newSteps = [...instructions];
+                newSteps[index].step = e.target.value;
+                setInstructions(newSteps);
+              }}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder={`Step ${index + 1}`}
+              rows={2}
+            />
+            <button
+              onClick={() => setInstructions(instructions.filter((_, i) => i !== index))}
+              className="p-2 text-red-500 rounded-full border border-transparent hover:border-red-500 focus:ring-2 focus:ring-red-500"
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={() => setInstructions([...instructions, { step: '' }])}
+          className="flex items-center gap-2 text-emerald-500 font-medium hover:underline"
+        >
+          + Add Step
+        </button>
+      </div>
+    </div>
+
+    {/* Chef's Tips Section */}
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+        </svg>
+        Chef's Tips
+      </h3>
+      <div className="space-y-2">
+        {tips.map((tip, index) => (
+          <div key={index} className="flex items-center gap-2 group">
+            <textarea
+              value={tip}
+              onChange={(e) => {
+                const newTips = [...tips];
+                newTips[index] = e.target.value;
+                setTips(newTips);
+              }}
+              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+              placeholder={`Tip ${index + 1}`}
+              rows={2}
+            />
+            <button
+              onClick={() => setTips(tips.filter((_, i) => i !== index))}
+              className="p-2 text-red-500 rounded-full border border-transparent hover:border-red-500 focus:ring-2 focus:ring-red-500"
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={() => setTips([...tips, ''])}
+          className="flex items-center gap-2 text-emerald-500 font-medium hover:underline"
+        >
+          + Add Tip
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+{selectedVariant === 'contract' && (
+  <div className="space-y-6">
+    {/* Contract Details */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Contract Title</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+          placeholder="Enter contract title"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Contract Date</label>
+        <input
+          type="date"
+          value={contractDate}
+          onChange={(e) => setContractDate(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+        />
+      </div>
+    </div>
+    <div className="flex gap-2">
+    <input
+      type="number"
+      value={contractValue}
+      onChange={(e) => setContractValue(e.target.value)}
+      className="flex-1 p-3 rounded-xl border border-slate-300"
+      placeholder="Enter contract value"
+    />
+    <select
+      value={currency}
+      onChange={(e) => setCurrency(e.target.value)}
+      className="w-32 p-3 rounded-xl border border-slate-300"
+    >
+      {currencyOptions.map(option => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  </div>
+
+    {/* Party Information */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Party 1 Name</label>
+        <input
+          type="text"
+          value={party1Name}
+          onChange={(e) => setParty1Name(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+          placeholder="Enter party 1 name"
+        />
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Party 2 Name</label>
+        <input
+          type="text"
+          value={party2Name}
+          onChange={(e) => setParty2Name(e.target.value)}
+          className="w-full p-3 rounded-xl border border-slate-300"
+          placeholder="Enter party 2 name"
+        />
+      </div>
+    </div>
+
+    {/* Signatures */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Party 1 Signature</label>
+        <SignatureCanvas
+          ref={party1SigCanvas}
+          penColor="black"
+          canvasProps={{ className: 'w-full h-32 border border-slate-300 rounded-xl' }}
+        />
+        <div className="flex gap-2 mt-2">
+          <button
+            onClick={() => clearSignature(party1SigCanvas)}
+            className="p-2 bg-red-500 text-white rounded-lg"
+          >
+            Clear
+          </button>
+          <button
+            onClick={() => saveSignature(party1SigCanvas, setParty1Signature)}
+            className="p-2 bg-green-500 text-white rounded-lg"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+      <div>
+        <label className="block text-stone-950 mb-2 font-medium">Party 2 Signature</label>
+        <SignatureCanvas
+          ref={party2SigCanvas}
+          penColor="black"
+          canvasProps={{ className: 'w-full h-32 border border-slate-300 rounded-xl' }}
+        />
+        <div className="flex gap-2 mt-2">
+          <button
+            onClick={() => clearSignature(party2SigCanvas)}
+            className="p-2 bg-red-500 text-white rounded-lg"
+          >
+            Clear
+          </button>
+          <button
+            onClick={() => saveSignature(party2SigCanvas, setParty2Signature)}
+            className="p-2 bg-green-500 text-white rounded-lg"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {/* Contract Terms */}
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Contract Terms</label>
+      <textarea
+        value={contractTerms}
+        onChange={(e) => setContractTerms(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 min-h-[200px]"
+        placeholder="Enter contract terms and conditions..."
+      />
+    </div>
+
+    {/* Witnesses */}
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Witnesses</label>
+      {witnesses.map((witness, idx) => (
+        <div key={idx} className="flex gap-2 mb-2">
+          <input
+            type="text"
+            value={witness.name}
+            onChange={(e) => {
+              const newWitnesses = [...witnesses];
+              newWitnesses[idx].name = e.target.value;
+              setWitnesses(newWitnesses);
+            }}
+            className="flex-1 p-3 rounded-xl border border-slate-300"
+            placeholder="Witness name"
+          />
+          <input
+            type="text"
+            value={witness.signature}
+            onChange={(e) => {
+              const newWitnesses = [...witnesses];
+              newWitnesses[idx].signature = e.target.value;
+              setWitnesses(newWitnesses);
+            }}
+            className="flex-1 p-3 rounded-xl border border-slate-300 font-mono"
+            placeholder="Witness signature"
+          />
+          <button
+            onClick={() => setWitnesses(witnesses.filter((_, i) => i !== idx))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button
+        onClick={() => setWitnesses([...witnesses, { name: '', signature: '' }])}
+        className="text-blue-600 hover:text-blue-700"
+      >
+        + Add Witness
+      </button>
+    </div>
+
+    {/* Valid Until */}
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Valid Until</label>
+      <input
+        type="date"
+        value={validUntil}
+        onChange={(e) => setValidUntil(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300"
+        />
+    </div>
+  </div>
+)}
+
+{/* Add Affirmations input fields */}
+{selectedVariant === 'affirmations' && (
+  <div className="space-y-4">
+    {/* Title Input */}
+    <div>
+      <label className="block text-gray-900 mb-1 text-sm font-medium">
+        Affirmation Title
+      </label>
+      <input
+        type="text"
+        value={affirmationTitle}
+        onChange={(e) => setAffirmationTitle(e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        placeholder="Enter your affirmation title"
+      />
+    </div>
+
+    {/* Affirmation Text Input */}
+    <div>
+      <label className="block text-gray-900 mb-1 text-sm font-medium">
+        Affirmation Text
+      </label>
+      <textarea
+        value={affirmationText}
+        onChange={(e) => setAffirmationText(e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        placeholder="Enter your affirmation"
+        rows={3}
+      />
+    </div>
+
+    {/* Time and Date Inputs */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label className="block text-gray-900 mb-1 text-sm font-medium">
+          Time of Affirmation
+        </label>
+        <input
+          type="time"
+          value={affirmationTime}
+          onChange={(e) => setAffirmationTime(e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-900 mb-1 text-sm font-medium">
+          Date of Affirmation
+        </label>
+        <input
+          type="date"
+          value={affirmationDate}
+          onChange={(e) => setAffirmationDate(e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+        />
+      </div>
+    </div>
+
+    {/* Color Customization Inputs */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label className="block text-gray-900 mb-1 text-sm">
+          Affirmation Text Color
+        </label>
+        {/* <input
+          type="color"
+          value={affirmationTextColor}
+          onChange={(e) => setAffirmationTextColor(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        /> */}
+        <SketchPicker
+                color={affirmationTextColor}
+                onChange={(color) => setAffirmationTextColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-900 mb-1 text-sm">
+          Card Background Color
+        </label>
+        {/* <input
+          type="color"
+          value={cardBackgroundColor}
+          onChange={(e) => setCardBackgroundColor(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-300"
+        /> */}
+        <SketchPicker
+                color={cardBackgroundColor}
+                onChange={(color) => setCardBackgroundColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+        />
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Add Birthday input fields */}
+{selectedVariant === 'birthday' && (
+        <div className="space-y-6 p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+          {/* Name and Age Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="relative">
+              <label htmlFor="celebrantName" className="block text-gray-800 text-sm font-medium mb-2">
+                Celebrant's Name
+              </label>
+              <input
+                type="text"
+                id="celebrantName"
+                value={celebrantName}
+                onChange={(e) => setCelebrantName(e.target.value)}
+                style={{
+                  color: celebrantNameColor,
+                  background: celebrantNameBackground,
+                  borderColor: celebrantNameBorderColor,
+                }}
+                className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
+                placeholder="Enter name"
+              />
+              {/* Color Customization */}
+              <div className="mt-4 flex flex-col gap-4">
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Text Color</label>
+                  <SketchPicker
+                    color={celebrantNameColor}
+                    onChange={(color) => setCelebrantNameColor(color.hex)}
+                    className="w-full h-fit mx-auto rounded-xl p-4 cursor-pointer transition-transform duration-200 border border-gray-200"
+                  />
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Border Color</label>
+                  <input
+                    type="color"
+                    value={celebrantNameBorderColor}
+                    onChange={(e) => setCelebrantNameBorderColor(e.target.value)}
+                    className="w-12 h-8 border rounded-lg"
+                    title="Border Color"
+                  />
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Background</label>
+                  <input
+                    type="text"
+                    value={celebrantNameBackground}
+                    onChange={(e) => setCelebrantNameBackground(e.target.value)}
+                    className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Background (color or gradient)"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <label htmlFor="age" className="block text-gray-800 text-sm font-medium mb-2">
+                Age
+              </label>
+              <input
+                type="number"
+                id="age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                style={{
+                  color: ageColor,
+                  background: ageBackground,
+                  borderColor: ageBorderColor,
+                }}
+                className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
+                placeholder="Enter age"
+              />
+              {/* Color Customization */}
+              <div className="mt-4 flex flex-col gap-4">
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Text Color</label>
+                  <input
+                    type="color"
+                    value={ageColor}
+                    onChange={(e) => setAgeColor(e.target.value)}
+                    className="w-12 h-8 border rounded-lg"
+                    title="Text Color"
+                  />
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Border Color</label>
+                  <input
+                    type="color"
+                    value={ageBorderColor}
+                    onChange={(e) => setAgeBorderColor(e.target.value)}
+                    className="w-12 h-8 border rounded-lg"
+                    title="Border Color"
+                  />
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="block text-gray-800 text-sm font-medium">Background</label>
+                  <input
+                    type="text"
+                    value={ageBackground}
+                    onChange={(e) => setAgeBackground(e.target.value)}
+                    className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Background (color or gradient)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Other fields (e.g., date, message) */}
+          {['cardDate', 'birthdayDate', 'birthdayMessage', 'daysUntil'].map((field) => (
+            <div key={field} className="relative">
+              <label
+                htmlFor={field}
+                className="block text-gray-800 text-sm font-medium mb-2 capitalize"
+              >
+                {field.replace(/([A-Z])/g, ' $1')}
+              </label>
+              <input
+                type={field === 'birthdayMessage' ? 'textarea' : field === 'cardDate' || field === 'birthdayDate' ? 'date' : 'text'}
+                id={field}
+                value={fieldValues[field as keyof typeof fieldValues]}
+                onChange={(e) => handleFieldChange(field as keyof FieldValues, e.target.value)}
+                style={{
+                  color: fieldColors[field as keyof typeof fieldColors].text,
+                  background: fieldColors[field as keyof typeof fieldColors].background,
+                  borderColor: fieldColors[field as keyof typeof fieldColors].border,
+                }}
+                className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 transition shadow-sm ${
+                  field === 'birthdayMessage' ? 'min-h-[100px]' : ''
+                }`}
+                placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
+              />
+              {/* Color Customization */}
+              <div className="mt-4 flex gap-4">
+                <input
+                  type="color"
+                  value={fieldColors[field as keyof typeof fieldColors].text}
+                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'text', e.target.value)}
+                  className="w-12 h-8 border rounded-lg"
+                  title="Text Color"
+                />
+                <input
+                  type="color"
+                  value={fieldColors[field as keyof typeof fieldColors].border}
+                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'border', e.target.value)}
+                  className="w-12 h-8 border rounded-lg"
+                  title="Border Color"
+                />
+                <input
+                  type="text"
+                  value={fieldColors[field as keyof typeof fieldColors].background}
+                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'background', e.target.value)}
+                  className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Background (color or gradient)"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+
+
+
+
+
+          {/* Base form fields for all variants */}
+          <div className="space-y-6">
+          {/* <TemplateSelector /> */}
+
+
+          {/* Product specific fields */}
+            {selectedVariant === 'product' && (
+              <>
+                <div>
+                  <label className={baseLabelStyles}>Inner BG Color</label>
+                  <input
+                    type="color"
+                    value={backgroundColor}
+                    onChange={(e) => setBackgroundColor(e.target.value)}
+                    className="w-full h-[45px] backdrop-blur-sm rounded-xl"
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Title</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                    title="Enter the title"
+                    placeholder="Enter a title"
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Description</label>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                    title="Enter the description"
+                    placeholder="Enter a description"
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Price</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-32 p-2 rounded-lg border border-slate-300"
+                    >
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="NGN">₦</option>
+                      <option value="GHC">GHC</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Detailed Description</label>
+                  <textarea
+                    value={largeDescription}
+                    onChange={(e) => setLargeDescription(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                    rows={4}
+                  />
+                </div>
+                <div>
+  <label className="block text-stone-950 mb-2">Product Image</label>
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProductImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    }}
+    className="w-full p-2 rounded-lg border border-slate-300"
+  />
+  {productImage && (
+    <div className="mt-4 relative">
+      <Image
+        src={productImage}
+        alt="Product Image"
+        width={500}
+        height={500}
+        className="rounded-lg"
+      />
+      <button
+        onClick={() => setProductImage('')}
+        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
+      >
+        ✕
+      </button>
+    </div>
+  )}
+</div>
+              </>
+            )}
+
+
+            {/* {(selectedVariant === 'product' || selectedVariant === 'business' ) && (
+              <>
+              <div>
+        <label className={baseLabelStyles}>Inner BG Color</label>
+        <input
+          type="color"
+          value={backgroundColor}
+          onChange={(e) => setBackgroundColor(e.target.value)}
+          className="w-full h-[45px] backdrop-blur-sm
+        rounded-xl"
+        />
+      </div>
+              <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-950 mb-2">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the description"
+                placeholder="Enter a description"
+              />
+            </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Price</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-32 p-2 rounded-lg border border-slate-300"
+                    >
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="NGN">₦</option>
+                      <option value="GHC">GHC</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Detailed Description </label>
+                  <textarea
+                    value={largeDescription}
+                    onChange={(e) => setLargeDescription(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                    rows={4}
+                  />
+                </div>
+              </>
+            )} */}
+
+            {/* Business specific fields */}
+{selectedVariant === 'business' && (
+  <div className='space-y-4 bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg'>
+    
+    {/* Background Type Selection */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Background Type
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div>
+          <label className="block text-stone-800 text-sm font-medium mb-2">Background Type</label>
+          <select
+            value={bgType}
+            onChange={(e) => setBgType(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow"
+          >
+            <option value="gradient">Gradient</option>
+            <option value="solid">Solid Color</option>
+          </select>
+        </div>
+        {bgType === 'gradient' && (
+          <>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
+              {/* <input
+                type="color"
+                value={gradientFrom}
+                onChange={(e) => setGradientFrom(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientFrom}
+                onChange={(color) => setGradientFrom(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
+              {/* <input
+                type="color"
+                value={gradientVia}
+                onChange={(e) => setGradientVia(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientVia}
+                onChange={(color) => setGradientVia(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
+              {/* <input
+                type="color"
+                value={gradientTo}
+                onChange={(e) => setGradientTo(e.target.value)}
+                className="w-full h-10 rounded-lg border border-slate-300"
+              /> */}
+              <SketchPicker
+                color={gradientTo}
+                onChange={(color) => setGradientTo(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+            </div>
+          </>
+        )}
+        {bgType === 'solid' && (
+          <div>
+            <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
+            {/* <input
+              type="color"
+              value={solidColor}
+              onChange={(e) => setSolidColor(e.target.value)}
+              className="w-full h-10 rounded-lg border border-slate-300"
+            /> */}
+            <SketchPicker
+                color={solidColor}
+                onChange={(color) => setSolidColor(color.hex)}
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                          border border-gray-200"
+              />
+          </div>
+        )}
+      </div>
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Title</label>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        title="Enter the title"
+        placeholder="Enter a title"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Description</label>
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        title="Enter the description"
+        placeholder="Enter a description"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Price</label>
+      <div className="flex gap-2">
+        <input
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          className="w-full p-2 rounded-lg border border-slate-300"
+        />
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="w-32 p-2 rounded-lg border border-slate-300"
+        >
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+          <option value="NGN">₦</option>
+          <option value="GHC">GHC</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Detailed Description</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        rows={4}
+      />
+    </div>
+  </div>
+)}
+
+
+            {/* Resume specific fields */}
+{selectedVariant === 'resume' && (
+  <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+ 
+      {/* Background Type Selection */}
+  <div className="space-y-4 p-4">
+      {/* Background Type Selection */}
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2">Background Type</label>
+      <Switch.Group>
+        <div className="flex items-center space-x-4">
+          <Switch.Label className="mr-2">Solid Color</Switch.Label>
+          <Switch
+            checked={bgType === 'gradient'}
+            onChange={() => setBgType(bgType === 'solid' ? 'gradient' : 'solid')}
+            className={`${
+              bgType === 'gradient' ? 'bg-blue-600' : 'bg-gray-200'
+            } relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out`}
+          >
+            <span
+              className={`${
+                bgType === 'gradient' ? 'translate-x-6' : 'translate-x-1'
+              } inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out`}
+            />
+          </Switch>
+          <Switch.Label className="ml-2">Gradient</Switch.Label>
+        </div>
+      </Switch.Group>
+    </div>
+
+    {/* Background Color Picker */}
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2">
+        {bgType === 'solid' ? 'Solid Color' : 'Gradient Colors'}
+      </label>
+      <button
+        type="button"
+        onClick={() => setShowColorPicker(!showColorPicker)}
+        className="p-2 bg-blue-500 text-white rounded-lg"
+      >
+        {showColorPicker ? 'Hide Color Picker' : 'Show Color Picker'}
+      </button>
+      {showColorPicker && (
+        <div className="mt-4">
+          {bgType === 'solid' ? (
+            <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+            />
+          ) : (
+            <div className="space-y-6 w-full mx-auto">
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">From</label>
+                <SketchPicker
+                  color={gradientFrom}
+                  onChange={(color) => setGradientFrom(color.hex)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Via</label>
+                <SketchPicker
+                  color={gradientVia}
+                  onChange={(color) => setGradientVia(color.hex)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">To</label>
+                <SketchPicker
+                  color={gradientTo}
+                  onChange={(color) => setGradientTo(color.hex)}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+    </div>
+
+
+     {/* Full Name */}
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">Full Name</label>
+    <input
+      type="text"
+      value={fullName}
+      onChange={(e) => setFullName(e.target.value)}
+      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter your full name"
+    />
+  </div>
+
+  {/* Job Title */}
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">Job Title</label>
+    <input
+      type="text"
+      value={jobTitle}
+      onChange={(e) => setJobTitle(e.target.value)}
+      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter your job title"
+    />
+  </div>
+
+  <div>
+  <label className="block text-gray-800 mb-1 font-medium">Bio</label>
+  <textarea
+    value={bio}
+    onChange={(e) => setBio(e.target.value)}
+    className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+    placeholder="Enter a short bio about yourself"
+  />
+</div>
+
+  {/* Contact Information */}
+  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div>
+      <label className="block text-gray-800 mb-1 font-medium">Email Address</label>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter your email address"
+      />
+    </div>
+    <div>
+      <label className="block text-gray-800 mb-1 font-medium">Phone Number</label>
+      <input
+        type="text"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter your phone number"
+      />
+    </div>
+  </div>
+
+  {/* Location */}
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">Location</label>
+    <input
+      type="text"
+      value={location}
+      onChange={(e) => setLocation(e.target.value)}
+      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter your location"
+    />
+  </div>
+
+  {/* Skills */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Skills</label>
+  {skills.map((skill, index) => (
+    <div key={index} className="flex items-center space-x-2 mb-2">
+      <input
+        type="text"
+        value={skill.value}
+        onChange={(e) => updateSkill(index, e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter skill"
+      />
+      <button
+        type="button"
+        onClick={() => removeSkill(index)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addSkill}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Skill
+  </button>
+</div>
+
+  {/* Work Experience */}
+  {/* Work Experience */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Work Experience</label>
+  {workExperience.map((experience, expIndex) => (
+    <div key={expIndex} className="space-y-2 mb-4">
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Company Name</label>
+        <input
+          type="text"
+          value={experience.companyName}
+          onChange={(e) => updateWorkExperience(expIndex, 'companyName', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter company name"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Role/Position</label>
+        <input
+          type="text"
+          value={experience.role}
+          onChange={(e) => updateWorkExperience(expIndex, 'role', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter your role"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Duration</label>
+        <input
+          type="text"
+          value={experience.duration}
+          onChange={(e) => updateWorkExperience(expIndex, 'duration', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="e.g., Jan 2022 - Dec 2024"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Job Descriptions</label>
+        {experience.jobDescriptions.map((desc, descIndex) => (
+          <div key={descIndex} className="flex items-center space-x-2 mb-2">
+            <input
+              type="text"
+              value={desc}
+              onChange={(e) => updateJobDescription(expIndex, descIndex, e.target.value)}
+              className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter job description"
+            />
+            <button
+              type="button"
+              onClick={() => removeJobDescription(expIndex, descIndex)}
+              className="p-2 bg-red-500 text-white rounded-lg"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => addJobDescription(expIndex)}
+          className="p-2 bg-blue-500 text-white rounded-lg"
+        >
+          Add Job Description
+        </button>
+      </div>
+      <button
+        type="button"
+        onClick={() => removeWorkExperience(expIndex)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addWorkExperience}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Work Experience
+  </button>
+</div>
+
+  {/* Education */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Education</label>
+  {education.map((edu, index) => (
+    <div key={index} className="space-y-2 mb-4">
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Degree</label>
+        <input
+          type="text"
+          value={edu.degree}
+          onChange={(e) => updateEducation(index, 'degree', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter your degree"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Institution</label>
+        <input
+          type="text"
+          value={edu.institution}
+          onChange={(e) => updateEducation(index, 'institution', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter institution name"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Graduation Year</label>
+        <input
+          type="text"
+          value={edu.gradYear}
+          onChange={(e) => updateEducation(index, 'gradYear', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter graduation year"
+        />
+      </div>
+      <button
+        type="button"
+        onClick={() => removeEducation(index)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addEducation}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Education
+  </button>
+</div>
+
+  {/* Hobbies */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Hobbies</label>
+  {hobbies.map((hobby, index) => (
+    <div key={index} className="flex items-center space-x-2 mb-2">
+      <input
+        type="text"
+        value={hobby}
+        onChange={(e) => updateHobby({ index, value: e.target.value })}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter hobby"
+      />
+      <button
+        type="button"
+        onClick={() => removeHobby(index)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addHobby}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Hobby
+  </button>
+</div>
+</div>
+)}
+
+
+            {/* Event specific fields */}
+            {selectedVariant === 'event' && (
+              <div className="bg-white/80 rounded-xl md:p-6 p-4">
+              <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-950 mb-2">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the description"
+                placeholder="Enter a description"
+              />
+            </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Event Date</label>
+                  <input
+                    type="datetime-local"
+                    value={eventDate}
+                    onChange={(e) => setEventDate(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                  />
+                </div>
+                <div className="space-y-4">
+  <label className="block text-lg font-medium text-gray-900">Upload Event Image</label>
+  <div className="space-y-2">
+                {eventImage && (
+                  <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+                    <img src={eventImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+                    <button
+                      title="Delete Hero Image"
+                      onClick={() => seteventImage('')}
+                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        seteventImage(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                  accept="image/*"
+                />
+              </div>
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Event Price</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-32 p-2 rounded-lg border border-slate-300"
+                    >
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="NGN">₦</option>
+                      <option value="GHC">GHC</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Location</label>
+                  <input
+                    type="text"
+                    value={eventLocation}
+                    onChange={(e) => setEventLocation(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Event Type</label>
+                  <input
+                    type="text"
+                    value={eventType}
+                    onChange={(e) => setEventType(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                  />
+                </div>
+                <div>
+      <label className="block text-stone-950 mb-2 font-medium">Event Details</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
+        placeholder="Enter flyer details, features, or event information"
+      />
+    </div>
+              </div>
+  )}
+
+            {/* MOOD SPECIFIC FIELDS */}
+            {selectedVariant === 'mood' && (
+  <div className="space-y-6">
+    <div>
+        <label className="block text-stone-950 mb-2">Inner BG Color</label>
+        <input
+          type="color"
+          value={backgroundColor}
+          onChange={(e) => setBackgroundColor(e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300"
+        />
+      </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Mood Title</label>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        placeholder="Enter mood title"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Mood Description</label>
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        placeholder="Enter mood description"
+      />
+    </div>
+    
+    <div>
+      <label className="block text-stone-950 mb-2">Mood Picture</label>
+      <input
+        type="file"
+        onChange={(e) => handleImageChange(e, 'moodPicture')}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        accept="image/*"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Mood Smiley</label>
+      <select
+        value={moodSmiley}
+        onChange={(e) => setMoodSmiley(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+      >
+        {smileys.map((smiley) => (
+          <option key={smiley} value={smiley}>
+            {smiley}
+          </option>
+        ))}
+      </select>
+    </div>
+    
+    <div>
+      <label className="block text-stone-950 mb-2">Date</label>
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2">Name</label>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        placeholder="Enter your name"
+      />
+    </div>
+  </div>
+)}
+
+
+            {/* Menu specific fields */}
+            {selectedVariant === 'menu' && (
+  <div className="space-y-6 p-4 sm:p-6 md:p-8 bg-white shadow-lg rounded-lg">
+    {/* Menu Title and Subtitle */}
+    <div className="grid gap-4">
+      <div>
+        <label className="block text-gray-700 text-sm font-medium">Menu Title</label>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={menuTitle}
+            onChange={(e) => setMenuTitle(e.target.value)}
+            className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder="Enter Menu Title"
+          />
+          <input
+            type="color"
+            value={menuTitleColor}
+            onChange={(e) => setMenuTitleColor(e.target.value)}
+            className="w-10 h-10 mt-1 rounded-lg border border-gray-300"
+            title="Title Text Color"
+          />
+        </div>
+      </div>
+      <div>
+        <label className="block text-gray-700 text-sm font-medium">Menu Subtitle</label>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={menuSubtitle}
+            onChange={(e) => setMenuSubtitle(e.target.value)}
+            className="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder="Enter Menu Subtitle"
+          />
+          <input
+            type="color"
+            value={menuSubtitleColor}
+            onChange={(e) => setMenuSubtitleColor(e.target.value)}
+            className="w-10 h-10 mt-1 rounded-lg border border-gray-300"
+            title="Subtitle Text Color"
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* Menu Date */}
+    <div className="space-y-2">
+      <label className="block text-gray-700 text-sm font-medium">Menu Date</label>
+      <div className="flex flex-col sm:flex-row items-center gap-4">
+        <input
+          type="date"
+          value={menuDate || ''}
+          onChange={(e) => setMenuDate(e.target.value)}
+          className="w-full sm:w-auto mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+        />
+        <input
+          type="color"
+          value={menuDateColor}
+          onChange={(e) => setMenuDateColor(e.target.value)}
+          className="w-10 h-10 border border-gray-300 rounded-lg"
+          title="Date Text Color"
+        />
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            checked={isDateOptional}
+            onChange={(e) => setIsDateOptional(e.target.checked)}
+            className="h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+          />
+          <label className="ml-2 text-gray-700 text-sm">Optional Date</label>
+        </div>
+      </div>
+    </div>
+
+    {/* Inner Card Color */}
+    <div className="space-y-2">
+      <label className="block text-gray-700 text-sm font-medium">Inner Card Color</label>
+      <input
+        type="color"
+        value={innerCardColor}
+        onChange={(e) => setInnerCardColor(e.target.value)}
+        className="w-full mt-2 h-10 rounded-lg border border-gray-300"
+        title="Inner Card Color"
+      />
+    </div>
+
+    {/* Menu Background Color */}
+    <div className="space-y-2">
+      <label className="block text-gray-700 text-sm font-medium">Menu Background Color</label>
+      <input
+        type="color"
+        value={menuBackgroundColor}
+        onChange={(e) => setMenuBackgroundColor(e.target.value)}
+        className="w-full mt-2 h-10 rounded-lg border border-gray-300"
+        title="Menu Background Color"
+      />
+    </div>
+
+    {/* Menu Categories */}
+    <div className="space-y-4">
+      <label className="block text-gray-700 text-sm font-medium">Menu Categories</label>
+      {menuCategories.map((category, index) => (
+        <div
+          key={index}
+          className="p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4"
+        >
+          {/* Category Name */}
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={category.name}
+              onChange={(e) => {
+                const updatedCategories = [...menuCategories];
+                updatedCategories[index].name = e.target.value;
+                setMenuCategories(updatedCategories);
+              }}
+              className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+              placeholder="Category Name"
+            />
+            <input
+              type="color"
+              value={category.textColor}
+              onChange={(e) => {
+                const updatedCategories = [...menuCategories];
+                updatedCategories[index].textColor = e.target.value;
+                setMenuCategories(updatedCategories);
+              }}
+              className="w-10 h-10 border border-gray-300 rounded-lg"
+              title="Category Text Color"
+            />
+            <button
+              onClick={() =>
+                setMenuCategories(menuCategories.filter((_, i) => i !== index))
+              }
+              className="text-red-500 text-lg hover:bg-red-50 p-2 rounded-full"
+            >
+              ×
+            </button>
+          </div>
+
+          {/* Category Description */}
+          <textarea
+            value={category.description}
+            onChange={(e) => {
+              const updatedCategories = [...menuCategories];
+              updatedCategories[index].description = e.target.value;
+              setMenuCategories(updatedCategories);
+            }}
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+            placeholder="Category Description"
+          ></textarea>
+
+          {/* Menu Items */}
+          <div className="space-y-2">
+            <label className="block text-gray-700 text-sm font-medium">Menu Items</label>
+            {category.items.map((item, itemIndex) => (
+              <div key={itemIndex} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={item.name}
+                  onChange={(e) => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items[itemIndex].name = e.target.value;
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                  placeholder="Item Name"
+                />
+                <input
+                  type="text"
+                  value={item.price}
+                  onChange={(e) => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items[itemIndex].price = e.target.value;
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="w-24 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                  placeholder="Price"
+                />
+                <select
+                  value={item.currency}
+                  onChange={(e) => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items[itemIndex].currency = e.target.value;
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="w-24 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+                >
+                  <option value="USD">USD</option>
+                  <option value="NGN">NGN</option>
+                  <option value="GHS">GHS</option>
+                  <option value="EUR">EUR</option>
+                </select>
+                <button
+                  onClick={() => {
+                    const updatedCategories = [...menuCategories];
+                    updatedCategories[index].items = updatedCategories[index].items.filter(
+                      (_, i) => i !== itemIndex
+                    );
+                    setMenuCategories(updatedCategories);
+                  }}
+                  className="text-red-500 text-lg hover:bg-red-50 p-2 rounded-full"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            <button
+              onClick={() => {
+                const updatedCategories = [...menuCategories];
+                updatedCategories[index].items.push({ name: '', price: '', currency: 'USD' });
+                setMenuCategories(updatedCategories);
+              }}
+              className="text-emerald-600 mt-2 hover:text-emerald-700"
+            >
+              + Add Item
+            </button>
+          </div>
+        </div>
+      ))}
+      <button
+        onClick={() =>
+          setMenuCategories([
+            ...menuCategories,
+            { name: '', textColor: '#000', description: '', items: [] },
+          ])
+        }
+        className="text-emerald-600 mt-4 hover:text-emerald-700"
+      >
+        + Add Category
+      </button>
+    </div>
+
+    {/* Special Section */}
+    <div>
+      <label className="block text-gray-700 text-sm font-medium">Special Section</label>
+      <textarea
+        value={specialItemDescription}
+        onChange={(e) => setSpecialItemDescription(e.target.value)}
+        className="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500"
+        placeholder="Enter Today's Special Description"
+      ></textarea>
+    </div>
+  </div>
+)}
+
+            {/* Invoice/Receipt/E-Invoice fields */}
+            {(selectedVariant === 'invoice' || selectedVariant === 'receipt' || selectedVariant === 'einvoice') && (
+              <>
+              <div>
+              <label className="block text-stone-950 mb-2">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the title"
+                placeholder="Enter a title"
+              />
+            </div>
+            <div>
+              <label className="block text-stone-950 mb-2">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-2 rounded-lg border border-slate-300"
+                title="Enter the description"
+                placeholder="Enter a description"
+              />
+            </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">
+                    {selectedVariant === 'receipt' ? 'Receipt Number' : 'Invoice Number'}
+                  </label>
+                  <input
+                    type="text"
+                    value={invoiceNumber}
+                    onChange={(e) => setInvoiceNumber(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-slate-300"
+                    title="Enter invoice number"
+                    placeholder="Invoice Number"
+                  />
+                </div>
+                <div>
+                  <label className="block text-stone-950 mb-2">Items</label>
+                  {items.map((item, index) => (
+                    <div key={index} className="flex gap-2 mb-2">
+                      <input
+                        type="text"
+                        value={item.description}
+                        onChange={(e) => {
+                          const newItems = [...items];
+                          newItems[index].description = e.target.value;
+                          setItems(newItems);
+                        }}
+                        placeholder="Description"
+                        className="flex-1 p-2 rounded-lg border border-slate-300"
+                      />
+                      <input
+                        type="number"
+                        value={item.amount}
+                        onChange={(e) => {
+                          const newItems = [...items];
+                          newItems[index].amount = parseFloat(e.target.value);
+                          setItems(newItems);
+                        }}
+                        placeholder="Amount"
+                        className="w-32 p-2 rounded-lg border border-slate-300"
+                      />
+                      <button
+                        onClick={() => {
+                          const newItems = items.filter((_, i) => i !== index);
+                          setItems(newItems);
+                        }}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => setItems([...items, { description: '', amount: 0 }])}
+                    className="text-blue-500 hover:text-blue-600"
+                  >
+                    + Add Item
+                  </button>
+                </div>
+                {selectedVariant !== 'receipt' && (
+                  <>
+                    <div>
+                      <label className="block text-stone-950 mb-2">Due Date</label>
+                      <input
+                        type="date"
+                        value={dueDate}
+                        onChange={(e) => setDueDate(e.target.value)}
+                        className="w-full p-2 rounded-lg border border-slate-300"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-stone-950 mb-2">Tax Rate (%)</label>
+                      <input
+                        type="number"
+                        value={taxRate}
+                        onChange={(e) => setTaxRate(parseFloat(e.target.value))}
+                        className="w-full p-2 rounded-lg border border-slate-300"
+                      />
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+
+            {/* Common fields for all variants */}
+            <div className="p-6 space-y-6 bg-gradient-to-b from-gray-50 to-gray-100 shadow-lg rounded-2xl">
+  {/* Upload Hero Image */}
+  <div className="space-y-4">
+  <label className="block text-lg font-medium text-gray-900">Upload Hero Image</label>
+  <div className="space-y-2">
+    {heroImage && (
+      <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+        <img src={heroImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+        <button
+          title="Delete Hero Image"
+          onClick={() => setHeroImage('')}
+          className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    )}
+    <input
+      type="file"
+      onChange={(e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setHeroImage(reader.result as string);
+          };
+          reader.readAsDataURL(file);
+        }
+      }}
+      className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+      accept="image/*"
+    />
+  </div>
+</div>
+
+  {/* Upload Logo */}
+  <div className="space-y-4">
+    <label className="block text-lg font-medium text-gray-900">Upload Your Logo</label>
+    <div className="space-y-2">
+      {logo && (
+        <div className="relative w-full h-32 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+          <img src={logo} alt="Logo" className="object-cover w-full h-full" />
+          <button
+            onClick={() => handleDeleteImage('logo')}
+            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+      <input
+        type="file"
+        onChange={(e) => handleImageChange(e, 'logo')}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        accept="image/*"
+      />
+    </div>
+  </div>
+                  {/* General Price */}
+                <div>
+                  <label className="block text-stone-950 mb-2">General Price</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-slate-300"
+                    />
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-32 p-2 rounded-lg border border-slate-300"
+                    >
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="NGN">₦</option>
+                      <option value="GHC">GHC</option>
+                    </select>
+                  </div>
+                </div>
+
+  {/* QR Code URL */}
+  <div>
+    <label className="block text-lg font-medium text-gray-900">QR Code URL</label>
+    <input
+      type="text"
+      value={qrUrl}
+      title="Enter QR Code URL"
+      onChange={(e) => setQrUrl(e.target.value)}
+      className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter QR Code URL"
+    />
+  </div>
+
+  {/* Profile Picture */}
+  <div className="space-y-4">
+    <label className="block text-lg font-medium text-gray-900">Upload Profile Picture</label>
+    <div className="space-y-2">
+    {profilePicture && (
+        <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+          <img src={profilePicture} alt="Uploaded Hero" className="object-cover w-full h-full" />
+          <button
+            title="Delete Hero Image"
+            onClick={() => handleDeleteImage('profilePicture')}
+            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+      <input
+        type="file"
+        onChange={handleProfilePictureChange}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        title="Upload a profile picture"
+        accept="image/*"
+      />
+    </div>
+  </div>
+</div>
+
+
+
+
+{/* Checkbox Example */}
+<div className=" bg-white/80 p-3 shadow-md rounded-xl">
+      <label className={baseLabelStyles}>Show Sections</label>
+        <div className=" border m-4 "/>
+      <div className="flex items-center justify-between">
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showTopPart}
+            onChange={(e) => setShowTopPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className=" text-slate-700 text-xs">Show Top Section</span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showBottomPart}
+            onChange={(e) => setShowBottomPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700 text-xs">Show Bottom Section</span>
+        </label>
+        {/* <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showfooterPart}
+            onChange={(e) => setshowfooterPart(e.target.checked)}
+            className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-slate-700 text-xs">Show App Signature</span>
+        </label> */}
+      </div>
+    </div>
+
+          </div>
+        </div>
+
+      {/* Submit Button */}
+    <div className="pt-4 space-y-4">
+    
+      <button
+        onClick={generateImage}
+        disabled={isLoading}
+        className="
+          w-full py-4 px-8
+          bg-gradient-to-r from-blue-600 to-indigo-600
+          hover:from-blue-700 hover:to-indigo-700
+          text-white font-medium
+          rounded-xl
+          shadow-lg shadow-blue-500/25
+          hover:shadow-blue-500/40
+          transform hover:-translate-y-0.5
+          transition-all duration-200
+          disabled:opacity-50 disabled:cursor-not-allowed
+          disabled:hover:translate-y-0
+        "
+      >
+        
+        {isLoading ? (
+          <span className="flex items-center justify-center gap-2">
+            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Generating...
+          </span>
+        ) : (
+          'Download Card'
+        )}
+      </button>
+      <button
+        onClick={generatePDF}
+        disabled={isLoading1}
+        className="
+          w-full py-4 px-8
+          bg-gradient-to-r from-lime-600 to-green-600
+          hover:from-green-700 hover:to-lime-700
+          text-white font-medium
+          rounded-xl
+          shadow-lg shadow-blue-500/25
+          hover:shadow-blue-500/40
+          transform hover:-translate-y-0.5
+          transition-all duration-200
+          disabled:opacity-50 disabled:cursor-not-allowed
+          disabled:hover:translate-y-0
+        "
+      >
+      {isLoading1 ? (
+          <span className="flex items-center justify-center gap-2">
+            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Generating...
+          </span>
+        ) : (
+          'Generate PDF'
+        )}
+      </button>
+    </div>
+
+        
+      </div>}
+      
+
       {/* Add responsive card container */}
-      <div className="flex-1 md:h-full h-2/3 md:max-w-3xl w-full  flex md:mx-auto items-center justify-center rounded-lg shadow-md p-8 m-4 mb-20 md:mb-4">
+      <div className="flex-1 md:h-full h-3/6  md:max-w-3xl w-full overflow-scroll   flex md:mx-auto items-center justify-center rounded-lg shadow-md p-8 m-4 md:mb-4">
       <motion.div
   ref={cardRef}
   initial={{ opacity: 0, y: 20 }}
@@ -5955,7 +9980,7 @@ const baseLabelStyles = `
     shadow-[0_8px_32px_rgba(0,0,0,0.15)] 
     backdrop-blur-xl 
     overflow-hidden 
-    w-full
+    w-full  
     transition-colors duration-300
   `}
   style={{
