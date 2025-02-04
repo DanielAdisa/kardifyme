@@ -11161,321 +11161,1023 @@ const baseLabelStyles = `
         </div>
       )}
 
-        {/* Recipe Display */}
+    {/* Recipe Display */}
         {selectedVariant === 'recipe' && (
-  <div 
-    className="relative p-4 md:p-6 rounded-2xl rounded-b-none shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
-    style={{
-      background: bgType === 'gradient'
-        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-        : bgType === 'solid'
-        ? solidColor
-        : 'none',
-    }}
-  >
-    <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
-      {/* Left Column - Main Content */}
-      <div className="space-y-8">
-        {/* Header Section */}
-        <div className="text-center md:text-left space-y-4 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight" style={{ color: textColors.title }}>
-            {title || 'Recipe Name'}
-          </h2>
-          <div className="flex flex-wrap justify-center md:justify-start gap-6 text-white/90" style={{ color: textColors.details }}>
-            <span className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-md">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
-              </svg>
-              {cookingTime} mins
-            </span>
-            <span className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-md">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-              </svg>
-              Serves {servings}
-            </span>
-          </div>
-        </div>
+          <div 
+            className="relative p-4 md:p-6 rounded-2xl rounded-b-none shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+            style={{
+              background: bgType === 'gradient'
+                ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                : bgType === 'solid'
+                ? solidColor
+                : 'none',
+            }}
+          >
+            <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
+              {/* Left Column - Main Content */}
+              <div className="space-y-8">
+                {/* Header Section */}
+                <div className="text-center md:text-left space-y-4 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
+                  <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight" style={{ color: textColors.title }}>
+                    {title || 'Recipe Name'}
+                  </h2>
+                  <div className="flex flex-wrap justify-center md:justify-start gap-6 text-white/90" style={{ color: textColors.details }}>
+                    <span className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-md">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+                      </svg>
+                      {cookingTime} mins
+                    </span>
+                    <span className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-md">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                      </svg>
+                      Serves {servings}
+                    </span>
+                  </div>
+                </div>
 
-        {/* Description Section */}
-        {description && (
-          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
-            <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Description</h3>
-            <p className="text-white/90" style={{ color: textColors.description }}>
-              {description}
-            </p>
-          </div>
-        )}
+                {/* Description Section */}
+                {description && (
+                  <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+                    <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Description</h3>
+                    <p className="text-white/90" style={{ color: textColors.description }}>
+                      {description}
+                    </p>
+                  </div>
+                )}
 
-        {/* Ingredients Section Display */}
-          <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
-            <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
-            <ul className="space-y-3">
-              {ingredients.map((ing, idx) => (
-                <li key={idx} className="flex w-full justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors" style={{ backgroundColor: ing.backgroundColor, borderColor: ing.borderColor, color: ing.textColor }}>
-                  <span className="font-medium">{ing.item}</span>
-                  <span className=" rounded-full text-sm" style={{ backgroundColor: ing.amountBackgroundColor, borderColor: ing.amountBorderColor, color: ing.amountTextColor }}>{ing.amount}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+                {/* Ingredients Section Display */}
+                  <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+                    <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Ingredients</h3>
+                    <ul className="space-y-3">
+                      {ingredients.map((ing, idx) => (
+                        <li key={idx} className="flex w-full justify-between items-center p-2 hover:bg-white/5 rounded-lg transition-colors" style={{ backgroundColor: ing.backgroundColor, borderColor: ing.borderColor, color: ing.textColor }}>
+                          <span className="font-medium">{ing.item}</span>
+                          <span className=" rounded-full text-sm" style={{ backgroundColor: ing.amountBackgroundColor, borderColor: ing.amountBorderColor, color: ing.amountTextColor }}>{ing.amount}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-        {/* Instructions Section */}
-        <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
-          <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Instructions</h3>
-          <ol className="space-y-4" style={{ color: textColors.instructions }}>
-            {instructions.map((inst, idx) => (
-              <li key={idx} className="flex gap-4 p-2 hover:bg-white/5 rounded-lg transition-colors">
-                <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/20 rounded-full">
-                  {idx + 1}
-                </span>
-                <span>{inst.step}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
+                {/* Instructions Section */}
+                <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300" style={{ backgroundColor: innerCardColor }}>
+                  <h3 className="text-2xl font-semibold mb-6" style={{ color: textColors.sectionTitle }}>Instructions</h3>
+                  <ol className="space-y-4" style={{ color: textColors.instructions }}>
+                    {instructions.map((inst, idx) => (
+                      <li key={idx} className="flex gap-4 p-2 hover:bg-white/5 rounded-lg transition-colors">
+                        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/20 rounded-full">
+                          {idx + 1}
+                        </span>
+                        <span>{inst.step}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
 
-        
+                
 
-      </div>
+              </div>
 
-      {/* Right Column - Image, Difficulty */}
-      <div className="space-y-8">
-        {heroImage && (
-          <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
-            <Image 
-              src={heroImage} 
-              alt={title} 
-              width={400} 
-              height={500} 
-              className="w-full h-[300px] object-cover hover:scale-110 transition-transform duration-700" 
-            />
-          </div>
-        )}
-        <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20" style={{ backgroundColor: innerCardColor }}>
-          <div className="text-center space-y-4">
-            <span className={`px-4 py-2 rounded-xl text-sm font-medium inline-block ${getDifficultyColor(difficulty)}`}>
-              {difficulty.toUpperCase()}
-            </span>
-          </div>
-        </div>
-        {logo && (
-          <div className="flex justify-center">
-            <div className="relative w-20 h-20 transform hover:scale-110 transition-transform duration-300">
-              <Image 
-                src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)} 
-                alt="Logo" 
-                fill 
-                className="rounded-full object-cover border-2 border-white/50 shadow-lg" 
-              />
+              {/* Right Column - Image, Difficulty */}
+              <div className="space-y-8">
+                {heroImage && (
+                  <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
+                    <Image 
+                      src={heroImage} 
+                      alt={title} 
+                      width={400} 
+                      height={500} 
+                      className="w-full h-[300px] object-cover hover:scale-110 transition-transform duration-700" 
+                    />
+                  </div>
+                )}
+                <div className="p-6 bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20" style={{ backgroundColor: innerCardColor }}>
+                  <div className="text-center space-y-4">
+                    <span className={`px-4 py-2 rounded-xl text-sm font-medium inline-block ${getDifficultyColor(difficulty)}`}>
+                      {difficulty.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+                {logo && (
+                  <div className="flex justify-center">
+                    <div className="relative w-20 h-20 transform hover:scale-110 transition-transform duration-300">
+                      <Image 
+                        src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)} 
+                        alt="Logo" 
+                        fill 
+                        className="rounded-full object-cover border-2 border-white/50 shadow-lg" 
+                      />
+                    </div>
+                  </div>
+                )}
+                {/* Chef's Tips */}
+                {/* Chef's Tips */}
+                {chefTips && chefTips.length > 0 && (
+                      <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
+                        <h3 className="text-2xl font-semibold mb-4" style={{ color: textColors.sectionTitle }}>Chef's Tips</h3>
+                        <ul className="space-y-4" style={{ color: textColors.chefTips }}>
+                          {chefTips.map((tip, index) => (
+                            <li key={index} className="text-white/90 italic text-sm leading-relaxed">
+                              💡 {tip}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+              </div>
             </div>
           </div>
         )}
-        {/* Chef's Tips */}
-        {/* Chef's Tips */}
-        {chefTips && chefTips.length > 0 && (
-              <div className="p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 hover:bg-white/15 transition-colors duration-300">
-                <h3 className="text-2xl font-semibold mb-4" style={{ color: textColors.sectionTitle }}>Chef's Tips</h3>
-                <ul className="space-y-4" style={{ color: textColors.chefTips }}>
-                  {chefTips.map((tip, index) => (
-                    <li key={index} className="text-white/90 italic text-sm leading-relaxed">
-                      💡 {tip}
+
+      {/* Resume Card Display Start */}
+        
+            {selectedVariant === 'resume' && selectedVariantStyle === 'default' && (
+              <div
+                className="relative min-h-[600px] p-4 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+                style={{
+                  background:
+                    bgType === 'gradient'
+                      ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                      : bgType === 'solid'
+                      ? solidColor
+                      : "#f9f9f9",
+                }}
+              >
+                <div className="relative z-10 flex flex-col items-center gap-8 text-center">
+                  {/* Profile Picture */}
+                  {profilePicture && (
+                    <div className="transform hover:scale-110 transition-all duration-500">
+                      <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                        <img
+                          src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)}
+                          alt="Profile Picture"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Full Name and Job Title */}
+                  <div>
+                    {fullName && (
+                      <h2
+                        className="text-4xl md:text-5xl font-bold tracking-tight"
+                        style={{ color: textColors.fullName }}
+                      >
+                        {fullName}
+                      </h2>
+                    )}
+                    {jobTitle && (
+                      <p
+                        className="text-xl md:text-2xl font-light mt-1"
+                        style={{ color: textColors.jobTitle }}
+                      >
+                        {jobTitle}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Contact Information */}
+                  <div className="space-y-2 text-sm md:text-base">
+                    {email && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Email:</span>
+                        <a
+                          href={`mailto:${email}`}
+                          className="underline hover:text-blue-500 transition-colors"
+                          style={{ color: textColors.email }}
+                        >
+                          {email}
+                        </a>
+                      </p>
+                    )}
+                    {phone && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Phone:</span>
+                        <span style={{ color: textColors.phone }}>{phone}</span>
+                      </p>
+                    )}
+                    {location && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Location:</span>
+                        <span style={{ color: textColors.location }}>{location}</span>
+                      </p>
+                    )}
+                  </div>
+                  {bio && (
+              <div className="w-full max-w-2xl text-left space-y-2">
+                {/* <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.bio }}>
+                    About Me:
+                </h3> */}
+                <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
+                  {bio}
+                </p>
+              </div>
+            )}
+
+                  {/* Skills */}
+            {skills.length > 0 && (
+              <div className="w-full max-w-2xl">
+                <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
+                  Skills
+                </h3>
+                <ul className="flex flex-wrap justify-center gap-2 text-sm md:text-base">
+                  {skills.map((skill, index) => (
+                    <li
+                      key={index}
+                      className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md"
+                      style={{ color: textColors.skills }}
+                    >
+                      {skill.value.trim()}
                     </li>
                   ))}
                 </ul>
               </div>
             )}
-      </div>
-    </div>
-  </div>
-)}
+
+                  {/* Work Experience */}
+            {/* Work Experience */}
+            {workExperience.length > 0 && (
+              <div className="w-full max-w-2xl text-left space-y-4">
+                <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+                  Work Experience
+                </h3>
+                {workExperience.map((experience, index) => (
+                  <div key={index} className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+                    <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
+                      {experience.companyName}
+                    </p>
+                    <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
+                      {experience.role}
+                    </p>
+                    <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
+                      {experience.duration}
+                    </p>
+                    {experience.jobDescriptions.length > 0 && (
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-semibold" style={{ color: textColors.jobDescriptions }}>
+                          Job Descriptions:
+                        </h4>
+                        <ul className="list-disc pl-5 space-y-2">
+                          {experience.jobDescriptions.map((desc, descIndex) => (
+                            <li key={descIndex} className="text-sm md:text-base" style={{ color: textColors.jobDescriptions }}>
+                              {desc}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+                  {/* Education */}
+                  {education.length > 0 && (
+              <div className="w-full max-w-2xl text-left space-y-4">
+                <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+                  Education
+                </h3>
+                {education.map((edu, index) => (
+                  <div key={index} className="space-y-2 bg-white/80 p-4 pt-2 rounded-xl shadow-lg">
+                    <div className="flex justify-between items-center">
+                      <p className="font-medium text-base md:text-lg" style={{ color: textColors.institution }}>
+                        {edu.institution}
+                      </p>
+                      <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
+                        {edu.gradYear}
+                      </p>
+                    </div>
+                    <p className="text-sm md:text-base italic" style={{ color: textColors.degree }}>
+                      {edu.degree}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+                  {/* Hobbies */}
+                  {hobbies.length > 0 && (
+              <div className="w-full max-w-2xl text-left space-y-4">
+                <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
+                  Hobbies
+                </h3>
+                <div className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+                  <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
+                    {hobbies.join(', ')}
+                  </p>
+                </div>
+              </div>
+            )}
+                </div>
+              </div>
+            )}
+
+            {selectedVariant === 'resume' && selectedVariantStyle === 'style1' && (
+              <div
+                className="relative min-h-[600px] p-4 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+                style={{
+                  background:
+                    bgType === 'gradient'
+                      ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                      : bgType === 'solid'
+                      ? solidColor
+                      : "#f9f9f9",
+                }}
+              >
+                <div className="relative z-10 flex flex-col gap-8 text-left">
+                  {/* Profile Picture */}
+                  {profilePicture && (
+                    <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                      <img src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)} alt="Profile Picture" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  {/* Full Name and Job Title */}
+                  <div>
+                    {fullName && (
+                      <h2 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: textColors.fullName }}>
+                        {fullName}
+                      </h2>
+                    )}
+                    {jobTitle && (
+                      <p className="text-xl md:text-2xl font-light mt-1" style={{ color: textColors.jobTitle }}>
+                        {jobTitle}
+                      </p>
+                    )}
+                  </div>
+                  {/* Contact Information */}
+                  <div className="space-y-2 text-sm md:text-base">
+                    {email && (
+                      <p className="flex items-center gap-2">
+                        <span className="font-medium">Email:</span>
+                        <a href={`mailto:${email}`} className="underline hover:text-blue-500 transition-colors" style={{ color: textColors.email }}>
+                          {email}
+                        </a>
+                      </p>
+                    )}
+                    {phone && (
+                      <p className="flex items-center gap-2">
+                        <span className="font-medium">Phone:</span>
+                        <span style={{ color: textColors.phone }}>{phone}</span>
+                      </p>
+                    )}
+                    {location && (
+                      <p className="flex items-center gap-2">
+                        <span className="font-medium">Location:</span>
+                        <span style={{ color: textColors.location }}>{location}</span>
+                      </p>
+                    )}
+                  </div>
+                  {/* Bio */}
+                  {bio && (
+                    <div className="space-y-2">
+                      <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
+                        {bio}
+                      </p>
+                    </div>
+                  )}
+                  {/* Skills, Work Experience, Education, Hobbies */}
+                  <div className="space-y-4">
+                    {skills.length > 0 && (
+                      <div>
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
+                          Skills
+                        </h3>
+                        <ul className="flex flex-wrap gap-2 text-sm md:text-base">
+                          {skills.map((skill, index) => (
+                            <li key={index} className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md" style={{ color: textColors.skills }}>
+                              {skill.value.trim()}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {workExperience.length > 0 && (
+                      <div>
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+                          Work Experience
+                        </h3>
+                        {workExperience.map((experience, index) => (
+                          <div key={index} className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
+                            <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
+                              {experience.companyName}
+                            </p>
+                            <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
+                              {experience.role}
+                            </p>
+                            <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
+                              {experience.duration}
+                            </p>
+                            {experience.jobDescriptions.length > 0 && (
+                              <div className="space-y-1">
+                                <ul className="list-disc pl-5 space-y-2">
+                                  {experience.jobDescriptions.map((desc, descIndex) => (
+                                    <li key={descIndex} className="text-sm md:text-base" style={{ color: textColors.jobDescriptions }}>
+                                      {desc}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {education.length > 0 && (
+                      <div>
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+                          Education
+                        </h3>
+                        {education.map((edu, index) => (
+                          <div key={index} className="space-y-2 bg-white/80 p-4 pt-2 rounded-xl shadow-lg">
+                            <div className="flex justify-between items-center">
+                              <p className="font-medium text-base md:text-lg" style={{ color: textColors.institution }}>
+                                {edu.institution}
+                              </p>
+                              <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
+                                {edu.gradYear}
+                              </p>
+                            </div>
+                            <p className="text-sm md:text-base italic" style={{ color: textColors.degree }}>
+                              {edu.degree}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {hobbies.length > 0 && (
+                      <div>
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
+                          Hobbies
+                        </h3>
+                        <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
+                          {hobbies.join(', ')}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {selectedVariant === 'resume' && selectedVariantStyle === 'style2' && (
+              <div
+                className="relative min-h-[600px] p-4 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+                style={{
+                  background:
+                    bgType === 'gradient'
+                      ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                      : bgType === 'solid'
+                      ? solidColor
+                      : "#f9f9f9",
+                }}
+              >
+                <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Left Column: Profile */}
+                  <div className="space-y-4">
+                    {/* Profile Picture */}
+                    {profilePicture && (
+                      <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden mx-auto">
+                        <img src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)} alt="Profile Picture" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    {/* Full Name and Job Title */}
+                    <div>
+                      {fullName && (
+                        <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-center" style={{ color: textColors.fullName }}>
+                          {fullName}
+                        </h2>
+                      )}
+                      {jobTitle && (
+                        <p className="text-xl md:text-2xl font-light mt-1 text-center" style={{ color: textColors.jobTitle }}>
+                          {jobTitle}
+                        </p>
+                      )}
+                    </div>
+                    {/* Contact Information */}
+                    <div className="space-y-2 text-sm md:text-base">
+                      {email && (
+                        <p className="flex items-center justify-center gap-2">
+                          <span className="font-medium">Email:</span>
+                          <a href={`mailto:${email}`} className="underline hover:text-blue-500 transition-colors" style={{ color: textColors.email }}>
+                            {email}
+                          </a>
+                        </p>
+                      )}
+                      {phone && (
+                        <p className="flex items-center justify-center gap-2">
+                          <span className="font-medium">Phone:</span>
+                          <span style={{ color: textColors.phone }}>{phone}</span>
+                        </p>
+                      )}
+                      {location && (
+                        <p className="flex items-center justify-center gap-2">
+                          <span className="font-medium">Location:</span>
+                          <span style={{ color: textColors.location }}>{location}</span>
+                        </p>
+                      )}
+                    </div>
+                    {/* Bio */}
+                    {bio && (
+                      <div className="space-y-2">
+                        <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
+                          {bio}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  {/* Right Column: Sections */}
+                  <div className="space-y-4">
+                    {skills.length > 0 && (
+                      <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
+                          Skills
+                        </h3>
+                        <ul className="flex flex-wrap gap-2 text-sm md:text-base">
+                          {skills.map((skill, index) => (
+                            <li key={index} className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md" style={{ color: textColors.skills }}>
+                              {skill.value.trim()}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {workExperience.length > 0 && (
+                      <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+                          Work Experience
+                        </h3>
+                        {workExperience.map((experience, index) => (
+                          <div key={index} className="space-y-2">
+                            <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
+                              {experience.companyName}
+                            </p>
+                            <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
+                              {experience.role}
+                            </p>
+                            <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
+                              {experience.duration}
+                            </p>
+                            {experience.jobDescriptions.length > 0 && (
+                              <div className="space-y-1">
+                                <ul className="list-disc pl-5 space-y-2">
+                                  {experience.jobDescriptions.map((desc, descIndex) => (
+                                    <li key={descIndex} className="text-sm md:text-base" style={{ color: textColors.jobDescriptions }}>
+                                      {desc}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {education.length > 0 && (
+                      <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+                          Education
+                        </h3>
+                        {education.map((edu, index) => (
+                          <div key={index} className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <p className="font-medium text-base md:text-lg" style={{ color: textColors.institution }}>
+                                {edu.institution}
+                              </p>
+                              <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
+                                {edu.gradYear}
+                              </p>
+                            </div>
+                            <p className="text-sm md:text-base italic" style={{ color: textColors.degree }}>
+                              {edu.degree}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {hobbies.length > 0 && (
+                      <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
+                          Hobbies
+                        </h3>
+                        <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
+                          {hobbies.join(', ')}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {selectedVariant === 'resume' && selectedVariantStyle === 'style3' && (
+              <div
+                className="relative min-h-[600px] p-4 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+                style={{
+                  background:
+                    bgType === 'gradient'
+                      ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                      : bgType === 'solid'
+                      ? solidColor
+                      : "#f9f9f9",
+                }}
+              >
+                <div className="relative z-10 flex flex-col items-center gap-8 text-center">
+                  {/* Profile Picture */}
+                  {profilePicture && (
+                    <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                      <img src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)} alt="Profile Picture" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  {/* Full Name and Job Title */}
+                  <div>
+                    {fullName && (
+                      <h2 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: textColors.fullName }}>
+                        {fullName}
+                      </h2>
+                    )}
+                    {jobTitle && (
+                      <p className="text-xl md:text-2xl font-light mt-1" style={{ color: textColors.jobTitle }}>
+                        {jobTitle}
+                      </p>
+                    )}
+                  </div>
+                  {/* Contact Information */}
+                  <div className="space-y-2 text-sm md:text-base">
+                    {email && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Email:</span>
+                        <a href={`mailto:${email}`} className="underline hover:text-blue-500 transition-colors" style={{ color: textColors.email }}>
+                          {email}
+                        </a>
+                      </p>
+                    )}
+                    {phone && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Phone:</span>
+                        <span style={{ color: textColors.phone }}>{phone}</span>
+                      </p>
+                    )}
+                    {location && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Location:</span>
+                        <span style={{ color: textColors.location }}>{location}</span>
+                      </p>
+                    )}
+                  </div>
+                  {/* Bio */}
+                  {bio && (
+                    <div className="w-full max-w-2xl text-left space-y-2">
+                      <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
+                        {bio}
+                      </p>
+                    </div>
+                  )}
+                  {/* Skills, Work Experience, Education, Hobbies */}
+                  <div className="w-full max-w-2xl text-left space-y-4">
+                    {skills.length > 0 && (
+                      <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
+                          Skills
+                        </h3>
+                        <ul className="flex flex-wrap justify-center gap-2 text-sm md:text-base">
+                          {skills.map((skill, index) => (
+                            <li key={index} className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md" style={{ color: textColors.skills }}>
+                              {skill.value.trim()}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {workExperience.length > 0 && (
+                      <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+                          Work Experience
+                        </h3>
+                        {workExperience.map((experience, index) => (
+                          <div key={index} className="space-y-2">
+                            <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
+                              {experience.companyName}
+                            </p>
+                            <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
+                              {experience.role}
+                            </p>
+                            <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
+                              {experience.duration}
+                            </p>
+                            {experience.jobDescriptions.length > 0 && (
+                              <div className="space-y-1">
+                                <ul className="list-disc pl-5 space-y-2">
+                                  {experience.jobDescriptions.map((desc, descIndex) => (
+                                    <li key={descIndex} className="text-sm md:text-base" style={{ color: textColors.jobDescriptions }}>
+                                      {desc}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {education.length > 0 && (
+                      <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+                          Education
+                        </h3>
+                        {education.map((edu, index) => (
+                          <div key={index} className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <p className="font-medium text-base md:text-lg" style={{ color: textColors.institution }}>
+                                {edu.institution}
+                              </p>
+                              <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
+                                {edu.gradYear}
+                              </p>
+                            </div>
+                            <p className="text-sm md:text-base italic" style={{ color: textColors.degree }}>
+                              {edu.degree}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {hobbies.length > 0 && (
+                      <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
+                          Hobbies
+                        </h3>
+                        <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
+                          {hobbies.join(', ')}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {selectedVariant === 'resume' && selectedVariantStyle === 'style4' && (
+              <div
+                className="relative min-h-[600px] p-4 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+                style={{
+                  background:
+                    bgType === 'gradient'
+                      ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+                      : bgType === 'solid'
+                      ? solidColor
+                      : "#f9f9f9",
+                }}
+              >
+                <div className="relative z-10 flex flex-col items-center gap-8 text-center">
+                  {/* Profile Picture */}
+                  {profilePicture && (
+                    <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                      <img src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)} alt="Profile Picture" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  {/* Full Name and Job Title */}
+                  <div>
+                    {fullName && (
+                      <h2 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: textColors.fullName }}>
+                        {fullName}
+                      </h2>
+                    )}
+                    {jobTitle && (
+                      <p className="text-xl md:text-2xl font-light mt-1" style={{ color: textColors.jobTitle }}>
+                        {jobTitle}
+                      </p>
+                    )}
+                  </div>
+                  {/* Contact Information */}
+                  <div className="space-y-2 text-sm md:text-base">
+                    {email && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Email:</span>
+                        <a href={`mailto:${email}`} className="underline hover:text-blue-500 transition-colors" style={{ color: textColors.email }}>
+                          {email}
+                        </a>
+                      </p>
+                    )}
+                    {phone && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Phone:</span>
+                        <span style={{ color: textColors.phone }}>{phone}</span>
+                      </p>
+                    )}
+                    {location && (
+                      <p className="flex items-center justify-center gap-2">
+                        <span className="font-medium">Location:</span>
+                        <span style={{ color: textColors.location }}>{location}</span>
+                      </p>
+                    )}
+                  </div>
+                  {/* Bio */}
+                  {bio && (
+                    <div className="w-full max-w-2xl text-left space-y-2">
+                      <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
+                        {bio}
+                      </p>
+                    </div>
+                  )}
+                  {/* Skills, Work Experience, Education, Hobbies */}
+                  <div className="w-full max-w-2xl text-left space-y-4">
+                    {skills.length > 0 && (
+                      <div>
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
+                          Skills
+                        </h3>
+                        <ul className="flex flex-wrap justify-center gap-2 text-sm md:text-base">
+                          {skills.map((skill, index) => (
+                            <li key={index} className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md" style={{ color: textColors.skills }}>
+                              {skill.value.trim()}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {workExperience.length > 0 && (
+                      <div>
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+                          Work Experience
+                        </h3>
+                        <ul className="space-y-4">
+                          {workExperience.map((experience, index) => (
+                            <li key={index} className="flex items-start space-x-4">
+                              <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                              <div>
+                                <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
+                                  {experience.companyName}
+                                </p>
+                                <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
+                                  {experience.role}
+                                </p>
+                                <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
+                                  {experience.duration}
+                                </p>
+                                {experience.jobDescriptions.length > 0 && (
+                                  <div className="space-y-1">
+                                    <ul className="list-disc pl-5 space-y-2">
+                                      {experience.jobDescriptions.map((desc, descIndex) => (
+                                        <li key={descIndex} className="text-sm md:text-base" style={{ color: textColors.jobDescriptions }}>
+                                          {desc}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {education.length > 0 && (
+                      <div>
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+                          Education
+                        </h3>
+                        <ul className="space-y-4">
+                          {education.map((edu, index) => (
+                            <li key={index} className="flex items-start space-x-4">
+                              <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+                              <div>
+                                <div className="flex justify-between items-center">
+                                  <p className="font-medium text-base md:text-lg" style={{ color: textColors.institution }}>
+                                    {edu.institution}
+                                  </p>
+                                  <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
+                                    {edu.gradYear}
+                                  </p>
+                                </div>
+                                <p className="text-sm md:text-base italic" style={{ color: textColors.degree }}>
+                                  {edu.degree}
+                                </p>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {hobbies.length > 0 && (
+                      <div>
+                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
+                          Hobbies
+                        </h3>
+                        <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
+                          {hobbies.join(', ')}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+      {/* Resume Card Display End */}
 
 
-{selectedVariant === 'resume' && (
-  <div
-    className="relative min-h-[600px] p-4 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
-    style={{
-      background:
-        bgType === 'gradient'
-          ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-          : bgType === 'solid'
-          ? solidColor
-          : "#f9f9f9",
-    }}
-  >
-    <div className="relative z-10 flex flex-col items-center gap-8 text-center">
-      {/* Profile Picture */}
-      {profilePicture && (
-        <div className="transform hover:scale-110 transition-all duration-500">
-          <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
-            <img
-              src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)}
-              alt="Profile Picture"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-      )}
+    {/* idcard Display Start */}
 
-      {/* Full Name and Job Title */}
-      <div>
-        {fullName && (
-          <h2
-            className="text-4xl md:text-5xl font-bold tracking-tight"
-            style={{ color: textColors.fullName }}
-          >
-            {fullName}
-          </h2>
-        )}
-        {jobTitle && (
-          <p
-            className="text-xl md:text-2xl font-light mt-1"
-            style={{ color: textColors.jobTitle }}
-          >
-            {jobTitle}
-          </p>
-        )}
-      </div>
+        {selectedVariant === 'idCard' && selectedVariantStyle === 'default' && (
+            <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl rounded-b-md shadow-2xl border border-slate-700/30 max-w-full mx-auto overflow-hidden">
+              {/* Background Decorations */}
+              <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-full blur-2xl"></div>
+              <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-gradient-to-tr from-slate-700/30 to-transparent rounded-full blur-3xl"></div>
 
-      {/* Contact Information */}
-      <div className="space-y-2 text-sm md:text-base">
-        {email && (
-          <p className="flex items-center justify-center gap-2">
-            <span className="font-medium">Email:</span>
-            <a
-              href={`mailto:${email}`}
-              className="underline hover:text-blue-500 transition-colors"
-              style={{ color: textColors.email }}
-            >
-              {email}
-            </a>
-          </p>
-        )}
-        {phone && (
-          <p className="flex items-center justify-center gap-2">
-            <span className="font-medium">Phone:</span>
-            <span style={{ color: textColors.phone }}>{phone}</span>
-          </p>
-        )}
-        {location && (
-          <p className="flex items-center justify-center gap-2">
-            <span className="font-medium">Location:</span>
-            <span style={{ color: textColors.location }}>{location}</span>
-          </p>
-        )}
-      </div>
-      {bio && (
-  <div className="w-full max-w-2xl text-left space-y-2">
-    {/* <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.bio }}>
-        About Me:
-    </h3> */}
-    <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
-      {bio}
-    </p>
-  </div>
-)}
+              {/* Card Content */}
+              <div className="relative z-10 space-y-4">
+                {/* Header */}
+                <div className="flex justify-center items-center w-full">
+                  <div className="flex items-center">
+                    {logo && (
+                      <div className="relative w-16 h-16">
+                        <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="text-sm font-semibold text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
+                      <p className="text-xs text-center text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                    </div>
+                  </div>
+                </div>
 
-      {/* Skills */}
-{skills.length > 0 && (
-  <div className="w-full max-w-2xl">
-    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
-      Skills
-    </h3>
-    <ul className="flex flex-wrap justify-center gap-2 text-sm md:text-base">
-      {skills.map((skill, index) => (
-        <li
-          key={index}
-          className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md"
-          style={{ color: textColors.skills }}
-        >
-          {skill.value.trim()}
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
+                {/* Main Details Section */}
+                <div className="flex gap-4">
+                  {/* Left Column: Personal Info */}
+                  <div className="flex-1 space-y-4">
+                    {/* Name & Department */}
+                    <div className="space-y-1">
+                      <h2 className="text-2xl font-semibold text-white">{idCardDetails.name || 'Full Name'}</h2>
+                      <p className="text-lg text-indigo-300">{idCardDetails.department || 'Department'}</p>
+                    </div>
+                    {/* Additional Details */}
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="space-y-1">
+                        <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">ID Number</p>
+                        <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">Issue Date</p>
+                        <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">Expiry Date</p>
+                        <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                      </div>
+                    </div>
+                  </div>
 
-      {/* Work Experience */}
-{/* Work Experience */}
-{workExperience.length > 0 && (
-  <div className="w-full max-w-2xl text-left space-y-4">
-    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
-      Work Experience
-    </h3>
-    {workExperience.map((experience, index) => (
-      <div key={index} className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
-        <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
-          {experience.companyName}
-        </p>
-        <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
-          {experience.role}
-        </p>
-        <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
-          {experience.duration}
-        </p>
-        {experience.jobDescriptions.length > 0 && (
-          <div className="space-y-1">
-            <h4 className="text-sm font-semibold" style={{ color: textColors.jobDescriptions }}>
-              Job Descriptions:
-            </h4>
-            <ul className="list-disc pl-5 space-y-2">
-              {experience.jobDescriptions.map((desc, descIndex) => (
-                <li key={descIndex} className="text-sm md:text-base" style={{ color: textColors.jobDescriptions }}>
-                  {desc}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    ))}
-  </div>
-)}
+                  {/* Right Column: Photo & QR Code */}
+                  <div className="flex flex-col items-center gap-4">
+                    {/* Profile Picture */}
+                    <div className="relative w-[110px] h-[150px] rounded-xl overflow-hidden border-2 border-slate-700/50 shadow-2xl">
+                      {idCardDetails.photo ? (
+                        <Image src={idCardDetails.photo} alt="Profile" fill className="object-cover" />
+                      ) : (
+                        <div className="flex items-center justify-center h-full bg-slate-800 text-slate-400">
+                          <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1}
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    {/* QR Code */}
+                    {qrUrl && (
+                      <div className="bg-white/90 p-2 rounded-lg shadow-xl">
+                        <QRCodeSVG value={qrUrl} size={90} />
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-      {/* Education */}
-      {education.length > 0 && (
-  <div className="w-full max-w-2xl text-left space-y-4">
-    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
-      Education
-    </h3>
-    {education.map((edu, index) => (
-      <div key={index} className="space-y-2 bg-white/80 p-4 pt-2 rounded-xl shadow-lg">
-        <div className="flex justify-between items-center">
-          <p className="font-medium text-base md:text-lg" style={{ color: textColors.institution }}>
-            {edu.institution}
-          </p>
-          <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
-            {edu.gradYear}
-          </p>
-        </div>
-        <p className="text-sm md:text-base italic" style={{ color: textColors.degree }}>
-          {edu.degree}
-        </p>
-      </div>
-    ))}
-  </div>
-)}
+                {/* Footer */}
+                <div className="pt-6 border-t border-slate-700/50">
+                  <div className="flex justify-between items-center">
+                    {/* Signature Placeholder */}
+                    <div className="space-y-1">
+                      <p className="text-xs text-slate-400">Authorized Signature</p>
+                      <div className="h-8 w-40 border-b border-slate-600"></div>
+                    </div>
+                    {/* Footer Tag */}
+                    <div className="px-2 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
+                      <p className="text-xs text-slate-400">Powered by Kardify</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+       )}
 
-      {/* Hobbies */}
-      {hobbies.length > 0 && (
-  <div className="w-full max-w-2xl text-left space-y-4">
-    <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
-      Hobbies
-    </h3>
-    <div className="space-y-2 bg-white/80 p-4 rounded-xl shadow-lg">
-      <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
-        {hobbies.join(', ')}
-      </p>
-    </div>
-  </div>
-)}
-    </div>
-  </div>
-)}
-
-    {/* idcard Display */}
-      {selectedVariant === 'idCard' && showIDCard && (
-        <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl rounded-b-md shadow-2xl border border-slate-700/30 max-w-full mx-auto overflow-hidden">
+      {selectedVariant === 'idCard' && selectedVariantStyle === 'style1' && (
+        <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl shadow-2xl border border-slate-700/30 max-w-full mx-auto overflow-hidden">
           {/* Background Decorations */}
           <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-full blur-2xl"></div>
@@ -11484,19 +12186,113 @@ const baseLabelStyles = `
           {/* Card Content */}
           <div className="relative z-10 space-y-4">
             {/* Header */}
-            <div className=' flex justify-center items-center w-full'>
-            <div className="flex items-center">
-              {logo && (
-                <div className="relative w-16 h-16">
-                  <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
+            <div className="flex justify-center items-center w-full">
+              <div className="flex items-center">
+                {logo && (
+                  <div className="relative w-16 h-16">
+                    <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
+                  </div>
+                )}
+                <div>
+                  <h3 className="text-sm font-semibold text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
+                  <p className="text-xs text-center text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
                 </div>
-              )}
-              <div className="">
-                <h3 className="text-sm font-semibold text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
-                <p className="text-xs text-center text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
               </div>
             </div>
-            </div>   
+
+            {/* Main Details Section */}
+            <div className="space-y-4">
+              {/* Name & Department */}
+              <div className="space-y-1">
+                <h2 className="text-2xl font-semibold text-white">{idCardDetails.name || 'Full Name'}</h2>
+                <p className="text-lg text-indigo-300">{idCardDetails.department || 'Department'}</p>
+              </div>
+              {/* Additional Details */}
+              <div className="space-y-2">
+                <div className="space-y-1">
+                  <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">ID Number</p>
+                  <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">Issue Date</p>
+                  <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">Expiry Date</p>
+                  <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                </div>
+              </div>
+
+              {/* Profile Picture & QR Code */}
+              <div className="flex flex-col items-center gap-4">
+                {/* Profile Picture */}
+                <div className="relative w-[110px] h-[150px] rounded-xl overflow-hidden border-2 border-slate-700/50 shadow-2xl">
+                  {idCardDetails.photo ? (
+                    <Image src={idCardDetails.photo} alt="Profile" fill className="object-cover" />
+                  ) : (
+                    <div className="flex items-center justify-center h-full bg-slate-800 text-slate-400">
+                      <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {/* QR Code */}
+                {qrUrl && (
+                  <div className="bg-white/90 p-2 rounded-lg shadow-xl">
+                    <QRCodeSVG value={qrUrl} size={90} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="pt-6 border-t border-slate-700/50">
+              <div className="flex justify-between items-center">
+                {/* Signature Placeholder */}
+                <div className="space-y-1">
+                  <p className="text-xs text-slate-400">Authorized Signature</p>
+                  <div className="h-8 w-40 border-b border-slate-600"></div>
+                </div>
+                {/* Footer Tag */}
+                <div className="px-2 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
+                  <p className="text-xs text-slate-400">Powered by Kardify</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedVariant === 'idCard' && selectedVariantStyle === 'style2' && (
+        <div className="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-4 rounded-2xl shadow-2xl border border-slate-700/30 max-w-full mx-auto overflow-hidden">
+          {/* Background Decorations */}
+          <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-gradient-to-tr from-slate-700/30 to-transparent rounded-full blur-3xl"></div>
+
+          {/* Card Content */}
+          <div className="relative z-10 space-y-4">
+            {/* Header */}
+            <div className="flex justify-center items-center w-full">
+              <div className="flex items-center">
+                {logo && (
+                  <div className="relative w-16 h-16">
+                    <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
+                  </div>
+                )}
+                <div>
+                  <h3 className="text-sm font-semibold text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
+                  <p className="text-xs text-center text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                </div>
+              </div>
+            </div>
+
             {/* Main Details Section */}
             <div className="flex gap-4">
               {/* Left Column: Personal Info */}
@@ -11506,19 +12302,18 @@ const baseLabelStyles = `
                   <h2 className="text-2xl font-semibold text-white">{idCardDetails.name || 'Full Name'}</h2>
                   <p className="text-lg text-indigo-300">{idCardDetails.department || 'Department'}</p>
                 </div>
-
                 {/* Additional Details */}
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="space-y-2">
                   <div className="space-y-1">
-                    <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">ID Number</p>
+                    <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">ID Number</p>
                     <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">Issue Date</p>
+                    <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">Issue Date</p>
                     <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-stone-50/80  text-[11px] text-center  rounded-xl font-semibold">Expiry Date</p>
+                    <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">Expiry Date</p>
                     <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
                   </div>
                 </div>
@@ -11543,7 +12338,6 @@ const baseLabelStyles = `
                     </div>
                   )}
                 </div>
-
                 {/* QR Code */}
                 {qrUrl && (
                   <div className="bg-white/90 p-2 rounded-lg shadow-xl">
@@ -11561,7 +12355,6 @@ const baseLabelStyles = `
                   <p className="text-xs text-slate-400">Authorized Signature</p>
                   <div className="h-8 w-40 border-b border-slate-600"></div>
                 </div>
-
                 {/* Footer Tag */}
                 <div className="px-2 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
                   <p className="text-xs text-slate-400">Powered by Kardify</p>
@@ -11572,13 +12365,331 @@ const baseLabelStyles = `
         </div>
       )}
 
-    {/* Add contract card display */}
-      {selectedVariant === 'contract' && (
-        <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-3 rounded-2xl rounded-b-md shadow-2xl overflow-hidden">
+      {selectedVariant === 'idCard' && selectedVariantStyle === 'style3' && (
+        <div className="relative bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 max-w-full mx-auto overflow-hidden">
+          {/* Background Decorations */}
+          <div className="absolute inset-0 bg-grid-slate-100/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
+
+          {/* Card Content */}
+          <div className="relative z-10 space-y-4">
+            {/* Header */}
+            <div className="flex justify-center items-center w-full">
+              <div className="flex items-center">
+                {logo && (
+                  <div className="relative w-16 h-16">
+                    <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
+                  </div>
+                )}
+                <div>
+                  <h3 className="text-sm font-semibold text-center text-gray-600 tracking-wider">IDENTIFICATION CARD</h3>
+                  <p className="text-xs text-center text-gray-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Details Section */}
+            <div className="space-y-4">
+              {/* Name & Department */}
+              <div className="space-y-1">
+                <h2 className="text-2xl font-semibold text-gray-800">{idCardDetails.name || 'Full Name'}</h2>
+                <p className="text-lg text-gray-600">{idCardDetails.department || 'Department'}</p>
+              </div>
+              {/* Additional Details */}
+              <div className="space-y-2">
+                <div className="space-y-1">
+                  <p className="text-gray-500 text-[11px] text-center rounded-xl font-semibold">ID Number</p>
+                  <p className="font-medium text-gray-700 bg-gray-100 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-gray-500 text-[11px] text-center rounded-xl font-semibold">Issue Date</p>
+                  <p className="font-medium text-gray-700 bg-gray-100 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-gray-500 text-[11px] text-center rounded-xl font-semibold">Expiry Date</p>
+                  <p className="font-medium text-gray-700 bg-gray-100 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                </div>
+              </div>
+
+              {/* Profile Picture & QR Code */}
+              <div className="flex flex-col items-center gap-4">
+                {/* Profile Picture */}
+                <div className="relative w-[110px] h-[150px] rounded-xl overflow-hidden border-2 border-gray-200 shadow-2xl">
+                  {idCardDetails.photo ? (
+                    <Image src={idCardDetails.photo} alt="Profile" fill className="object-cover" />
+                  ) : (
+                    <div className="flex items-center justify-center h-full bg-gray-100 text-gray-400">
+                      <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {/* QR Code */}
+                {qrUrl && (
+                  <div className="bg-gray-100 p-2 rounded-lg shadow-xl">
+                    <QRCodeSVG value={qrUrl} size={90} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="pt-6 border-t border-gray-200">
+              <div className="flex justify-between items-center">
+                {/* Signature Placeholder */}
+                <div className="space-y-1">
+                  <p className="text-xs text-gray-500">Authorized Signature</p>
+                  <div className="h-8 w-40 border-b border-gray-300"></div>
+                </div>
+                {/* Footer Tag */}
+                <div className="px-2 py-1.5 rounded-lg bg-gray-100 backdrop-blur-sm">
+                  <p className="text-xs text-gray-500">Powered by Kardify</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedVariant === 'idCard' && selectedVariantStyle === 'style4' && (
+        <div className="relative bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 p-4 rounded-2xl shadow-2xl border border-slate-700/30 max-w-full mx-auto overflow-hidden">
+          {/* Floating Decorations */}
+          <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-gradient-to-tr from-slate-700/30 to-transparent rounded-full blur-3xl"></div>
+
+          {/* Card Content */}
+          <div className="relative z-10 space-y-4">
+            {/* Header */}
+            <div className="flex justify-center items-center w-full">
+              <div className="flex items-center">
+                {logo && (
+                  <div className="relative w-16 h-16">
+                    <Image src={logo} alt="Logo" fill className="object-contain rounded-full" />
+                  </div>
+                )}
+                <div>
+                  <h3 className="text-sm font-semibold text-center text-indigo-400 tracking-wider">IDENTIFICATION CARD</h3>
+                  <p className="text-xs text-center text-slate-400">Valid until {idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Details Section */}
+            <div className="space-y-4">
+              {/* Name & Department */}
+              <div className="space-y-1">
+                <h2 className="text-2xl font-semibold text-white">{idCardDetails.name || 'Full Name'}</h2>
+                <p className="text-lg text-indigo-300">{idCardDetails.department || 'Department'}</p>
+              </div>
+              {/* Additional Details */}
+              <div className="space-y-2">
+                <div className="space-y-1">
+                  <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">ID Number</p>
+                  <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.idNumber || 'XXXX-XXXX'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">Issue Date</p>
+                  <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.issueDate || 'MM/DD/YYYY'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-stone-50/80 text-[11px] text-center rounded-xl font-semibold">Expiry Date</p>
+                  <p className="font-medium text-stone-50/90 bg-slate-800 py-2 p-0.5 rounded-md text-[15px] text-center">{idCardDetails.expiryDate || 'MM/DD/YYYY'}</p>
+                </div>
+              </div>
+
+              {/* Profile Picture & QR Code */}
+              <div className="flex flex-col items-center gap-4">
+                {/* Profile Picture */}
+                <div className="relative w-[110px] h-[150px] rounded-xl overflow-hidden border-2 border-slate-700/50 shadow-2xl">
+                  {idCardDetails.photo ? (
+                    <Image src={idCardDetails.photo} alt="Profile" fill className="object-cover" />
+                  ) : (
+                    <div className="flex items-center justify-center h-full bg-slate-800 text-slate-400">
+                      <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {/* QR Code */}
+                {qrUrl && (
+                  <div className="bg-white/90 p-2 rounded-lg shadow-xl">
+                    <QRCodeSVG value={qrUrl} size={90} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="pt-6 border-t border-slate-700/50">
+              <div className="flex justify-between items-center">
+                {/* Signature Placeholder */}
+                <div className="space-y-1">
+                  <p className="text-xs text-slate-400">Authorized Signature</p>
+                  <div className="h-8 w-40 border-b border-slate-600"></div>
+                </div>
+                {/* Footer Tag */}
+                <div className="px-2 py-1.5 rounded-lg bg-slate-800/50 backdrop-blur-sm">
+                  <p className="text-xs text-slate-400">Powered by Kardify</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* idcard Display End */}
+
+    {/* Begin contract card display */}
+
+      {selectedVariant === 'contract' && selectedVariantStyle === 'default' && (
+            <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-3 rounded-2xl shadow-2xl overflow-hidden">
+              {/* Decorative Elements */}
+              <div className="absolute z-10 inset-0 bg-grid-white/10"></div>
+              <div className="absolute z-10 top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+              <div className="relative z-10 space-y-4">
+                {/* Header with Official Seal */}
+                <div className="text-center border-b border-white/20 pb-6">
+                  <div className="flex justify-center mb-4">
+                    {logo && (
+                      <div className="relative w-20 h-20">
+                        <Image src={logo} alt="Official Seal" fill className="rounded-full object-cover border-2 border-white/50" />
+                      </div>
+                    )}
+                  </div>
+                  <h2 className="text-4xl font-serif text-white mb-2">{title || 'Contract Agreement'}</h2>
+                  <div className="flex justify-center gap-2 text-sm text-blue-200">
+                    <p>Ref: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
+                    <p>|</p>
+                    <p>Date: {new Date(contractDate).toLocaleDateString()}</p>
+                  </div>
+                </div>
+
+                {/* Parties Section */}
+                <div className="grid grid-cols-1 gap-4">
+                  {[
+                    { title: 'Party 1', name: party1Name, sign: party1Signature },
+                    { title: 'Party 2', name: party2Name, sign: party2Signature }
+                  ].map((party, idx) => (
+                    <div key={idx} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                      <h3 className="text-base text-white mb-4">{party.title}</h3>
+                      <div className="space-y-2">
+                        <div className="bg-white/5 p-3 rounded-xl">
+                          <p className="text-sm text-blue-200">Full Name</p>
+                          <p className="text-lg text-white font-medium">{party.name}</p>
+                        </div>
+                        {party.sign && (
+                          <div className="bg-white/5 p-3 rounded-xl">
+                            <p className="text-sm text-blue-200">Digital Signature</p>
+                            <div className="mt-2 bg-white/5 rounded-lg overflow-hidden">
+                              <img
+                                src={party.sign}
+                                alt={`${party.title} Signature`}
+                                className="w-full h-20 object-contain"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Terms and Conditions */}
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+                  <h3 className="text-xl text-white mb-4">Terms and Conditions</h3>
+                  <div className="prose prose-invert max-w-none">
+                    <div className="bg-white/5 p-6 rounded-xl">
+                      <p className="text-blue-200 whitespace-pre-line leading-relaxed">{contractTerms}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contract Details */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-white/10 p-3 rounded-xl border border-white/10">
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-base text-blue-200">Contract Value</p>
+                    </div>
+                    <p className="text-xl text-white font-medium">{formatCurrency(parseFloat(contractValue), currency)}</p>
+                  </div>
+                  <div className="bg-white/10 p-3 rounded-xl border border-white/10">
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-base text-blue-200">Valid Until</p>
+                    </div>
+                    <p className="text-xl text-white font-medium">{new Date(validUntil).toLocaleDateString()}</p>
+                  </div>
+                </div>
+
+                {/* Witnesses */}
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+                  <h3 className="text-xl text-white mb-4">Witnesses</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {witnesses.map((witness, idx) => (
+                      <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
+                          <p className="text-blue-200">{witness.name}</p>
+                        </div>
+                        <div className="font-mono text-white/90 text-sm mt-2 p-2 bg-white/5 rounded-lg">
+                          {witness.signature}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex justify-between items-center pt-3 border-t border-white/20">
+                  <div className="flex items-center gap-4">
+                    {qrUrl && (
+                      <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+                        <QRCodeSVG value={qrUrl} size={40} />
+                        <p className="text-xs text-center mt-1 text-blue-900">Verify</p>
+                      </div>
+                    )}
+                    <div className="text-sm text-blue-200">
+                      <p>Document ID: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
+                      <p>Created: {new Date(contractDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-sm font-medium text-emerald-400">Secured by Kardify</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+      )}
+
+      {selectedVariant === 'contract' && selectedVariantStyle === 'style1' && (
+        <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-3 rounded-2xl shadow-2xl overflow-hidden">
           {/* Decorative Elements */}
           <div className="absolute z-10 inset-0 bg-grid-white/10"></div>
           <div className="absolute z-10 top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
-          
+
           <div className="relative z-10 space-y-4">
             {/* Header with Official Seal */}
             <div className="text-center border-b border-white/20 pb-6">
@@ -11597,8 +12708,8 @@ const baseLabelStyles = `
               </div>
             </div>
 
-            {/* Parties Section with Enhanced Design */}
-            <div className="grid grid-cols-1 gap-4">
+            {/* Parties Section */}
+            <div className="space-y-4">
               {[
                 { title: 'Party 1', name: party1Name, sign: party1Signature },
                 { title: 'Party 2', name: party2Name, sign: party2Signature }
@@ -11614,8 +12725,8 @@ const baseLabelStyles = `
                       <div className="bg-white/5 p-3 rounded-xl">
                         <p className="text-sm text-blue-200">Digital Signature</p>
                         <div className="mt-2 bg-white/5 rounded-lg overflow-hidden">
-                          <img 
-                            src={party.sign} 
+                          <img
+                            src={party.sign}
                             alt={`${party.title} Signature`}
                             className="w-full h-20 object-contain"
                           />
@@ -11627,7 +12738,7 @@ const baseLabelStyles = `
               ))}
             </div>
 
-            {/* Terms and Conditions with Enhanced Readability */}
+            {/* Terms and Conditions */}
             <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
               <h3 className="text-xl text-white mb-4">Terms and Conditions</h3>
               <div className="prose prose-invert max-w-none">
@@ -11637,8 +12748,8 @@ const baseLabelStyles = `
               </div>
             </div>
 
-            {/* Contract Details with Icons */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* Contract Details */}
+            <div className="space-y-4">
               <div className="bg-white/10 p-3 rounded-xl border border-white/10">
                 <div className="flex items-center gap-2 mb-2">
                   <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -11659,10 +12770,10 @@ const baseLabelStyles = `
               </div>
             </div>
 
-            {/* Witnesses with Enhanced Layout */}
+            {/* Witnesses */}
             <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
               <h3 className="text-xl text-white mb-4">Witnesses</h3>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-4">
                 {witnesses.map((witness, idx) => (
                   <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/5">
                     <div className="flex items-center gap-2 mb-2">
@@ -11679,7 +12790,7 @@ const baseLabelStyles = `
               </div>
             </div>
 
-            {/* Footer with Enhanced Security Features */}
+            {/* Footer */}
             <div className="flex justify-between items-center pt-3 border-t border-white/20">
               <div className="flex items-center gap-4">
                 {qrUrl && (
@@ -11704,6 +12815,148 @@ const baseLabelStyles = `
         </div>
       )}
 
+      {selectedVariant === 'contract' && selectedVariantStyle === 'style2' && (
+        <div className="relative bg-gradient-to-br from-slate-800 to-indigo-900 p-6 rounded-3xl shadow-2xl overflow-hidden">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]"></div>
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+          {/* Header Section */}
+          <div className="relative z-10 mb-8 text-center">
+            <div className="flex justify-center items-center gap-4 mb-6">
+              {logo && (
+                <div className="relative w-24 h-24 transform hover:scale-105 transition-transform duration-300">
+                  <Image src={logo} alt="Official Seal" fill className="rounded-full object-cover border-4 border-white/20 shadow-lg" />
+                </div>
+              )}
+              <div>
+                <h2 className="text-5xl font-serif text-white mb-2 tracking-tight">{title || 'Contract Agreement'}</h2>
+                <div className="flex items-center justify-center gap-3 text-blue-200/80">
+                  <span>Ref: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</span>
+                  <span>•</span>
+                  <span>Date: {new Date(contractDate).toLocaleDateString()}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content Grid */}
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left Column */}
+            <div className="space-y-6">
+              {/* Parties Section */}
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
+                <h3 className="text-2xl font-semibold text-white mb-6">Contracting Parties</h3>
+                <div className="space-y-6">
+                  {[
+                    { title: 'Party 1', name: party1Name, sign: party1Signature },
+                    { title: 'Party 2', name: party2Name, sign: party2Signature }
+                  ].map((party, idx) => (
+                    <div key={idx} className="bg-white/5 rounded-xl p-5 hover:bg-white/10 transition-colors duration-300">
+                      <h4 className="text-lg text-blue-200 mb-4">{party.title}</h4>
+                      <div className="space-y-4">
+                        <div className="bg-black/20 p-4 rounded-lg">
+                          <p className="text-sm text-blue-200/80 mb-1">Full Name</p>
+                          <p className="text-xl text-white font-medium">{party.name}</p>
+                        </div>
+                        {party.sign && (
+                          <div className="bg-black/20 p-4 rounded-lg">
+                            <p className="text-sm text-blue-200/80 mb-2">Digital Signature</p>
+                            <div className="bg-black/30 rounded-lg p-2">
+                              <img src={party.sign} alt={`${party.title} Signature`} className="w-full h-20 object-contain" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-6">
+              {/* Contract Details */}
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
+                <h3 className="text-2xl font-semibold text-white mb-6">Contract Details</h3>
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="bg-black/20 p-4 rounded-xl">
+                    <div className="flex items-center gap-3 mb-2">
+                      <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-blue-200">Value</p>
+                    </div>
+                    <p className="text-2xl text-white font-semibold">{formatCurrency(parseFloat(contractValue), currency)}</p>
+                  </div>
+                  <div className="bg-black/20 p-4 rounded-xl">
+                    <div className="flex items-center gap-3 mb-2">
+                      <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-blue-200">Valid Until</p>
+                    </div>
+                    <p className="text-2xl text-white font-semibold">{new Date(validUntil).toLocaleDateString()}</p>
+                  </div>
+                </div>
+
+                {/* Terms Section */}
+                <div className="bg-black/20 p-4 rounded-xl">
+                  <h4 className="text-xl text-white mb-4">Terms & Conditions</h4>
+                  <div className="bg-black/30 p-4 rounded-lg">
+                    <p className="text-blue-100/90 whitespace-pre-line leading-relaxed">{contractTerms}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Witnesses Section */}
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
+                <h3 className="text-2xl font-semibold text-white mb-6">Witnesses</h3>
+                <div className="grid gap-4">
+                  {witnesses.map((witness, idx) => (
+                    <div key={idx} className="bg-black/20 p-4 rounded-xl hover:bg-black/30 transition-colors duration-300">
+                      <div className="flex items-center gap-3 mb-3">
+                        <svg className="w-5 h-5 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <p className="text-lg text-white">{witness.name}</p>
+                      </div>
+                      <div className="font-mono text-blue-200/90 text-sm p-3 bg-black/30 rounded-lg">
+                        {witness.signature}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="relative z-10 mt-8 pt-6 border-t border-white/10 flex flex-wrap justify-between items-center gap-6">
+            <div className="flex items-center gap-6">
+              {qrUrl && (
+                <div className="bg-white/90 p-3 rounded-xl shadow-lg hover:bg-white transition-colors duration-300">
+                  <QRCodeSVG value={qrUrl} size={48} />
+                  <p className="text-xs text-center mt-2 text-indigo-900 font-medium">Verify</p>
+                </div>
+              )}
+              <div className="text-sm text-blue-200/80">
+                <p className="mb-1">Document ID: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
+                <p>Created: {new Date(contractDate).toLocaleDateString()}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 bg-emerald-400/10 px-4 py-2 rounded-full">
+              <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-medium text-emerald-400">Secured by Kardify</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+    {/* End contract card display */}
 
     {/* Add Birthday card display */}
     {selectedVariant === "birthday" && (
