@@ -10071,9 +10071,10 @@ const baseLabelStyles = `
 
   {/* Product Variant Display Start */}
      <div className= "">
+
           {selectedVariant === 'product' && selectedVariantStyle === 'default' && (
   <div className={`relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10`}
-    style={{ backgroundColor: `${backgroundColor}dd` }}>
+    style={{ backgroundColor: `${backgroundColor}` }}>
     {/* Glass Background Effects */}
     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5"></div>
     <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
@@ -10125,45 +10126,186 @@ const baseLabelStyles = `
   </div>
           )}
 
-{selectedVariant === 'product' && selectedVariantStyle === 'style1' && (
-  <div className="relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10" style={{ backgroundColor: `${backgroundColor}dd` }}>
-    {/* Glass Background Effects */}
-    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5"></div>
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+          {selectedVariant === 'product' && selectedVariantStyle === 'style1' && (
+            <div className="relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10" style={{ backgroundColor: `${backgroundColor}dd` }}>
+              {/* Glass Background Effects */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5"></div>
+              <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
 
-    <div className="relative space-y-4 z-10">
-      {/* Product Image */}
-      {productImage && (
-        <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-          <Image src={productImage} alt="Product Image" layout="fill" objectFit="cover" className="transition-transform duration-300 group-hover:scale-105" />
-        </div>
-      )}
-      {/* Title, Price, and QR Code */}
-      <div className="flex flex-col items-center space-y-2">
-        <h3 className="text-4xl font-bold text-stone-950">{title}</h3>
-        <p className="text-2xl font-semibold bg-stone-500/20 backdrop-blur-sm text-stone-950/90 px-6 py-2 rounded-full inline-block">
-          {formatCurrency(parseFloat(price), currency)}
-        </p>
-        {qrUrl && (
-          <div className="bg-white/80 backdrop-blur-xl p-3 rounded-xl shadow-lg hover:scale-105 transition-transform">
-            <QRCodeSVG value={qrUrl} size={80} />
+              <div className="relative space-y-4 z-10">
+                {/* Product Image */}
+                {productImage && (
+                  <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    <Image src={productImage} alt="Product Image" layout="fill" objectFit="cover" className="transition-transform duration-300 group-hover:scale-105" />
+                  </div>
+                )}
+                {/* Title, Price, and QR Code */}
+                <div className="flex flex-col items-center space-y-2">
+                  <h3 className="text-4xl font-bold text-stone-950">{title}</h3>
+                  <p className="text-2xl font-semibold bg-stone-500/20 backdrop-blur-sm text-stone-950/90 px-6 py-2 rounded-full inline-block">
+                    {formatCurrency(parseFloat(price), currency)}
+                  </p>
+                  {qrUrl && (
+                    <div className="bg-white/80 backdrop-blur-xl p-3 rounded-xl shadow-lg hover:scale-105 transition-transform">
+                      <QRCodeSVG value={qrUrl} size={80} />
+                    </div>
+                  )}
+                </div>
+                {/* Description and Large Description */}
+                <div className="space-y-2">
+                  <p className="text-lg text-stone-950/90 leading-relaxed backdrop-blur-sm bg-white/5 p-6 rounded-xl border border-white/10">
+                    {description}
+                  </p>
+                  <div className="backdrop-blur-md bg-stone-50/10 p-6 rounded-xl border border-white/10">
+                    <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
+                    <p className="text-stone-950/80 whitespace-pre-line">{largeDescription}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {selectedVariant === 'product' && selectedVariantStyle === 'style2' && (
+            <div 
+            style={{ backgroundColor: `${backgroundColor}` }}
+            className="relative bg-white rounded-2xl shadow-2xl overflow-hidden group transition-all duration-300 hover:shadow-3xl">
+            <div className="relative h-64 overflow-hidden">
+              {productImage && (
+                <Image
+                  src={productImage}
+                  alt="Product"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              )}
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60">
+                <h3 className="text-3xl font-bold text-white">{title}</h3>
+                <p className="text-xl text-white/90">
+                  {formatCurrency(parseFloat(price), currency)}
+                </p>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div className="flex justify-between items-center">
+                {qrUrl && (
+                  <div className="bg-white p-2 rounded-lg shadow-md">
+                    <QRCodeSVG value={qrUrl} size={80} />
+                  </div>
+                )}
+                <div className="text-right">
+                  {/* <p className="text-sm text-gray-600">SKU: {sku}</p>
+                  <p className="text-sm text-gray-600">In Stock: {stockCount}</p> */}
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-gray-700 leading-relaxed">{description}</p>
+                <div className="border-t pt-4">
+                  <h4 className="font-semibold text-lg mb-2">Specifications</h4>
+                  <p className="text-gray-600 whitespace-pre-line">
+                    {largeDescription}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
-      </div>
-      {/* Description and Large Description */}
-      <div className="space-y-2">
-        <p className="text-lg text-stone-950/90 leading-relaxed backdrop-blur-sm bg-white/5 p-6 rounded-xl border border-white/10">
-          {description}
-        </p>
-        <div className="backdrop-blur-md bg-stone-50/10 p-6 rounded-xl border border-white/10">
-          <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
-          <p className="text-stone-950/80 whitespace-pre-line">{largeDescription}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+          )}
+
+          {selectedVariant === 'product' && selectedVariantStyle === 'style3' && (
+           <div 
+           style={{ backgroundColor: `${backgroundColor}` }}
+           className="bg-white rounded-xl shadow-lg overflow-hidden group">
+           <div className="flex flex-col md:flex-row">
+             <div className="md:w-1/3 relative overflow-hidden">
+               {productImage && (
+                 <Image
+                   src={productImage}
+                   alt="Product"
+                   width={400}
+                   height={400}
+                   className="object-cover h-full w-full"
+                 />
+               )}
+             </div>
+             
+             <div className="md:w-2/3 p-6 space-y-4">
+               <div className="flex justify-between items-start">
+                 <div>
+                   <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+                   <p className="text-xl text-gray-600 mt-1">
+                     {formatCurrency(parseFloat(price), currency)}
+                   </p>
+                 </div>
+                 {qrUrl && (
+                   <QRCodeSVG 
+                     value={qrUrl} 
+                     size={64} 
+                     className="bg-white p-1 rounded-lg shadow-sm" 
+                   />
+                 )}
+               </div>
+               
+               <div className="space-y-2">
+                 <p className="text-gray-700">{description}</p>
+                 <div className="bg-gray-50 p-4 rounded-lg">
+                   <h4 className="font-semibold text-gray-900 mb-2">Key Features</h4>
+                   <ul className="list-disc pl-5 text-gray-600 text-sm">
+                     {largeDescription.split('\n').map((feature, index) => (
+                       <li key={index}>{feature}</li>
+                     ))}
+                   </ul>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+          )}
+
+          {selectedVariant === 'product' && selectedVariantStyle === 'style4' && (
+            <div className="relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10" style={{ backgroundColor: `${backgroundColor}dd` }}>
+              {/* Floating Decorations */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5"></div>
+              <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+
+              <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 z-10">
+                {/* Left Column: Image */}
+                <div className="space-y-2">
+                  {productImage && (
+                    <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                      <Image src={productImage} alt="Product Image" layout="fill" objectFit="cover" className="transition-transform duration-300 group-hover:scale-105" />
+                    </div>
+                  )}
+                </div>
+                {/* Right Column: Details */}
+                <div className="space-y-2">
+                  <div className="flex flex-col items-center space-y-2">
+                    <h3 className="text-4xl font-bold text-stone-950">{title}</h3>
+                    <p className="text-2xl font-semibold bg-stone-500/20 backdrop-blur-sm text-stone-950/90 px-6 py-2 rounded-full inline-block">
+                      {formatCurrency(parseFloat(price), currency)}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-lg text-stone-950/90 leading-relaxed backdrop-blur-sm bg-white/5 p-6 rounded-xl border border-white/10">
+                      {description}
+                    </p>
+                    <div className="backdrop-blur-md bg-stone-50/10 p-6 rounded-xl border border-white/10">
+                      <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
+                      <p className="text-stone-950/80 whitespace-pre-line">{largeDescription}</p>
+                    </div>
+                    {qrUrl && (
+                      <div className="bg-white/80 backdrop-blur-xl p-3 rounded-xl shadow-lg hover:scale-105 transition-transform">
+                        <QRCodeSVG value={qrUrl} size={80} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
       </div>
   {/* Product Variant Display End */}
 
