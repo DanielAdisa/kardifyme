@@ -2322,18 +2322,21 @@ const baseLabelStyles = `
           <>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
-              {/* <input
+              { isMobile ?
+              <input
                 type="color"
                 value={gradientFrom}
                 onChange={(e) => setGradientFrom(e.target.value)}
                 className="w-full h-10 rounded-lg border border-slate-300"
-              /> */}
+              />
+              :
               <SketchPicker
                 color={gradientFrom}
                 onChange={(color) => setGradientFrom(color.hex)}
                 className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
                           border border-gray-200"
               />
+              }
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
