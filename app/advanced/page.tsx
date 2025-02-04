@@ -879,7 +879,7 @@ const saveSignature = (
   useEffect(() => {
     const interval = setInterval(() => {
       setDummyState(prev => prev + 1);
-    }, 500);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -1924,7 +1924,7 @@ const baseLabelStyles = `
 
 
   return (
-    <div className="flex w-full md flex-col-reverse md:flex-row h-screen justify-center items-center p-3">
+    <div className="flex w-full md flex-col-reverse md:flex-row bg-gradient-to-r from-blue-400 via-blue-600 to-blue-800 h-screen justify-center items-center p-3">
 
 
 
@@ -3510,9 +3510,9 @@ const baseLabelStyles = `
 
 {/* Recipe Input Fields */}
 {selectedVariant === 'recipe' && (
-  <div className="space-y-8 p-4 bg-white/70 backdrop-blur-md rounded-xl border border-white/10">
+  <div className="space-y-8 p-4 flex bg-white/70 backdrop-blur-md rounded-xl border border-white/10">
     {/* Background Type Selection */}
-    <div className="space-y-6">
+    <div className="space-y-6 flex flex">
       <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -3533,8 +3533,8 @@ const baseLabelStyles = `
         </div>
         {bgType === 'gradient' && (
           <>
-            <div>
-              <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
+            <div className="col-span-full">
+              <label className=" text-stone-800 text-sm font-medium mb-2">Gradient From</label>
               {/* <input
                 type="color"
                 value={gradientFrom}
@@ -9964,7 +9964,7 @@ const baseLabelStyles = `
       
 
       {/* Add responsive card container */}
-      <div className="flex-1 md:h-full h-4/6  md:max-w-3xl w-full md:pt-[20px] pt-[250px] overflow-scroll place-content-start   flex md:mx-auto items-center justify-center rounded-lg shadow-md p-8 m-4 md:mb-4">
+      <div className="md:flex-1 flex  md:h-full h-4/6  md:max-w-3xl w-full md:pt-[20px] pt-[250px] overflow-scroll place-content-start content- md:mx-auto items-center justify rounded-lg shadow-md p-8 m-4 md:mb-4">
       <motion.div
   ref={cardRef}
   initial={{ opacity: 0, y: 20 }}
@@ -10069,8 +10069,9 @@ const baseLabelStyles = `
             <div className={`p-2 ${selectedVariant === 'product' ? '' : ''}`}>
 
 
-    {/* Product Variant */}
-    {selectedVariant === 'product' && (
+  {/* Product Variant Display Start */}
+     <div className= "">
+          {selectedVariant === 'product' && selectedVariantStyle === 'default' && (
   <div className={`relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10`}
     style={{ backgroundColor: `${backgroundColor}dd` }}>
     {/* Glass Background Effects */}
@@ -10122,7 +10123,51 @@ const baseLabelStyles = `
       </div>
     </div>
   </div>
+          )}
+
+{selectedVariant === 'product' && selectedVariantStyle === 'style1' && (
+  <div className="relative p-2 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md bg-white/10" style={{ backgroundColor: `${backgroundColor}dd` }}>
+    {/* Glass Background Effects */}
+    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5"></div>
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+
+    <div className="relative space-y-4 z-10">
+      {/* Product Image */}
+      {productImage && (
+        <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg group">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          <Image src={productImage} alt="Product Image" layout="fill" objectFit="cover" className="transition-transform duration-300 group-hover:scale-105" />
+        </div>
+      )}
+      {/* Title, Price, and QR Code */}
+      <div className="flex flex-col items-center space-y-2">
+        <h3 className="text-4xl font-bold text-stone-950">{title}</h3>
+        <p className="text-2xl font-semibold bg-stone-500/20 backdrop-blur-sm text-stone-950/90 px-6 py-2 rounded-full inline-block">
+          {formatCurrency(parseFloat(price), currency)}
+        </p>
+        {qrUrl && (
+          <div className="bg-white/80 backdrop-blur-xl p-3 rounded-xl shadow-lg hover:scale-105 transition-transform">
+            <QRCodeSVG value={qrUrl} size={80} />
+          </div>
+        )}
+      </div>
+      {/* Description and Large Description */}
+      <div className="space-y-2">
+        <p className="text-lg text-stone-950/90 leading-relaxed backdrop-blur-sm bg-white/5 p-6 rounded-xl border border-white/10">
+          {description}
+        </p>
+        <div className="backdrop-blur-md bg-stone-50/10 p-6 rounded-xl border border-white/10">
+          <h4 className="text-xl font-semibold text-stone-950 mb-4">Product Details</h4>
+          <p className="text-stone-950/80 whitespace-pre-line">{largeDescription}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 )}
+      </div>
+  {/* Product Variant Display End */}
+
+
 
 
       {/* Business Variant Display Start */}
