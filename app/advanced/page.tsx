@@ -2056,7 +2056,7 @@ const baseLabelStyles = `
   {/* Style Controls */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
     {/* Card Color Picker1 */}
-    <div className="space-y-2 bg-white p-4 w-full mx-auto rounded-2xl border border-gray-100 shadow-sm">
+    <div className="space-y-2  w-full p-4 mx-auto rounded-2xl border border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
         Card Color
         <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
@@ -2083,7 +2083,7 @@ const baseLabelStyles = `
     </div>
 
     {/* Template Selector */}
-    <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
+    <div className="space-y-2  p-4 rounded-2xl border border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
         Template Style
         <span className="ml-2 text-sm text-gray-400">Choose Font</span>
@@ -2094,7 +2094,7 @@ const baseLabelStyles = `
           ...selectedTemplate,
           [selectedVariant]: e.target.value
         })}
-        className="w-full p-3 text-gray-700 bg-white rounded-xl border border-gray-200 
+        className="w-full p-3 text-gray-700  rounded-xl border border-gray-200 
                  shadow-sm appearance-none cursor-pointer transition-all duration-200
                  hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
       >
@@ -2108,7 +2108,7 @@ const baseLabelStyles = `
   </div>
 
   {/* Text Color Picker */}
-  <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
+  <div className="space-y-2  p-4 rounded-2xl border border-gray-100 shadow-sm">
     <label className="block font-medium text-gray-700">
       Text Color
       <span className="ml-2 w-full text-sm text-gray-400">Set font color</span>
@@ -2118,7 +2118,7 @@ const baseLabelStyles = `
             type="color"
             value={titleColor}
             onChange={(e) => setTitleColor(e.target.value)}
-            className="w-full h-12 p-4 rounded-xl cursor-pointer transition-transform duration-200 
+            className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
           /> : <SketchPicker
           color={titleColor}
@@ -2137,7 +2137,7 @@ const baseLabelStyles = `
         type="color"
         value={footerColor}
         onChange={(e) => setFooterColor(e.target.value)}
-        className="w-full h-12 rounded-xl p-4 cursor-pointer transition-transform duration-200 
+        className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
       /> : <SketchPicker
       color={footerColor}
@@ -2159,7 +2159,7 @@ const baseLabelStyles = `
             type="color"
             value={footerCardColor}
             onChange={(e) => setfooterCardColor(e.target.value)}
-            className="w-full h-12 rounded-xl p-4 cursor-pointer transition-transform duration-200 
+            className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
           /> : <SketchPicker
           color={footerCardColor}
