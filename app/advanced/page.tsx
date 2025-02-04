@@ -1968,7 +1968,7 @@ const baseLabelStyles = `
           />
           <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
-        {/* <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={showfooterPart}
@@ -1976,7 +1976,7 @@ const baseLabelStyles = `
             className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />
           <span className="text-slate-700 text-xs">Show App Signature</span>
-        </label> */}
+        </label>
       </div>
     </div>
 
@@ -2056,19 +2056,26 @@ const baseLabelStyles = `
   {/* Style Controls */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
     {/* Card Color Picker1 */}
-    <div className="space-y-2 bg-white p-4 mx-auto rounded-2xl border border-gray-100 shadow-sm">
+    <div className="space-y-2 bg-white p-4 w-full mx-auto rounded-2xl border border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
         Card Color
         <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
       </label>
       <div className="relative group">
-        <div title="Select card color">
-          <SketchPicker
+        {isMobile ? <input
+            type="color"
+            value={cardColor[selectedVariant]}
+            onChange={(e) => setCardColor({ ...cardColor, [selectedVariant]: e.target.value })}
+            className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+                 hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+          /> : <SketchPicker
             color={cardColor[selectedVariant]}
             onChange={(color) => setCardColor({ ...cardColor, [selectedVariant]: color.hex })}
             className="w-full h-fit p-4 cursor-pointer transition-transform duration-200 
                      "
-          />
+          /> }
+        <div title="Select card color">
+          
         </div>
         <div className="absolute inset-0 rounded-xl ring-2 ring-gray-200 pointer-events-none 
                       transition-opacity opacity-0 group-hover:opacity-100" />
@@ -2107,13 +2114,18 @@ const baseLabelStyles = `
       <span className="ml-2 w-full text-sm text-gray-400">Set font color</span>
     </label>
     <div className="relative group">
-      <SketchPicker
-        color={titleColor}
-        onChange={(color) => setTitleColor(color.hex)}
-        className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                  border border-gray-200"
-      />
-      
+      {isMobile ? <input
+            type="color"
+            value={titleColor}
+            onChange={(e) => setTitleColor(e.target.value)}
+            className="w-full h-12 p-4 rounded-xl cursor-pointer transition-transform duration-200 
+                 hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
+          /> : <SketchPicker
+          color={titleColor}
+          onChange={(color) => setTitleColor(color.hex)}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                    border border-gray-200"
+        /> }     
     </div>
 
     <label className="block font-medium text-gray-700">
@@ -2121,19 +2133,20 @@ const baseLabelStyles = `
       <span className="ml-2 text-sm text-gray-400">Set footer font color</span>
     </label>
     <div className="relative group">
-    <SketchPicker
-        color={footerColor}
-        onChange={(color) => setFooterColor(color.hex)}
-        className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                  border border-gray-200"
-      />
-      {/* <input
+      { isMobile ? <input
         type="color"
         value={footerColor}
         onChange={(e) => setFooterColor(e.target.value)}
-        className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+        className="w-full h-12 rounded-xl p-4 cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
-      /> */}
+      /> : <SketchPicker
+      color={footerColor}
+      onChange={(color) => setFooterColor(color.hex)}
+      className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                border border-gray-200"
+    /> }
+    
+      
       
     </div>
 
@@ -2142,19 +2155,20 @@ const baseLabelStyles = `
           <span className="ml-2 text-sm text-gray-400">Set Footer Color</span>
     </label>
       <div className="relative group">
-          {/* <input
+        {isMobile  ? <input
             type="color"
             value={footerCardColor}
             onChange={(e) => setfooterCardColor(e.target.value)}
-            className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
+            className="w-full h-12 rounded-xl p-4 cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
-          /> */}
-          <SketchPicker
-            color={footerCardColor}
-            onChange={(color) => setfooterCardColor(color.hex)}
-            className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                      border border-gray-200"
-          />
+          /> : <SketchPicker
+          color={footerCardColor}
+          onChange={(color) => setfooterCardColor(color.hex)}
+          className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
+                    border border-gray-200"
+        /> }
+          
+          
       </div>
         
   </div>
@@ -5865,7 +5879,7 @@ const baseLabelStyles = `
           />
           <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
-        {/* <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={showfooterPart}
@@ -5873,7 +5887,7 @@ const baseLabelStyles = `
             className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />
           <span className="text-slate-700 text-xs">Show App Signature</span>
-        </label> */}
+        </label>
       </div>
     </div>
 
@@ -5983,7 +5997,7 @@ const baseLabelStyles = `
           />
           <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
-        {/* <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={showfooterPart}
@@ -5991,7 +6005,7 @@ const baseLabelStyles = `
             className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />
           <span className="text-slate-700 text-xs">Show App Signature</span>
-        </label> */}
+        </label>
       </div>
     </div>
 
@@ -9880,7 +9894,7 @@ const baseLabelStyles = `
           />
           <span className="text-slate-700 text-xs">Show Bottom Section</span>
         </label>
-        {/* <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={showfooterPart}
@@ -9888,7 +9902,7 @@ const baseLabelStyles = `
             className="form-checkbox text-blue-600 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />
           <span className="text-slate-700 text-xs">Show App Signature</span>
-        </label> */}
+        </label>
       </div>
     </div>
 
@@ -10233,8 +10247,12 @@ const baseLabelStyles = `
              <div className="md:w-2/3 p-6 space-y-4">
                <div className="flex justify-between items-start">
                  <div>
-                   <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-                   <p className="text-xl text-gray-600 mt-1">
+                   <h1 
+                   style={{ color: titleColor }}
+                   className="text-2xl font-bold text-gray-900">{title}</h1>
+                   <p 
+                   style={{ color: titleColor }}
+                   className="text-xl text-gray-600 mt-1">
                      {formatCurrency(parseFloat(price), currency)}
                    </p>
                  </div>
@@ -10248,7 +10266,9 @@ const baseLabelStyles = `
                </div>
                
                <div className="space-y-2">
-                 <p className="text-gray-700">{description}</p>
+                 <p 
+                 style={{ color: titleColor }}
+                 className="text-gray-700">{description}</p>
                  <div className="bg-gray-50 p-4 rounded-lg">
                    <h4 className="font-semibold text-gray-900 mb-2">Key Features</h4>
                    <ul className="list-disc pl-5 text-gray-600 text-sm">
@@ -12816,113 +12836,109 @@ const baseLabelStyles = `
       )}
 
       {selectedVariant === 'contract' && selectedVariantStyle === 'style2' && (
-        <div className="relative bg-gradient-to-br from-slate-800 to-indigo-900 p-6 rounded-3xl shadow-2xl overflow-hidden">
-          {/* Background Elements */}
-          <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]"></div>
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="relative bg-gradient-to-br from-slate-900 to-blue-900 p-3 rounded-2xl shadow-2xl overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute z-10 inset-0 bg-grid-white/10"></div>
+          <div className="absolute z-10 top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
 
-          {/* Header Section */}
-          <div className="relative z-10 mb-8 text-center">
-            <div className="flex justify-center items-center gap-4 mb-6">
-              {logo && (
-                <div className="relative w-24 h-24 transform hover:scale-105 transition-transform duration-300">
-                  <Image src={logo} alt="Official Seal" fill className="rounded-full object-cover border-4 border-white/20 shadow-lg" />
+          <div className="relative  z-10 md:grid md:grid-cols-2 gap-4">
+            {/* Left Column: Header and Parties */}
+            <div className="space-y-4 flex w-full  flex-col">
+              {/* Header with Official Seal */}
+              <div className="text-center border-b border-white/20 pb-6">
+                <div className="flex justify-center mb-4">
+                  {logo && (
+                    <div className="relative w-20 h-20">
+                      <Image src={logo} alt="Official Seal" fill className="rounded-full object-cover border-2 border-white/50" />
+                    </div>
+                  )}
                 </div>
-              )}
-              <div>
-                <h2 className="text-5xl font-serif text-white mb-2 tracking-tight">{title || 'Contract Agreement'}</h2>
-                <div className="flex items-center justify-center gap-3 text-blue-200/80">
-                  <span>Ref: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</span>
-                  <span>•</span>
-                  <span>Date: {new Date(contractDate).toLocaleDateString()}</span>
+                <h2 className="text-4xl font-serif text-white mb-2">{title || 'Contract Agreement'}</h2>
+                <div className="flex justify-center gap-2 text-sm text-blue-200">
+                  <p>Ref: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
+                  <p>|</p>
+                  <p>Date: {new Date(contractDate).toLocaleDateString()}</p>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Main Content Grid */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Column */}
-            <div className="space-y-6">
-              {/* Parties Section */}
-              <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-                <h3 className="text-2xl font-semibold text-white mb-6">Contracting Parties</h3>
-                <div className="space-y-6">
-                  {[
-                    { title: 'Party 1', name: party1Name, sign: party1Signature },
-                    { title: 'Party 2', name: party2Name, sign: party2Signature }
-                  ].map((party, idx) => (
-                    <div key={idx} className="bg-white/5 rounded-xl p-5 hover:bg-white/10 transition-colors duration-300">
-                      <h4 className="text-lg text-blue-200 mb-4">{party.title}</h4>
-                      <div className="space-y-4">
-                        <div className="bg-black/20 p-4 rounded-lg">
-                          <p className="text-sm text-blue-200/80 mb-1">Full Name</p>
-                          <p className="text-xl text-white font-medium">{party.name}</p>
-                        </div>
-                        {party.sign && (
-                          <div className="bg-black/20 p-4 rounded-lg">
-                            <p className="text-sm text-blue-200/80 mb-2">Digital Signature</p>
-                            <div className="bg-black/30 rounded-lg p-2">
-                              <img src={party.sign} alt={`${party.title} Signature`} className="w-full h-20 object-contain" />
-                            </div>
-                          </div>
-                        )}
+              {/* Parties Section with Enhanced Design */}
+              <div className="grid grid-cols-1 gap-4">
+                {[
+                  { title: 'Party 1', name: party1Name, sign: party1Signature },
+                  { title: 'Party 2', name: party2Name, sign: party2Signature }
+                ].map((party, idx) => (
+                  <div key={idx} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                    <h3 className="text-base text-white mb-4">{party.title}</h3>
+                    <div className="space-y-2">
+                      <div className="bg-white/5 p-3 rounded-xl">
+                        <p className="text-sm text-blue-200">Full Name</p>
+                        <p className="text-lg text-white font-medium">{party.name}</p>
                       </div>
+                      {party.sign && (
+                        <div className="bg-white/5 p-3 rounded-xl">
+                          <p className="text-sm text-blue-200">Digital Signature</p>
+                          <div className="mt-2 bg-white/5 rounded-lg overflow-hidden">
+                            <img
+                              src={party.sign}
+                              alt={`${party.title} Signature`}
+                              className="w-full h-20 object-contain"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Right Column */}
-            <div className="space-y-6">
-              {/* Contract Details */}
-              <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-                <h3 className="text-2xl font-semibold text-white mb-6">Contract Details</h3>
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-black/20 p-4 rounded-xl">
-                    <div className="flex items-center gap-3 mb-2">
-                      <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <p className="text-blue-200">Value</p>
-                    </div>
-                    <p className="text-2xl text-white font-semibold">{formatCurrency(parseFloat(contractValue), currency)}</p>
-                  </div>
-                  <div className="bg-black/20 p-4 rounded-xl">
-                    <div className="flex items-center gap-3 mb-2">
-                      <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <p className="text-blue-200">Valid Until</p>
-                    </div>
-                    <p className="text-2xl text-white font-semibold">{new Date(validUntil).toLocaleDateString()}</p>
-                  </div>
-                </div>
-
-                {/* Terms Section */}
-                <div className="bg-black/20 p-4 rounded-xl">
-                  <h4 className="text-xl text-white mb-4">Terms & Conditions</h4>
-                  <div className="bg-black/30 p-4 rounded-lg">
-                    <p className="text-blue-100/90 whitespace-pre-line leading-relaxed">{contractTerms}</p>
+            {/* Right Column: Terms, Details, and Witnesses */}
+            <div className="space-y-4">
+              {/* Terms and Conditions with Enhanced Readability */}
+              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+                <h3 className="text-xl text-white mb-4">Terms and Conditions</h3>
+                <div className="prose prose-invert max-w-none">
+                  <div className="bg-white/5 p-6 rounded-xl">
+                    <p className="text-blue-200 whitespace-pre-line leading-relaxed">{contractTerms}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Witnesses Section */}
-              <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-                <h3 className="text-2xl font-semibold text-white mb-6">Witnesses</h3>
-                <div className="grid gap-4">
+              {/* Contract Details with Icons */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-white/10 p-3 rounded-xl border border-white/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-base text-blue-200">Contract Value</p>
+                  </div>
+                  <p className="text-xl text-white font-medium">{formatCurrency(parseFloat(contractValue), currency)}</p>
+                </div>
+                <div className="bg-white/10 p-3 rounded-xl border border-white/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <p className="text-base text-blue-200">Valid Until</p>
+                  </div>
+                  <p className="text-xl text-white font-medium">{new Date(validUntil).toLocaleDateString()}</p>
+                </div>
+              </div>
+
+              {/* Witnesses with Enhanced Layout */}
+              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+                <h3 className="text-xl text-white mb-4">Witnesses</h3>
+                <div className="grid grid-cols-2 gap-2">
                   {witnesses.map((witness, idx) => (
-                    <div key={idx} className="bg-black/20 p-4 rounded-xl hover:bg-black/30 transition-colors duration-300">
-                      <div className="flex items-center gap-3 mb-3">
-                        <svg className="w-5 h-5 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg className="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <p className="text-lg text-white">{witness.name}</p>
+                        <p className="text-blue-200">{witness.name}</p>
                       </div>
-                      <div className="font-mono text-blue-200/90 text-sm p-3 bg-black/30 rounded-lg">
+                      <div className="font-mono text-white/90 text-sm mt-2 p-2 bg-white/5 rounded-lg">
                         {witness.signature}
                       </div>
                     </div>
@@ -12930,27 +12946,27 @@ const baseLabelStyles = `
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Footer */}
-          <div className="relative z-10 mt-8 pt-6 border-t border-white/10 flex flex-wrap justify-between items-center gap-6">
-            <div className="flex items-center gap-6">
-              {qrUrl && (
-                <div className="bg-white/90 p-3 rounded-xl shadow-lg hover:bg-white transition-colors duration-300">
-                  <QRCodeSVG value={qrUrl} size={48} />
-                  <p className="text-xs text-center mt-2 text-indigo-900 font-medium">Verify</p>
+            {/* Footer with Enhanced Security Features */}
+            <div className="col-span-2 flex justify-between items-center pt-3 border-t border-white/20">
+              <div className="flex items-center gap-4">
+                {qrUrl && (
+                  <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+                    <QRCodeSVG value={qrUrl} size={40} />
+                    <p className="text-xs text-center mt-1 text-blue-900">Verify</p>
+                  </div>
+                )}
+                <div className="text-sm text-blue-200">
+                  <p>Document ID: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
+                  <p>Created: {new Date(contractDate).toLocaleDateString()}</p>
                 </div>
-              )}
-              <div className="text-sm text-blue-200/80">
-                <p className="mb-1">Document ID: {contractAddress || 'KDY-' + Date.now().toString().slice(-8)}</p>
-                <p>Created: {new Date(contractDate).toLocaleDateString()}</p>
               </div>
-            </div>
-            <div className="flex items-center gap-3 bg-emerald-400/10 px-4 py-2 rounded-full">
-              <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="text-sm font-medium text-emerald-400">Secured by Kardify</span>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm font-medium text-emerald-400">Secured by Kardify</span>
+              </div>
             </div>
           </div>
         </div>
@@ -13050,7 +13066,7 @@ const baseLabelStyles = `
             </div>
           </div>
         </div>
-      )}
+    )}
 
     {/* Add Affirmations card display */}
     {selectedVariant === 'affirmations' && (
