@@ -3389,7 +3389,7 @@ const baseLabelStyles = `
             ...budgetState,
             categories: [
               ...budgetState.categories,
-              { id: crypto.randomUUID(), name: '', amount: 0 }
+              { id: crypto.randomUUID(), name: '', amount: 0, type: '', expenses: [] }
             ]
           });
         }}
