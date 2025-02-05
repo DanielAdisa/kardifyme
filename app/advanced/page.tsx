@@ -3296,7 +3296,7 @@ const baseLabelStyles = `
 
 {/* Budget Input Field */}
 {selectedVariant === 'budget' && (
-  <div className="space-y-6  p-4">
+  <div className="space-y-6 bg-white/80  p-4">
     {/* Title, Month & Year, Currency */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
