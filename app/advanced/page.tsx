@@ -6440,51 +6440,10 @@ const baseLabelStyles = `
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div>
-        <label className="block text-stone-950 mb-2">Gradient From</label>
-        {/* <input
-          type="color"
-          value={gradientFrom}
-          onChange={(e) => setGradientFrom(e.target.value)}
-          className="w-full h-10 rounded-lg border border-slate-300"
-        /> */}
-        <SketchPicker
-              color={gradientFrom}
-              onChange={(color) => setGradientFrom(color.hex)}
-              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                        border border-gray-200"
-        />
-      </div>
-      <div>
-        <label className="block text-stone-950 mb-2">Gradient Via</label>
-        {/* <input
-          type="color"
-          value={gradientVia}
-          onChange={(e) => setGradientVia(e.target.value)}
-          className="w-full h-10 rounded-lg border border-slate-300"
-        /> */}
-      </div>
-      <SketchPicker
-              color={gradientVia}
-              onChange={(color) => setGradientVia(color.hex)}
-              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                        border border-gray-200"
-            />
-      <div>
-        <label className="block text-stone-950 mb-2">Gradient To</label>
-        {/* <input
-          type="color"
-          value={gradientTo}
-          onChange={(e) => setGradientTo(e.target.value)}
-          className="w-full h-10 rounded-lg border border-slate-300"
-        /> */}
-        <SketchPicker
-              color={gradientTo}
-              onChange={(color) => setGradientTo(color.hex)}
-              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                        border border-gray-200"
-            />
-      </div>
+      
+      
+      
+      
       {/* Background Image Upload */}
     <div>
       <label className="block text-gray-800 font-medium mb-2">Upload Background Image</label>
@@ -10830,6 +10789,250 @@ const baseLabelStyles = `
                 {formatCurrency(parseFloat(price), currency)}
               </p>
             </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'flyer' && selectedVariantStyle === 'style1' && (
+  <div className="relative p-8 rounded-3xl shadow-2xl overflow-hidden bg-white min-h-[500px]">
+    {/* Accent Line */}
+    <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-blue-500 to-purple-600"></div>
+    
+    <div className="relative z-10 flex flex-col h-full justify-between">
+      {/* Header */}
+      <div className="space-y-6">
+        {logo && (
+          <div className="w-16 h-16">
+            <Image src={logo} alt="Logo" width={64} height={64} className="object-contain" />
+          </div>
+        )}
+        <h3 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900">
+          {title || "Modern Event"}
+        </h3>
+        <p className="text-xl text-gray-600 max-w-2xl">
+          {description || "A Contemporary Experience"}
+        </p>
+      </div>
+
+      {/* Main Content */}
+      <div className="my-12">
+        {flyerImage && (
+          <div className="relative aspect-[21/9] rounded-lg overflow-hidden">
+            <Image src={flyerImage} alt="Event" fill className="object-cover" />
+          </div>
+        )}
+        <div className="mt-8 space-y-4 text-gray-700">
+          <p className="text-lg whitespace-pre-wrap">{largeDescription}</p>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex justify-between items-end">
+        {qrUrl && (
+          <div className="bg-gray-100 p-3 rounded-lg">
+            <QRCodeSVG value={qrUrl} size={80} />
+          </div>
+        )}
+        {price && (
+          <div className="text-right">
+            <p className="text-sm text-gray-600">Starting at</p>
+            <p className="text-4xl font-bold text-gray-900">
+              {formatCurrency(parseFloat(price), currency)}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'flyer' && selectedVariantStyle === 'style2' && (
+  <div className="relative p-6 bg-black min-h-[500px] rounded-3xl shadow-2xl overflow-hidden">
+    {/* Grid Background */}
+    <div className="absolute inset-0 grid grid-cols-2 md:grid-cols-3 gap-px opacity-10">
+      {[...Array(12)].map((_, i) => (
+        <div key={i} className="bg-white/20"></div>
+      ))}
+    </div>
+
+    <div className="relative z-10 grid md:grid-cols-2 gap-8 h-full">
+      {/* Left Column */}
+      <div className="space-y-8">
+        {logo && (
+          <div className="w-20 h-20 bg-white/10 rounded-full p-4">
+            <Image src={logo} alt="Logo" width={80} height={80} className="object-contain" />
+          </div>
+        )}
+        <div>
+          <h3 className="text-6xl font-black text-white mb-4 leading-none">
+            {title || "Grid Event"}
+          </h3>
+          <p className="text-xl text-white/80">{description}</p>
+        </div>
+        
+        <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg">
+          <p className="text-white/90 whitespace-pre-wrap">{largeDescription}</p>
+        </div>
+      </div>
+
+      {/* Right Column */}
+      <div className="space-y-6">
+        {flyerImage && (
+          <div className="relative aspect-square rounded-lg overflow-hidden">
+            <Image src={flyerImage} alt="Event" fill className="object-cover" />
+          </div>
+        )}
+        
+        <div className="flex justify-between items-end">
+          {qrUrl && <QRCodeSVG value={qrUrl} size={100} bgColor="transparent" fgColor="white" />}
+          {price && (
+            <div className="bg-white text-black p-4 rounded-lg">
+              <p className="text-4xl font-bold">{formatCurrency(parseFloat(price), currency)}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'flyer' && selectedVariantStyle === 'style3' && (
+  <div 
+    className="relative p-12 min-h-[500px] rounded-3xl shadow-2xl overflow-hidden"
+    style={{
+      background: 'linear-gradient(to right, #1a1a1a, #2d2d2d)'
+    }}
+  >
+    {/* Ornamental Border */}
+    <div className="absolute inset-0 border-[16px] border-double border-white/10 rounded-2xl"></div>
+    
+    <div className="relative z-10 flex flex-col items-center text-center h-full justify-between">
+      {/* Header */}
+      <div className="space-y-6">
+        {logo && (
+          <div className="w-32 h-32 mx-auto">
+            <Image src={logo} alt="Logo" width={128} height={128} className="object-contain" />
+          </div>
+        )}
+        <div>
+          <h3 className="font-serif text-5xl md:text-6xl text-white mb-4">
+            {title || "Elegant Soirée"}
+          </h3>
+          <p className="text-xl text-white/80 font-light">{description}</p>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="my-12 w-full max-w-3xl">
+        {flyerImage && (
+          <div className="relative aspect-[2/1] rounded-lg overflow-hidden mb-8">
+            <Image src={flyerImage} alt="Event" fill className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+          </div>
+        )}
+        <div className="bg-white/5 backdrop-blur p-8 rounded-lg border border-white/10">
+          <p className="text-white/90 whitespace-pre-wrap leading-relaxed">{largeDescription}</p>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex flex-col md:flex-row items-center gap-8">
+        {qrUrl && (
+          <div className="bg-white/90 p-4 rounded-lg">
+            <QRCodeSVG value={qrUrl} size={100} />
+          </div>
+        )}
+        {price && (
+          <div className="text-center md:text-left">
+            <p className="text-white/60 text-sm uppercase tracking-widest">Premium Access</p>
+            <p className="text-4xl font-serif text-white mt-2">
+              {formatCurrency(parseFloat(price), currency)}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'flyer' && selectedVariantStyle === 'style4' && (
+  <div
+    className="relative p-6 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-3xl"
+    style={{
+      background: `linear-gradient(135deg, #00bfff, #ff7f50)`, // Gradient from light blue to coral
+      color: '#ffffff', // White text for contrast
+    }}
+  >
+    {/* Background Overlay */}
+    <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
+
+    {/* Decorative Elements */}
+    <div className="absolute top-0 left-0 w-24 h-24 bg-purple-500/20 rounded-full blur-[100px]"></div>
+    <div className="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400/20 rounded-full blur-[120px]"></div>
+
+    {/* Content Container */}
+    <div className="relative z-10 space-y-8 text-center">
+      {/* Header Section */}
+      <div className="space-y-4">
+        {logo && (
+          <div className="mx-auto mb-4">
+            <img
+              src={logo}
+              alt="Event Logo"
+              className="w-20 h-20 rounded-full border-2 border-white shadow-md"
+            />
+          </div>
+        )}
+        <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-wide">
+          {title || "Exclusive Gala"}
+        </h1>
+        <p className="text-lg md:text-xl font-medium">
+          {description || "A Night of Luxury & Entertainment"}
+        </p>
+      </div>
+
+      {/* Main Content */}
+      <div className="p-6 rounded-xl bg-black/50 backdrop-blur-lg shadow-md">
+        <p className="text-base md:text-lg leading-relaxed whitespace-pre-wrap">
+          {largeDescription ||
+            "Indulge in an unforgettable evening with world-class performances, gourmet cuisine, and exclusive experiences."}
+        </p>
+      </div>
+
+      {/* Flyer Image */}
+      {flyerImage && (
+        <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-lg">
+          <Image
+            src={flyerImage}
+            alt="Event Image"
+            layout="fill"
+            objectFit="cover"
+            className="transition-transform duration-300 hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        </div>
+      )}
+
+      {/* Footer Section */}
+      <div className="flex flex-col md:flex-row justify-between items-center mt-8">
+        {/* QR Code */}
+        {qrUrl && (
+          <div className="bg-white/90 p-4 rounded-lg shadow-md backdrop-blur-md">
+            <QRCodeSVG value={qrUrl} size={100} />
+            <p className="text-xs text-black mt-2 font-medium">SCAN FOR DETAILS</p>
+          </div>
+        )}
+
+        {/* Price */}
+        {price && !isNaN(parseFloat(price)) && (
+          <div className="p-4 rounded-xl bg-gradient-to-r from-green-500 to-blue-600 shadow-lg text-center">
+            <p className="text-sm font-medium text-white mb-2">ADMISSION STARTS AT</p>
+            <p className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              {formatCurrency(parseFloat(price), currency)}
+            </p>
           </div>
         )}
       </div>
