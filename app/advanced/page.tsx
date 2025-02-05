@@ -1,13 +1,7 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-type BudgetCategory = {
-  id: string;
-  name: string;
-  amount: number;
-  type: string; // Add this line
-  expenses: { id: string; name: string; amount: number }[];
-};
+
 import { SketchPicker } from 'react-color';
 import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
@@ -44,6 +38,8 @@ interface BudgetCategory {
   id: string;
   name: string;
   amount: number;
+  type: string; // Add this line
+  expenses: { id: string; name: string; amount: number }[];
 }
 
 // Update card variants
