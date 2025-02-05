@@ -2066,6 +2066,8 @@ const baseLabelStyles = `
             type="color"
             value={cardColor[selectedVariant]}
             onChange={(e) => setCardColor({ ...cardColor, [selectedVariant]: e.target.value })}
+            title="Select card color"
+            placeholder="Card Color"
             className="w-full h-12 rounded-xl cursor-pointer transition-transform duration-200 
                  hover:scale-[1.02] focus:scale-[1.02] border border-gray-200"
           /> : <SketchPicker
@@ -9981,7 +9983,7 @@ const baseLabelStyles = `
       
 
       {/* Add responsive card container */}
-      <div className="md:flex-1 flex  md:h-full h-4/6  md:max-w-3xl w-full md:pt-[20px] pt-[250px] overflow-scroll place-content-start content- md:mx-auto items-center justify rounded-lg shadow-md p-8 m-4 md:mb-4">
+      <div className="md:flex-1 flex  md:h-full h-4/6  md:max-w-5xl w-full md:pt-[650px] pt-[450px] overflow-scroll place-content-start content- md:mx-auto items-center justify rounded-lg shadow-md p-8 m-4 md:mb-4">
       <motion.div
   ref={cardRef}
   initial={{ opacity: 0, y: 20 }}
