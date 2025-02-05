@@ -3296,7 +3296,7 @@ const baseLabelStyles = `
 
 {/* Budget Input Field */}
 {selectedVariant === 'budget' && (
-  <div className="space-y-6">
+  <div className= " bg-white/80 space-y-6">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
               <label className="block text-stone-950 mb-2">Title</label>
@@ -3344,10 +3344,10 @@ const baseLabelStyles = `
       />
     </div>
 
-    <div className="space-y-4">
+    <div className="space-y-4 flex flex-col">
       <label className="block text-stone-950 mb-2 font-medium">Budget Categories</label>
       {budgetState.categories.map((category, index) => (
-        <div key={category.id} className="flex gap-2">
+        <div key={category.id} className="flex flex-col gap-2">
           <input
             type="text"
             value={category.name}
@@ -3356,7 +3356,7 @@ const baseLabelStyles = `
               newCategories[index].name = e.target.value;
               setBudgetState({...budgetState, categories: newCategories});
             }}
-            className="flex-1 p-3 rounded-xl border border-slate-300"
+            className="flex flex-col p-3 rounded-xl border border-slate-300"
             placeholder="Category name"
           />
           <input
@@ -3367,7 +3367,7 @@ const baseLabelStyles = `
               newCategories[index].amount = parseFloat(e.target.value);
               setBudgetState({...budgetState, categories: newCategories});
             }}
-            className="w-32 p-3 rounded-xl border border-slate-300"
+            className="md:w-32 p-3 rounded-xl border border-slate-300"
             placeholder="Amount"
           />
           <button
@@ -7232,7 +7232,8 @@ const baseLabelStyles = `
 
 {/* Budget Input Field */}
 {selectedVariant === 'budget' && (
-  <div className="space-y-6">
+  <div className="space-y-6  p-4">
+    {/* Title, Month & Year, Currency */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <label className="block text-stone-950 mb-2">Title</label>
@@ -7241,7 +7242,6 @@ const baseLabelStyles = `
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full p-2 rounded-lg border border-slate-300"
-          title="Enter the title"
           placeholder="Enter a title"
         />
       </div>
@@ -7250,7 +7250,9 @@ const baseLabelStyles = `
         <input
           type="month"
           value={budgetState.monthYear}
-          onChange={(e) => setBudgetState({...budgetState, monthYear: e.target.value})}
+          onChange={(e) =>
+            setBudgetState({ ...budgetState, monthYear: e.target.value })
+          }
           className="w-full p-3 rounded-xl border border-slate-300"
         />
       </div>
@@ -7258,7 +7260,9 @@ const baseLabelStyles = `
         <label className="block text-stone-950 mb-2 font-medium">Currency</label>
         <select
           value={budgetState.currency}
-          onChange={(e) => setBudgetState({...budgetState, currency: e.target.value})}
+          onChange={(e) =>
+            setBudgetState({ ...budgetState, currency: e.target.value })
+          }
           className="w-full p-3 rounded-xl border border-slate-300"
         >
           {currencyOptions.map((option) => (
@@ -7269,112 +7273,170 @@ const baseLabelStyles = `
         </select>
       </div>
     </div>
+
+    {/* Total Budget */}
     <div>
       <label className="block text-stone-950 mb-2 font-medium">Total Budget</label>
       <input
         type="number"
         value={budgetState.totalBudget}
-        onChange={(e) => setBudgetState({...budgetState, totalBudget: parseFloat(e.target.value)})}
+        onChange={(e) =>
+          setBudgetState({
+            ...budgetState,
+            totalBudget: parseFloat(e.target.value),
+          })
+        }
         className="w-full p-3 rounded-xl border border-slate-300"
         placeholder="Enter total budget"
       />
     </div>
 
-    <div className="space-y-4">
-      <label className="block text-stone-950 mb-2 font-medium">Budget Categories</label>
+    {/* Budget Categories */}
+    <div className="space-y-4 flex flex-col w-full">
+      <label className=" text-stone-950 mb-2 font-medium">Budget Categories</label>
       {budgetState.categories.map((category, index) => (
         <div key={category.id} className="space-y-4">
-          <div className="flex gap-2 items-center">
+          {/* Category Details */}
+          <div className="flex flex-col md:flex-row gap-2 items-center space-y-2 md:space-y-0">
+            {/* Category Name Input */}
             <input
               type="text"
               value={category.name}
               onChange={(e) => {
                 const newCategories = [...budgetState.categories];
                 newCategories[index].name = e.target.value;
-                setBudgetState({...budgetState, categories: newCategories});
+                setBudgetState({ ...budgetState, categories: newCategories });
               }}
-              className="flex-1 p-3 rounded-xl border border-slate-300"
+              className="w-full md:w-auto p-3 rounded-xl border border-slate-300"
               placeholder="Category name"
             />
-            <input
-              type="number"
-              value={category.amount}
-              onChange={(e) => {
-                const newCategories = [...budgetState.categories];
-                newCategories[index].amount = parseFloat(e.target.value);
-                setBudgetState({...budgetState, categories: newCategories});
-              }}
-              className="w-32 p-3 rounded-xl border border-slate-300"
-              placeholder="Amount"
-            />
-            <select
-              value={category.type}
-              onChange={(e) => {
-                const newCategories = [...budgetState.categories];
-                newCategories[index].type = e.target.value;
-                setBudgetState({...budgetState, categories: newCategories});
-              }}
-              className="w-32 p-3 rounded-xl border border-slate-300"
-            >
-              <option value="amount">Amount</option>
-              <option value="percentage">Percentage</option>
-            </select>
+
+            {/* Amount/Percentage Inputs */}
+            <div className="flex overflow-x-scroll md:flex-row gap-2 items-center w-full md:w-auto">
+              <input
+                type="number"
+                value={category.amount}
+                onChange={(e) => {
+                  const newCategories = [...budgetState.categories];
+                  newCategories[index].amount = parseFloat(e.target.value);
+                  setBudgetState({ ...budgetState, categories: newCategories });
+                }}
+                className="w-full md:w-32 p-3 rounded-xl border border-slate-300"
+                placeholder="Amount"
+              />
+              <select
+                value={category.type}
+                onChange={(e) => {
+                  const newCategories = [...budgetState.categories];
+                  newCategories[index].type = e.target.value;
+                  setBudgetState({ ...budgetState, categories: newCategories });
+                }}
+                className="w-full md:w-32 p-3 rounded-xl border border-slate-300"
+              >
+                <option value="amount">Amount</option>
+                <option value="percentage">Percentage</option>
+              </select>
+            </div>
+
+            {/* Delete Button */}
             <button
               onClick={() => {
-                const newCategories = budgetState.categories.filter((_, i) => i !== index);
-                setBudgetState({...budgetState, categories: newCategories});
+                const newCategories = budgetState.categories.filter(
+                  (_, i) => i !== index
+                );
+                setBudgetState({ ...budgetState, categories: newCategories });
               }}
               className="p-3 text-red-500 hover:bg-red-50 rounded-xl"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
               </svg>
             </button>
           </div>
+
+          {/* Expenses Section */}
           <div className="pl-8 space-y-2">
             {category.expenses.map((expense, expIndex) => (
-              <div key={expense.id} className="flex gap-2 items-center">
+              <div
+                key={expense.id}
+                className="flex flex-col md:flex-row gap-2 items-center"
+              >
+                {/* Expense Name Input */}
                 <input
                   type="text"
                   value={expense.name}
                   onChange={(e) => {
                     const newCategories = [...budgetState.categories];
-                    newCategories[index].expenses[expIndex].name = e.target.value;
-                    setBudgetState({...budgetState, categories: newCategories});
+                    newCategories[index].expenses[expIndex].name =
+                      e.target.value;
+                    setBudgetState({ ...budgetState, categories: newCategories });
                   }}
-                  className="flex-1 p-3 rounded-xl border border-slate-300"
+                  className="w-full md:w-auto p-3 rounded-xl border border-slate-300"
                   placeholder="Expense name"
                 />
+
+                {/* Expense Amount Input */}
                 <input
                   type="number"
                   value={expense.amount}
                   onChange={(e) => {
                     const newCategories = [...budgetState.categories];
-                    newCategories[index].expenses[expIndex].amount = parseFloat(e.target.value);
-                    setBudgetState({...budgetState, categories: newCategories});
+                    newCategories[index].expenses[expIndex].amount =
+                      parseFloat(e.target.value);
+                    setBudgetState({ ...budgetState, categories: newCategories });
                   }}
-                  className="w-32 p-3 rounded-xl border border-slate-300"
+                  className="w-full md:w-32 p-3 rounded-xl border border-slate-300"
                   placeholder="Amount"
                 />
+
+                {/* Delete Expense Button */}
                 <button
                   onClick={() => {
                     const newCategories = [...budgetState.categories];
-                    newCategories[index].expenses = newCategories[index].expenses.filter((_, i) => i !== expIndex);
-                    setBudgetState({...budgetState, categories: newCategories});
+                    newCategories[index].expenses = newCategories[index].expenses.filter(
+                      (_, i) => i !== expIndex
+                    );
+                    setBudgetState({ ...budgetState, categories: newCategories });
                   }}
                   className="p-3 text-red-500 hover:bg-red-50 rounded-xl"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
                   </svg>
                 </button>
               </div>
             ))}
+
+            {/* Add Expense Button */}
             <button
               onClick={() => {
                 const newCategories = [...budgetState.categories];
-                newCategories[index].expenses.push({ id: crypto.randomUUID(), name: '', amount: 0 });
-                setBudgetState({...budgetState, categories: newCategories});
+                newCategories[index].expenses.push({
+                  id: crypto.randomUUID(),
+                  name: '',
+                  amount: 0,
+                });
+                setBudgetState({ ...budgetState, categories: newCategories });
               }}
               className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
             >
@@ -7383,14 +7445,22 @@ const baseLabelStyles = `
           </div>
         </div>
       ))}
+
+      {/* Add Category Button */}
       <button
         onClick={() => {
           setBudgetState({
             ...budgetState,
             categories: [
               ...budgetState.categories,
-              { id: crypto.randomUUID(), name: '', amount: 0, type: 'amount', expenses: [] }
-            ]
+              {
+                id: crypto.randomUUID(),
+                name: '',
+                amount: 0,
+                type: 'amount',
+                expenses: [],
+              },
+            ],
           });
         }}
         className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
@@ -7400,6 +7470,7 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
 
 {/* // Add to the form section where other inputs are present */}
 {selectedVariant === 'idCard' && (
