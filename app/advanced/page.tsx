@@ -10714,114 +10714,125 @@ const baseLabelStyles = `
 {/* Flyer Display */}
 {selectedVariant === 'flyer' && selectedVariantStyle === 'default' && (
   <div
-    className="relative p-2 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
+    className="relative p-4 md:p-6 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-3xl"
     style={{
       background: bgType === 'gradient'
-        ? `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia || ''} ${gradientVia ? '50%' : ''}, ${gradientTo})`
         : bgType === 'solid'
         ? solidColor
-        : '#1a1a1a',
+        : 'linear-gradient(135deg, #1a1a1a, #2d2d2d)',
+      minHeight: '500px'
     }}
   >
-    {/* Background Image */}
+    {/* Background Overlay */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60 pointer-events-none"></div>
+
+    {/* Dynamic Background Image */}
     {backgroundImage && (
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-50"
-        style={{
-          backgroundImage: `url(${typeof backgroundImage === 'string' ? backgroundImage : URL.createObjectURL(backgroundImage)})`,
-        }}
-      ></div>
+      <div className="absolute inset-0">
+        <Image
+          src={typeof backgroundImage === 'string' ? backgroundImage : URL.createObjectURL(backgroundImage)}
+          alt="Background"
+          fill
+          className="object-cover"
+          quality={90}
+        />
+      </div>
     )}
 
-    {/* Decorative Elements */}
-    <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
-    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-400/20 rounded-full blur-[150px]"></div>
-    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-500/20 rounded-full blur-[150px]"></div>
+    {/* Animated Gradient Blobs */}
+    <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-400/20 rounded-full blur-[150px] animate-pulse-slow"></div>
+    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-500/20 rounded-full blur-[150px] animate-pulse-slow delay-1000"></div>
 
-    {/* Flyer Content */}
-    <div className="relative z-10 space-y-8 text-center text-white">
-      {/* Title */}
-      <h3
-        className="text-4xl md:text-5xl font-extrabold uppercase tracking-wide"
-        style={{ color: titleColor }}
-      >
-        {title || "Celebrate in Style!"}
-      </h3>
-
-      {/* Subheading */}
-      <p
-        className="text-lg md:text-xl text-white/90"
-        style={{ color: titleColor }}
-      >
-        {description || "An unforgettable evening awaits!"}
-      </p>
-
-      {/* Flyer Image */}
-      {flyerImage && (
-        <div className="relative w-full h-64 rounded-xl overflow-hidden shadow-lg">
-          <Image
-            src={flyerImage}
-            alt="Event Image"
-            layout="fill"
-            objectFit="cover"
-            className="transition-transform duration-300 hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="p-6 rounded-xl bg-black/50 backdrop-blur-lg shadow-md">
-        <p
-          className="text-base md:text-lg leading-relaxed whitespace-pre-wrap"
-          style={{ color: titleColor }}
-        >
-          {largeDescription ||
-            "Join us for live music, entertainment, and memories to last a lifetime!"}
-        </p>
-      </div>
-
-      {/* QR Code & Price */}
-      <div className="flex flex-wrap justify-center gap-4">
-        {qrUrl && (
-          <div className="bg-white/90 mx-auto p-4 rounded-lg shadow-md backdrop-blur-md">
-            <QRCodeSVG value={qrUrl} size={100} />
-            <p className="text-xs text-black mt-2 font-medium">
-              Scan for Details
-            </p>
-          </div>
-        )}
-        {price && !isNaN(parseFloat(price)) && (
-          <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 shadow-lg text-center">
-            <p
-              className="text-sm font-medium text-white mb-2"
-              style={{ color: titleColor }}
-            >
-              Admission Fee
-            </p>
-            <p
-              className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
-              style={{ color: titleColor }}
-            >
-              {formatCurrency(parseFloat(price), currency)}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Logo */}
-      {logo && (
-        <div className="flex justify-center mt-6">
-          <div className="relative w-20 h-20">
+    {/* Content Container */}
+    <div className="relative z-10 flex flex-col h-full justify-between items-center space-y-6 text-center">
+      {/* Header Section */}
+      <div className="space-y-4">
+        {logo && (
+          <div className="mx-auto w-24 h-24 rounded-full bg-white/10 p-2 shadow-lg">
             <Image
               src={logo}
               alt="Logo"
-              fill
-              className="rounded-full object-cover border-2 border-white/50 shadow-md"
+              width={96}
+              height={96}
+              className="rounded-full object-contain"
             />
           </div>
+        )}
+        
+        <h3
+          className="text-4xl md:text-5xl font-bold uppercase tracking-tighter bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent"
+          style={{ 
+            color: titleColor,
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+          }}
+        >
+          {title || "Grand Celebration"}
+        </h3>
+
+        <p
+          className="text-xl md:text-2xl font-medium text-white/90 max-w-2xl mx-auto"
+          style={{ color: titleColor }}
+        >
+          {description || "An Evening of Elegance & Excitement"}
+        </p>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 w-full flex flex-col items-center justify-center">
+        {flyerImage && (
+          <div className="relative w-full max-w-2xl aspect-video rounded-xl overflow-hidden shadow-2xl transform transition-transform duration-500 hover:scale-105">
+            <Image
+              src={flyerImage}
+              alt="Main Event Visual"
+              fill
+              className="object-cover"
+              quality={95}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/50"></div>
+          </div>
+        )}
+
+        <div className="mt-6 p-6 bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 max-w-2xl w-full">
+          <p
+            className="text-lg md:text-xl leading-relaxed text-white/90 whitespace-pre-wrap"
+            style={{ color: titleColor }}
+          >
+            {largeDescription || "Join us for an unforgettable night featuring:\n• Live Performances\n• Gourmet Dining\n• Exclusive Experiences"}
+          </p>
         </div>
-      )}
+      </div>
+
+      {/* Footer Section */}
+      <div className="w-full flex flex-col md:flex-row justify-center items-center gap-6">
+        {qrUrl && (
+          <div className="bg-white/90 p-3 rounded-xl shadow-lg hover:scale-105 transition-transform">
+            <QRCodeSVG 
+              value={qrUrl} 
+              size={120}
+              bgColor="transparent"
+              fgColor="#1a1a1a"
+              level="H"
+            />
+            <p className="text-xs font-semibold text-black mt-2">
+              SCAN FOR DETAILS
+            </p>
+          </div>
+        )}
+
+        {price && (
+          <div className="bg-gradient-to-r from-amber-500 to-rose-600 p-4 rounded-xl shadow-lg transform hover:scale-105 transition-transform">
+            <div className="space-y-1">
+              <p className="text-xs font-bold text-white/80 uppercase tracking-wide">
+                Admission Starts At
+              </p>
+              <p className="text-3xl font-black text-white">
+                {formatCurrency(parseFloat(price), currency)}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   </div>
 )}
