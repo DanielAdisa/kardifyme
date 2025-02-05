@@ -3296,7 +3296,7 @@ const baseLabelStyles = `
 
 {/* Budget Input Field */}
 {selectedVariant === 'budget' && (
-  <div className="space-y-6 bg-white/80  p-4">
+  <div className="space-y-6 bg-white  p-4">
     {/* Title, Month & Year, Currency */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
@@ -11465,8 +11465,9 @@ const baseLabelStyles = `
   </div>
 )}
 
+{/* Budget Card Display Start */}
 
-{selectedVariant === 'budget' && (
+{selectedVariant === 'budget' && selectedVariantStyle === 'default' && (
   <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 md:p-6 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-teal-500/10">
     {/* Enhanced Background Elements */}
     <div className="absolute inset-0 bg-grid-gray-600/10 z-0 opacity-30"></div>
@@ -11596,6 +11597,737 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
+{selectedVariant === 'budget' && selectedVariantStyle === 'style1' && (
+    <div className="relative bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 p-4 md:p-6 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-rose-200/40 group">
+      {/* Animated Floral Elements */}
+      <div className="absolute inset-0 opacity-15 z-0">
+        <div className="absolute top-0 left-10 w-24 h-24 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmMzI4YyI+PHBhdGggZD0iTTEyIDBDNS4zNzMgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTIgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMHptMCAyMi4wMTRjLTUuNTMxIDAtMTAuMDE0LTQuNDgzLTEwLjAxNC0xMC4wMTRTNi40NjkgMS45ODYgMTIgMS45ODYgMjIuMDE0IDYuNDY5IDIyLjAxNCAxMiAxNy41MzEgMjIuMDE0IDEyIDIyLjAxNHpNMTIgMTUuMzM5Yy0xLjgzNyAwLTMuMzM5LTEuNTAyLTMuMzM5LTMuMzM5UzEwLjE2MyA4LjY2MSAxMiA4LjY2MVMxNS4zMzkgMTAuMTYzIDE1LjMzOSAxMiAxMy40OTggMTUuMzM5IDEyIDE1LjMzOXoiLz48L3N2Zz4=')] opacity-20 animate-float"></div>
+        <div className="absolute top-1/3 right-8 w-16 h-16 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmMzI4YyI+PHBhdGggZD0iTTEyIDBDNS4zNzMgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTIgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMHptMCAyMi4wMTRjLTUuNTMxIDAtMTAuMDE0LTQuNDgzLTEwLjAxNC0xMC4wMTRTNi40NjkgMS45ODYgMTIgMS45ODYgMjIuMDE0IDYuNDY5IDIyLjAxNCAxMiAxNy41MzEgMjIuMDE0IDEyIDIyLjAxNHpNMTIgMTUuMzM5Yy0xLjgzNyAwLTMuMzM5LTEuNTAyLTMuMzM5LTMuMzM5UzEwLjE2MyA4LjY2MSAxMiA4LjY2MVMxNS4zMzkgMTAuMTYzIDE1LjMzOSAxMiAxMy40OTggMTUuMzM5IDEyIDE1LjMzOXoiLz48L3N2Zz4=')] opacity-20 animate-float delay-1000"></div>
+      </div>
+  
+      {/* Floating Sparkles */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className="absolute w-1 h-1 bg-rose-300/50 rounded-full animate-sparkle"
+               style={{
+                 top: `${Math.random() * 100}%`,
+                 left: `${Math.random() * 100}%`,
+                 animationDelay: `${i * 0.5}s`
+               }}></div>
+        ))}
+      </div>
+  
+      <div className="relative z-10 space-y-6 max-w-7xl mx-auto">
+        {/* Glossy Header */}
+        <div className="text-center space-y-4 pb-6 border-b border-rose-200/50 relative">
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-rose-400/10 rounded-full blur-xl"></div>
+          <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-500 pb-2 inline-block relative">
+            {title || 'My Sparkly Budget'}
+            <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-rose-400/50 to-pink-400/50 rounded-full"></span>
+          </h2>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3">
+            <div className="px-3 py-1.5 bg-rose-50/80 backdrop-blur-sm rounded-full border border-rose-200/50 shadow-sm">
+              <p className="text-sm md:text-base text-rose-600 font-medium tracking-wider">
+                {budgetState.monthYear}
+              </p>
+            </div>
+            <div className="inline-flex items-center px-6 py-3 bg-white/90 rounded-2xl backdrop-blur-sm border border-rose-200/50 shadow-lg hover:shadow-rose-200/30 transition-shadow">
+              <span className="text-2xl md:text-3xl font-bold text-rose-600">
+                {formatCurrency(budgetState.totalBudget, budgetState.currency)}
+              </span>
+            </div>
+          </div>
+        </div>
+  
+        {/* Interactive Categories Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          {budgetState.categories.map((category) => {
+            const allocatedAmount = category.type === 'percentage'
+              ? (category.amount / 100) * budgetState.totalBudget
+              : category.amount;
+            const totalExpenses = category.expenses.reduce((acc, expense) => acc + expense.amount, 0);
+            const remainingPercentage = ((allocatedAmount - totalExpenses) / allocatedAmount) * 100;
+  
+            return (
+              <div key={category.id} 
+                   className="group bg-white/90 backdrop-blur-sm p-4 md:p-5 rounded-2xl border-2 border-rose-200/30 
+                            transition-all duration-300 hover:border-rose-300/50 hover:shadow-lg relative overflow-hidden">
+                {/* Category Ribbon */}
+                <div className="absolute top-3 -right-8 w-32 bg-rose-500 text-white text-xs font-semibold text-center rotate-45 py-1 shadow-md">
+                  {category.type === 'percentage' ? 'Percentage' : 'Fixed Amount'}
+                </div>
+  
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg md:text-xl font-semibold text-rose-700 group-hover:text-rose-800 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-rose-400 rounded-full"></span>
+                    {category.name}
+                  </h3>
+                  <div className="text-right">
+                    <span className="text-sm md:text-base text-rose-600 font-medium">
+                      {category.type === 'percentage'
+                        ? `${category.amount}%`
+                        : formatCurrency(allocatedAmount, budgetState.currency)}
+                    </span>
+                  </div>
+                </div>
+  
+                {/* 3D Progress Bar */}
+                <div className="relative h-4 bg-rose-100 rounded-full overflow-hidden mb-4 shadow-inner">
+                  <div
+                    className="absolute h-full bg-gradient-to-r from-rose-400 to-pink-400 rounded-full transition-all duration-500 shadow-progress"
+                    style={{
+                      width: `${(allocatedAmount / budgetState.totalBudget) * 100}%`,
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent"></div>
+                  </div>
+                </div>
+  
+                {/* Expense List with Hover Effects */}
+                <div className="space-y-2 mb-4">
+                  {category.expenses.map((expense) => (
+                    <div key={expense.id} 
+                         className="flex items-center justify-between p-2 rounded-lg bg-rose-50/50 
+                                  transition-all duration-200 hover:bg-rose-100 hover:translate-x-1">
+                      <span className="text-sm md:text-base text-rose-700 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-rose-400 rounded-full opacity-70"></span>
+                        {expense.name}
+                      </span>
+                      <span className="text-sm md:text-base font-medium text-rose-600">
+                        {formatCurrency(expense.amount, budgetState.currency)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+  
+                {/* Budget Status Indicators */}
+                <div className="pt-4 border-t border-rose-200/30 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-rose-600">Allocated</span>
+                      <span className="text-xs text-rose-400 bg-rose-50 px-2 py-1 rounded-full">
+                        {formatCurrency(allocatedAmount, budgetState.currency)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-rose-600">Remaining</span>
+                      <span className={`text-sm font-medium ${remainingPercentage > 20 ? 'text-rose-600' : 'text-red-400'} bg-white px-2 py-1 rounded-full border`}>
+                        {formatCurrency(allocatedAmount - totalExpenses, budgetState.currency)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="relative pt-2">
+                    <div className="h-1 bg-rose-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-rose-300 to-pink-300 transition-all duration-500"
+                        style={{
+                          width: `${100 - (totalExpenses / allocatedAmount) * 100}%`
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+  
+        {/* Glowing Summary Cards */}
+        <div className="bg-white/90 backdrop-blur-sm p-5 rounded-2xl border-2 border-rose-200/30 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { 
+                title: 'Total Allocated', 
+                value: budgetState.categories.reduce((acc, cat) => acc + 
+                  (cat.type === 'percentage' ? 
+                    (cat.amount / 100) * budgetState.totalBudget : 
+                    cat.amount), 0),
+                icon: '💰'
+              },
+              { 
+                title: 'Total Spent', 
+                value: budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
+                icon: '🛍️'
+              },
+              { 
+                title: 'Budget Remaining', 
+                value: budgetState.totalBudget - budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
+                icon: '🎀'
+              }
+            ].map((stat, index) => (
+              <div key={index} className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl border border-rose-200/30 relative overflow-hidden">
+                <div className="absolute -right-4 -bottom-4 text-6xl text-rose-200/30 z-0">{stat.icon}</div>
+                <div className="relative z-10">
+                  <span className="block text-sm text-rose-600 mb-1">{stat.title}</span>
+                  <span className="text-lg md:text-xl text-rose-700 font-bold">
+                    {formatCurrency(stat.value, budgetState.currency)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+  
+        {/* Animated Footer */}
+        <div className="flex justify-between items-center pt-4 border-t border-rose-200/50">
+          {logo && (
+            <div className="relative w-12 h-12 transform hover:scale-105 transition-transform group">
+              <div className="absolute inset-0 bg-rose-100/30 rounded-full blur-md group-hover:blur-lg transition-all"></div>
+              <Image
+                src={logo}
+                alt="Logo"
+                fill
+                className="rounded-full object-cover border-2 border-rose-200 hover:border-rose-400/50 z-10"
+              />
+            </div>
+          )}
+          <div className="text-right">
+            <p className="text-sm text-rose-600 animate-pulse-slow">🌟 Manage your sparkles wisely 🌟</p>
+            <p className="text-sm font-medium text-rose-700 mt-1">
+              Powered by <span className="text-rose-600">Kardify</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+  
+{selectedVariant === 'budget' && selectedVariantStyle === 'style2' && (
+  <div className="relative bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 p-4 md:p-6 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-rose-200/40 group">
+    {/* Animated Floral Elements */}
+    <div className="absolute inset-0 opacity-15 z-0">
+      <div className="absolute top-0 left-10 w-24 h-24 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmMzI4YyI+PHBhdGggZD0iTTEyIDBDNS4zNzMgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTIgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMHptMCAyMi4wMTRjLTUuNTMxIDAtMTAuMDE0LTQuNDgzLTEwLjAxNC0xMC4wMTRTNi40NjkgMS45ODYgMTIgMS45ODYgMjIuMDE0IDYuNDY5IDIyLjAxNCAxMiAxNy41MzEgMjIuMDE0IDEyIDIyLjAxNHpNMTIgMTUuMzM5Yy0xLjgzNyAwLTMuMzM5LTEuNTAyLTMuMzM5LTMuMzM5UzEwLjE2MyA4LjY2MSAxMiA4LjY2MVMxNS4zMzkgMTAuMTYzIDE1LjMzOSAxMiAxMy40OTggMTUuMzM5IDEyIDE1LjMzOXoiLz48L3N2Zz4=')] opacity-20 animate-float"></div>
+      <div className="absolute top-1/3 right-8 w-16 h-16 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmMzI4YyI+PHBhdGggZD0iTTEyIDBDNS4zNzMgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTIgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMHptMCAyMi4wMTRjLTUuNTMxIDAtMTAuMDE0LTQuNDgzLTEwLjAxNC0xMC4wMTRTNi40NjkgMS45ODYgMTIgMS45ODYgMjIuMDE0IDYuNDY5IDIyLjAxNCAxMiAxNy41MzEgMjIuMDE0IDEyIDIyLjAxNHpNMTIgMTUuMzM5Yy0xLjgzNyAwLTMuMzM5LTEuNTAyLTMuMzM5LTMuMzM5UzEwLjE2MyA4LjY2MSAxMiA4LjY2MVMxNS4zMzkgMTAuMTYzIDE1LjMzOSAxMiAxMy40OTggMTUuMzM5IDEyIDE1LjMzOXoiLz48L3N2Zz4=')] opacity-20 animate-float delay-1000"></div>
+    </div>
+
+    {/* Floating Sparkles */}
+    <div className="absolute inset-0 pointer-events-none z-0">
+      {[...Array(8)].map((_, i) => (
+        <div key={i} className="absolute w-1 h-1 bg-rose-300/50 rounded-full animate-sparkle"
+             style={{
+               top: `${Math.random() * 100}%`,
+               left: `${Math.random() * 100}%`,
+               animationDelay: `${i * 0.5}s`
+             }}></div>
+      ))}
+    </div>
+
+    <div className="relative z-10 space-y-6 max-w-7xl mx-auto">
+      {/* Glossy Header */}
+      <div className="text-center space-y-4 pb-6 border-b border-rose-200/50 relative">
+        <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-rose-400/10 rounded-full blur-xl"></div>
+        <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-500 pb-2 inline-block relative">
+          {title || 'My Sparkly Budget'}
+          <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-rose-400/50 to-pink-400/50 rounded-full"></span>
+        </h2>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3">
+          <div className="px-3 py-1.5 bg-rose-50/80 backdrop-blur-sm rounded-full border border-rose-200/50 shadow-sm">
+            <p className="text-sm md:text-base text-rose-600 font-medium tracking-wider">
+              {budgetState.monthYear}
+            </p>
+          </div>
+          <div className="inline-flex items-center px-6 py-3 bg-white/90 rounded-2xl backdrop-blur-sm border border-rose-200/50 shadow-lg hover:shadow-rose-200/30 transition-shadow">
+            <span className="text-2xl md:text-3xl font-bold text-rose-600">
+              {formatCurrency(budgetState.totalBudget, budgetState.currency)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Interactive Categories Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        {budgetState.categories.map((category) => {
+          const allocatedAmount = category.type === 'percentage'
+            ? (category.amount / 100) * budgetState.totalBudget
+            : category.amount;
+          const totalExpenses = category.expenses.reduce((acc, expense) => acc + expense.amount, 0);
+          const remainingPercentage = ((allocatedAmount - totalExpenses) / allocatedAmount) * 100;
+
+          return (
+            <div key={category.id} 
+                 className="group bg-white/90 backdrop-blur-sm p-4 md:p-5 rounded-2xl border-2 border-rose-200/30 
+                          transition-all duration-300 hover:border-rose-300/50 hover:shadow-lg relative overflow-hidden">
+              {/* Category Ribbon */}
+              <div className="absolute top-3 -right-8 w-32 bg-rose-500 text-white text-xs font-semibold text-center rotate-45 py-1 shadow-md">
+                {category.type === 'percentage' ? 'Percentage' : 'Fixed Amount'}
+              </div>
+
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg md:text-xl font-semibold text-rose-700 group-hover:text-rose-800 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-rose-400 rounded-full"></span>
+                  {category.name}
+                </h3>
+                <div className="text-right">
+                  <span className="text-sm md:text-base text-rose-600 font-medium">
+                    {category.type === 'percentage'
+                      ? `${category.amount}% (${formatCurrency(allocatedAmount, budgetState.currency)})`
+                      : formatCurrency(allocatedAmount, budgetState.currency)}
+                  </span>
+                </div>
+              </div>
+
+              {/* 3D Progress Bar */}
+              <div className="relative h-4 bg-rose-100 rounded-full overflow-hidden mb-4 shadow-inner">
+                <div
+                  className="absolute h-full bg-gradient-to-r from-rose-400 to-pink-400 rounded-full transition-all duration-500 shadow-progress"
+                  style={{
+                    width: `${(allocatedAmount / budgetState.totalBudget) * 100}%`,
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent"></div>
+                </div>
+              </div>
+
+              {/* Expense List with Hover Effects */}
+              <div className="space-y-2 mb-4">
+                {category.expenses.map((expense) => (
+                  <div key={expense.id} 
+                       className="flex items-center justify-between p-2 rounded-lg bg-rose-50/50 
+                                transition-all duration-200 hover:bg-rose-100 hover:translate-x-1">
+                    <span className="text-sm md:text-base text-rose-700 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-rose-400 rounded-full opacity-70"></span>
+                      {expense.name}
+                    </span>
+                    <span className="text-sm md:text-base font-medium text-rose-600">
+                      {formatCurrency(expense.amount, budgetState.currency)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Budget Status Indicators */}
+              <div className="pt-4 border-t border-rose-200/30 space-y-2">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-rose-600">Allocated</span>
+                    <span className="text-xs text-rose-400 bg-rose-50 px-2 py-1 rounded-full">
+                      {formatCurrency(allocatedAmount, budgetState.currency)}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-rose-600">Remaining</span>
+                    <span className={`text-sm font-medium ${remainingPercentage > 20 ? 'text-rose-600' : 'text-red-400'} bg-white px-2 py-1 rounded-full border`}>
+                      {formatCurrency(allocatedAmount - totalExpenses, budgetState.currency)}
+                    </span>
+                  </div>
+                </div>
+                <div className="relative pt-2">
+                  <div className="h-1 bg-rose-100 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-rose-300 to-pink-300 transition-all duration-500"
+                      style={{
+                        width: `${100 - (totalExpenses / allocatedAmount) * 100}%`
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Glowing Summary Cards */}
+      <div className="bg-white/90 backdrop-blur-sm p-5 rounded-2xl border-2 border-rose-200/30 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { 
+              title: 'Total Allocated', 
+              value: budgetState.categories.reduce((acc, cat) => acc + 
+                (cat.type === 'percentage' ? 
+                  (cat.amount / 100) * budgetState.totalBudget : 
+                  cat.amount), 0),
+              icon: '💰'
+            },
+            { 
+              title: 'Total Spent', 
+              value: budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
+              icon: '🛍️'
+            },
+            { 
+              title: 'Budget Remaining', 
+              value: budgetState.totalBudget - budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
+              icon: '🎀'
+            }
+          ].map((stat, index) => (
+            <div key={index} className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl border border-rose-200/30 relative overflow-hidden">
+              <div className="absolute -right-4 -bottom-4 text-6xl text-rose-200/30 z-0">{stat.icon}</div>
+              <div className="relative z-10">
+                <span className="block text-sm text-rose-600 mb-1">{stat.title}</span>
+                <span className="text-lg md:text-xl text-rose-700 font-bold">
+                  {formatCurrency(stat.value, budgetState.currency)}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Animated Footer */}
+      <div className="flex justify-between items-center pt-4 border-t border-rose-200/50">
+        {logo && (
+          <div className="relative w-12 h-12 transform hover:scale-105 transition-transform group">
+            <div className="absolute inset-0 bg-rose-100/30 rounded-full blur-md group-hover:blur-lg transition-all"></div>
+            <Image
+              src={logo}
+              alt="Logo"
+              fill
+              className="rounded-full object-cover border-2 border-rose-200 hover:border-rose-400/50 z-10"
+            />
+          </div>
+        )}
+        <div className="text-right">
+          <p className="text-sm text-rose-600 animate-pulse-slow">🌟 Manage your sparkles wisely 🌟</p>
+          <p className="text-sm font-medium text-rose-700 mt-1">
+            Powered by <span className="text-rose-600">Kardify</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'budget' && selectedVariantStyle === 'style3' && (
+  <div className="relative bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900 p-4 md:p-6 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-emerald-500/10 group border border-slate-700">
+    {/* Binary Code Animation */}
+    <div className="absolute inset-0 opacity-10 z-0">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxNiAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNOCAxOFYyTTIgMTBINk0xNCAxMEgxME0yIDE0SDFNMTUgMTRIMTBMMTQgNkgxMFYxNEg2VjZIMiIgc3Ryb2tlPSIjM0I0RDUxIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=')] opacity-20 animate-binary-stream"></div>
+    </div>
+
+    {/* Circuit Board Pattern */}
+    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB2aWV3Qm94PSIwIDAgOCA4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0xLjUgMS41TDMgM00zIDVMNSA1TTUgM0w2LjUgMS41IiBzdHJva2U9IiMzQjRENTEiIHN0cm9rZS13aWR0aD0iLjUiLz48L3N2Zz4=')] opacity-10 z-0"></div>
+
+    <div className="relative z-10 space-y-6 max-w-7xl mx-auto">
+      {/* Industrial Header */}
+      <div className="text-center space-y-4 pb-6 border-b border-slate-700 relative">
+        <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 pb-2 inline-block relative">
+          {title || 'Bro Budget Alpha'}
+          <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/50 to-cyan-500/50 rounded-full"></span>
+        </h2>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3">
+          <div className="px-3 py-1.5 bg-slate-800/80 backdrop-blur-sm rounded-full border border-slate-700 shadow-sm">
+            <p className="text-sm md:text-base text-emerald-400 font-medium tracking-wider">
+              {budgetState.monthYear}
+            </p>
+          </div>
+          <div className="inline-flex items-center px-6 py-3 bg-slate-800/90 rounded-2xl backdrop-blur-sm border border-slate-700 shadow-lg hover:shadow-emerald-500/20 transition-shadow">
+            <span className="text-2xl md:text-3xl font-bold text-emerald-300">
+              {formatCurrency(budgetState.totalBudget, budgetState.currency)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Brutalist Categories Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        {budgetState.categories.map((category) => {
+          const allocatedAmount = category.type === 'percentage'
+            ? (category.amount / 100) * budgetState.totalBudget
+            : category.amount;
+          const totalExpenses = category.expenses.reduce((acc, expense) => acc + expense.amount, 0);
+          const remainingPercentage = ((allocatedAmount - totalExpenses) / allocatedAmount) * 100;
+
+          return (
+            <div key={category.id} 
+                 className="group bg-slate-800/90 backdrop-blur-sm p-4 md:p-5 rounded-xl border-2 border-slate-700 
+                          transition-all duration-300 hover:border-emerald-500/50 hover:shadow-lg relative overflow-hidden">
+              {/* Category Badge */}
+              <div className="absolute top-3 right-3 bg-slate-900 text-emerald-400 text-xs font-bold uppercase px-2 py-1 rounded-full border border-emerald-500/30">
+                {category.type === 'percentage' ? '%' : 'FIXED'}
+              </div>
+
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-300 group-hover:text-white flex items-center gap-2">
+                  <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                  {category.name}
+                </h3>
+                <div className="text-right">
+                  <span className="text-sm md:text-base text-emerald-400 font-mono">
+                    {category.type === 'percentage'
+                      ? `${category.amount}% (${formatCurrency(allocatedAmount, budgetState.currency)})`
+                      : formatCurrency(allocatedAmount, budgetState.currency)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Steel Progress Bar */}
+              <div className="relative h-3 bg-slate-700 rounded-full overflow-hidden mb-4 shadow-inner">
+                <div
+                  className="absolute h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(allocatedAmount / budgetState.totalBudget) * 100}%`,
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"></div>
+                </div>
+              </div>
+
+              {/* Expense List - Military Style */}
+              <div className="space-y-2 mb-4">
+                {category.expenses.map((expense) => (
+                  <div key={expense.id} 
+                       className="flex items-center justify-between p-2 rounded-lg bg-slate-900/50 
+                                transition-all duration-200 hover:bg-slate-700/50 hover:translate-x-1">
+                    <span className="text-sm md:text-base text-gray-400 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full opacity-70"></span>
+                      {expense.name}
+                    </span>
+                    <span className="text-sm md:text-base font-mono font-medium text-emerald-400">
+                      {formatCurrency(expense.amount, budgetState.currency)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Budget Status - Dashboard Style */}
+              <div className="pt-4 border-t border-slate-700 space-y-2">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-2 bg-slate-900/50 rounded-lg text-center">
+                    <p className="text-xs text-gray-400 mb-1">Allocated</p>
+                    <p className="text-sm font-bold text-emerald-400">
+                      {formatCurrency(allocatedAmount, budgetState.currency)}
+                    </p>
+                  </div>
+                  <div className="p-2 bg-slate-900/50 rounded-lg text-center">
+                    <p className="text-xs text-gray-400 mb-1">Remaining</p>
+                    <p className={`text-sm font-bold ${remainingPercentage > 20 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {formatCurrency(allocatedAmount - totalExpenses, budgetState.currency)}
+                    </p>
+                  </div>
+                </div>
+                <div className="relative pt-2">
+                  <div className="h-1 bg-slate-700 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-emerald-600 to-cyan-500 transition-all duration-500"
+                      style={{
+                        width: `${100 - (totalExpenses / allocatedAmount) * 100}%`
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Tactical Summary Section */}
+      <div className="bg-slate-800/90 backdrop-blur-sm p-5 rounded-xl border-2 border-slate-700">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { 
+              title: 'Total Firepower', 
+              value: budgetState.categories.reduce((acc, cat) => acc + 
+                (cat.type === 'percentage' ? 
+                  (cat.amount / 100) * budgetState.totalBudget : 
+                  cat.amount), 0),
+              icon: '💪'
+            },
+            { 
+              title: 'Ammo Spent', 
+              value: budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
+              icon: '🏋️'
+            },
+            { 
+              title: 'Remaining Fuel', 
+              value: budgetState.totalBudget - budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
+              icon: '🚀'
+            }
+          ].map((stat, index) => (
+            <div key={index} className="p-4 bg-slate-900/50 rounded-lg border border-slate-700 relative overflow-hidden">
+              <div className="absolute -right-4 -bottom-4 text-4xl text-slate-700/50 z-0">{stat.icon}</div>
+              <div className="relative z-10">
+                <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{stat.title}</p>
+                <p className="text-lg md:text-xl font-bold text-emerald-400 font-mono">
+                  {formatCurrency(stat.value, budgetState.currency)}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Industrial Footer */}
+      <div className="flex justify-between items-center pt-4 border-t border-slate-700">
+        {logo && (
+          <div className="relative w-12 h-12 transform hover:scale-105 transition-transform group">
+            <div className="absolute inset-0 bg-emerald-500/10 rounded-full blur-md group-hover:blur-lg transition-all"></div>
+            <Image
+              src={logo}
+              alt="Logo"
+              fill
+              className="rounded-full object-cover border-2 border-slate-700 hover:border-emerald-500/50 z-10"
+            />
+          </div>
+        )}
+        <div className="text-right">
+          <p className="text-sm text-gray-400 font-mono">CRUSH YOUR FINANCIAL GOALS 💪</p>
+          <p className="text-xs font-medium text-slate-500 mt-1">
+            Powered by <span className="text-emerald-400">Kardify</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'budget' && selectedVariantStyle === 'style4' && (
+  <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-teal-500/10">
+    {/* Animated Background Elements */}
+    <div className="absolute inset-0 bg-grid-gray-700/10 z-0 opacity-20"></div>
+    <div className="absolute -top-20 -right-20 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl z-0 animate-pulse-slow"></div>
+    <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl z-0 animate-pulse-slow delay-1000"></div>
+
+    <div className="relative z-10 space-y-6 max-w-7xl mx-auto">
+      {/* Header Section */}
+      <div className="text-center space-y-4 pb-6 border-b border-gray-700/50">
+        <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-blue-300">
+          {title || 'Bro Budget'}
+        </h2>
+        <p className="text-sm md:text-base text-gray-400 font-medium tracking-wider">
+          {budgetState.monthYear}
+        </p>
+        <div className="inline-flex items-center px-6 py-3 bg-gray-800/50 rounded-2xl backdrop-blur-sm border border-gray-700/50">
+          <span className="text-2xl md:text-3xl font-bold text-teal-300">
+            {formatCurrency(budgetState.totalBudget, budgetState.currency)}
+          </span>
+        </div>
+      </div>
+
+      {/* Interactive Categories Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        {budgetState.categories.map((category) => {
+          const allocatedAmount = category.type === 'percentage'
+            ? (category.amount / 100) * budgetState.totalBudget
+            : category.amount;
+          const totalExpenses = category.expenses.reduce((acc, expense) => acc + expense.amount, 0);
+          const remainingPercentage = ((allocatedAmount - totalExpenses) / allocatedAmount) * 100;
+
+          return (
+            <div key={category.id} 
+                 className="group bg-gray-800/50 backdrop-blur-sm p-4 md:p-5 rounded-xl border border-gray-700/50 
+                          transition-all duration-300 hover:bg-gray-800/70 hover:border-teal-500/30">
+              {/* Category Ribbon */}
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg md:text-xl font-semibold text-teal-200 group-hover:text-teal-100">
+                  {category.name}
+                </h3>
+                <div className="text-right">
+                  <span className="text-sm md:text-base text-gray-300 font-medium">
+                    {category.type === 'percentage'
+                      ? `${category.amount}% (${formatCurrency(allocatedAmount, budgetState.currency)})`
+                      : formatCurrency(allocatedAmount, budgetState.currency)}
+                  </span>
+                </div>
+              </div>
+
+              {/* 3D Progress Bar */}
+              <div className="relative h-2 bg-gray-700/50 rounded-full overflow-hidden mb-4">
+                <div
+                  className="absolute h-full bg-gradient-to-r from-teal-500 to-teal-400 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(allocatedAmount / budgetState.totalBudget) * 100}%`,
+                  }}
+                />
+              </div>
+
+              {/* Expense List with Hover Effects */}
+              <div className="space-y-2 mb-4">
+                {category.expenses.map((expense) => (
+                  <div key={expense.id} 
+                       className="flex items-center justify-between p-2 rounded-lg bg-gray-900/30 
+                                transition-colors hover:bg-gray-900/50">
+                    <span className="text-sm md:text-base text-gray-300">{expense.name}</span>
+                    <span className="text-sm md:text-base font-medium text-teal-300">
+                      {formatCurrency(expense.amount, budgetState.currency)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Budget Status Indicators */}
+              <div className="flex justify-between items-center pt-3 border-t border-gray-700/50">
+                <span className="text-sm text-gray-400">Remaining</span>
+                <span className={`text-sm font-medium ${remainingPercentage > 20 ? 'text-teal-300' : 'text-red-400'}`}>
+                  {formatCurrency(allocatedAmount - totalExpenses, budgetState.currency)}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Glowing Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {[
+          {
+            title: 'Total Allocated',
+            value: budgetState.categories.reduce(
+              (acc, cat) =>
+                acc +
+                (cat.type === 'percentage'
+                  ? (cat.amount / 100) * budgetState.totalBudget
+                  : cat.amount),
+              0
+            ),
+            icon: '💰',
+          },
+          {
+            title: 'Total Spent',
+            value: budgetState.categories.reduce(
+              (acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0),
+              0
+            ),
+            icon: '💸',
+          },
+          {
+            title: 'Budget Remaining',
+            value:
+              budgetState.totalBudget -
+              budgetState.categories.reduce(
+                (acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0),
+                0
+              ),
+            icon: '🎯',
+          },
+        ].map((stat, index) => (
+          <div
+            key={index}
+            className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-700/50 flex flex-col items-center justify-center space-y-2"
+          >
+            <span className="text-2xl text-teal-300">{stat.icon}</span>
+            <span className="text-sm text-gray-400 font-medium">{stat.title}</span>
+            <span className="text-lg md:text-xl font-bold text-teal-300">
+              {formatCurrency(stat.value, budgetState.currency)}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Animated Footer */}
+      <div className="flex justify-between items-center pt-4 border-t border-gray-700/50">
+        {logo && (
+          <div className="relative w-12 h-12 transform hover:scale-105 transition-transform">
+            <Image
+              src={logo}
+              alt="Logo"
+              fill
+              className="rounded-full object-cover border-2 border-gray-700 hover:border-teal-500/50"
+            />
+          </div>
+        )}
+        <div className="text-right">
+          <p className="text-sm text-gray-400">Manage your budget like a pro</p>
+          <p className="text-sm font-medium text-teal-300">Powered by Kardify</p>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
+{/* Budget Card Display End */}
 
     {/* Recipe Display */}
         {selectedVariant === 'recipe' && (
