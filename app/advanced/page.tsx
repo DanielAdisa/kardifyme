@@ -1,5 +1,13 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from 'react';
+
+type BudgetCategory = {
+  id: string;
+  name: string;
+  amount: number;
+  type: string; // Add this line
+  expenses: { id: string; name: string; amount: number }[];
+};
 import { SketchPicker } from 'react-color';
 import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
@@ -7230,17 +7238,17 @@ const baseLabelStyles = `
 {selectedVariant === 'budget' && (
   <div className="space-y-6">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-              <label className="block text-stone-950 mb-2">Title</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 rounded-lg border border-slate-300"
-                title="Enter the title"
-                placeholder="Enter a title"
-              />
-            </div>
+      <div>
+        <label className="block text-stone-950 mb-2">Title</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-2 rounded-lg border border-slate-300"
+          title="Enter the title"
+          placeholder="Enter a title"
+        />
+      </div>
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Month & Year</label>
         <input
@@ -7279,40 +7287,104 @@ const baseLabelStyles = `
     <div className="space-y-4">
       <label className="block text-stone-950 mb-2 font-medium">Budget Categories</label>
       {budgetState.categories.map((category, index) => (
-        <div key={category.id} className="flex gap-2">
-          <input
-            type="text"
-            value={category.name}
-            onChange={(e) => {
-              const newCategories = [...budgetState.categories];
-              newCategories[index].name = e.target.value;
-              setBudgetState({...budgetState, categories: newCategories});
-            }}
-            className="flex-1 p-3 rounded-xl border border-slate-300"
-            placeholder="Category name"
-          />
-          <input
-            type="number"
-            value={category.amount}
-            onChange={(e) => {
-              const newCategories = [...budgetState.categories];
-              newCategories[index].amount = parseFloat(e.target.value);
-              setBudgetState({...budgetState, categories: newCategories});
-            }}
-            className="w-32 p-3 rounded-xl border border-slate-300"
-            placeholder="Amount"
-          />
-          <button
-            onClick={() => {
-              const newCategories = budgetState.categories.filter((_, i) => i !== index);
-              setBudgetState({...budgetState, categories: newCategories});
-            }}
-            className="p-3 text-red-500 hover:bg-red-50 rounded-xl"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
+        <div key={category.id} className="space-y-4">
+          <div className="flex gap-2 items-center">
+            <input
+              type="text"
+              value={category.name}
+              onChange={(e) => {
+                const newCategories = [...budgetState.categories];
+                newCategories[index].name = e.target.value;
+                setBudgetState({...budgetState, categories: newCategories});
+              }}
+              className="flex-1 p-3 rounded-xl border border-slate-300"
+              placeholder="Category name"
+            />
+            <input
+              type="number"
+              value={category.amount}
+              onChange={(e) => {
+                const newCategories = [...budgetState.categories];
+                newCategories[index].amount = parseFloat(e.target.value);
+                setBudgetState({...budgetState, categories: newCategories});
+              }}
+              className="w-32 p-3 rounded-xl border border-slate-300"
+              placeholder="Amount"
+            />
+            <select
+              value={category.type}
+              onChange={(e) => {
+                const newCategories = [...budgetState.categories];
+                newCategories[index].type = e.target.value;
+                setBudgetState({...budgetState, categories: newCategories});
+              }}
+              className="w-32 p-3 rounded-xl border border-slate-300"
+            >
+              <option value="amount">Amount</option>
+              <option value="percentage">Percentage</option>
+            </select>
+            <button
+              onClick={() => {
+                const newCategories = budgetState.categories.filter((_, i) => i !== index);
+                setBudgetState({...budgetState, categories: newCategories});
+              }}
+              className="p-3 text-red-500 hover:bg-red-50 rounded-xl"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+          <div className="pl-8 space-y-2">
+            {category.expenses.map((expense, expIndex) => (
+              <div key={expense.id} className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  value={expense.name}
+                  onChange={(e) => {
+                    const newCategories = [...budgetState.categories];
+                    newCategories[index].expenses[expIndex].name = e.target.value;
+                    setBudgetState({...budgetState, categories: newCategories});
+                  }}
+                  className="flex-1 p-3 rounded-xl border border-slate-300"
+                  placeholder="Expense name"
+                />
+                <input
+                  type="number"
+                  value={expense.amount}
+                  onChange={(e) => {
+                    const newCategories = [...budgetState.categories];
+                    newCategories[index].expenses[expIndex].amount = parseFloat(e.target.value);
+                    setBudgetState({...budgetState, categories: newCategories});
+                  }}
+                  className="w-32 p-3 rounded-xl border border-slate-300"
+                  placeholder="Amount"
+                />
+                <button
+                  onClick={() => {
+                    const newCategories = [...budgetState.categories];
+                    newCategories[index].expenses = newCategories[index].expenses.filter((_, i) => i !== expIndex);
+                    setBudgetState({...budgetState, categories: newCategories});
+                  }}
+                  className="p-3 text-red-500 hover:bg-red-50 rounded-xl"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+            <button
+              onClick={() => {
+                const newCategories = [...budgetState.categories];
+                newCategories[index].expenses.push({ id: crypto.randomUUID(), name: '', amount: 0 });
+                setBudgetState({...budgetState, categories: newCategories});
+              }}
+              className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
+            >
+              Add Expense
+            </button>
+          </div>
         </div>
       ))}
       <button
@@ -7321,7 +7393,7 @@ const baseLabelStyles = `
             ...budgetState,
             categories: [
               ...budgetState.categories,
-              { id: crypto.randomUUID(), name: '', amount: 0 }
+              { id: crypto.randomUUID(), name: '', amount: 0, type: 'amount', expenses: [] }
             ]
           });
         }}
@@ -11271,96 +11343,136 @@ const baseLabelStyles = `
 )}
 
 
-    {/* Budget Display */}
-      {selectedVariant === 'budget' && (
-        <div className="relative bg-gradient-to-br pb-0 from-gray-800 via-gray-700 to-gray-900 p-2 rounded-b-md rounded-2xl shadow-xl overflow-hidden">
-          {/* Subtle Background Elements */}
-          <div className="absolute inset-0 bg-grid-gray-600/10 z-0"></div>
-          <div className="absolute -top-20 -right-20 w-60 h-60 bg-teal-500/20 rounded-full blur-3xl z-0"></div>
-          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-500/20 rounded-full blur-3xl z-0"></div>
+{selectedVariant === 'budget' && (
+  <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 md:p-6 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-teal-500/10">
+    {/* Enhanced Background Elements */}
+    <div className="absolute inset-0 bg-grid-gray-600/10 z-0 opacity-30"></div>
+    <div className="absolute -top-20 -right-20 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl z-0 animate-pulse-slow"></div>
+    <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl z-0 animate-pulse-slow delay-1000"></div>
 
-          <div className="relative z-10 space-y-4">
-            {/* Header Section */}
-            <div className="text-center border-b border-gray-600/20 pb-4">
-              <h2 className="text-2xl md:text-3xl font-semibold text-teal-300">
-                {title || 'Monthly Budget'}
-              </h2>
-              <p className="text-sm md:text-base text-gray-400">{budgetState.monthYear}</p>
-              <div className="mt-2 text-xl md:text-2xl font-bold text-teal-100">
-                {formatCurrency(budgetState.totalBudget, budgetState.currency)}
+    <div className="relative z-10 space-y-6 max-w-7xl mx-auto">
+      {/* Enhanced Header Section */}
+      <div className="text-center space-y-4 pb-6 border-b border-gray-700/50">
+        <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-blue-300">
+          {title || 'Monthly Budget'}
+        </h2>
+        <p className="text-sm md:text-base text-gray-400 font-medium tracking-wider">
+          {budgetState.monthYear}
+        </p>
+        <div className="inline-flex items-center px-6 py-3 bg-gray-800/50 rounded-2xl backdrop-blur-sm border border-gray-700/50">
+          <span className="text-2xl md:text-3xl font-bold text-teal-300">
+            {formatCurrency(budgetState.totalBudget, budgetState.currency)}
+          </span>
+        </div>
+      </div>
+
+      {/* Enhanced Budget Categories */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        {budgetState.categories.map((category) => {
+          const amount = category.type === 'percentage'
+            ? (category.amount / 100) * budgetState.totalBudget
+            : category.amount;
+          const totalExpenses = category.expenses.reduce((acc, expense) => acc + expense.amount, 0);
+          const remainingPercentage = ((amount - totalExpenses) / amount) * 100;
+
+          return (
+            <div key={category.id} 
+                 className="group bg-gray-800/50 backdrop-blur-sm p-4 md:p-5 rounded-xl border border-gray-700/50 
+                          transition-all duration-300 hover:bg-gray-800/70 hover:border-teal-500/30">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg md:text-xl font-semibold text-teal-200 group-hover:text-teal-100">
+                  {category.name}
+                </h3>
+                <div className="text-right">
+                  <span className="text-sm md:text-base text-gray-300 font-medium">
+                    {category.type === 'percentage'
+                      ? `${category.amount}% (${formatCurrency(amount, budgetState.currency)})`
+                      : formatCurrency(amount, budgetState.currency)}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* Budget Categories */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {budgetState.categories.map((category) => (
+              {/* Enhanced Progress Bar */}
+              <div className="relative h-2 bg-gray-700/50 rounded-full overflow-hidden mb-4">
                 <div
-                  key={category.id}
-                  className="bg-gray-700 p-3 rounded-lg shadow-sm border border-gray-600"
-                >
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-base md:text-lg font-medium text-teal-200">
-                      {category.name}
-                    </h3>
-                    <span className="text-sm text-gray-300">
-                      {formatCurrency(category.amount, budgetState.currency)}
+                  className="absolute h-full bg-gradient-to-r from-teal-500 to-teal-400 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(amount / budgetState.totalBudget) * 100}%`,
+                  }}
+                />
+              </div>
+
+              {/* Expenses List */}
+              <div className="space-y-2 mb-4">
+                {category.expenses.map((expense) => (
+                  <div key={expense.id} 
+                       className="flex items-center justify-between p-2 rounded-lg bg-gray-900/30 
+                                transition-colors hover:bg-gray-900/50">
+                    <span className="text-sm md:text-base text-gray-300">{expense.name}</span>
+                    <span className="text-sm md:text-base font-medium text-teal-300">
+                      {formatCurrency(expense.amount, budgetState.currency)}
                     </span>
                   </div>
-                  <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-teal-400 rounded-full"
-                      style={{
-                        width: `${(category.amount / budgetState.totalBudget) * 100}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Summary Section */}
-            <div className="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-600">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm md:text-base text-gray-400">Total Spent</span>
-                <span className="text-sm md:text-base text-teal-200 font-medium">
-                  {formatCurrency(
-                    budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
-                    budgetState.currency
-                  )}
-                </span>
+                ))}
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm md:text-base text-gray-400">Remaining</span>
-                <span className="text-sm md:text-base text-teal-200 font-medium">
-                  {formatCurrency(
-                    budgetState.totalBudget -
-                      budgetState.categories.reduce((acc, cat) => acc + cat.amount, 0),
-                    budgetState.currency
-                  )}
+
+              {/* Enhanced Remaining Budget */}
+              <div className="flex justify-between items-center pt-3 border-t border-gray-700/50">
+                <span className="text-sm text-gray-400">Remaining</span>
+                <span className={`text-sm font-medium ${remainingPercentage > 20 ? 'text-teal-300' : 'text-red-400'}`}>
+                  {formatCurrency(amount - totalExpenses, budgetState.currency)}
                 </span>
               </div>
             </div>
+          );
+        })}
+      </div>
 
-            {/* Footer Section */}
-            <div className="flex justify-between items-center pt-3 border-t border-gray-600/20">
-              {logo && (
-                <div className="relative w-12 h-12">
-                  <Image
-                    src={logo}
-                    alt="Logo"
-                    fill
-                    className="rounded-full object-cover border-2 border-gray-500"
-                  />
-                </div>
+      {/* Enhanced Summary Section */}
+      <div className="bg-gray-800/50 backdrop-blur-sm p-5 rounded-xl border border-gray-700/50">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 bg-gray-900/30 rounded-lg">
+            <span className="block text-sm text-gray-400 mb-1">Total Spent</span>
+            <span className="text-lg md:text-xl text-teal-300 font-bold">
+              {formatCurrency(
+                budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
+                budgetState.currency
               )}
-              <div className="text-sm pb-1.5 text-gray-400">
-                <p>Plan your expenses wisely</p>
-                <p className="text-teal-300 font-medium">Powered by Kardify</p>
-              </div>
-            </div>
+            </span>
+          </div>
+          <div className="p-4 bg-gray-900/30 rounded-lg">
+            <span className="block text-sm text-gray-400 mb-1">Remaining</span>
+            <span className="text-lg md:text-xl text-teal-300 font-bold">
+              {formatCurrency(
+                budgetState.totalBudget -
+                  budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
+                budgetState.currency
+              )}
+            </span>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Enhanced Footer */}
+      <div className="flex justify-between items-center pt-4 border-t border-gray-700/50">
+        {logo && (
+          <div className="relative w-12 h-12 transform hover:scale-105 transition-transform">
+            <Image
+              src={logo}
+              alt="Logo"
+              fill
+              className="rounded-full object-cover border-2 border-gray-700 hover:border-teal-500/50"
+            />
+          </div>
+        )}
+        <div className="text-right">
+          <p className="text-sm text-gray-400">Plan your expenses wisely</p>
+          <p className="text-sm font-medium text-teal-300">Powered by Kardify</p>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
     {/* Recipe Display */}
         {selectedVariant === 'recipe' && (
