@@ -6308,25 +6308,16 @@ const baseLabelStyles = `
 
 {/* Flyer Input Fields */}
 {selectedVariant === 'flyer' && (
-  <div className="space-y-6 bg-white/90 p-4 rounded-xl">
+  <div className="space-y-8 bg-white/90 p-6 rounded-2xl shadow-xl">
     {/* Background Type Selection */}
-    <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <section className="space-y-6">
+      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+        <svg className="w-5 h-5 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        Background Type
-      </h3>
+        <h3 className="text-lg font-semibold text-stone-800">Background Type</h3>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* <div className="">
-      <label className={baseLabelStyles}>Inner BG Color</label>
-      <input
-        type="color"
-        value={backgroundColor}
-        onChange={(e) => setBackgroundColor(e.target.value)}
-        className="w-full h-[45px] backdrop-blur-sm rounded-xl"
-      />
-    </div> */}
         <div>
           <label className="block text-stone-800 text-sm font-medium mb-2">Background Type</label>
           <select
@@ -6342,47 +6333,26 @@ const baseLabelStyles = `
           <>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient From</label>
-              {/* <input
-                type="color"
-                value={gradientFrom}
-                onChange={(e) => setGradientFrom(e.target.value)}
-                className="w-full h-10 rounded-lg border border-slate-300"
-              /> */}
               <SketchPicker
                 color={gradientFrom}
                 onChange={(color) => setGradientFrom(color.hex)}
-                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                          border border-gray-200"
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 border border-gray-200"
               />
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient Via</label>
-              {/* <input
-                type="color"
-                value={gradientVia}
-                onChange={(e) => setGradientVia(e.target.value)}
-                className="w-full h-10 rounded-lg border border-slate-300"
-              /> */}
               <SketchPicker
                 color={gradientVia}
                 onChange={(color) => setGradientVia(color.hex)}
-                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                          border border-gray-200"
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 border border-gray-200"
               />
             </div>
             <div>
               <label className="block text-stone-800 text-sm font-medium mb-2">Gradient To</label>
-              {/* <input
-                type="color"
-                value={gradientTo}
-                onChange={(e) => setGradientTo(e.target.value)}
-                className="w-full h-10 rounded-lg border border-slate-300"
-              /> */}
               <SketchPicker
                 color={gradientTo}
                 onChange={(color) => setGradientTo(color.hex)}
-                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                          border border-gray-200"
+                className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 border border-gray-200"
               />
             </div>
           </>
@@ -6390,23 +6360,18 @@ const baseLabelStyles = `
         {bgType === 'solid' && (
           <div>
             <label className="block text-stone-800 text-sm font-medium mb-2">Solid Color</label>
-            {/* <input
-              type="color"
-              value={solidColor}
-              onChange={(e) => setSolidColor(e.target.value)}
-              className="w-full h-10 rounded-lg border border-slate-300"
-            /> */}
             <SketchPicker
               color={solidColor}
               onChange={(color) => setSolidColor(color.hex)}
-              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 
-                        border border-gray-200"
+              className="w-full h-fit mx-auto rounded-xl p-4 mt-4 mb-4 cursor-pointer transition-transform duration-200 border border-gray-200"
             />
           </div>
         )}
       </div>
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    </section>
+
+    {/* Title and Tagline */}
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Title</label>
         <input
@@ -6427,9 +6392,10 @@ const baseLabelStyles = `
           placeholder="Add a captivating tagline"
         />
       </div>
-    </div>
+    </section>
 
-    <div>
+    {/* Main Content */}
+    <section>
       <label className="block text-stone-950 mb-2 font-medium">Main Content</label>
       <textarea
         value={largeDescription}
@@ -6437,53 +6403,48 @@ const baseLabelStyles = `
         className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
         placeholder="Enter flyer details, features, or event information"
       />
-    </div>
+    </section>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      
-      
-      
-      
-      {/* Background Image Upload */}
-    <div>
-      <label className="block text-gray-800 font-medium mb-2">Upload Background Image</label>
-      
-      <div className="space-y-2">
-                {backgroundImage && (
-                  <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
-                    <img src={backgroundImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
-                    <button
-                      title="Delete Hero Image"
-                      onClick={() => setBackgroundImage('')}
-                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  onChange={(e) => {
-                    const file = e.target.files && e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setBackgroundImage(reader.result as string);
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  accept="image/*"
-                />
-              </div>
+    {/* Background Image Upload */}
+    <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <label className="block text-gray-800 font-medium mb-2">Upload Background Image</label>
+        <div className="space-y-2">
+          {backgroundImage && (
+            <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+              <img src={backgroundImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+              <button
+                title="Delete Hero Image"
+                onClick={() => setBackgroundImage('')}
+                className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          )}
+          <input
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files && e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setBackgroundImage(reader.result as string);
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+            accept="image/*"
+          />
+        </div>
+      </div>
+    </section>
 
-    </div>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {/* Price and QR Code URL */}
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label className="block text-stone-950 mb-2 font-medium">Price</label>
         <div className="flex gap-2">
@@ -6515,66 +6476,67 @@ const baseLabelStyles = `
           placeholder="Enter URL for QR code"
         />
       </div>
-    </div>
+    </section>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div className="space-y-4">
-  <label className="block text-lg font-medium text-gray-900">Upload Flyer Image</label>
-  <div className="space-y-2">
-                {flyerImage && (
-                  <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
-                    <img src={flyerImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
-                    <button
-                      title="Delete Hero Image"
-                      onClick={() => setflyerImage('')}
-                      className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  onChange={(e) => {
-                    const file = e.target.files && e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setflyerImage(reader.result as string);
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  accept="image/*"
-                />
-              </div>
-                </div>
-      <div className="space-y-2">
-      {logo && (
-        <div className="relative w-full h-32 bg-gray-200 rounded-xl overflow-hidden shadow-md">
-          <img src={logo} alt="Logo" className="object-cover w-full h-full" />
-          <button
-            onClick={() => handleDeleteImage('logo')}
-            className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+    {/* Flyer Image and Logo Upload */}
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-4">
+        <label className="block text-lg font-medium text-gray-900">Upload Flyer Image</label>
+        <div className="space-y-2">
+          {flyerImage && (
+            <div className="relative w-full h-40 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+              <img src={flyerImage} alt="Uploaded Hero" className="object-cover w-full h-full" />
+              <button
+                title="Delete Hero Image"
+                onClick={() => setflyerImage('')}
+                className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          )}
+          <input
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files && e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setflyerImage(reader.result as string);
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+            accept="image/*"
+          />
         </div>
-      )}
-      <label className="block text-lg font-medium text-gray-900">Upload Flyer Logo</label>
-      <input
-        type="file"
-        onChange={(e) => handleImageChange(e, 'logo')}
-        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-        accept="image/*"
-      />
-    </div>
-    </div>
+      </div>
+      <div className="space-y-2">
+        {logo && (
+          <div className="relative w-full h-32 bg-gray-200 rounded-xl overflow-hidden shadow-md">
+            <img src={logo} alt="Logo" className="object-cover w-full h-full" />
+            <button
+              onClick={() => handleDeleteImage('logo')}
+              className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <label className="block text-lg font-medium text-gray-900">Upload Flyer Logo</label>
+        <input
+          type="file"
+          onChange={(e) => handleImageChange(e, 'logo')}
+          className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+          accept="image/*"
+        />
+      </div>
+    </section>
   </div>
 )}
 
