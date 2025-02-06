@@ -26,7 +26,7 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.6, -0.05, 0.01, 0.99] }}
-            className="text-6xl md:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 leading-[1.1]"
+            className="text-6xl md:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 leading-[1.1] font-sans"
           >
             Revolutionize Your <span className="text-slate-100">Digital Identity</span>
           </motion.h1>
@@ -37,7 +37,7 @@ const LandingPage = () => {
             transition={{ delay: 0.4 }}
             className="max-w-3xl mx-auto"
           >
-            <p className="text-xl text-slate-400 font-light">
+            <p className="text-xl text-slate-400 font-light font-sans">
               Next-generation digital cards powered by AI-driven design and blockchain-verified authenticity.
             </p>
           </motion.div>
@@ -93,8 +93,8 @@ const LandingPage = () => {
               className="bg-slate-900/50 backdrop-blur-xl p-8 rounded-2xl border border-slate-800 hover:border-cyan-400/30 transition-colors duration-300"
             >
               <div className="text-cyan-400 text-4xl mb-4">0{i+1}</div>
-              <h3 className="text-2xl font-semibold text-slate-100 mb-3">{title}</h3>
-              <p className="text-slate-400 font-light">
+              <h3 className="text-2xl font-semibold text-slate-100 mb-3 font-sans">{title}</h3>
+              <p className="text-slate-400 font-light font-sans">
                 {i === 0 && 'Automatically generates optimal designs based on your brand identity'}
                 {i === 1 && 'Embed dynamic content that updates in real-time across all platforms'}
                 {i === 2 && 'Track engagement and interactions through integrated analytics dashboard'}
@@ -108,17 +108,17 @@ const LandingPage = () => {
       <section className="relative py-32 px-6">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1 space-y-6">
-            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
+            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 font-sans">
               Immersive Interaction
             </h2>
-            <p className="text-slate-400 text-lg font-light">
+            <p className="text-slate-400 text-lg font-light font-sans">
               Experience seamless design interaction with our spatial interface. Rotate, zoom, and preview your digital card in 3D space.
             </p>
             <div className="flex gap-4">
-              <button className="px-6 py-3 rounded-full bg-slate-900 border border-slate-800 hover:border-cyan-400 transition-colors">
+              <button className="px-6 py-3 rounded-full bg-slate-900 border border-slate-800 hover:border-cyan-400 transition-colors font-sans">
                 View Demo
               </button>
-              <button className="px-6 py-3 rounded-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:scale-[1.02] transition-transform">
+              <button className="px-6 py-3 rounded-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:scale-[1.02] transition-transform font-sans">
                 Start Creating
               </button>
             </div>
@@ -152,7 +152,7 @@ const LandingPage = () => {
       {/* Dynamic QR Section */}
       <section className="relative py-32 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-slate-100 mb-8">
+          <h2 className="text-4xl font-bold text-slate-100 mb-8 font-sans">
             Smart Integration
           </h2>
           <motion.div 
@@ -167,7 +167,7 @@ const LandingPage = () => {
               level="H"
               className="rounded-xl"
             />
-            <div className="mt-4 text-cyan-400 font-medium">Dynamic Content QR</div>
+            <div className="mt-4 text-cyan-400 font-medium font-sans">Dynamic Content QR</div>
           </motion.div>
         </div>
       </section>
@@ -177,14 +177,14 @@ const LandingPage = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl p-12 border border-slate-800 relative overflow-hidden">
             <div className="absolute inset-0 bg-noise opacity-10" />
-            <h2 className="text-4xl font-bold text-slate-100 mb-6">
+            <h2 className="text-4xl font-bold text-slate-100 mb-6 font-sans">
               Ready for the Future?
             </h2>
-            <p className="text-slate-400 mb-8 font-light">
+            <p className="text-slate-400 mb-8 font-light font-sans">
               Join thousands of innovators already shaping their digital presence with KardifyMe
             </p>
             <Link href="/create">
-              <button className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full font-semibold hover:scale-[1.02] transition-transform">
+              <button className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full font-semibold hover:scale-[1.02] transition-transform font-sans">
                 Start Your Journey
               </button>
             </Link>
