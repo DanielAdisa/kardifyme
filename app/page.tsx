@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
@@ -14,7 +13,7 @@ const LandingPage = () => {
     <div className="min-h-screen bg-grid-slate-900/[0.04] relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 bg-slate-950 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
-      <motion.div 
+      <motion.div
         className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-transparent"
         style={{ x }}
       />
@@ -28,9 +27,12 @@ const LandingPage = () => {
             transition={{ duration: 0.8, ease: [0.6, -0.05, 0.01, 0.99] }}
             className="text-6xl md:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 leading-[1.1]"
           >
-            Revolutionize Your <span className="text-slate-100">Digital Identity</span>
+            Revolutionize Your{' '}
+            <span aria-label="Digital Identity" className="text-slate-100">
+              Digital Identity
+            </span>
           </motion.h1>
-          
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -48,7 +50,10 @@ const LandingPage = () => {
             className="mt-12"
           >
             <Link href="/create">
-              <button className="group relative px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full font-semibold hover:scale-[1.03] transition-transform duration-300">
+              <button
+                aria-label="Start Creating Button"
+                className="group relative px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full font-semibold hover:scale-[1.03] transition-transform duration-300"
+              >
                 <span className="relative z-10">Start Creating</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
                 <div className="absolute inset-0 rounded-full bg-noise opacity-10" />
@@ -57,7 +62,7 @@ const LandingPage = () => {
           </motion.div>
 
           {/* Holographic card preview */}
-          <motion.div 
+          <motion.div
             className="mt-24 mx-auto w-[320px] h-[200px] bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-800 shadow-2xl relative overflow-hidden hover:rotate-[2deg] transition-transform duration-500"
             whileHover={{ scale: 1.05 }}
           >
@@ -85,14 +90,14 @@ const LandingPage = () => {
       <section className="relative py-32 px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
           {['AI Design Engine', 'Dynamic NFT Links', 'Real-time Analytics'].map((title, i) => (
-            <motion.div 
+            <motion.div
               key={title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.2 }}
               className="bg-slate-900/50 backdrop-blur-xl p-8 rounded-2xl border border-slate-800 hover:border-cyan-400/30 transition-colors duration-300"
             >
-              <div className="text-cyan-400 text-4xl mb-4">0{i+1}</div>
+              <div className="text-cyan-400 text-4xl mb-4">0{i + 1}</div>
               <h3 className="text-2xl font-semibold text-slate-100 mb-3">{title}</h3>
               <p className="text-slate-400 font-light">
                 {i === 0 && 'Automatically generates optimal designs based on your brand identity'}
@@ -123,13 +128,13 @@ const LandingPage = () => {
               </button>
             </div>
           </div>
-          
+
           {/* 3D Preview Area */}
           <div className="flex-1 relative h-[400px] bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-800">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-64 h-64 bg-gradient-radial from-cyan-500/20 to-transparent rounded-full" />
             </div>
-            <motion.div 
+            <motion.div
               className="w-full h-full flex items-center justify-center"
               animate={{ rotate: [0, 8, -8, 0] }}
               transition={{ duration: 6, repeat: Infinity }}
@@ -152,15 +157,13 @@ const LandingPage = () => {
       {/* Dynamic QR Section */}
       <section className="relative py-32 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-slate-100 mb-8">
-            Smart Integration
-          </h2>
-          <motion.div 
+          <h2 className="text-4xl font-bold text-slate-100 mb-8">Smart Integration</h2>
+          <motion.div
             className="inline-block bg-slate-900/50 backdrop-blur-xl p-6 rounded-2xl border border-slate-800 hover:border-cyan-400 transition-colors"
             whileHover={{ scale: 1.05 }}
           >
-            <QRCodeSVG 
-              value="https://kardifyme.com" 
+            <QRCodeSVG
+              value="https://kardifyme.com"
               size={200}
               bgColor="transparent"
               fgColor="#22d3ee"
@@ -177,9 +180,7 @@ const LandingPage = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl p-12 border border-slate-800 relative overflow-hidden">
             <div className="absolute inset-0 bg-noise opacity-10" />
-            <h2 className="text-4xl font-bold text-slate-100 mb-6">
-              Ready for the Future?
-            </h2>
+            <h2 className="text-4xl font-bold text-slate-100 mb-6">Ready for the Future?</h2>
             <p className="text-slate-400 mb-8 font-light">
               Join thousands of innovators already shaping their digital presence with KardifyMe
             </p>
