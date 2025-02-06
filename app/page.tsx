@@ -5,9 +5,33 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useRef } from 'react';
 
 const LandingPage = () => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref });
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
+  // References for each section
+  const heroRef = useRef(null);
+  const featuresRef = useRef(null);
+  const demoRef = useRef(null);
+  const qrRef = useRef(null);
+  const footerRef = useRef(null);
+
+  // Track scroll progress for each section
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+
+  const featuresProgress = useScroll({ target: featuresRef });
+  const featuresOpacity = useTransform(featuresProgress.scrollYProgress, [0, 0.5], [0, 1]);
+
+  const demoProgress = useScroll({ target: demoRef });
+  const demoOpacity = useTransform(demoProgress.scrollYProgress, [0, 0.5], [0, 1]);
+
+  const qrProgress = useScroll({ target: qrRef });
+  const qrOpacity = useTransform(qrProgress.scrollYProgress, [0, 0.5], [0, 1]);
+
+  const footerProgress = useScroll({ target: footerRef });
+  const footerOpacity = useTransform(footerProgress.scrollYProgress, [0, 0.5], [0, 1]);
 
   return (
     <div className="min-h-screen bg-grid-slate-900/[0.04] relative overflow-hidden">
@@ -15,12 +39,15 @@ const LandingPage = () => {
       <div className="absolute inset-0 bg-slate-950 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-transparent"
-        style={{ x }}
+        style={{ opacity: scrollYProgress }}
       />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6">
-        <div className="max-w-7xl mx-auto text-center space-y-8">
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-6">
+        <motion.div
+          className="max-w-7xl mx-auto text-center space-y-8"
+          style={{ opacity: heroOpacity, scale: heroScale }}
+        >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -32,7 +59,6 @@ const LandingPage = () => {
               Digital Identity
             </span>
           </motion.h1>
-
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -43,7 +69,6 @@ const LandingPage = () => {
               Next-generation digital cards powered by AI-driven design and blockchain-verified authenticity.
             </p>
           </motion.div>
-
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -60,35 +85,15 @@ const LandingPage = () => {
               </button>
             </Link>
           </motion.div>
-
-          {/* Holographic card preview */}
-          <motion.div
-            className="mt-24 mx-auto w-[320px] h-[200px] bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-800 shadow-2xl relative overflow-hidden hover:rotate-[2deg] transition-transform duration-500"
-            whileHover={{ scale: 1.05 }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-purple-500/10" />
-            <div className="absolute inset-0 [mask-image:linear-gradient(transparent,white,transparent)]" />
-            <div className="p-6 relative z-10">
-              <div className="flex justify-between items-start">
-                <div className="space-y-2">
-                  <div className="h-4 w-32 bg-cyan-400/90 rounded-full" />
-                  <div className="h-3 w-24 bg-slate-100/90 rounded-full" />
-                </div>
-                <div className="w-12 h-12 bg-purple-400/90 rounded-lg" />
-              </div>
-              <div className="mt-8 flex gap-4">
-                <div className="h-8 w-8 bg-slate-100 rounded-full" />
-                <div className="h-8 w-8 bg-slate-100 rounded-full" />
-                <div className="h-8 w-8 bg-slate-100 rounded-full" />
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Features Section */}
-      <section className="relative py-32 px-6">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+      <section ref={featuresRef} className="relative py-32 px-6">
+        <motion.div
+          className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8"
+          style={{ opacity: featuresOpacity }}
+        >
           {['AI Design Engine', 'Dynamic NFT Links', 'Real-time Analytics'].map((title, i) => (
             <motion.div
               key={title}
@@ -106,12 +111,15 @@ const LandingPage = () => {
               </p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Interactive Demo Section */}
-      <section className="relative py-32 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+      <section ref={demoRef} className="relative py-32 px-6">
+        <motion.div
+          className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16"
+          style={{ opacity: demoOpacity }}
+        >
           <div className="flex-1 space-y-6">
             <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
               Immersive Interaction
@@ -128,7 +136,6 @@ const LandingPage = () => {
               </button>
             </div>
           </div>
-
           {/* 3D Preview Area */}
           <div className="flex-1 relative h-[400px] bg-slate-900/50 backdrop-blur-xl rounded-2xl border border-slate-800">
             <div className="absolute inset-0 flex items-center justify-center">
@@ -151,12 +158,15 @@ const LandingPage = () => {
               </div>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Dynamic QR Section */}
-      <section className="relative py-32 px-6">
-        <div className="max-w-7xl mx-auto text-center">
+      <section ref={qrRef} className="relative py-32 px-6">
+        <motion.div
+          className="max-w-7xl mx-auto text-center"
+          style={{ opacity: qrOpacity }}
+        >
           <h2 className="text-4xl font-bold text-slate-100 mb-8">Smart Integration</h2>
           <motion.div
             className="inline-block bg-slate-900/50 backdrop-blur-xl p-6 rounded-2xl border border-slate-800 hover:border-cyan-400 transition-colors"
@@ -172,12 +182,15 @@ const LandingPage = () => {
             />
             <div className="mt-4 text-cyan-400 font-medium">Dynamic Content QR</div>
           </motion.div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Footer CTA */}
-      <section className="relative py-32 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <section ref={footerRef} className="relative py-32 px-6">
+        <motion.div
+          className="max-w-4xl mx-auto text-center"
+          style={{ opacity: footerOpacity }}
+        >
           <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl p-12 border border-slate-800 relative overflow-hidden">
             <div className="absolute inset-0 bg-noise opacity-10" />
             <h2 className="text-4xl font-bold text-slate-100 mb-6">Ready for the Future?</h2>
@@ -190,7 +203,7 @@ const LandingPage = () => {
               </button>
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );
