@@ -11468,130 +11468,153 @@ const baseLabelStyles = `
 {/* Budget Card Display Start */}
 
 {selectedVariant === 'budget' && selectedVariantStyle === 'default' && (
-  <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 md:p-6 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-teal-500/10">
-    {/* Enhanced Background Elements */}
-    <div className="absolute inset-0 bg-grid-gray-600/10 z-0 opacity-30"></div>
-    <div className="absolute -top-20 -right-20 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl z-0 animate-pulse-slow"></div>
-    <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl z-0 animate-pulse-slow delay-1000"></div>
-
+  <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-gray-700/20">
+    {/* Subtle Background Elements */}
+    <div className="absolute inset-0 bg-grid-gray-700/10 z-0 opacity-20"></div>
+    <div className="absolute -top-20 -right-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl z-0 animate-pulse-slow"></div>
+    <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl z-0 animate-pulse-slow delay-1000"></div>
     <div className="relative z-10 space-y-6 max-w-7xl mx-auto">
-      {/* Enhanced Header Section */}
-      <div className="text-center space-y-4 pb-6 border-b border-gray-700/50">
-        <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-blue-300">
-          {title || 'Monthly Budget'}
+      {/* Professional Header */}
+      <div className="text-center space-y-4 pb-6 border-b-4 border-gray-700 relative">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500">
+          {title || 'Corporate Budget Management'}
         </h2>
-        <p className="text-sm md:text-base text-gray-400 font-medium tracking-wider">
+        <p className="text-base md:text-lg text-gray-400 font-bold tracking-widest uppercase">
           {budgetState.monthYear}
         </p>
-        <div className="inline-flex items-center px-6 py-3 bg-gray-800/50 rounded-2xl backdrop-blur-sm border border-gray-700/50">
-          <span className="text-2xl md:text-3xl font-bold text-teal-300">
+        <div className="inline-flex items-center px-6 py-3 bg-gray-800/70 rounded-2xl backdrop-blur-sm border-2 border-gray-700 shadow-lg">
+          <span className="text-3xl md:text-4xl font-extrabold text-blue-500">
             {formatCurrency(budgetState.totalBudget, budgetState.currency)}
           </span>
         </div>
       </div>
-
-      {/* Enhanced Budget Categories */}
+      {/* Interactive Categories Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {budgetState.categories.map((category) => {
-          const amount = category.type === 'percentage'
+          const allocatedAmount = category.type === 'percentage'
             ? (category.amount / 100) * budgetState.totalBudget
             : category.amount;
           const totalExpenses = category.expenses.reduce((acc, expense) => acc + expense.amount, 0);
-          const remainingPercentage = ((amount - totalExpenses) / amount) * 100;
-
+          const remainingPercentage = ((allocatedAmount - totalExpenses) / allocatedAmount) * 100;
           return (
             <div key={category.id} 
-                 className="group bg-gray-800/50 backdrop-blur-sm p-4 md:p-5 rounded-xl border border-gray-700/50 
-                          transition-all duration-300 hover:bg-gray-800/70 hover:border-teal-500/30">
+                 className="group bg-gray-800/50 backdrop-blur-sm p-4 md:p-5 rounded-xl border-2 border-gray-700 
+                          transition-all duration-300 hover:bg-gray-800/70 hover:border-blue-500/50">
+              {/* Category Badge */}
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg md:text-xl font-semibold text-teal-200 group-hover:text-teal-100">
+                <h3 className="text-lg md:text-xl font-bold text-blue-500 group-hover:text-green-500 uppercase">
                   {category.name}
                 </h3>
                 <div className="text-right">
                   <span className="text-sm md:text-base text-gray-300 font-medium">
                     {category.type === 'percentage'
-                      ? `${category.amount}% (${formatCurrency(amount, budgetState.currency)})`
-                      : formatCurrency(amount, budgetState.currency)}
+                      ? `${category.amount}% (${formatCurrency(allocatedAmount, budgetState.currency)})`
+                      : formatCurrency(allocatedAmount, budgetState.currency)}
                   </span>
                 </div>
               </div>
-
-              {/* Enhanced Progress Bar */}
-              <div className="relative h-2 bg-gray-700/50 rounded-full overflow-hidden mb-4">
+              {/* Steel Progress Bar */}
+              <div className="relative h-3 bg-gray-700 rounded-full overflow-hidden mb-4 shadow-inner">
                 <div
-                  className="absolute h-full bg-gradient-to-r from-teal-500 to-teal-400 rounded-full transition-all duration-500"
+                  className="absolute h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full transition-all duration-500"
                   style={{
-                    width: `${(amount / budgetState.totalBudget) * 100}%`,
+                    width: `${(allocatedAmount / budgetState.totalBudget) * 100}%`,
                   }}
                 />
               </div>
-
-              {/* Expenses List */}
+              {/* Expense List with Hover Effects */}
               <div className="space-y-2 mb-4">
                 {category.expenses.map((expense) => (
                   <div key={expense.id} 
-                       className="flex items-center justify-between p-2 rounded-lg bg-gray-900/30 
-                                transition-colors hover:bg-gray-900/50">
+                       className="flex items-center justify-between p-2 rounded-lg bg-gray-900/40 
+                                transition-colors hover:bg-gray-900/60">
                     <span className="text-sm md:text-base text-gray-300">{expense.name}</span>
-                    <span className="text-sm md:text-base font-medium text-teal-300">
+                    <span className="text-sm md:text-base font-medium text-blue-500">
                       {formatCurrency(expense.amount, budgetState.currency)}
                     </span>
                   </div>
                 ))}
               </div>
-
-              {/* Enhanced Remaining Budget */}
-              <div className="flex justify-between items-center pt-3 border-t border-gray-700/50">
-                <span className="text-sm text-gray-400">Remaining</span>
-                <span className={`text-sm font-medium ${remainingPercentage > 20 ? 'text-teal-300' : 'text-red-400'}`}>
-                  {formatCurrency(amount - totalExpenses, budgetState.currency)}
+              {/* Budget Status Indicators */}
+              <div className="flex justify-between items-center mt-10 mb-10 pt-3 border-t-2 border-gray-700">
+                <span className="text-sm text-gray-400 uppercase">Total</span>
+                <span className={`text-sm font-medium ${totalExpenses > allocatedAmount ? 'text-red-500 blink' : 'text-blue-500'}`}>
+                  {formatCurrency(totalExpenses, budgetState.currency)}
                 </span>
+                
+              </div>
+              <div className="flex justify-between items-center pt-3 border-t-2 border-gray-700">
+                <span className="text-sm text-gray-400 uppercase">Remaining</span>
+                <span className={`text-sm font-medium ${totalExpenses > allocatedAmount? 'text-red-500 blink' : 'text-blue-500'}`}>
+                  {formatCurrency(allocatedAmount - totalExpenses, budgetState.currency)}
+                </span>
+                
               </div>
             </div>
           );
         })}
       </div>
-
-      {/* Enhanced Summary Section */}
-      <div className="bg-gray-800/50 backdrop-blur-sm p-5 rounded-xl border border-gray-700/50">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 bg-gray-900/30 rounded-lg">
-            <span className="block text-sm text-gray-400 mb-1">Total Spent</span>
-            <span className="text-lg md:text-xl text-teal-300 font-bold">
-              {formatCurrency(
-                budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
-                budgetState.currency
-              )}
+      {/* Professional Summary Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {[
+          {
+            title: 'Total Allocated',
+            value: budgetState.categories.reduce(
+              (acc, cat) =>
+                acc +
+                (cat.type === 'percentage'
+                  ? (cat.amount / 100) * budgetState.totalBudget
+                  : cat.amount),
+              0
+            ),
+            icon: '💼',
+          },
+          {
+            title: 'Total Expenditure',
+            value: budgetState.categories.reduce(
+              (acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0),
+              0
+            ),
+            icon: '💳',
+          },
+          {
+            title: 'Projected Balance',
+            value:
+              budgetState.totalBudget -
+              budgetState.categories.reduce(
+                (acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0),
+                0
+              ),
+            icon: '⚖️',
+          },
+        ].map((stat, index) => (
+          <div
+            key={index}
+            className="bg-gray-800/70 backdrop-blur-sm p-4 rounded-xl border-2 border-gray-700 flex flex-col items-center justify-center space-y-2"
+          >
+            <span className="text-2xl text-blue-500">{stat.icon}</span>
+            <span className="text-sm text-gray-400 font-medium uppercase">{stat.title}</span>
+            <span className="text-lg md:text-xl font-bold text-blue-500">
+              {formatCurrency(stat.value, budgetState.currency)}
             </span>
           </div>
-          <div className="p-4 bg-gray-900/30 rounded-lg">
-            <span className="block text-sm text-gray-400 mb-1">Remaining</span>
-            <span className="text-lg md:text-xl text-teal-300 font-bold">
-              {formatCurrency(
-                budgetState.totalBudget -
-                  budgetState.categories.reduce((acc, cat) => acc + cat.expenses.reduce((a, e) => a + e.amount, 0), 0),
-                budgetState.currency
-              )}
-            </span>
-          </div>
-        </div>
+        ))}
       </div>
-
-      {/* Enhanced Footer */}
-      <div className="flex justify-between items-center pt-4 border-t border-gray-700/50">
+      {/* Professional Footer */}
+      <div className="flex justify-between items-center pt-4 border-t-2 border-gray-700">
         {logo && (
           <div className="relative w-12 h-12 transform hover:scale-105 transition-transform">
             <Image
               src={logo}
               alt="Logo"
               fill
-              className="rounded-full object-cover border-2 border-gray-700 hover:border-teal-500/50"
+              className="rounded-lg object-cover border-2 border-gray-700 hover:border-blue-500/50"
             />
           </div>
         )}
         <div className="text-right">
-          <p className="text-sm text-gray-400">Plan your expenses wisely</p>
-          <p className="text-sm font-medium text-teal-300">Powered by Kardify</p>
+          <p className="text-sm text-gray-400 uppercase">STRATEGIC FINANCIAL MANAGEMENT 💼</p>
+          <p className="text-sm font-medium text-blue-500">Powered by Kardify</p>
         </div>
       </div>
     </div>
@@ -11673,11 +11696,19 @@ const baseLabelStyles = `
               </div>
 
               {/* Budget Status */}
-              <div className="flex justify-between items-center pt-3 border-t border-slate-200">
-                <span className="text-sm text-slate-500">Remaining</span>
-                <span className={`text-sm font-medium ${remainingPercentage > 20 ? 'text-blue-600' : 'text-amber-600'}`}>
+              <div className="flex justify-between items-center mt-10 mb-10 pt-3 border-t-2 border-gray-700">
+                <span className="text-sm text-gray-400 uppercase">Total</span>
+                <span className={`text-sm font-medium ${totalExpenses > allocatedAmount ? 'text-red-500 blink' : 'text-blue-500'}`}>
+                  {formatCurrency(totalExpenses, budgetState.currency)}
+                </span>
+                
+              </div>
+              <div className="flex justify-between items-center pt-3 border-t-2 border-gray-700">
+                <span className="text-sm text-gray-400 uppercase">Remaining</span>
+                <span className={`text-sm font-medium ${totalExpenses > allocatedAmount? 'text-red-500 blink' : 'text-blue-500'}`}>
                   {formatCurrency(allocatedAmount - totalExpenses, budgetState.currency)}
                 </span>
+                
               </div>
             </div>
           );
@@ -11861,17 +11892,24 @@ const baseLabelStyles = `
               <div className="pt-4 border-t border-rose-200/30 space-y-2">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-rose-600">Allocated</span>
+                    <span className="text-sm text-rose-600">Remaining</span>
                     <span className="text-xs text-rose-400 bg-rose-50 px-2 py-1 rounded-full">
-                      {formatCurrency(allocatedAmount, budgetState.currency)}
+                    {formatCurrency(allocatedAmount - totalExpenses, budgetState.currency)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-rose-600">Remaining</span>
-                    <span className={`text-sm font-medium ${remainingPercentage > 20 ? 'text-rose-600' : 'text-red-400'} bg-white px-2 py-1 rounded-full border`}>
-                      {formatCurrency(allocatedAmount - totalExpenses, budgetState.currency)}
+                    <span className="text-sm text-rose-600">Total</span>
+                    <span className={`text-sm font-medium ${totalExpenses > allocatedAmount ? 'text-red-500 animate blink' : 'text-blue-500'} bg-white px-2 py-1 rounded-full border`}>
+                    {formatCurrency(totalExpenses, budgetState.currency)}
                     </span>
                   </div>
+                  {/* <div className="flex justify-between items-center">
+                <span className="text-sm text-rose-600">Total</span>
+                <span className={`text-sm font-medium ${totalExpenses > allocatedAmount ? 'text-red-500' : 'text-blue-500'}  bg-white px-2 py-1 rounded-full border`}>
+                  {formatCurrency(totalExpenses, budgetState.currency)}
+                </span>
+                
+              </div> */}
                 </div>
                 <div className="relative pt-2">
                   <div className="h-1 bg-rose-100 rounded-full overflow-hidden">
