@@ -18,7 +18,7 @@ const LandingPage = () => {
     offset: ['start end', 'end start'],
   });
 
-  const heroOpacity = useScroll({ target: heroRef });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [1, 0], [1, 0.8]);
 
   const featuresProgress = useScroll({ target: featuresRef });
