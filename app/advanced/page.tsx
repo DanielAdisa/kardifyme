@@ -454,6 +454,7 @@ const [innerCardColor, setInnerCardColor] = useState('#ffffff');
 
 const [message, setMessage] = useState('');
 const [wishType, setWishType] = useState('Happy Birthday');
+const [birthdayMessage, setbirthdayMessage] = useState('');
 const [budgetCategories, setBudgetCategories] = useState([{ category: '', amount: 0 }]);
 const [totalBudget, setTotalBudget] = useState(0);
 const [remainingBudget, setRemainingBudget] = useState(0);
@@ -4441,166 +4442,312 @@ const baseLabelStyles = `
   </div>
 )}
 
-{/* Add Birthday input fields */}
 {selectedVariant === 'birthday' && (
-        <div className="space-y-6 p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
-          {/* Name and Age Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="relative">
-              <label htmlFor="celebrantName" className="block text-gray-800 text-sm font-medium mb-2">
-                Celebrant's Name
-              </label>
-              <input
-                type="text"
-                id="celebrantName"
-                value={celebrantName}
-                onChange={(e) => setCelebrantName(e.target.value)}
-                style={{
-                  color: celebrantNameColor,
-                  background: celebrantNameBackground,
-                  borderColor: celebrantNameBorderColor,
-                }}
-                className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
-                placeholder="Enter name"
-              />
-              {/* Color Customization */}
-              <div className="mt-4 flex flex-col gap-4">
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Text Color</label>
-                  <SketchPicker
-                    color={celebrantNameColor}
-                    onChange={(color) => setCelebrantNameColor(color.hex)}
-                    className="w-full h-fit mx-auto rounded-xl p-4 cursor-pointer transition-transform duration-200 border border-gray-200"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Border Color</label>
-                  <input
-                    type="color"
-                    value={celebrantNameBorderColor}
-                    onChange={(e) => setCelebrantNameBorderColor(e.target.value)}
-                    className="w-12 h-8 border rounded-lg"
-                    title="Border Color"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Background</label>
-                  <input
-                    type="text"
-                    value={celebrantNameBackground}
-                    onChange={(e) => setCelebrantNameBackground(e.target.value)}
-                    className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Background (color or gradient)"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="relative">
-              <label htmlFor="age" className="block text-gray-800 text-sm font-medium mb-2">
-                Age
-              </label>
-              <input
-                type="number"
-                id="age"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                style={{
-                  color: ageColor,
-                  background: ageBackground,
-                  borderColor: ageBorderColor,
-                }}
-                className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
-                placeholder="Enter age"
-              />
-              {/* Color Customization */}
-              <div className="mt-4 flex flex-col gap-4">
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Text Color</label>
-                  <input
-                    type="color"
-                    value={ageColor}
-                    onChange={(e) => setAgeColor(e.target.value)}
-                    className="w-12 h-8 border rounded-lg"
-                    title="Text Color"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Border Color</label>
-                  <input
-                    type="color"
-                    value={ageBorderColor}
-                    onChange={(e) => setAgeBorderColor(e.target.value)}
-                    className="w-12 h-8 border rounded-lg"
-                    title="Border Color"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Background</label>
-                  <input
-                    type="text"
-                    value={ageBackground}
-                    onChange={(e) => setAgeBackground(e.target.value)}
-                    className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Background (color or gradient)"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+  <div className="space-y-6 p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+    {/* Name and Age Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label htmlFor="celebrantName" className="block text-gray-800 text-sm font-medium mb-2">
+          Celebrant's Name
+        </label>
+        <input
+          type="text"
+          id="celebrantName"
+          value={celebrantName}
+          onChange={(e) => setCelebrantName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+          placeholder="Enter name"
+        />
+      </div>
+      <div>
+        <label htmlFor="age" className="block text-gray-800 text-sm font-medium mb-2">
+          Age
+        </label>
+        <input
+          type="number"
+          id="age"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+          placeholder="Enter age"
+        />
+      </div>
+    </div>
 
-          {/* Other fields (e.g., date, message) */}
-          {['cardDate', 'birthdayDate', 'birthdayMessage', 'daysUntil'].map((field) => (
-            <div key={field} className="relative">
-              <label
-                htmlFor={field}
-                className="block text-gray-800 text-sm font-medium mb-2 capitalize"
-              >
-                {field.replace(/([A-Z])/g, ' $1')}
-              </label>
-              <input
-                type={field === 'birthdayMessage' ? 'textarea' : field === 'cardDate' || field === 'birthdayDate' ? 'date' : 'text'}
-                id={field}
-                value={fieldValues[field as keyof typeof fieldValues]}
-                onChange={(e) => handleFieldChange(field as keyof FieldValues, e.target.value)}
-                style={{
-                  color: fieldColors[field as keyof typeof fieldColors].text,
-                  background: fieldColors[field as keyof typeof fieldColors].background,
-                  borderColor: fieldColors[field as keyof typeof fieldColors].border,
-                }}
-                className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 transition shadow-sm ${
-                  field === 'birthdayMessage' ? 'min-h-[100px]' : ''
-                }`}
-                placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
-              />
-              {/* Color Customization */}
-              <div className="mt-4 flex gap-4">
-                <input
-                  type="color"
-                  value={fieldColors[field as keyof typeof fieldColors].text}
-                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'text', e.target.value)}
-                  className="w-12 h-8 border rounded-lg"
-                  title="Text Color"
-                />
-                <input
-                  type="color"
-                  value={fieldColors[field as keyof typeof fieldColors].border}
-                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'border', e.target.value)}
-                  className="w-12 h-8 border rounded-lg"
-                  title="Border Color"
-                />
-                <input
-                  type="text"
-                  value={fieldColors[field as keyof typeof fieldColors].background}
-                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'background', e.target.value)}
-                  className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Background (color or gradient)"
-                />
-              </div>
-            </div>
-          ))}
+    {/* Date Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label htmlFor="cardDate" className="block text-gray-800 text-sm font-medium mb-2">
+          Card Date
+        </label>
+        <input
+          type="date"
+          id="cardDate"
+          value={fieldValues.cardDate}
+          onChange={(e) => handleFieldChange('cardDate', e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        />
+      </div>
+      <div>
+        <label htmlFor="birthdayDate" className="block text-gray-800 text-sm font-medium mb-2">
+          Birthday Date
+        </label>
+        <input
+          type="date"
+          id="birthdayDate"
+          value={fieldValues.birthdayDate}
+          onChange={(e) => handleFieldChange('birthdayDate', e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        />
+      </div>
+    </div>
+
+    {/* Message Field */}
+    <div>
+      <label htmlFor="birthdayMessage" className="block text-gray-800 text-sm font-medium mb-2">
+        Birthday Message
+      </label>
+      <textarea
+        id="birthdayMessage"
+        value={fieldValues.birthdayMessage}
+        onChange={(e) => handleFieldChange('birthdayMessage', e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm min-h-[100px]"
+        placeholder="Enter birthday message"
+      />
+    </div>
+
+    {/* Days Until Field */}
+    <div>
+      <label htmlFor="daysUntil" className="block text-gray-800 text-sm font-medium mb-2">
+        Days Until Birthday
+      </label>
+      <input
+        type="number"
+        id="daysUntil"
+        value={fieldValues.daysUntil}
+        onChange={(e) => handleFieldChange('daysUntil', e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        placeholder="Enter days until birthday"
+      />
+    </div>
+
+    {/* Background Type Selection */}
+    <div>
+      <label className="block text-gray-800 text-sm font-medium mb-2">Background Type</label>
+      <select
+        value={bgType}
+        onChange={(e) => setBgType(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+      >
+        <option value="gradient">Gradient</option>
+        <option value="solid">Solid Color</option>
+        <option value="image">Image</option>
+      </select>
+    </div>
+
+    {/* Gradient or Solid Color Inputs */}
+    {bgType === 'gradient' && (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <label className="block text-gray-800 text-sm font-medium">Gradient From</label>
+          <input
+            type="color"
+            value={gradientFrom}
+            onChange={(e) => setGradientFrom(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Gradient From"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="block text-gray-800 text-sm font-medium">Gradient Via</label>
+          <input
+            type="color"
+            value={gradientVia}
+            onChange={(e) => setGradientVia(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Gradient Via"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="block text-gray-800 text-sm font-medium">Gradient To</label>
+          <input
+            type="color"
+            value={gradientTo}
+            onChange={(e) => setGradientTo(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Gradient To"
+          />
+        </div>
+      </div>
+    )}
+    {bgType === 'solid' && (
+      <div className="flex items-center gap-2">
+        <label className="block text-gray-800 text-sm font-medium">Solid Color</label>
+        <input
+          type="color"
+          value={solidColor}
+          onChange={(e) => setSolidColor(e.target.value)}
+          className="w-12 h-8 border rounded-lg"
+          title="Solid Color"
+        />
+      </div>
+    )}
+    {bgType === 'image' && (
+      <div className="relative">
+        <label className="block text-gray-800 text-sm font-medium mb-2">Upload Background Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setBackgroundImage(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+          className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500"
+        />
+        {backgroundImage && (
+          <div className="mt-2 flex items-center">
+            <img
+              src={backgroundImage}
+              alt="Background"
+              className="w-20 h-20 rounded-lg mr-2"
+            />
+            <button
+              onClick={() => setBackgroundImage('')}
+              className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+            >
+              X
+            </button>
+          </div>
+        )}
+      </div>
+    )}
+
+    {/* Logo Upload */}
+    <div className="relative">
+      <label className="block text-gray-800 text-sm font-medium mb-2">Upload Logo</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setLogo(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+          }
+        }}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500"
+      />
+      {logo && (
+        <div className="mt-2 flex items-center">
+          <img
+            src={logo}
+            alt="Logo"
+            className="w-20 h-20 rounded-lg mr-2"
+          />
+          <button
+            onClick={() => setLogo('')}
+            className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            X
+          </button>
         </div>
       )}
+    </div>
 
+    {/* Flyer Image Upload */}
+    <div className="relative">
+      <label className="block text-gray-800 text-sm font-medium mb-2">Upload Flyer Image</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setflyerImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+          }
+        }}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500"
+      />
+      {flyerImage && (
+        <div className="mt-2 flex items-center">
+          <img
+            src={flyerImage}
+            alt="Flyer"
+            className="w-20 h-20 rounded-lg mr-2"
+          />
+          <button
+            onClick={() => setflyerImage('')}
+            className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            X
+          </button>
+        </div>
+      )}
+    </div>
+
+    {/* QR Code URL Input */}
+    <div>
+      <label htmlFor="qrUrl" className="block text-gray-800 text-sm font-medium mb-2">
+        QR Code URL
+      </label>
+      <input
+        type="text"
+        id="qrUrl"
+        value={qrUrl}
+        onChange={(e) => setQrUrl(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        placeholder="Enter URL for QR code"
+      />
+    </div>
+
+    {/* Price Input */}
+    <div className="flex space-x-4">
+      <div>
+        <label htmlFor="price" className="block text-gray-800 text-sm font-medium mb-2">
+          Price
+        </label>
+        <input
+          type="number"
+          id="price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+          placeholder="Enter price"
+        />
+      </div>
+      <div>
+        <label htmlFor="currency" className="block text-gray-800 text-sm font-medium mb-2">
+          Currency
+        </label>
+        <select
+          id="currency"
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        >
+          {currencyOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+)}
 
 
 
@@ -6165,11 +6312,12 @@ const baseLabelStyles = `
   </label>
   <div className="relative mt-1">
     <select
+      title="Select card style"
       value={selectedVariantStyle}
       onChange={(e) => setSelectedVariantStyle(e.target.value)}
       className="w-full p-4 pr-12 text-gray-700 bg-white rounded-2xl border border-gray-200 
-               shadow-sm appearance-none cursor-pointer transition-all duration-200
-               hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+             shadow-sm appearance-none cursor-pointer transition-all duration-200
+             hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
     >
       <option value="default">Default Style</option>
       <option value="style1">Style 1</option>
@@ -8473,166 +8621,312 @@ const baseLabelStyles = `
   </div>
 )}
 
-{/* Add Birthday input fields */}
 {selectedVariant === 'birthday' && (
-        <div className="space-y-6 p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
-          {/* Name and Age Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="relative">
-              <label htmlFor="celebrantName" className="block text-gray-800 text-sm font-medium mb-2">
-                Celebrant's Name
-              </label>
-              <input
-                type="text"
-                id="celebrantName"
-                value={celebrantName}
-                onChange={(e) => setCelebrantName(e.target.value)}
-                style={{
-                  color: celebrantNameColor,
-                  background: celebrantNameBackground,
-                  borderColor: celebrantNameBorderColor,
-                }}
-                className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
-                placeholder="Enter name"
-              />
-              {/* Color Customization */}
-              <div className="mt-4 flex flex-col gap-4">
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Text Color</label>
-                  <SketchPicker
-                    color={celebrantNameColor}
-                    onChange={(color) => setCelebrantNameColor(color.hex)}
-                    className="w-full h-fit mx-auto rounded-xl p-4 cursor-pointer transition-transform duration-200 border border-gray-200"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Border Color</label>
-                  <input
-                    type="color"
-                    value={celebrantNameBorderColor}
-                    onChange={(e) => setCelebrantNameBorderColor(e.target.value)}
-                    className="w-12 h-8 border rounded-lg"
-                    title="Border Color"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Background</label>
-                  <input
-                    type="text"
-                    value={celebrantNameBackground}
-                    onChange={(e) => setCelebrantNameBackground(e.target.value)}
-                    className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Background (color or gradient)"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="relative">
-              <label htmlFor="age" className="block text-gray-800 text-sm font-medium mb-2">
-                Age
-              </label>
-              <input
-                type="number"
-                id="age"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                style={{
-                  color: ageColor,
-                  background: ageBackground,
-                  borderColor: ageBorderColor,
-                }}
-                className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm"
-                placeholder="Enter age"
-              />
-              {/* Color Customization */}
-              <div className="mt-4 flex flex-col gap-4">
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Text Color</label>
-                  <input
-                    type="color"
-                    value={ageColor}
-                    onChange={(e) => setAgeColor(e.target.value)}
-                    className="w-12 h-8 border rounded-lg"
-                    title="Text Color"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Border Color</label>
-                  <input
-                    type="color"
-                    value={ageBorderColor}
-                    onChange={(e) => setAgeBorderColor(e.target.value)}
-                    className="w-12 h-8 border rounded-lg"
-                    title="Border Color"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="block text-gray-800 text-sm font-medium">Background</label>
-                  <input
-                    type="text"
-                    value={ageBackground}
-                    onChange={(e) => setAgeBackground(e.target.value)}
-                    className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Background (color or gradient)"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+  <div className="space-y-6 p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+    {/* Name and Age Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label htmlFor="celebrantName" className="block text-gray-800 text-sm font-medium mb-2">
+          Celebrant's Name
+        </label>
+        <input
+          type="text"
+          id="celebrantName"
+          value={celebrantName}
+          onChange={(e) => setCelebrantName(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+          placeholder="Enter name"
+        />
+      </div>
+      <div>
+        <label htmlFor="age" className="block text-gray-800 text-sm font-medium mb-2">
+          Age
+        </label>
+        <input
+          type="number"
+          id="age"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+          placeholder="Enter age"
+        />
+      </div>
+    </div>
 
-          {/* Other fields (e.g., date, message) */}
-          {['cardDate', 'birthdayDate', 'birthdayMessage', 'daysUntil'].map((field) => (
-            <div key={field} className="relative">
-              <label
-                htmlFor={field}
-                className="block text-gray-800 text-sm font-medium mb-2 capitalize"
-              >
-                {field.replace(/([A-Z])/g, ' $1')}
-              </label>
-              <input
-                type={field === 'birthdayMessage' ? 'textarea' : field === 'cardDate' || field === 'birthdayDate' ? 'date' : 'text'}
-                id={field}
-                value={fieldValues[field as keyof typeof fieldValues]}
-                onChange={(e) => handleFieldChange(field as keyof FieldValues, e.target.value)}
-                style={{
-                  color: fieldColors[field as keyof typeof fieldColors].text,
-                  background: fieldColors[field as keyof typeof fieldColors].background,
-                  borderColor: fieldColors[field as keyof typeof fieldColors].border,
-                }}
-                className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 transition shadow-sm ${
-                  field === 'birthdayMessage' ? 'min-h-[100px]' : ''
-                }`}
-                placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
-              />
-              {/* Color Customization */}
-              <div className="mt-4 flex gap-4">
-                <input
-                  type="color"
-                  value={fieldColors[field as keyof typeof fieldColors].text}
-                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'text', e.target.value)}
-                  className="w-12 h-8 border rounded-lg"
-                  title="Text Color"
-                />
-                <input
-                  type="color"
-                  value={fieldColors[field as keyof typeof fieldColors].border}
-                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'border', e.target.value)}
-                  className="w-12 h-8 border rounded-lg"
-                  title="Border Color"
-                />
-                <input
-                  type="text"
-                  value={fieldColors[field as keyof typeof fieldColors].background}
-                  onChange={(e) => updateFieldColor(field as keyof FieldColors, 'background', e.target.value)}
-                  className="flex-1 p-2 rounded-lg border focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Background (color or gradient)"
-                />
-              </div>
-            </div>
-          ))}
+    {/* Date Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label htmlFor="cardDate" className="block text-gray-800 text-sm font-medium mb-2">
+          Card Date
+        </label>
+        <input
+          type="date"
+          id="cardDate"
+          value={fieldValues.cardDate}
+          onChange={(e) => handleFieldChange('cardDate', e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        />
+      </div>
+      <div>
+        <label htmlFor="birthdayDate" className="block text-gray-800 text-sm font-medium mb-2">
+          Birthday Date
+        </label>
+        <input
+          type="date"
+          id="birthdayDate"
+          value={fieldValues.birthdayDate}
+          onChange={(e) => handleFieldChange('birthdayDate', e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        />
+      </div>
+    </div>
+
+    {/* Message Field */}
+    <div>
+      <label htmlFor="birthdayMessage" className="block text-gray-800 text-sm font-medium mb-2">
+        Birthday Message
+      </label>
+      <textarea
+        id="birthdayMessage"
+        value={fieldValues.birthdayMessage}
+        onChange={(e) => handleFieldChange('birthdayMessage', e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm min-h-[100px]"
+        placeholder="Enter birthday message"
+      />
+    </div>
+
+    {/* Days Until Field */}
+    <div>
+      <label htmlFor="daysUntil" className="block text-gray-800 text-sm font-medium mb-2">
+        Days Until Birthday
+      </label>
+      <input
+        type="number"
+        id="daysUntil"
+        value={fieldValues.daysUntil}
+        onChange={(e) => handleFieldChange('daysUntil', e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        placeholder="Enter days until birthday"
+      />
+    </div>
+
+    {/* Background Type Selection */}
+    <div>
+      <label className="block text-gray-800 text-sm font-medium mb-2">Background Type</label>
+      <select
+        value={bgType}
+        onChange={(e) => setBgType(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+      >
+        <option value="gradient">Gradient</option>
+        <option value="solid">Solid Color</option>
+        <option value="image">Image</option>
+      </select>
+    </div>
+
+    {/* Gradient or Solid Color Inputs */}
+    {bgType === 'gradient' && (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <label className="block text-gray-800 text-sm font-medium">Gradient From</label>
+          <input
+            type="color"
+            value={gradientFrom}
+            onChange={(e) => setGradientFrom(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Gradient From"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="block text-gray-800 text-sm font-medium">Gradient Via</label>
+          <input
+            type="color"
+            value={gradientVia}
+            onChange={(e) => setGradientVia(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Gradient Via"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="block text-gray-800 text-sm font-medium">Gradient To</label>
+          <input
+            type="color"
+            value={gradientTo}
+            onChange={(e) => setGradientTo(e.target.value)}
+            className="w-12 h-8 border rounded-lg"
+            title="Gradient To"
+          />
+        </div>
+      </div>
+    )}
+    {bgType === 'solid' && (
+      <div className="flex items-center gap-2">
+        <label className="block text-gray-800 text-sm font-medium">Solid Color</label>
+        <input
+          type="color"
+          value={solidColor}
+          onChange={(e) => setSolidColor(e.target.value)}
+          className="w-12 h-8 border rounded-lg"
+          title="Solid Color"
+        />
+      </div>
+    )}
+    {bgType === 'image' && (
+      <div className="relative">
+        <label className="block text-gray-800 text-sm font-medium mb-2">Upload Background Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setBackgroundImage(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+          className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500"
+        />
+        {backgroundImage && (
+          <div className="mt-2 flex items-center">
+            <img
+              src={backgroundImage}
+              alt="Background"
+              className="w-20 h-20 rounded-lg mr-2"
+            />
+            <button
+              onClick={() => setBackgroundImage('')}
+              className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+            >
+              X
+            </button>
+          </div>
+        )}
+      </div>
+    )}
+
+    {/* Logo Upload */}
+    <div className="relative">
+      <label className="block text-gray-800 text-sm font-medium mb-2">Upload Logo</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setLogo(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+          }
+        }}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500"
+      />
+      {logo && (
+        <div className="mt-2 flex items-center">
+          <img
+            src={logo}
+            alt="Logo"
+            className="w-20 h-20 rounded-lg mr-2"
+          />
+          <button
+            onClick={() => setLogo('')}
+            className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            X
+          </button>
         </div>
       )}
+    </div>
 
+    {/* Flyer Image Upload */}
+    <div className="relative">
+      <label className="block text-gray-800 text-sm font-medium mb-2">Upload Flyer Image</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setflyerImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+          }
+        }}
+        className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500"
+      />
+      {flyerImage && (
+        <div className="mt-2 flex items-center">
+          <img
+            src={flyerImage}
+            alt="Flyer"
+            className="w-20 h-20 rounded-lg mr-2"
+          />
+          <button
+            onClick={() => setflyerImage('')}
+            className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+          >
+            X
+          </button>
+        </div>
+      )}
+    </div>
+
+    {/* QR Code URL Input */}
+    <div>
+      <label htmlFor="qrUrl" className="block text-gray-800 text-sm font-medium mb-2">
+        QR Code URL
+      </label>
+      <input
+        type="text"
+        id="qrUrl"
+        value={qrUrl}
+        onChange={(e) => setQrUrl(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        placeholder="Enter URL for QR code"
+      />
+    </div>
+
+    {/* Price Input */}
+    <div className="flex space-x-4">
+      <div>
+        <label htmlFor="price" className="block text-gray-800 text-sm font-medium mb-2">
+          Price
+        </label>
+        <input
+          type="number"
+          id="price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+          placeholder="Enter price"
+        />
+      </div>
+      <div>
+        <label htmlFor="currency" className="block text-gray-800 text-sm font-medium mb-2">
+          Currency
+        </label>
+        <select
+          id="currency"
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition shadow-sm"
+        >
+          {currencyOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+)}
 
 
 
@@ -14122,98 +14416,98 @@ const baseLabelStyles = `
     {/* End contract card display */}
 
     {/* Add Birthday card display */}
-    {selectedVariant === "birthday" && (
-        <div className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-6 md:p-10 rounded-2xl shadow-xl overflow-hidden animate-gradient-x">
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
-          <div className="absolute -top-28 -right-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-28 -left-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    {selectedVariant === 'birthday' && (
+  <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 md:p-10 rounded-2xl shadow-xl overflow-hidden animate-gradient-x">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 bg-[url('/confetti.png')] opacity-20 animate-spin-slow"></div>
+    <div className="absolute -top-28 -right-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-yellow-400/20 rounded-full blur-3xl"></div>
+    <div className="absolute -bottom-28 -left-28 w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-blue-400/20 rounded-full blur-3xl"></div>
+    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
-          <div className="relative z-10 space-y-8 sm:space-y-10">
-            {/* Header */}
-            <div className="text-center">
-              <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
-                {wishType || "Happy Birthday!"}
-              </h2>
-              <p className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
-                {celebrantName || "Dear Friend"}
-              </p>
-              {age && (
-                <p className="text-lg sm:text-2xl md:text-3xl text-white/90 drop-shadow-lg">
-                  on your {age}
-                  <sup>th</sup> Birthday!
-                </p>
-              )}
-            </div>
+    <div className="relative z-10 space-y-8 sm:space-y-10">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif text-white drop-shadow-lg mb-4 animate-bounce-slow">
+          {wishType || "Happy Birthday!"}
+        </h2>
+        <p className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 drop-shadow-lg mb-4 animate-fade-in">
+          {celebrantName || "Dear Friend"}
+        </p>
+        {age && (
+          <p className="text-lg sm:text-2xl md:text-3xl text-white/90 drop-shadow-lg">
+            on your {age}<sup>th</sup> Birthday!
+          </p>
+        )}
+      </div>
 
-            {/* Main Image */}
-            {image && (
-              <div className="relative mx-auto w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
-                <Image
-                  src={image}
-                  alt="Birthday Memory"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
-
-            {/* Countdown Timer */}
-            <div className="text-center">
-              <p className="text-sm sm:text-lg text-white/80">Your next birthday is in:</p>
-              <p className="text-3xl sm:text-4xl font-bold text-white tracking-wide">
-                {calculateDaysUntilBirthday(cardDate, birthdayDate)}
-              </p>
-            </div>
-
-            {/* Message */}
-            <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/20 shadow-lg">
-              <p className="text-lg sm:text-xl md:text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
-                {message ||
-                  "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
-              </p>
-            </div>
-
-            {/* Social Media Share */}
-            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Share on Facebook
-              </button>
-              <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Tweet
-              </button>
-              <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
-                Share on Instagram
-              </button>
-            </div>
-
-            {/* Footer */}
-            <div className="flex flex-col sm:flex-row justify-between items-center pt-6 space-y-4 sm:space-y-0">
-              <div className="flex items-center gap-4">
-                {logo && (
-                  <div className="relative w-12 h-12 sm:w-16 sm:h-16 hover:scale-110 transition-transform duration-300">
-                    <Image
-                      src={logo}
-                      alt="Logo"
-                      fill
-                      className="rounded-full object-cover border-2 border-white/50"
-                    />
-                  </div>
-                )}
-                {qrUrl && (
-                  <div className="bg-white/95 p-2 rounded-xl shadow-lg">
-                    <QRCodeSVG value={qrUrl} size={48} />
-                  </div>
-                )}
-              </div>
-              <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md text-center">
-                Celebrate with Kardify 🎉
-              </div>
-            </div>
-          </div>
+      {/* Main Image */}
+      {flyerImage && (
+        <div className="relative mx-auto w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 rounded-full overflow-hidden border-[6px] border-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
+          <Image
+            src={flyerImage}
+            alt="Birthday Memory"
+            fill
+            className="object-cover"
+          />
         </div>
-    )}
+      )}
+
+      {/* Countdown Timer */}
+      <div className="text-center">
+        <p className="text-sm sm:text-lg text-white/80">Your next birthday is in:</p>
+        <p className="text-3xl sm:text-4xl font-bold text-white tracking-wide">
+          {calculateDaysUntilBirthday(cardDate, birthdayDate)} days
+        </p>
+      </div>
+
+      {/* Message */}
+      <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/20 shadow-lg">
+        <p className="text-lg sm:text-xl md:text-2xl text-white text-center font-medium leading-relaxed tracking-wide">
+          {birthdayMessage ||
+            "Wishing you a day filled with love, joy, laughter, and amazing memories. You are cherished beyond words!"}
+        </p>
+      </div>
+
+      {/* Social Media Share */}
+      <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Share on Facebook
+        </button>
+        <button className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Tweet
+        </button>
+        <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md transition-all">
+          Share on Instagram
+        </button>
+      </div>
+
+      {/* Footer */}
+      <div className="flex flex-col sm:flex-row justify-between items-center pt-6 space-y-4 sm:space-y-0">
+        <div className="flex items-center gap-4">
+          {logo && (
+            <div className="relative w-12 h-12 sm:w-16 sm:h-16 hover:scale-110 transition-transform duration-300">
+              <Image
+                src={logo}
+                alt="Logo"
+                fill
+                className="rounded-full object-cover border-2 border-white/50"
+              />
+            </div>
+          )}
+          {qrUrl && (
+            <div className="bg-white/95 p-2 rounded-xl shadow-lg">
+              <QRCodeSVG value={qrUrl} size={48} />
+              <p className="text-xs text-black mt-1 font-medium">SCAN FOR DETAILS</p>
+            </div>
+          )}
+        </div>
+        <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm text-white text-sm shadow-md text-center">
+          Celebrate with Kardify 🎉
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
     {/* Add Affirmations card display */}
     {selectedVariant === 'affirmations' && (
