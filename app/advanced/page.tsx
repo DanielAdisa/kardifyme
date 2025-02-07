@@ -21,7 +21,7 @@ import { useLocalStorageState } from '@/hooks/useLocalStorageState';
 
 
 import { ethers } from 'ethers';
-import { ClockIcon, CalendarIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, CalendarIcon, GlobeAltIcon, SunIcon, MapPinIcon } from '@heroicons/react/24/outline';
 
 
 //niceone
@@ -41,6 +41,27 @@ interface BudgetCategory {
   type: string; // Add this line
   expenses: { id: string; name: string; amount: number }[];
 }
+
+interface Event {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+}
+
+interface Day {
+  events: Event[];
+}
+
+interface TimetableState {
+  days: Record<string, Day>;
+}
+
+
+const setTimetableState = (newState: TimetableState) => {
+  // Your state update logic here
+};
 
 // Update card variants
 const cardVariants = {
@@ -278,6 +299,19 @@ const cardVariants = {
       },
     },
   },
+  timetable: {
+    templates: {
+      modern: {
+        font: 'font-serif',
+      },
+      classic: {
+        font: 'font-mono',
+      },
+      minimal: {
+        font: 'font-sans',
+      },
+    },
+  },
 };
 
 // Add currency options
@@ -302,7 +336,70 @@ type TextColors = {
 };
 
 
+const timeZoneOptions = [
+  { value: 'UTC', label: 'UTC' },
+  { value: 'GMT', label: 'GMT' },
+  { value: 'CST', label: 'CST' },
+  { value: 'EST', label: 'EST' },
+  // Add more time zones as needed
+];
+
+interface Day {
+  id: string;
+  date: string;
+  events: Event[];
+}
+
+interface Event {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+}
+
+interface Event {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+}
+
+interface Day {
+  id: string;
+  date: string;
+  events: Event[];
+}
+
+interface TimetableState {
+  startDate: string;
+  endDate: string;
+  timeZone: string;
+  days: Record<string, Day>;
+}
+
+interface Event {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+}
+
+interface Day {
+  events: Event[];
+}
+
 const CreateCard = () => {
+
+  const [scheduleType, setScheduleType] = useState<string>('daily');
+  const [timetableState, setTimetableState] = useState<TimetableState>({
+    startDate: '',
+    endDate: '',
+    timeZone: '',
+    days: {},
+  });
   const [bio, setBio] = useState('');
   const [gradYear, setGradYear] = useState('');
   const [institution, setInstitution] = useState('');
@@ -396,7 +493,7 @@ const [productImageState, setProductImageState] = useState<string | null>(null);
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   
   const cardRef = useRef<HTMLDivElement>(null);
@@ -733,6 +830,7 @@ const [cardColor, setCardColor] = useState({
   brand: '#ffffff',
   invitation: '#ffeb3b',
   resume: '#ffffff',
+  timetable: '#ffffff',
 });
 // const [education, setEducation] = useState([{ degree: '', institution: '', gradYear: '' }]);
 // const [hobbies, setHobbies] = useState(['']);
@@ -796,6 +894,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   brand: 'minimal',
   invitation: 'minimal',
   resume: 'minimal',
+  timetable: 'minimal',
 });
 
 const templateOptions = {
@@ -817,6 +916,7 @@ const templateOptions = {
   brand: ['modern', 'classic', 'minimal'],
   invitation: ['modern', 'classic', 'minimal'],
   resume: ['modern', 'classic', 'minimal'],
+  timetable: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -900,7 +1000,195 @@ const saveSignature = (
     return colorMap[difficulty.toLowerCase()] || colorMap.default;
   };
 
+// Format time to AM/PM
+const formatTime = (timeString: string) => {
+  const [hours, minutes] = timeString.split(':');
+  const hour = parseInt(hours);
+  return `${hour % 12 || 12}:${minutes} ${hour >= 12 ? 'PM' : 'AM'}`;
+};
+
+// Calculate duration between times
+const calculateDuration = (start: string, end: string) => {
+  const [startHours, startMinutes] = start.split(':').map(Number);
+  const [endHours, endMinutes] = end.split(':').map(Number);
   
+  const totalMinutes = (endHours * 60 + endMinutes) - (startHours * 60 + startMinutes);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  
+  return `${hours}h ${minutes}m`;
+};
+
+const calculateDurationPercentage = (start: string, end: string) => {
+  const startMinutes = parseInt(start.split(':')[0]) * 60 + parseInt(start.split(':')[1]);
+  const endMinutes = parseInt(end.split(':')[0]) * 60 + parseInt(end.split(':')[1]);
+  const totalMinutes = endMinutes - startMinutes;
+  
+  // Assuming 16-hour day (8am to 12am)
+  const maxMinutes = 16 * 60;
+  return Math.min((totalMinutes / maxMinutes) * 100, 100);
+};
+
+
+  const [timeZone, setTimeZone] = useState("");
+
+
+  const timeZoneOptions = [
+    { label: "UTC", value: "UTC" },
+    { label: "GMT+1", value: "GMT+1" },
+    { label: "GMT-5", value: "GMT-5" },
+  ];
+
+  const handleAddDay = () => {
+    const newDays = {
+      ...timetableState.days,
+      [crypto.randomUUID()]: {
+        id: crypto.randomUUID(),
+        date: new Date().toISOString().split("T")[0],
+        events: [],
+      },
+    };
+    setTimetableState({ ...timetableState, days: newDays });
+  };
+
+  interface Event {
+    id: string;
+    name: string;
+    startTime: string;
+    endTime: string;
+    location: string;
+  }
+
+  interface Day {
+    id: string;
+    date: string;
+    events: Event[];
+  }
+
+  const handleAddEvent = (dayOfWeek: string): void => {
+    const newDays: { [key: string]: Day } = { ...timetableState.days };
+    if (!newDays[dayOfWeek]) {
+      newDays[dayOfWeek] = {
+        id: crypto.randomUUID(),
+        date: new Date().toISOString().split("T")[0],
+        events: [],
+      };
+    }
+    newDays[dayOfWeek].events.push({
+      id: crypto.randomUUID(),
+      name: "",
+      startTime: "09:00",
+      endTime: "10:00",
+      location: "",
+    });
+    const newDaysObject: { [key: string]: Day } = Object.values(newDays).reduce((acc, day) => {
+      acc[day.id] = day;
+      return acc;
+    }, {} as { [key: string]: Day });
+    setTimetableState({ ...timetableState, days: newDaysObject });
+  };
+
+  interface Event {
+    id: string;
+    name: string;
+    startTime: string;
+    endTime: string;
+    location: string;
+  }
+
+  interface Day {
+    id: string;
+    date: string;
+    events: Event[];
+  }
+
+  const handleRemoveEvent = (dayOfWeek: string, eventIndex: number): void => {
+    const newDays: { [key: string]: Day } = { ...timetableState.days };
+    if (!newDays[dayOfWeek]) return;
+    newDays[dayOfWeek].events = newDays[dayOfWeek].events.filter(
+      (_, i) => i !== eventIndex
+    );
+    const newDaysObject: { [key: string]: Day } = Object.values(newDays).reduce((acc, day) => {
+      acc[day.id] = day;
+      return acc;
+    }, {} as { [key: string]: Day });
+    setTimetableState({ ...timetableState, days: newDaysObject });
+  };
+
+  interface Event {
+    id: string;
+    name: string;
+    startTime: string;
+    endTime: string;
+    location: string;
+  }
+
+  interface Day {
+    id: string;
+    date: string;
+    events: Event[];
+  }
+
+  const handleUpdateEvent = (
+    dayOfWeek: string,
+    eventIndex: number,
+    field: keyof Event,
+    value: string
+  ): void => {
+    const newDays: { [key: string]: Day } = { ...timetableState.days };
+    if (!newDays[dayOfWeek]) return;
+    newDays[dayOfWeek].events[eventIndex][field] = value;
+    const newDaysObject: { [key: string]: Day } = Object.values(newDays).reduce((acc, day) => {
+      acc[day.id] = day;
+      return acc;
+    }, {} as { [key: string]: Day });
+    setTimetableState({ ...timetableState, days: newDaysObject });
+  };
+
+  interface Day {
+    id: string;
+    date: string;
+    events: Event[];
+  }
+
+  type DayField = keyof Day;
+
+  const handleUpdateDay = (dayId: string, field: keyof Omit<Day, 'events'>, value: string): void => {
+    const newDays: { [key: string]: Day } = { ...timetableState.days };
+    if (!newDays[dayId]) return;
+    newDays[dayId] = {
+      ...newDays[dayId],
+      [field]: value
+    };
+    const newDaysObject: { [key: string]: Day } = Object.values(newDays).reduce((acc, day) => {
+      acc[day.id] = day;
+      return acc;
+    }, {} as { [key: string]: Day });
+    setTimetableState({ ...timetableState, days: newDaysObject });
+  };
+
+  interface Day {
+    id: string;
+    date: string;
+    events: Event[];
+  }
+
+  interface TimetableState {
+    startDate: string;
+    endDate: string;
+    timeZone: string;
+    days: { [key: string]: Day };
+  }
+
+  const handleRemoveDay = (dayId: string): void => {
+    const newDays: { [key: string]: Day } = Object.keys(timetableState.days)
+      .filter((id: string) => id !== dayId)
+      .reduce((acc: { [key: string]: Day }, id: string) => {
+        acc[id] = timetableState.days[id];
+        return acc;
+      }, {});
+    setTimetableState({ ...timetableState, days: newDays });
+  };
   
   useEffect(() => {
     const savedState = localStorage.getItem('pageState');
@@ -1587,6 +1875,7 @@ const saveSignature = (
       brand: '#ffffff',
       invitation: '#ffeb3b',
       resume: '#ffffff',
+      timetable: '#ffffff',
     },
     footerCardColor: '#000',
     selectedTemplate: {
@@ -1608,6 +1897,7 @@ const saveSignature = (
       brand: 'minimal',
       invitation: 'minimal',
       resume: 'minimal',
+      timetable: 'minimal'
     }
   });
 
@@ -2020,6 +2310,7 @@ const baseLabelStyles = `
         <option value="brand">🏷️ Brand Card</option>
         <option value="invitation">💌 Invitation</option>
         <option value="resume">💬 Resume</option>
+        <option value="timetable">💬 Time Table</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -5425,6 +5716,227 @@ const baseLabelStyles = `
 )}
 
 
+{selectedVariant === "timetable" && (
+  <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+          <h2>Title</h2>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full p-2 rounded-lg border border-slate-300"
+            placeholder="Enter timetable title"
+          />
+          <h2>Time Zone</h2>
+          <select
+            value={timeZone}
+            onChange={(e) => setTimeZone(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-300"
+          >
+            {timeZoneOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+       
+      
+
+      {/* Schedule Type Selector */}
+      <h2>Schedule Type</h2>
+      <select
+        value={scheduleType}
+        onChange={(e) => setScheduleType(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300"
+      >
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="permanent">Permanent</option>
+      </select>
+
+      {/* Fixed Weekly/Permanent Schedule */}
+    {(scheduleType === 'weekly' || scheduleType === 'permanent') && (
+      <div className="space-y-4">
+        <label className="block text-stone-950 mb-2 font-medium">Schedule Days</label>
+        <div className="space-y-4">
+          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((dayOfWeek) => (
+            <div key={dayOfWeek} className="border p-4 rounded-xl space-y-4">
+              <h3 className="text-lg font-medium">{dayOfWeek}</h3>
+              <div className="pl-8 space-y-4">
+                {(timetableState.days[dayOfWeek]?.events || []).map((event: Event, eventIndex: number) => (
+                  <div key={event.id} className="flex flex-col md:flex-row gap-4 items-start">
+                    {/* Event Name Input */}
+                    <input
+                      type="text"
+                      value={event.name}
+                      onChange={(e) => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events[eventIndex].name = e.target.value;
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="p-2 rounded-lg border border-slate-300 flex-1"
+                      placeholder="Event name"
+                    />
+                    {/* Start Time Input */}
+                    <input
+                      type="time"
+                      value={event.startTime}
+                      onChange={(e) => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events[eventIndex].startTime = e.target.value;
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="p-2 rounded-lg border border-slate-300"
+                    />
+                    {/* End Time Input */}
+                    <input
+                      type="time"
+                      value={event.endTime}
+                      onChange={(e) => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events[eventIndex].endTime = e.target.value;
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="p-2 rounded-lg border border-slate-300"
+                    />
+                    {/* Location Input */}
+                    <input
+                      type="text"
+                      value={event.location}
+                      onChange={(e) => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events[eventIndex].location = e.target.value;
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="p-2 rounded-lg border border-slate-300"
+                      placeholder="Location"
+                    />
+                    {/* Remove Event Button */}
+                    <button
+                      onClick={() => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events = newDays[dayOfWeek].events.filter((_, i) => i !== eventIndex);
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+                {/* Add Event Button - Fixed */}
+                <button
+                  onClick={() => {
+                    const newDays = { ...timetableState.days };
+                    if (!newDays[dayOfWeek]) {
+                      newDays[dayOfWeek] = {
+                        id: dayOfWeek, // Use day name as ID for consistency
+                        date: '', // Consider removing date for permanent schedules
+                        events: []
+                      };
+                    }
+                    newDays[dayOfWeek].events.push({
+                      id: crypto.randomUUID(),
+                      name: '',
+                      startTime: '09:00',
+                      endTime: '10:00',
+                      location: ''
+                    });
+                    setTimetableState({ ...timetableState, days: newDays });
+                  }}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
+                >
+                  Add Event
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+      {/* Daily or Monthly Schedule */}
+      {(scheduleType === "daily" || scheduleType === "monthly") && (
+        <div>
+          <h2>Schedule Days</h2>
+          {Object.values(timetableState.days).map((day, dayIndex) => (
+            <div key={day.id}>
+              <input
+                type="date"
+                value={day.date}
+                onChange={(e) => handleUpdateDay(day.id, "date", e.target.value)}
+                className="p-2 rounded-lg border border-slate-300"
+              />
+              <button
+                onClick={() => handleRemoveDay(day.id)}
+                className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+              >
+                Remove Day
+              </button>
+              {day.events.map((event, eventIndex) => (
+                <div key={event.id}>
+                  <input
+                    type="text"
+                    value={event.name}
+                    onChange={(e) =>
+                      handleUpdateEvent(day.id, eventIndex, "name", e.target.value)
+                    }
+                    className="p-2 rounded-lg border border-slate-300 flex-1"
+                    placeholder="Event name"
+                  />
+                  <input
+                    type="text"
+                    value={event.startTime}
+                    onChange={(e) =>
+                      handleUpdateEvent(day.id, eventIndex, "startTime", e.target.value)
+                    }
+                    className="p-2 rounded-lg border border-slate-300"
+                  />
+                  <input
+                    type="text"
+                    value={event.endTime}
+                    onChange={(e) =>
+                      handleUpdateEvent(day.id, eventIndex, "endTime", e.target.value)
+                    }
+                    className="p-2 rounded-lg border border-slate-300"
+                  />
+                  <input
+                    type="text"
+                    value={event.location}
+                    onChange={(e) =>
+                      handleUpdateEvent(day.id, eventIndex, "location", e.target.value)
+                    }
+                    className="p-2 rounded-lg border border-slate-300"
+                    placeholder="Location"
+                  />
+                  <button
+                    onClick={() => handleRemoveEvent(day.id, eventIndex)}
+                    className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => handleAddEvent(day.id)}
+                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
+              >
+                Add Event
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={handleAddDay}
+            className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
+          >
+            Add Day
+          </button>
+        </div>
+      )}
+      </div>
+      )}
+
+
             {/* Event specific fields */}
             {selectedVariant === 'event' && (
               <div className="bg-white/80 rounded-xl md:p-6 p-4">
@@ -6295,6 +6807,7 @@ const baseLabelStyles = `
         <option value="brand">🏷️ Brand Card</option>
         <option value="invitation">💌 Invitation</option>
         <option value="resume">💬 Resume</option>
+        <option value="timetable">💬 Time Table</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -9603,6 +10116,227 @@ const baseLabelStyles = `
 </div>
 )}
 
+{selectedVariant === "timetable" && (
+  <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+          <h2>Title</h2>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full p-2 rounded-lg border border-slate-300"
+            placeholder="Enter timetable title"
+          />
+          <h2>Time Zone</h2>
+          <select
+            value={timeZone}
+            onChange={(e) => setTimeZone(e.target.value)}
+            className="w-full p-3 rounded-xl border border-slate-300"
+          >
+            {timeZoneOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+       
+      
+
+      {/* Schedule Type Selector */}
+      <h2>Schedule Type</h2>
+      <select
+        value={scheduleType}
+        onChange={(e) => setScheduleType(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300"
+      >
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="permanent">Permanent</option>
+      </select>
+
+      {/* Fixed Weekly/Permanent Schedule */}
+    {(scheduleType === 'weekly' || scheduleType === 'permanent') && (
+      <div className="space-y-4">
+        <label className="block text-stone-950 mb-2 font-medium">Schedule Days</label>
+        <div className="space-y-4">
+          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((dayOfWeek) => (
+            <div key={dayOfWeek} className="border p-4 rounded-xl space-y-4">
+              <h3 className="text-lg font-medium">{dayOfWeek}</h3>
+              <div className="pl-8 space-y-4">
+                {(timetableState.days[dayOfWeek]?.events || []).map((event: Event, eventIndex: number) => (
+                  <div key={event.id} className="flex flex-col md:flex-row gap-4 items-start">
+                    {/* Event Name Input */}
+                    <input
+                      type="text"
+                      value={event.name}
+                      onChange={(e) => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events[eventIndex].name = e.target.value;
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="p-2 rounded-lg border border-slate-300 flex-1"
+                      placeholder="Event name"
+                    />
+                    {/* Start Time Input */}
+                    <input
+                      type="time"
+                      value={event.startTime}
+                      onChange={(e) => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events[eventIndex].startTime = e.target.value;
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="p-2 rounded-lg border border-slate-300"
+                    />
+                    {/* End Time Input */}
+                    <input
+                      type="time"
+                      value={event.endTime}
+                      onChange={(e) => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events[eventIndex].endTime = e.target.value;
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="p-2 rounded-lg border border-slate-300"
+                    />
+                    {/* Location Input */}
+                    <input
+                      type="text"
+                      value={event.location}
+                      onChange={(e) => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events[eventIndex].location = e.target.value;
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="p-2 rounded-lg border border-slate-300"
+                      placeholder="Location"
+                    />
+                    {/* Remove Event Button */}
+                    <button
+                      onClick={() => {
+                        const newDays = { ...timetableState.days };
+                        newDays[dayOfWeek].events = newDays[dayOfWeek].events.filter((_, i) => i !== eventIndex);
+                        setTimetableState({ ...timetableState, days: newDays });
+                      }}
+                      className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+                {/* Add Event Button - Fixed */}
+                <button
+                  onClick={() => {
+                    const newDays = { ...timetableState.days };
+                    if (!newDays[dayOfWeek]) {
+                      newDays[dayOfWeek] = {
+                        id: dayOfWeek, // Use day name as ID for consistency
+                        date: '', // Consider removing date for permanent schedules
+                        events: []
+                      };
+                    }
+                    newDays[dayOfWeek].events.push({
+                      id: crypto.randomUUID(),
+                      name: '',
+                      startTime: '09:00',
+                      endTime: '10:00',
+                      location: ''
+                    });
+                    setTimetableState({ ...timetableState, days: newDays });
+                  }}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
+                >
+                  Add Event
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+      {/* Daily or Monthly Schedule */}
+      {(scheduleType === "daily" || scheduleType === "monthly") && (
+        <div>
+          <h2>Schedule Days</h2>
+          {Object.values(timetableState.days).map((day, dayIndex) => (
+            <div key={day.id}>
+              <input
+                type="date"
+                value={day.date}
+                onChange={(e) => handleUpdateDay(day.id, "date", e.target.value)}
+                className="p-2 rounded-lg border border-slate-300"
+              />
+              <button
+                onClick={() => handleRemoveDay(day.id)}
+                className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+              >
+                Remove Day
+              </button>
+              {day.events.map((event, eventIndex) => (
+                <div key={event.id}>
+                  <input
+                    type="text"
+                    value={event.name}
+                    onChange={(e) =>
+                      handleUpdateEvent(day.id, eventIndex, "name", e.target.value)
+                    }
+                    className="p-2 rounded-lg border border-slate-300 flex-1"
+                    placeholder="Event name"
+                  />
+                  <input
+                    type="text"
+                    value={event.startTime}
+                    onChange={(e) =>
+                      handleUpdateEvent(day.id, eventIndex, "startTime", e.target.value)
+                    }
+                    className="p-2 rounded-lg border border-slate-300"
+                  />
+                  <input
+                    type="text"
+                    value={event.endTime}
+                    onChange={(e) =>
+                      handleUpdateEvent(day.id, eventIndex, "endTime", e.target.value)
+                    }
+                    className="p-2 rounded-lg border border-slate-300"
+                  />
+                  <input
+                    type="text"
+                    value={event.location}
+                    onChange={(e) =>
+                      handleUpdateEvent(day.id, eventIndex, "location", e.target.value)
+                    }
+                    className="p-2 rounded-lg border border-slate-300"
+                    placeholder="Location"
+                  />
+                  <button
+                    onClick={() => handleRemoveEvent(day.id, eventIndex)}
+                    className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => handleAddEvent(day.id)}
+                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
+              >
+                Add Event
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={handleAddDay}
+            className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
+          >
+            Add Day
+          </button>
+        </div>
+      )}
+      </div>
+      )}
+
+
 
             {/* Event specific fields */}
             {selectedVariant === 'event' && (
@@ -10743,6 +11477,7 @@ const baseLabelStyles = `
 
       </div>
   {/* Product Variant Display End */}
+
 
 
 
@@ -13537,6 +14272,123 @@ const baseLabelStyles = `
             )}
 
       {/* Resume Card Display End */}
+
+      {selectedVariant === 'timetable' && (
+  <div className="space-y-8 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-xl rounded-3xl p-8 shadow-2xl shadow-blue-100/50">
+    {/* Header Section */}
+    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+      <div className="space-y-3">
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-slate-800 to-blue-700 bg-clip-text text-transparent">
+          {title}
+        </h1>
+        <div className="flex items-center gap-3 text-slate-600">
+          <GlobeAltIcon className="w-6 h-6 text-blue-600" />
+          <span className="text-lg font-medium">{timetableState.timeZone}</span>
+          <span className="text-blue-500 mx-2">•</span>
+          <CalendarIcon className="w-6 h-6 text-blue-600" />
+          <span className="text-lg font-medium">
+            {scheduleType.charAt(0).toUpperCase() + scheduleType.slice(1)}
+          </span>
+        </div>
+      </div>
+      <div className="bg-white/90 px-6 py-3 rounded-xl shadow-sm border border-slate-200">
+        <p className="text-lg font-semibold text-slate-700">
+          Total Events: {Object.values(timetableState.days).reduce((acc, day) => acc + day.events.length, 0)}
+        </p>
+      </div>
+    </header>
+
+    {/* Days Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      {Object.entries(timetableState.days).map(([dayName, day]) => (
+        <article 
+          key={day.id}
+          className="bg-white/95 backdrop-blur-sm border border-slate-200/80 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+          {/* Day Header */}
+          <div className="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
+            <div>
+              <h3 className="text-xl font-bold text-slate-800 mb-1">
+                {scheduleType === 'daily' || scheduleType === 'monthly' 
+                  ? new Date(day.date).toLocaleDateString('en-US', { 
+                      weekday: 'short', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })
+                  : dayName}
+              </h3>
+              <p className="text-sm text-slate-500 font-medium">
+                {day.date && new Date(day.date).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </p>
+            </div>
+            <span className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">
+              {day.events.length}
+            </span>
+          </div>
+
+          {/* Events List */}
+          <div className="space-y-4">
+            {day.events.map((event) => (
+              <div 
+                key={event.id}
+                className="group relative bg-white p-4 rounded-lg border border-slate-100 hover:border-blue-200 transition-all duration-200 shadow-sm hover:shadow-md"
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-semibold text-slate-800">{event.name}</h4>
+                    <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                      {calculateDuration(event.startTime, event.endTime)}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <ClockIcon className="w-4 h-4 text-blue-500" />
+                    <time dateTime={`${event.startTime}-${event.endTime}`}>
+                      {formatTime(event.startTime)} – {formatTime(event.endTime)}
+                    </time>
+                  </div>
+
+                  {event.location && (
+                    <div className="flex items-center gap-2 text-sm text-slate-600">
+                      <MapPinIcon className="w-4 h-4 text-blue-500" />
+                      <span>{event.location}</span>
+                    </div>
+                  )}
+
+                  {/* Timeline Visualization */}
+                  <div className="mt-2 relative">
+                    <div className="h-1 bg-slate-100 rounded-full">
+                      <div 
+                        className="absolute h-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
+                        style={{
+                          width: `${calculateDurationPercentage(event.startTime, event.endTime)}%`
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {day.events.length === 0 && (
+              <div className="text-center py-6">
+                <div className="inline-flex flex-col items-center">
+                  <SunIcon className="w-8 h-8 text-slate-400 mb-2" />
+                  <p className="text-slate-400 font-medium">Free day!</p>
+                  <p className="text-slate-400 text-sm">No events scheduled</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+)}
 
 
     {/* idcard Display Start */}
