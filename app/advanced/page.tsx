@@ -665,6 +665,12 @@ const [fieldValues, setFieldValues] = useState({
   daysUntil: '',
 });
 
+// Convert time to pixels (5px per minute)
+const timeToPixels = (timeString: string) => {
+  const [hours, minutes] = timeString.split(':');
+  return (parseInt(hours) * 60 + parseInt(minutes)) / 5;
+};
+
 const [fieldColors, setFieldColors] = useState({
   celebrantName: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
   age: { text: '#000000', border: '#CCCCCC', background: '#FFFFFF' },
@@ -2217,6 +2223,19 @@ const baseLabelStyles = `
 
 
 
+
+  function generateTimeSlots(startTime: string, endTime: string): string[] {
+    const slots: string[] = [];
+    let current = new Date(`1970-01-01T${startTime}:00`);
+    const end = new Date(`1970-01-01T${endTime}:00`);
+
+    while (current < end) {
+      slots.push(current.toTimeString().slice(0, 5));
+      current.setMinutes(current.getMinutes() + 30); // Increment by 30 minutes
+    }
+
+    return slots;
+  }
 
   return (
     <div className="flex w-full md flex-col-reverse md:flex-row bg-gradient-to-r from-blue-400 via-blue-600 to-blue-800 h-screen justify-center items-center p-3">
@@ -11127,7 +11146,7 @@ const baseLabelStyles = `
       
 
       {/* Add responsive card container */}
-      <div className="md:flex-1 flex  md:h-full h-4/6  md:max-w-5xl w-full md:pt-[650px] pt-[450px] overflow-scroll place-content-start content- md:mx-auto items-center justify rounded-lg shadow-md p-8 m-4 md:mb-4">
+      <div className="md:flex-1 flex  md:h-full h-4/6  md:max-w-7xl w-full md:pt-[650px] pt-[450px] overflow-scroll place-content-start content- md:mx-auto items-center justify rounded-lg shadow-md p-8 m-4 md:mb-4">
       <motion.div
   ref={cardRef}
   initial={{ opacity: 0, y: 20 }}
@@ -14273,87 +14292,88 @@ const baseLabelStyles = `
 
       {/* Resume Card Display End */}
 
-      {selectedVariant === 'timetable' && (
-  <div className="space-y-8 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-xl rounded-3xl p-8 shadow-2xl shadow-blue-100/50">
+      {selectedVariant === 'timetable' && selectedVariantStyle === 'default' && (
+  <div className="space-y-6 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-xl rounded-2xl p-4 shadow-lg shadow-blue-100/50">
     {/* Header Section */}
-    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
-      <div className="space-y-3">
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-slate-800 to-blue-700 bg-clip-text text-transparent">
+    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-extrabold bg-gradient-to-r from-slate-800 to-blue-700 bg-clip-text text-transparent">
           {title}
         </h1>
-        <div className="flex items-center gap-3 text-slate-600">
-          <GlobeAltIcon className="w-6 h-6 text-blue-600" />
-          <span className="text-lg font-medium">{timetableState.timeZone}</span>
-          <span className="text-blue-500 mx-2">•</span>
-          <CalendarIcon className="w-6 h-6 text-blue-600" />
-          <span className="text-lg font-medium">
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <GlobeAltIcon className="w-5 h-5 text-blue-600" />
+          <span>{timetableState.timeZone}</span>
+          <span className="text-blue-500 mx-1">•</span>
+          <CalendarIcon className="w-5 h-5 text-blue-600" />
+          <span>
             {scheduleType.charAt(0).toUpperCase() + scheduleType.slice(1)}
           </span>
         </div>
       </div>
-      <div className="bg-white/90 px-6 py-3 rounded-xl shadow-sm border border-slate-200">
-        <p className="text-lg font-semibold text-slate-700">
-          Total Events: {Object.values(timetableState.days).reduce((acc, day) => acc + day.events.length, 0)}
+      <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200">
+        <p className="text-sm font-semibold text-slate-700">
+          Total Events:{' '}
+          {Object.values(timetableState.days).reduce((acc, day) => acc + day.events.length, 0)}
         </p>
       </div>
     </header>
 
     {/* Days Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+    <div className="grid md:grid-cols-5 grid-cols-1 gap-4">
       {Object.entries(timetableState.days).map(([dayName, day]) => (
-        <article 
+        <article
           key={day.id}
-          className="bg-white/95 backdrop-blur-sm border border-slate-200/80 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300"
+          className="bg-white/95 backdrop-blur-sm border border-slate-200/80 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-200"
         >
           {/* Day Header */}
-          <div className="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
+          <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
             <div>
-              <h3 className="text-xl font-bold text-slate-800 mb-1">
-                {scheduleType === 'daily' || scheduleType === 'monthly' 
-                  ? new Date(day.date).toLocaleDateString('en-US', { 
-                      weekday: 'short', 
-                      month: 'short', 
-                      day: 'numeric' 
+              <h3 className="text-base font-bold text-slate-800 mb-1">
+                {scheduleType === 'daily' || scheduleType === 'monthly'
+                  ? new Date(day.date).toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
                     })
                   : dayName}
               </h3>
-              <p className="text-sm text-slate-500 font-medium">
-                {day.date && new Date(day.date).toLocaleDateString('en-US', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
+              <p className="text-xs text-slate-500 font-medium">
+                {day.date &&
+                  new Date(day.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
               </p>
             </div>
-            <span className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">
+            <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">
               {day.events.length}
             </span>
           </div>
 
           {/* Events List */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             {day.events.map((event) => (
-              <div 
+              <div
                 key={event.id}
-                className="group relative bg-white p-4 rounded-lg border border-slate-100 hover:border-blue-200 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="group relative bg-white p-3 rounded-lg border border-slate-100 hover:border-blue-200 transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-slate-800">{event.name}</h4>
+                    <h4 className="font-medium text-slate-800">{event.name}</h4>
                     <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
                       {calculateDuration(event.startTime, event.endTime)}
                     </span>
                   </div>
-                  
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
+
+                  <div className="flex items-center gap-2 text-xs text-slate-600">
                     <ClockIcon className="w-4 h-4 text-blue-500" />
                     <time dateTime={`${event.startTime}-${event.endTime}`}>
                       {formatTime(event.startTime)} – {formatTime(event.endTime)}
                     </time>
                   </div>
-
                   {event.location && (
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <div className="flex items-center gap-2 text-xs text-slate-600">
                       <MapPinIcon className="w-4 h-4 text-blue-500" />
                       <span>{event.location}</span>
                     </div>
@@ -14362,10 +14382,10 @@ const baseLabelStyles = `
                   {/* Timeline Visualization */}
                   <div className="mt-2 relative">
                     <div className="h-1 bg-slate-100 rounded-full">
-                      <div 
+                      <div
                         className="absolute h-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
                         style={{
-                          width: `${calculateDurationPercentage(event.startTime, event.endTime)}%`
+                          width: `${calculateDurationPercentage(event.startTime, event.endTime)}%`,
                         }}
                       />
                     </div>
@@ -14373,13 +14393,12 @@ const baseLabelStyles = `
                 </div>
               </div>
             ))}
-
             {day.events.length === 0 && (
-              <div className="text-center py-6">
+              <div className="text-center py-4">
                 <div className="inline-flex flex-col items-center">
-                  <SunIcon className="w-8 h-8 text-slate-400 mb-2" />
+                  <SunIcon className="w-6 h-6 text-slate-400 mb-2" />
                   <p className="text-slate-400 font-medium">Free day!</p>
-                  <p className="text-slate-400 text-sm">No events scheduled</p>
+                  <p className="text-slate-400 text-xs">No events scheduled</p>
                 </div>
               </div>
             )}
@@ -14389,6 +14408,307 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
+{selectedVariant === 'timetable' && selectedVariantStyle === 'style1' && (
+  <div className="space-y-6 bg-white/90 backdrop-blur-lg rounded-2xl p-4 shadow-lg shadow-blue-100/50">
+    {/* Header Section */}
+    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-extrabold text-slate-900">
+          {title || "Timetable"}
+        </h1>
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <GlobeAltIcon className="w-5 h-5 text-blue-600" />
+          <span>{timetableState.timeZone || "UTC"}</span>
+          <span className="text-blue-500 mx-1">•</span>
+          <CalendarIcon className="w-5 h-5 text-blue-600" />
+          <span>
+            {scheduleType.charAt(0).toUpperCase() + scheduleType.slice(1) || "Weekly"}
+          </span>
+        </div>
+      </div>
+      <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200">
+        <p className="text-sm font-semibold text-slate-700">
+          Total Events:{' '}
+          {Object.values(timetableState.days || {}).reduce((acc, day) => acc + (day.events?.length || 0), 0)}
+        </p>
+      </div>
+    </header>
+
+    {/* Days Grid */}
+    <div className="grid grid-cols-1  gap-4">
+      {Object.entries(timetableState.days || {}).map(([dayName, day]) => (
+        <article
+          key={day.id}
+          className="bg-white border border-slate-200 rounded-lg p-2 shadow-md hover:shadow-lg transition-all duration-200"
+        >
+          {/* Day Header */}
+          <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
+            <div>
+              <h3 className="text-base font-bold text-slate-800 mb-1">
+                {scheduleType === 'daily' || scheduleType === 'monthly'
+                  ? new Date(day.date).toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  : dayName}
+              </h3>
+              <p className="text-xs text-slate-500 font-medium">
+                {day.date &&
+                  new Date(day.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+              </p>
+            </div>
+            <span className="text-xs font-medium text-slate-700">
+              {day.events?.length || 0} Event{day.events?.length !== 1 && 's'}
+            </span>
+          </div>
+
+          {/* Events List */}
+          {day.events?.length > 0 ? (
+            <ul className="space-y-2">
+              {day.events.map((event) => (
+                <li
+                  key={event.id}
+                  className="flex justify-between items-center p-2 bg-slate-50 rounded-md shadow-sm"
+                >
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-slate-800">{event.name}</span>
+                    <time className="text-xs text-slate-500">
+                      {formatTime(event.startTime)} – {formatTime(event.endTime)}
+                    </time>
+                  </div>
+                  <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                    {calculateDuration(event.startTime, event.endTime)} mins
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-center py-4 text-slate-400">
+              <SunIcon className="w-6 h-6 mx-auto mb-2" />
+              <p className="font-medium">No Events Today</p>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'timetable' && selectedVariantStyle === 'style2' && (
+  <div className="space-y-6 bg-white/90 backdrop-blur-lg rounded-2xl p-4 shadow-lg shadow-blue-100/50">
+    {/* Header Section */}
+    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-extrabold text-slate-900">{title || "Timetable"}</h1>
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <GlobeAltIcon className="w-4 h-4 text-blue-600" />
+          <span>{timetableState.timeZone || "UTC"}</span>
+          <span className="text-blue-500 mx-1">•</span>
+          <CalendarIcon className="w-4 h-4 text-blue-600" />
+          <span>
+            {scheduleType.charAt(0).toUpperCase() + scheduleType.slice(1) || "Weekly"}
+          </span>
+        </div>
+      </div>
+      <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200">
+        <p className="text-sm font-semibold text-slate-700">
+          Total Events:{' '}
+          {Object.values(timetableState.days || {}).reduce((acc, day) => acc + (day.events?.length || 0), 0)}
+        </p>
+      </div>
+    </header>
+
+    {/* Days Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      {Object.entries(timetableState.days || {}).map(([dayName, day]) => (
+        <article
+          key={day.id}
+          className="bg-white border border-slate-200 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-200"
+        >
+          {/* Day Header */}
+          <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+            <div>
+              <h3 className="text-base font-bold text-slate-800 mb-1">
+                {scheduleType === 'daily' || scheduleType === 'monthly'
+                  ? new Date(day.date).toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  : dayName}
+              </h3>
+              <p className="text-xs text-slate-500 font-medium">
+                {day.date &&
+                  new Date(day.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+              </p>
+            </div>
+            <span className="text-xs font-medium text-slate-700">
+              {day.events?.length || 0} Event{day.events?.length !== 1 && 's'}
+            </span>
+          </div>
+
+          {/* Events List */}
+          {day.events?.length > 0 ? (
+            <ul className="space-y-2">
+              {day.events.map((event) => (
+                <li
+                  key={event.id}
+                  className="flex flex-col p-2 bg-slate-50 rounded-md shadow-sm"
+                >
+                  {/* Event Name and Time */}
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-slate-800">{event.name}</span>
+                    <time className="text-xs text-slate-500">
+                      {event.startTime} – {event.endTime}
+                    </time>
+                  </div>
+
+                  {/* Event Duration Visualization */}
+                  <div className="mt-1 h-2 bg-slate-100 rounded-full">
+                    <div
+                      className="h-2 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full"
+                      style={{
+                        width: `${calculateDurationPercentage(event.startTime, event.endTime)}%`,
+                      }}
+                    />
+                  </div>
+
+                  {/* Optional Location */}
+                  {event.location && (
+                    <div className="flex items-center gap-1 text-xs text-slate-600 mt-1">
+                      <MapPinIcon className="w-3 h-3 text-blue-500" />
+                      <span>{event.location}</span>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-center py-4 text-slate-400">
+              <SunIcon className="w-6 h-6 mx-auto mb-2" />
+              <p className="font-medium">No Events Today</p>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+)}
+
+
+{selectedVariant === 'timetable' && selectedVariantStyle === 'style3' && (
+  <div className="bg-gradient-to-br from-yellow-100 to-pink-100 rounded-2xl p-4 shadow-lg shadow-orange-200/50">
+    {/* Header Section */}
+    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4">
+      <div>
+        <h1 className="text-2xl font-extrabold text-blue-600">
+          {title || "Class Schedule"}
+        </h1>
+        <div className="flex items-center gap-2 text-sm text-purple-600">
+          <span className="inline-flex items-center gap-1 bg-white px-2 py-1 rounded-full shadow-sm">
+            {/* 🌍 {timetableState.timeZone || "UTC"} */}
+          </span>
+          <span className="inline-flex items-center gap-1 bg-white px-2 py-1 rounded-full shadow-sm">
+            📅 {scheduleType.charAt(0).toUpperCase() + scheduleType.slice(1) || "Weekly"}
+          </span>
+        </div>
+      </div>
+      <div className="bg-white flex items-center px-3 py-2 rounded-full shadow-lg border-2 border-dashed border-green-400">
+        <p className="text-sm font-semibold text-pink-600">
+          Activities: 
+          {Object.values(timetableState.days || {}).reduce((acc, day) => acc + (day.events?.length || 0), 0)}
+        </p>
+      </div>
+    </header>
+
+    {/* Days Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-4">
+      {Object.entries(timetableState.days || {}).map(([dayName, day]) => (
+        <article
+          key={day.id}
+          className="bg-white border-2 border-dashed border-blue-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
+        >
+          {/* Day Header */}
+          <div className="flex justify-between items-center p-2 border-b-2 border-purple-200">
+            <div>
+              <h3 className="text-base font-bold text-green-600">
+                {scheduleType === 'daily' || scheduleType === 'monthly'
+                  ? new Date(day.date).toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  : dayName}
+              </h3>
+              <p className="text-xs text-orange-500 font-medium">
+                {day.date &&
+                  new Date(day.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+              </p>
+            </div>
+            <span className="text-xs font-medium text-white bg-pink-500 px-2 py-1 rounded-full">
+              {day.events?.length || 0} Events
+            </span>
+          </div>
+
+          {/* Events List */}
+          {day.events?.length > 0 ? (
+            <ul className="divide-y divide-slate-100">
+              {day.events.map((event) => (
+                <li
+                  key={event.id}
+                  className="flex flex-col p-2 hover:bg-yellow-50 transition-colors"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-purple-700">{event.name}</span>
+                    <time className="text-sm font-semibold text-blue-600">
+                      {formatTime(event.startTime)} – {formatTime(event.endTime)}
+                    </time>
+                  </div>
+                  {/* Progress Bar */}
+                  <div className="mt-1 h-2 bg-gray-200 rounded-full">
+                    <div
+                      className="h-2 bg-gradient-to-r from-green-400 to-blue-500 rounded-full"
+                      style={{
+                        width: `${calculateDurationPercentage(event.startTime, event.endTime)}%`,
+                      }}
+                    />
+                  </div>
+                  {event.location && (
+                    <div className="flex items-center gap-1 text-xs text-pink-600 mt-1">
+                      <MapPinIcon className="w-3 h-3" />
+                      <span>{event.location}</span>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-center py-4 text-orange-400">
+              <div className="text-2xl mb-2">🎉</div>
+              <p className="font-bold text-base">No Events Today</p>
+              <p className="text-sm">Enjoy your free time!</p>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+)}
+
 
 
     {/* idcard Display Start */}
@@ -14768,6 +15088,8 @@ const baseLabelStyles = `
           </div>
         </div>
       )}
+
+      
 
       {selectedVariant === 'idCard' && selectedVariantStyle === 'style4' && (
         <div className="relative bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 p-4 rounded-2xl shadow-2xl border border-slate-700/30 max-w-full mx-auto overflow-hidden">
