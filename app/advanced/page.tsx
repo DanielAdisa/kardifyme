@@ -1,6 +1,11 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from 'react';
 
+interface AcademicQualification {
+  qualification: string;
+  date: string;
+}
+
 
 import { SketchPicker } from 'react-color';
 import { toPng } from 'html-to-image';
@@ -21,7 +26,7 @@ import { useLocalStorageState } from '@/hooks/useLocalStorageState';
 
 
 import { ethers } from 'ethers';
-import { ClockIcon, CalendarIcon, GlobeAltIcon, SunIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, CalendarIcon, GlobeAltIcon, SunIcon, MapPinIcon, CurrencyDollarIcon, TagIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 
 //niceone
@@ -312,6 +317,19 @@ const cardVariants = {
       },
     },
   },
+  pricelist: {
+    templates: {
+      modern: {
+        font: 'font-serif',
+      },
+      classic: {
+        font: 'font-mono',
+      },
+      minimal: {
+        font: 'font-sans',
+      },
+    },
+  },
 };
 
 // Add currency options
@@ -391,7 +409,119 @@ interface Day {
   events: Event[];
 }
 
+interface Qualification {
+  qualification: string;
+  date: string;
+}
+
+interface Qualification {
+  qualification: string;
+  date: string;
+}
+
+interface AcademicQualification {
+  qualification: string;
+  date: string;
+}
+
+// Helper function to generate unique IDs
+const generateUniqueId = (): string => `id_${Math.random().toString(36).substr(2, 9)}`;
+
 const CreateCard = () => {
+  
+
+  const [pricelistState, setPricelistState] = useState<PricelistState>({
+    currency: 'USD',
+    tiers: [
+      {
+        id: generateUniqueId(),
+        name: 'Basic',
+        price: 10,
+        billingInterval: 'monthly',
+        description: 'For small businesses',
+        discount: '',
+        features: [
+          { id: generateUniqueId(), text: '10 GB Storage' },
+          { id: generateUniqueId(), text: '2 Users' },
+        ],
+        recommended: false,
+      },
+      {
+        id: generateUniqueId(),
+        name: 'Pro',
+        price: 25,
+        billingInterval: 'monthly',
+        description: 'For growing teams',
+        discount: '',
+        features: [
+          { id: generateUniqueId(), text: '50 GB Storage' },
+          { id: generateUniqueId(), text: '10 Users' },
+        ],
+        recommended: true,
+      },
+    ],
+    enableCalculator: false,
+    calculatorLabel: 'Get Estimate',
+    calculatorNote: 'Prices are subject to change.',
+  });
+
+  // Function to update a tier property
+  const updateTier = (tierIndex: number, key: keyof Tier, value: any) => {
+    const updatedTiers = pricelistState.tiers.map((tier, index) =>
+      index === tierIndex ? { ...tier, [key]: value } : tier
+    );
+    setPricelistState({ ...pricelistState, tiers: updatedTiers });
+  };
+
+  // Function to add a new feature to a tier
+  const addFeature = (tierIndex: number) => {
+    const updatedTiers = pricelistState.tiers.map((tier, index) =>
+      index === tierIndex
+        ? {
+            ...tier,
+            features: [...tier.features, { id: generateUniqueId(), text: '' }],
+          }
+        : tier
+    );
+    setPricelistState({ ...pricelistState, tiers: updatedTiers });
+  };
+
+  // Function to remove a feature from a tier
+  const removeFeature = (tierIndex: number, featureIndex: number) => {
+    const updatedTiers = pricelistState.tiers.map((tier, index) =>
+      index === tierIndex
+        ? {
+            ...tier,
+            features: tier.features.filter((_, idx) => idx !== featureIndex),
+          }
+        : tier
+    );
+    setPricelistState({ ...pricelistState, tiers: updatedTiers });
+  };
+
+  // Function to add a new pricing tier
+  const addNewTier = () => {
+    const newTier: Tier = {
+      id: generateUniqueId(),
+      name: '',
+      price: 0,
+      billingInterval: 'monthly',
+      description: '',
+      discount: '',
+      features: [],
+      recommended: false,
+    };
+    setPricelistState({
+      ...pricelistState,
+      tiers: [...pricelistState.tiers, newTier],
+    });
+  };
+
+  // Function to remove a pricing tier
+  const removeTier = (tierIndex: number) => {
+    const updatedTiers = pricelistState.tiers.filter((_, index) => index !== tierIndex);
+    setPricelistState({ ...pricelistState, tiers: updatedTiers });
+  };
 
   const [scheduleType, setScheduleType] = useState<string>('daily');
   const [timetableState, setTimetableState] = useState<TimetableState>({
@@ -493,7 +623,7 @@ const [productImageState, setProductImageState] = useState<string | null>(null);
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable' | 'pricelist';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   
   const cardRef = useRef<HTMLDivElement>(null);
@@ -772,6 +902,32 @@ interface MenuItem {
   currency?: string;
 }
 
+type Currency = 'USD' | 'EUR' | 'GBP' | 'INR' | 'NGN' | 'GHC';
+
+interface Feature {
+  id: string;
+  text: string;
+}
+
+interface Tier {
+  id: string;
+  name: string;
+  price: number;
+  billingInterval: 'monthly' | 'annual' | 'one-time';
+  description: string;
+  discount: string;
+  features: Feature[];
+  recommended: boolean;
+}
+
+interface PricelistState {
+  currency: Currency;
+  tiers: Tier[];
+  enableCalculator: boolean;
+  calculatorLabel: string;
+  calculatorNote: string;
+}
+
 interface MenuCategory {
   name: string;
   textColor: string;
@@ -837,6 +993,7 @@ const [cardColor, setCardColor] = useState({
   invitation: '#ffeb3b',
   resume: '#ffffff',
   timetable: '#ffffff',
+  pricelist: '#ffffff',
 });
 // const [education, setEducation] = useState([{ degree: '', institution: '', gradYear: '' }]);
 // const [hobbies, setHobbies] = useState(['']);
@@ -901,6 +1058,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   invitation: 'minimal',
   resume: 'minimal',
   timetable: 'minimal',
+  pricelist: 'minimal',
 });
 
 const templateOptions = {
@@ -923,6 +1081,7 @@ const templateOptions = {
   invitation: ['modern', 'classic', 'minimal'],
   resume: ['modern', 'classic', 'minimal'],
   timetable: ['modern', 'classic', 'minimal'],
+  pricelist: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -1151,6 +1310,63 @@ const calculateDurationPercentage = (start: string, end: string) => {
     setTimetableState({ ...timetableState, days: newDaysObject });
   };
 
+
+
+const [dateOfBirth, setDateOfBirth] = useState('');
+const [placeOfBirth, setPlaceOfBirth] = useState('');
+const [sex, setSex] = useState('');
+const [maritalStatus, setMaritalStatus] = useState('');
+interface Child {
+  name: string;
+  age: string;
+}
+
+const [children, setChildren] = useState<Child[]>([]);
+const [townStateOrigin, setTownStateOrigin] = useState('');
+const [nationality, setNationality] = useState('');
+const [currentPostalAddress, setCurrentPostalAddress] = useState('');
+
+const [permanentHomeAddress, setPermanentHomeAddress] = useState('');
+
+
+
+const [gsmNumber, setGsmNumber] = useState('');
+const [presentEmployment, setPresentEmployment] = useState({ employer: '', status: '', salary: '' });
+const [extraCurriculumActivities, setExtraCurriculumActivities] = useState<string[]>([]);
+interface Referee {
+  name: string;
+  address: string;
+  gsmNumber: string;
+}
+
+const [referees, setReferees] = useState<Referee[]>([]);
+
+// Example functions for managing dynamic fields
+const addChild = () => {
+  setChildren([...children, { name: '', age: '' }]);
+};
+
+interface Child {
+  name: string;
+  age: string;
+}
+
+const updateChild = (index: number, field: keyof Child, value: string): void => {
+  const newChildren: Child[] = [...children];
+  newChildren[index][field] = value;
+  setChildren(newChildren);
+};
+
+interface Child {
+  name: string;
+  age: string;
+}
+
+const removeChild = (index: number): void => {
+  const newChildren: Child[] = children.filter((_, i) => i !== index);
+  setChildren(newChildren);
+};
+
   interface Day {
     id: string;
     date: string;
@@ -1185,6 +1401,101 @@ const calculateDurationPercentage = (start: string, end: string) => {
     timeZone: string;
     days: { [key: string]: Day };
   }
+
+  // Add a new extra-curricular activity
+const addExtraCurriculumActivity = () => {
+  setExtraCurriculumActivities([...extraCurriculumActivities, '']);
+};
+
+// Update an extra-curricular activity
+interface ExtraCurriculumActivityUpdateParams {
+  index: number;
+  value: string;
+}
+
+const updateExtraCurriculumActivity = ({ index, value }: ExtraCurriculumActivityUpdateParams): void => {
+  const newActivities = [...extraCurriculumActivities];
+  newActivities[index] = value;
+  setExtraCurriculumActivities(newActivities);
+};
+
+// Remove an extra-curricular activity
+interface ExtraCurriculumActivityUpdateParams {
+  index: number;
+  value: string;
+}
+
+const removeExtraCurriculumActivity = (index: number): void => {
+  const newActivities = extraCurriculumActivities.filter((_, i) => i !== index);
+  setExtraCurriculumActivities(newActivities);
+};
+
+// Add a new referee entry
+const addReferee = () => {
+  setReferees([
+    ...referees,
+    {
+      name: '',
+      address: '',
+      gsmNumber: '',
+    },
+  ]);
+};
+
+// Update a specific field in a referee entry
+interface Referee {
+  name: string;
+  address: string;
+  gsmNumber: string;
+}
+
+const updateReferee = (index: number, field: keyof Referee, value: string): void => {
+  const newReferees: Referee[] = [...referees];
+  newReferees[index][field] = value;
+  setReferees(newReferees);
+};
+
+// Remove a referee entry
+interface Referee {
+  name: string;
+  address: string;
+  gsmNumber: string;
+}
+
+const removeReferee = (index: number): void => {
+  const newReferees: Referee[] = referees.filter((_, i) => i !== index);
+  setReferees(newReferees);
+};
+
+interface AcademicQualification {
+  degree: string;
+  institution: string;
+  gradYear: string;
+}
+
+const [academicQualifications, setAcademicQualifications] = useState<AcademicQualification[]>([]);
+const updateAcademicQualification = (index: number, field: keyof AcademicQualification, value: string) => {
+  const updatedQualifications = [...academicQualifications];
+  updatedQualifications[index][field] = value;
+  setAcademicQualifications(updatedQualifications);
+};
+
+
+// Update present employment details
+interface PresentEmployment {
+  employer: string;
+  status: string;
+  salary: string;
+}
+
+const updatePresentEmployment = (field: keyof PresentEmployment, value: string): void => {
+  setPresentEmployment({
+    ...presentEmployment,
+    [field]: value,
+  });
+};
+
+
 
   const handleRemoveDay = (dayId: string): void => {
     const newDays: { [key: string]: Day } = Object.keys(timetableState.days)
@@ -1882,6 +2193,8 @@ const calculateDurationPercentage = (start: string, end: string) => {
       invitation: '#ffeb3b',
       resume: '#ffffff',
       timetable: '#ffffff',
+      pricelist: '#ffffff',
+
     },
     footerCardColor: '#000',
     selectedTemplate: {
@@ -1903,7 +2216,8 @@ const calculateDurationPercentage = (start: string, end: string) => {
       brand: 'minimal',
       invitation: 'minimal',
       resume: 'minimal',
-      timetable: 'minimal'
+      timetable: 'minimal',
+      pricelist: 'minimal'
     }
   });
 
@@ -2237,6 +2551,22 @@ const baseLabelStyles = `
     return slots;
   }
 
+  function updateFeature(tierIndex: number, featureIndex: number, value: string): void {
+    const updatedTiers = pricelistState.tiers.map((tier, tIndex) => {
+      if (tIndex === tierIndex) {
+        const updatedFeatures = tier.features.map((feature, fIndex) => {
+          if (fIndex === featureIndex) {
+            return { ...feature, text: value };
+          }
+          return feature;
+        });
+        return { ...tier, features: updatedFeatures };
+      }
+      return tier;
+    });
+    setPricelistState({ ...pricelistState, tiers: updatedTiers });
+  }
+
   return (
     <div className="flex w-full md flex-col-reverse md:flex-row bg-gradient-to-r from-blue-400 via-blue-600 to-blue-800 h-screen justify-center items-center p-3">
 
@@ -2330,6 +2660,7 @@ const baseLabelStyles = `
         <option value="invitation">💌 Invitation</option>
         <option value="resume">💬 Resume</option>
         <option value="timetable">💬 Time Table</option>
+        <option value="pricelist">💬 Price List</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -5388,7 +5719,7 @@ const baseLabelStyles = `
 
 
             {/* Resume specific fields */}
-{selectedVariant === 'resume' && (
+{selectedVariant === 'resume' &&  (
   <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
  
       {/* Background Type Selection */}
@@ -5734,6 +6065,205 @@ const baseLabelStyles = `
 </div>
 )}
 
+{selectedVariant === 'pricelist' && (
+  <div className="space-y-6">
+  {/* Pricelist Header */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Pricelist Title</label>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        placeholder="e.g., Consulting Services Pricing"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Base Currency</label>
+      <select
+        value={pricelistState.currency}
+        onChange={(e) =>
+          setPricelistState({ ...pricelistState, currency: e.target.value as Currency })
+        }
+        className="w-full p-2 rounded-lg border border-slate-300"
+      >
+        {(['USD', 'EUR', 'GBP', 'INR'] as Currency[]).map((currency) => (
+          <option key={currency} value={currency}>
+            {currency}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* Pricing Tiers */}
+  <div className="space-y-4">
+    <label className="block text-stone-950 mb-2 font-medium">Pricing Tiers</label>
+    {pricelistState.tiers.map((tier, tierIndex) => (
+      <div
+        key={tier.id}
+        className="border p-4 rounded-xl bg-white shadow-sm space-y-4"
+      >
+        {/* Tier Header */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input
+            type="text"
+            value={tier.name}
+            onChange={(e) => updateTier(tierIndex, 'name', e.target.value)}
+            className="p-2 rounded-lg border border-slate-300 w-full"
+            placeholder="Tier Name (e.g., Premium)"
+          />
+          <input
+            type="number"
+            value={tier.price}
+            onChange={(e) => updateTier(tierIndex, 'price', Number(e.target.value))}
+            className="p-2 rounded-lg border border-slate-300 w-full"
+            placeholder="Price"
+          />
+          <select
+            value={tier.billingInterval}
+            onChange={(e) =>
+              updateTier(tierIndex, 'billingInterval', e.target.value as Tier['billingInterval'])
+            }
+            className="p-2 rounded-lg border border-slate-300 w-full"
+          >
+            <option value="monthly">Monthly</option>
+            <option value="annual">Annual</option>
+            <option value="one-time">One-time</option>
+          </select>
+        </div>
+
+        {/* Tier Features */}
+        <div className="pl-4 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              value={tier.description}
+              onChange={(e) => updateTier(tierIndex, 'description', e.target.value)}
+              className="p-2 rounded-lg border border-slate-300 w-full"
+              placeholder="Short description"
+            />
+            <input
+              type="text"
+              value={tier.discount}
+              onChange={(e) => updateTier(tierIndex, 'discount', e.target.value)}
+              className="p-2 rounded-lg border border-slate-300 w-full"
+              placeholder="Discount/Promo (e.g., '10% OFF')"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-stone-700 font-medium">Features</label>
+            {tier.features.map((feature, featureIndex) => (
+              <div
+                key={feature.id}
+                className="flex items-center gap-2"
+              >
+                <input
+                  type="text"
+                  value={feature.text}
+                  onChange={(e) => updateFeature(tierIndex, featureIndex, e.target.value)}
+                  className="p-2 rounded-lg border border-slate-300 flex-1"
+                  placeholder="Feature description"
+                />
+                <button
+                  onClick={() => removeFeature(tierIndex, featureIndex)}
+                  className="text-red-500 hover:bg-red-50 p-1 rounded-lg"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              onClick={() => addFeature(tierIndex)}
+              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
+            >
+              Add Feature
+            </button>
+          </div>
+        </div>
+
+        {/* Tier Footer */}
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={tier.recommended}
+              onChange={(e) => updateTier(tierIndex, 'recommended', e.target.checked)}
+              className="rounded border-slate-300"
+            />
+            <label className="text-stone-700">Mark as Recommended</label>
+          </div>
+          <button
+            onClick={() => removeTier(tierIndex)}
+            className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+          >
+            Remove Tier
+          </button>
+        </div>
+      </div>
+    ))}
+
+    {/* Add New Tier Button */}
+    <button
+      onClick={addNewTier}
+      className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
+    >
+      Add New Tier
+    </button>
+  </div>
+
+  {/* Advanced Options */}
+  <div className="border-t pt-4">
+    <div className="flex items-center gap-2 mb-4">
+      <input
+        type="checkbox"
+        checked={pricelistState.enableCalculator}
+        onChange={(e) =>
+          setPricelistState({
+            ...pricelistState,
+            enableCalculator: e.target.checked,
+          })
+        }
+        className="rounded border-slate-300"
+      />
+      <label className="text-stone-700 font-medium">
+        Enable Price Calculator Widget
+      </label>
+    </div>
+
+    {pricelistState.enableCalculator && (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          type="text"
+          value={pricelistState.calculatorLabel}
+          onChange={(e) =>
+            setPricelistState({
+              ...pricelistState,
+              calculatorLabel: e.target.value,
+            })
+          }
+          className="p-2 rounded-lg border border-slate-300 w-full"
+          placeholder="Calculator button label (e.g., 'Get Estimate')"
+        />
+        <input
+          type="text"
+          value={pricelistState.calculatorNote}
+          onChange={(e) =>
+            setPricelistState({
+              ...pricelistState,
+              calculatorNote: e.target.value,
+            })
+          }
+          className="p-2 rounded-lg border border-slate-300 w-full"
+          placeholder="Calculator disclaimer note"
+        />
+      </div>
+    )}
+  </div>
+</div>
+)}
+
 
 {selectedVariant === "timetable" && (
   <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
@@ -5783,7 +6313,7 @@ const baseLabelStyles = `
               <h3 className="text-lg font-medium">{dayOfWeek}</h3>
               <div className="pl-8 space-y-4">
                 {(timetableState.days[dayOfWeek]?.events || []).map((event: Event, eventIndex: number) => (
-                  <div key={event.id} className="flex flex-col md:flex-row gap-4 items-start">
+                  <div key={event.id} className="flex flex-col md:flex-col w-full gap-4 items-start">
                     {/* Event Name Input */}
                     <input
                       type="text"
@@ -5793,7 +6323,7 @@ const baseLabelStyles = `
                         newDays[dayOfWeek].events[eventIndex].name = e.target.value;
                         setTimetableState({ ...timetableState, days: newDays });
                       }}
-                      className="p-2 rounded-lg border border-slate-300 flex-1"
+                      className="p-2 rounded-lg border w-full border-slate-300 flex-1"
                       placeholder="Event name"
                     />
                     {/* Start Time Input */}
@@ -5805,7 +6335,7 @@ const baseLabelStyles = `
                         newDays[dayOfWeek].events[eventIndex].startTime = e.target.value;
                         setTimetableState({ ...timetableState, days: newDays });
                       }}
-                      className="p-2 rounded-lg border border-slate-300"
+                      className="p-2 rounded-lg border w-full border-slate-300"
                     />
                     {/* End Time Input */}
                     <input
@@ -5816,7 +6346,7 @@ const baseLabelStyles = `
                         newDays[dayOfWeek].events[eventIndex].endTime = e.target.value;
                         setTimetableState({ ...timetableState, days: newDays });
                       }}
-                      className="p-2 rounded-lg border border-slate-300"
+                      className="p-2 rounded-lg border w-full border-slate-300"
                     />
                     {/* Location Input */}
                     <input
@@ -5827,7 +6357,7 @@ const baseLabelStyles = `
                         newDays[dayOfWeek].events[eventIndex].location = e.target.value;
                         setTimetableState({ ...timetableState, days: newDays });
                       }}
-                      className="p-2 rounded-lg border border-slate-300"
+                      className="p-2 rounded-lg border w-full border-slate-300"
                       placeholder="Location"
                     />
                     {/* Remove Event Button */}
@@ -5884,11 +6414,11 @@ const baseLabelStyles = `
                 type="date"
                 value={day.date}
                 onChange={(e) => handleUpdateDay(day.id, "date", e.target.value)}
-                className="p-2 rounded-lg border border-slate-300"
+                className="p-2 w-full rounded-lg border border-slate-300"
               />
               <button
                 onClick={() => handleRemoveDay(day.id)}
-                className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+                className="text-red-500 w-full hover:bg-red-50 p-2 rounded-lg"
               >
                 Remove Day
               </button>
@@ -5900,7 +6430,7 @@ const baseLabelStyles = `
                     onChange={(e) =>
                       handleUpdateEvent(day.id, eventIndex, "name", e.target.value)
                     }
-                    className="p-2 rounded-lg border border-slate-300 flex-1"
+                    className="p-2 rounded-lg border w-full border-slate-300 flex-"
                     placeholder="Event name"
                   />
                   <input
@@ -5909,7 +6439,7 @@ const baseLabelStyles = `
                     onChange={(e) =>
                       handleUpdateEvent(day.id, eventIndex, "startTime", e.target.value)
                     }
-                    className="p-2 rounded-lg border border-slate-300"
+                    className="p-2 rounded-lg border w-full border-slate-300"
                   />
                   <input
                     type="text"
@@ -5917,7 +6447,7 @@ const baseLabelStyles = `
                     onChange={(e) =>
                       handleUpdateEvent(day.id, eventIndex, "endTime", e.target.value)
                     }
-                    className="p-2 rounded-lg border border-slate-300"
+                    className="p-2 rounded-lg w-full border border-slate-300"
                   />
                   <input
                     type="text"
@@ -5925,12 +6455,12 @@ const baseLabelStyles = `
                     onChange={(e) =>
                       handleUpdateEvent(day.id, eventIndex, "location", e.target.value)
                     }
-                    className="p-2 rounded-lg border border-slate-300"
+                    className="p-2 rounded-lg border w-full border-slate-300"
                     placeholder="Location"
                   />
                   <button
                     onClick={() => handleRemoveEvent(day.id, eventIndex)}
-                    className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+                    className="text-red-500 w-full hover:bg-red-50 p-2 rounded-lg"
                   >
                     Remove
                   </button>
@@ -5938,7 +6468,7 @@ const baseLabelStyles = `
               ))}
               <button
                 onClick={() => handleAddEvent(day.id)}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
+                className="p-2 text-blue-600 w-full hover:bg-blue-50 rounded-lg border border-blue-200"
               >
                 Add Event
               </button>
@@ -6827,6 +7357,7 @@ const baseLabelStyles = `
         <option value="invitation">💌 Invitation</option>
         <option value="resume">💬 Resume</option>
         <option value="timetable">💬 Time Table</option>
+        <option value="pricelist"> PriceList</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -8476,7 +9007,7 @@ const baseLabelStyles = `
             />
             {/* <input
               type="color"
-              value={textColors.description}
+77777777777777777777777777777    value={textColors.description}
               onChange={(e) => setTextColors({ ...textColors, description: e.target.value })}
               className="w-10 h-10 rounded-lg border border-slate-300"
               title="Description Text Color"
@@ -9788,6 +10319,206 @@ const baseLabelStyles = `
 )}
 
 
+{selectedVariant === 'pricelist' && (
+  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-4 rounded-2xl transition-all">
+  {/* Pricelist Header */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Pricelist Title</label>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full p-2 rounded-lg border border-slate-300"
+        placeholder="e.g., Consulting Services Pricing"
+      />
+    </div>
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Base Currency</label>
+      <select
+        value={pricelistState.currency}
+        onChange={(e) =>
+          setPricelistState({ ...pricelistState, currency: e.target.value as Currency })
+        }
+        className="w-full p-2 rounded-lg border border-slate-300"
+      >
+        {(['USD', 'EUR', 'GBP', 'INR', 'NGN', 'GHC'] as Currency[]).map((currency) => (
+          <option key={currency} value={currency}>
+            {currency}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* Pricing Tiers */}
+  <div className="space-y-4">
+    <label className="block text-stone-950 mb-2 font-medium">Pricing Tiers</label>
+    {pricelistState.tiers.map((tier, tierIndex) => (
+      <div
+        key={tier.id}
+        className="border p-4 rounded-xl bg-white shadow-sm space-y-4"
+      >
+        {/* Tier Header */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input
+            type="text"
+            value={tier.name}
+            onChange={(e) => updateTier(tierIndex, 'name', e.target.value)}
+            className="p-2 rounded-lg border border-slate-300 w-full"
+            placeholder="Tier Name (e.g., Premium)"
+          />
+          <input
+            type="number"
+            value={tier.price}
+            onChange={(e) => updateTier(tierIndex, 'price', Number(e.target.value))}
+            className="p-2 rounded-lg border border-slate-300 w-full"
+            placeholder="Price"
+          />
+          <select
+            value={tier.billingInterval}
+            onChange={(e) =>
+              updateTier(tierIndex, 'billingInterval', e.target.value as Tier['billingInterval'])
+            }
+            className="p-2 rounded-lg border border-slate-300 w-full"
+          >
+            <option value="monthly">Monthly</option>
+            <option value="annual">Annual</option>
+            <option value="one-time">One-time</option>
+          </select>
+        </div>
+
+        {/* Tier Features */}
+        <div className="pl-4 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              value={tier.description}
+              onChange={(e) => updateTier(tierIndex, 'description', e.target.value)}
+              className="p-2 rounded-lg border border-slate-300 w-full"
+              placeholder="Short description"
+            />
+            <input
+              type="text"
+              value={tier.discount}
+              onChange={(e) => updateTier(tierIndex, 'discount', e.target.value)}
+              className="p-2 rounded-lg border border-slate-300 w-full"
+              placeholder="Discount/Promo (e.g., '10% OFF')"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-stone-700 font-medium">Features</label>
+            {tier.features.map((feature, featureIndex) => (
+              <div
+                key={feature.id}
+                className="flex items-center gap-2"
+              >
+                <input
+                  type="text"
+                  value={feature.text}
+                  onChange={(e) => updateFeature(tierIndex, featureIndex, e.target.value)}
+                  className="p-2 rounded-lg border border-slate-300 flex-1"
+                  placeholder="Feature description"
+                />
+                <button
+                  onClick={() => removeFeature(tierIndex, featureIndex)}
+                  className="text-red-500 hover:bg-red-50 p-1 rounded-lg"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              onClick={() => addFeature(tierIndex)}
+              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
+            >
+              Add Feature
+            </button>
+          </div>
+        </div>
+
+        {/* Tier Footer */}
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={tier.recommended}
+              onChange={(e) => updateTier(tierIndex, 'recommended', e.target.checked)}
+              className="rounded border-slate-300"
+            />
+            <label className="text-stone-700">Mark as Recommended</label>
+          </div>
+          <button
+            onClick={() => removeTier(tierIndex)}
+            className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+          >
+            Remove Tier
+          </button>
+        </div>
+      </div>
+    ))}
+
+    {/* Add New Tier Button */}
+    <button
+      onClick={addNewTier}
+      className="w-full p-3 text-blue-600 hover:bg-blue-50 rounded-xl border border-blue-200"
+    >
+      Add New Tier
+    </button>
+  </div>
+
+  {/* Advanced Options */}
+  <div className="border-t pt-4">
+    <div className="flex items-center gap-2 mb-4">
+      <input
+        type="checkbox"
+        checked={pricelistState.enableCalculator}
+        onChange={(e) =>
+          setPricelistState({
+            ...pricelistState,
+            enableCalculator: e.target.checked,
+          })
+        }
+        className="rounded border-slate-300"
+      />
+      <label className="text-stone-700 font-medium">
+        Enable Price Calculator Widget
+      </label>
+    </div>
+
+    {pricelistState.enableCalculator && (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          type="text"
+          value={pricelistState.calculatorLabel}
+          onChange={(e) =>
+            setPricelistState({
+              ...pricelistState,
+              calculatorLabel: e.target.value,
+            })
+          }
+          className="p-2 rounded-lg border border-slate-300 w-full"
+          placeholder="Calculator button label (e.g., 'Get Estimate')"
+        />
+        <input
+          type="text"
+          value={pricelistState.calculatorNote}
+          onChange={(e) =>
+            setPricelistState({
+              ...pricelistState,
+              calculatorNote: e.target.value,
+            })
+          }
+          className="p-2 rounded-lg border border-slate-300 w-full"
+          placeholder="Calculator disclaimer note"
+        />
+      </div>
+    )}
+  </div>
+</div>
+)}
+
+
             {/* Resume specific fields */}
 {selectedVariant === 'resume' && (
   <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
@@ -9868,31 +10599,42 @@ const baseLabelStyles = `
     </div>
 
 
-     {/* Full Name */}
+{/* Full Name */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Full Name (in capital letters)</label>
+  <input
+    type="text"
+    value={fullName}
+    onChange={(e) => setFullName(e.target.value.toUpperCase())}
+    className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+    placeholder="Enter your full name in capital letters"
+  />
+</div>
+
+{/* Date of Birth / Place of Birth */}
+<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
   <div>
-    <label className="block text-gray-800 mb-1 font-medium">Full Name</label>
+    <label className="block text-gray-800 mb-1 font-medium">Date of Birth</label>
     <input
-      type="text"
-      value={fullName}
-      onChange={(e) => setFullName(e.target.value)}
+      type="date"
+      value={dateOfBirth}
+      onChange={(e) => setDateOfBirth(e.target.value)}
       className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-      placeholder="Enter your full name"
     />
   </div>
-
-  {/* Job Title */}
   <div>
-    <label className="block text-gray-800 mb-1 font-medium">Job Title</label>
+    <label className="block text-gray-800 mb-1 font-medium">Place of Birth</label>
     <input
       type="text"
-      value={jobTitle}
-      onChange={(e) => setJobTitle(e.target.value)}
+      value={placeOfBirth}
+      onChange={(e) => setPlaceOfBirth(e.target.value)}
       className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-      placeholder="Enter your job title"
+      placeholder="Enter your place of birth"
     />
   </div>
+</div>
 
-  <div>
+<div>
   <label className="block text-gray-800 mb-1 font-medium">Bio</label>
   <textarea
     value={bio}
@@ -9902,57 +10644,59 @@ const baseLabelStyles = `
   />
 </div>
 
-  {/* Contact Information */}
-  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-    <div>
-      <label className="block text-gray-800 mb-1 font-medium">Email Address</label>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-        placeholder="Enter your email address"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-800 mb-1 font-medium">Phone Number</label>
-      <input
-        type="text"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-        placeholder="Enter your phone number"
-      />
-    </div>
-  </div>
-
-  {/* Location */}
-  <div>
-    <label className="block text-gray-800 mb-1 font-medium">Location</label>
-    <input
-      type="text"
-      value={location}
-      onChange={(e) => setLocation(e.target.value)}
-      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-      placeholder="Enter your location"
-    />
-  </div>
-
-  {/* Skills */}
+{/* Sex */}
 <div>
-  <label className="block text-gray-800 mb-1 font-medium">Skills</label>
-  {skills.map((skill, index) => (
+  <label className="block text-gray-800 mb-1 font-medium">Sex</label>
+  <select
+    value={sex}
+    onChange={(e) => setSex(e.target.value)}
+    className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Select Sex</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
+
+{/* Marital Status */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Marital Status</label>
+  <select
+    value={maritalStatus}
+    onChange={(e) => setMaritalStatus(e.target.value)}
+    className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Select Marital Status</option>
+    <option value="Single">Single</option>
+    <option value="Married">Married</option>
+    <option value="Divorced">Divorced</option>
+    <option value="Widowed">Widowed</option>
+  </select>
+</div>
+
+{/* Names / Ages of Children */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Names / Ages of Children</label>
+  {children.map((child, index) => (
     <div key={index} className="flex items-center space-x-2 mb-2">
       <input
         type="text"
-        value={skill.value}
-        onChange={(e) => updateSkill(index, e.target.value)}
+        value={child.name}
+        onChange={(e) => updateChild(index, 'name', e.target.value)}
         className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-        placeholder="Enter skill"
+        placeholder="Child's name"
+      />
+      <input
+        type="number"
+        value={child.age}
+        onChange={(e) => updateChild(index, 'age', e.target.value)}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Age"
       />
       <button
         type="button"
-        onClick={() => removeSkill(index)}
+        onClick={() => removeChild(index)}
         className="p-2 bg-red-500 text-white rounded-lg"
       >
         Remove
@@ -9961,17 +10705,52 @@ const baseLabelStyles = `
   ))}
   <button
     type="button"
-    onClick={addSkill}
+    onClick={addChild}
     className="p-2 bg-blue-500 text-white rounded-lg"
   >
-    Add Skill
+    Add Child
   </button>
 </div>
 
-  {/* Work Experience */}
-  {/* Work Experience */}
+{/* Town / State of Origin */}
 <div>
-  <label className="block text-gray-800 mb-1 font-medium">Work Experience</label>
+  <label className="block text-gray-800 mb-1 font-medium">Town / State of Origin</label>
+  <input
+    type="text"
+    value={townStateOrigin}
+    onChange={(e) => setTownStateOrigin(e.target.value)}
+    className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+    placeholder="Enter your town and state of origin"
+  />
+</div>
+
+{/* Nationality */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Nationality</label>
+  <input
+    type="text"
+    value={nationality}
+    onChange={(e) => setNationality(e.target.value)}
+    className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+    placeholder="Enter your nationality"
+  />
+</div>
+
+{/* Current Postal Address */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Current Postal Address</label>
+  <input
+    type="text"
+    value={currentPostalAddress}
+    onChange={(e) => setCurrentPostalAddress(e.target.value)}
+    className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+    placeholder="Enter your current postal address"
+  />
+</div>
+
+{/* Working Experience with Dates */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Working Experience with Dates</label>
   {workExperience.map((experience, expIndex) => (
     <div key={expIndex} className="space-y-2 mb-4">
       <div>
@@ -10050,11 +10829,33 @@ const baseLabelStyles = `
   </button>
 </div>
 
-  {/* Education */}
+{/* Permanent Home Address */}
 <div>
-  <label className="block text-gray-800 mb-1 font-medium">Education</label>
+  <label className="block text-gray-800 mb-1 font-medium">Permanent Home Address</label>
+  <input
+    type="text"
+    value={permanentHomeAddress}
+    onChange={(e) => setPermanentHomeAddress(e.target.value)}
+    className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+    placeholder="Enter your permanent home address"
+  />
+</div>
+
+{/* Institutions Attended with Dates */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Institutions Attended with Dates</label>
   {education.map((edu, index) => (
     <div key={index} className="space-y-2 mb-4">
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Institution Name</label>
+        <input
+          type="text"
+          value={edu.institution}
+          onChange={(e) => updateEducation(index, 'institution', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter institution name"
+        />
+      </div>
       <div>
         <label className="block text-gray-800 mb-1 text-sm">Degree</label>
         <input
@@ -10063,16 +10864,6 @@ const baseLabelStyles = `
           onChange={(e) => updateEducation(index, 'degree', e.target.value)}
           className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
           placeholder="Enter your degree"
-        />
-      </div>
-      <div>
-        <label className="block text-gray-800 mb-1 text-sm">Institution</label>
-        <input
-          type="text"
-          value={edu.institution}
-          onChange={(e) => updateEducation(index, 'institution', e.target.value)}
-          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter institution name"
         />
       </div>
       <div>
@@ -10103,7 +10894,68 @@ const baseLabelStyles = `
   </button>
 </div>
 
-  {/* Hobbies */}
+{/* E-mail Address / GSM Number */}
+<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">E-mail Address</label>
+    <input
+      type="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter your email address"
+    />
+  </div>
+  <div>
+    <label className="block text-gray-800 mb-1 font-medium">GSM Number</label>
+    <input
+      type="text"
+      value={gsmNumber}
+      onChange={(e) => setGsmNumber(e.target.value)}
+      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter your GSM number"
+    />
+  </div>
+</div>
+
+{/* Present Employment / Status / Salary / Employer */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Present Employment / Status / Salary / Employer</label>
+  <div className="space-y-2">
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">Employer</label>
+      <input
+        type="text"
+        value={presentEmployment.employer}
+        onChange={(e) => setPresentEmployment({ ...presentEmployment, employer: e.target.value })}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter employer name"
+      />
+    </div>
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">Status</label>
+      <input
+        type="text"
+        value={presentEmployment.status}
+        onChange={(e) => setPresentEmployment({ ...presentEmployment, status: e.target.value })}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter employment status"
+      />
+    </div>
+    <div>
+      <label className="block text-gray-800 mb-1 text-sm">Salary</label>
+      <input
+        type="text"
+        value={presentEmployment.salary}
+        onChange={(e) => setPresentEmployment({ ...presentEmployment, salary: e.target.value })}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter salary"
+      />
+    </div>
+  </div>
+</div>
+
+{/* Hobbies */}
 <div>
   <label className="block text-gray-800 mb-1 font-medium">Hobbies</label>
   {hobbies.map((hobby, index) => (
@@ -10130,6 +10982,89 @@ const baseLabelStyles = `
     className="p-2 bg-blue-500 text-white rounded-lg"
   >
     Add Hobby
+  </button>
+</div>
+
+{/* Extra Curriculum Activities */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Extra Curriculum Activities</label>
+  {extraCurriculumActivities.map((activity, index) => (
+    <div key={index} className="flex items-center space-x-2 mb-2">
+      <input
+        type="text"
+        value={activity}
+        onChange={(e) => updateExtraCurriculumActivity({ index, value: e.target.value })}
+        className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter activity"
+      />
+      <button
+        type="button"
+        onClick={() => removeExtraCurriculumActivity(index)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addExtraCurriculumActivity}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Activity
+  </button>
+</div>
+
+{/* Referees / Address / GSM Number */}
+<div>
+  <label className="block text-gray-800 mb-1 font-medium">Referees / Address / GSM Number</label>
+  {referees.map((referee, index) => (
+    <div key={index} className="space-y-2 mb-4">
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Referee Name</label>
+        <input
+          type="text"
+          value={referee.name}
+          onChange={(e) => updateReferee(index, 'name', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter referee name"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">Address</label>
+        <input
+          type="text"
+          value={referee.address}
+          onChange={(e) => updateReferee(index, 'address', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter referee address"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-800 mb-1 text-sm">GSM Number</label>
+        <input
+          type="text"
+          value={referee.gsmNumber}
+          onChange={(e) => updateReferee(index, 'gsmNumber', e.target.value)}
+          className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter referee GSM number"
+        />
+      </div>
+      <button
+        type="button"
+        onClick={() => removeReferee(index)}
+        className="p-2 bg-red-500 text-white rounded-lg"
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addReferee}
+    className="p-2 bg-blue-500 text-white rounded-lg"
+  >
+    Add Referee
   </button>
 </div>
 </div>
@@ -10183,7 +11118,7 @@ const baseLabelStyles = `
               <h3 className="text-lg font-medium">{dayOfWeek}</h3>
               <div className="pl-8 space-y-4">
                 {(timetableState.days[dayOfWeek]?.events || []).map((event: Event, eventIndex: number) => (
-                  <div key={event.id} className="flex flex-col md:flex-row gap-4 items-start">
+                  <div key={event.id} className="flex flex-col md:flex-col w-full gap-4 items-start">
                     {/* Event Name Input */}
                     <input
                       type="text"
@@ -10193,7 +11128,7 @@ const baseLabelStyles = `
                         newDays[dayOfWeek].events[eventIndex].name = e.target.value;
                         setTimetableState({ ...timetableState, days: newDays });
                       }}
-                      className="p-2 rounded-lg border border-slate-300 flex-1"
+                      className="p-2 rounded-lg border w-full border-slate-300 flex-1"
                       placeholder="Event name"
                     />
                     {/* Start Time Input */}
@@ -10205,7 +11140,7 @@ const baseLabelStyles = `
                         newDays[dayOfWeek].events[eventIndex].startTime = e.target.value;
                         setTimetableState({ ...timetableState, days: newDays });
                       }}
-                      className="p-2 rounded-lg border border-slate-300"
+                      className="p-2 rounded-lg border w-full border-slate-300"
                     />
                     {/* End Time Input */}
                     <input
@@ -10216,7 +11151,7 @@ const baseLabelStyles = `
                         newDays[dayOfWeek].events[eventIndex].endTime = e.target.value;
                         setTimetableState({ ...timetableState, days: newDays });
                       }}
-                      className="p-2 rounded-lg border border-slate-300"
+                      className="p-2 rounded-lg border w-full border-slate-300"
                     />
                     {/* Location Input */}
                     <input
@@ -10227,7 +11162,7 @@ const baseLabelStyles = `
                         newDays[dayOfWeek].events[eventIndex].location = e.target.value;
                         setTimetableState({ ...timetableState, days: newDays });
                       }}
-                      className="p-2 rounded-lg border border-slate-300"
+                      className="p-2 rounded-lg border w-full border-slate-300"
                       placeholder="Location"
                     />
                     {/* Remove Event Button */}
@@ -10284,11 +11219,11 @@ const baseLabelStyles = `
                 type="date"
                 value={day.date}
                 onChange={(e) => handleUpdateDay(day.id, "date", e.target.value)}
-                className="p-2 rounded-lg border border-slate-300"
+                className="p-2 w-full rounded-lg border border-slate-300"
               />
               <button
                 onClick={() => handleRemoveDay(day.id)}
-                className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+                className="text-red-500 w-full hover:bg-red-50 p-2 rounded-lg"
               >
                 Remove Day
               </button>
@@ -10300,7 +11235,7 @@ const baseLabelStyles = `
                     onChange={(e) =>
                       handleUpdateEvent(day.id, eventIndex, "name", e.target.value)
                     }
-                    className="p-2 rounded-lg border border-slate-300 flex-1"
+                    className="p-2 rounded-lg border w-full border-slate-300 flex-"
                     placeholder="Event name"
                   />
                   <input
@@ -10309,7 +11244,7 @@ const baseLabelStyles = `
                     onChange={(e) =>
                       handleUpdateEvent(day.id, eventIndex, "startTime", e.target.value)
                     }
-                    className="p-2 rounded-lg border border-slate-300"
+                    className="p-2 rounded-lg border w-full border-slate-300"
                   />
                   <input
                     type="text"
@@ -10317,7 +11252,7 @@ const baseLabelStyles = `
                     onChange={(e) =>
                       handleUpdateEvent(day.id, eventIndex, "endTime", e.target.value)
                     }
-                    className="p-2 rounded-lg border border-slate-300"
+                    className="p-2 rounded-lg w-full border border-slate-300"
                   />
                   <input
                     type="text"
@@ -10325,12 +11260,12 @@ const baseLabelStyles = `
                     onChange={(e) =>
                       handleUpdateEvent(day.id, eventIndex, "location", e.target.value)
                     }
-                    className="p-2 rounded-lg border border-slate-300"
+                    className="p-2 rounded-lg border w-full border-slate-300"
                     placeholder="Location"
                   />
                   <button
                     onClick={() => handleRemoveEvent(day.id, eventIndex)}
-                    className="text-red-500 hover:bg-red-50 p-2 rounded-lg"
+                    className="text-red-500 w-full hover:bg-red-50 p-2 rounded-lg"
                   >
                     Remove
                   </button>
@@ -10338,7 +11273,7 @@ const baseLabelStyles = `
               ))}
               <button
                 onClick={() => handleAddEvent(day.id)}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
+                className="p-2 text-blue-600 w-full hover:bg-blue-50 rounded-lg border border-blue-200"
               >
                 Add Event
               </button>
@@ -14133,162 +15068,264 @@ const baseLabelStyles = `
               </div>
             )}
 
-            {selectedVariant === 'resume' && selectedVariantStyle === 'style4' && (
-              <div
-                className="relative min-h-[600px] p-4 md:p-10 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
-                style={{
-                  background:
-                    bgType === 'gradient'
-                      ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-                      : bgType === 'solid'
-                      ? solidColor
-                      : "#f9f9f9",
-                }}
-              >
-                <div className="relative z-10 flex flex-col items-center gap-8 text-center">
-                  {/* Profile Picture */}
-                  {profilePicture && (
-                    <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
-                      <img src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)} alt="Profile Picture" className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                  {/* Full Name and Job Title */}
-                  <div>
-                    {fullName && (
-                      <h2 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: textColors.fullName }}>
-                        {fullName}
-                      </h2>
-                    )}
-                    {jobTitle && (
-                      <p className="text-xl md:text-2xl font-light mt-1" style={{ color: textColors.jobTitle }}>
-                        {jobTitle}
-                      </p>
-                    )}
-                  </div>
-                  {/* Contact Information */}
-                  <div className="space-y-2 text-sm md:text-base">
-                    {email && (
-                      <p className="flex items-center justify-center gap-2">
-                        <span className="font-medium">Email:</span>
-                        <a href={`mailto:${email}`} className="underline hover:text-blue-500 transition-colors" style={{ color: textColors.email }}>
-                          {email}
-                        </a>
-                      </p>
-                    )}
-                    {phone && (
-                      <p className="flex items-center justify-center gap-2">
-                        <span className="font-medium">Phone:</span>
-                        <span style={{ color: textColors.phone }}>{phone}</span>
-                      </p>
-                    )}
-                    {location && (
-                      <p className="flex items-center justify-center gap-2">
-                        <span className="font-medium">Location:</span>
-                        <span style={{ color: textColors.location }}>{location}</span>
-                      </p>
-                    )}
-                  </div>
-                  {/* Bio */}
-                  {bio && (
-                    <div className="w-full max-w-2xl text-left space-y-2">
-                      <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
-                        {bio}
-                      </p>
-                    </div>
-                  )}
-                  {/* Skills, Work Experience, Education, Hobbies */}
-                  <div className="w-full max-w-2xl text-left space-y-4">
-                    {skills.length > 0 && (
-                      <div>
-                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.skills }}>
-                          Skills
-                        </h3>
-                        <ul className="flex flex-wrap justify-center gap-2 text-sm md:text-base">
-                          {skills.map((skill, index) => (
-                            <li key={index} className="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full shadow-md" style={{ color: textColors.skills }}>
-                              {skill.value.trim()}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {workExperience.length > 0 && (
-                      <div>
-                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
-                          Work Experience
-                        </h3>
-                        <ul className="space-y-4">
-                          {workExperience.map((experience, index) => (
-                            <li key={index} className="flex items-start space-x-4">
-                              <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                              <div>
-                                <p className="font-medium text-base md:text-lg" style={{ color: textColors.companyName }}>
-                                  {experience.companyName}
-                                </p>
-                                <p className="text-sm md:text-base italic" style={{ color: textColors.role }}>
-                                  {experience.role}
-                                </p>
-                                <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
-                                  {experience.duration}
-                                </p>
-                                {experience.jobDescriptions.length > 0 && (
-                                  <div className="space-y-1">
-                                    <ul className="list-disc pl-5 space-y-2">
-                                      {experience.jobDescriptions.map((desc, descIndex) => (
-                                        <li key={descIndex} className="text-sm md:text-base" style={{ color: textColors.jobDescriptions }}>
-                                          {desc}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                )}
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {education.length > 0 && (
-                      <div>
-                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
-                          Education
-                        </h3>
-                        <ul className="space-y-4">
-                          {education.map((edu, index) => (
-                            <li key={index} className="flex items-start space-x-4">
-                              <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                              <div>
-                                <div className="flex justify-between items-center">
-                                  <p className="font-medium text-base md:text-lg" style={{ color: textColors.institution }}>
-                                    {edu.institution}
-                                  </p>
-                                  <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
-                                    {edu.gradYear}
-                                  </p>
-                                </div>
-                                <p className="text-sm md:text-base italic" style={{ color: textColors.degree }}>
-                                  {edu.degree}
-                                </p>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {hobbies.length > 0 && (
-                      <div>
-                        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.hobbies }}>
-                          Hobbies
-                        </h3>
-                        <p className="text-sm md:text-base" style={{ color: textColors.hobbies }}>
-                          {hobbies.join(', ')}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+{selectedVariant === 'resume' && selectedVariantStyle === 'style4' && (
+  <div
+    className="relative min-h-[600px] p-4 md:p-6 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    style={{
+      background:
+        bgType === 'gradient'
+          ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+          : bgType === 'solid'
+          ? solidColor
+          : "#f9f9f9",
+    }}
+  >
+    <div className="relative z-10 flex flex-col items-center gap-8 text-center">
+      {/* Profile Picture */}
+      {profilePicture && (
+        <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white shadow-lg overflow-hidden">
+          <img
+            src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)}
+            alt="Profile Picture"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      {/* Full Name */}
+      {fullName && (
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight uppercase" style={{ color: textColors.fullName }}>
+          {fullName}
+        </h2>
+      )}
+
+      {/* Personal Details */}
+      <div className="w-full max-w-9xl text-left space-y-4">
+        {/* Date of Birth / Place of Birth */}
+        {(dateOfBirth || placeOfBirth) && (
+          <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.personalDetails }}>
+              Personal Details
+            </h3>
+            <div className="space-y-2">
+              {dateOfBirth && (
+                <p className="text-sm md:text-base" style={{ color: textColors.dateOfBirth }}>
+                  <span className="font-medium">Date of Birth:</span> {dateOfBirth}
+                </p>
+              )}
+              {placeOfBirth && (
+                <p className="text-sm md:text-base" style={{ color: textColors.placeOfBirth }}>
+                  <span className="font-medium">Place of Birth:</span> {placeOfBirth}
+                </p>
+              )}
+              {sex && (
+                <p className="text-sm md:text-base" style={{ color: textColors.sex }}>
+                  <span className="font-medium">Sex:</span> {sex}
+                </p>
+              )}
+              {maritalStatus && (
+                <p className="text-sm md:text-base" style={{ color: textColors.maritalStatus }}>
+                  <span className="font-medium">Marital Status:</span> {maritalStatus}
+                </p>
+              )}
+              {children.length > 0 && (
+                <div>
+                  <p className="font-medium text-sm md:text-base" style={{ color: textColors.children }}>
+                    Children:
+                  </p>
+                  <ul className="list-disc pl-5">
+                    {children.map((child, index) => (
+                      <li key={index} className="text-sm md:text-base" style={{ color: textColors.children }}>
+                        {child.name} (Age: {child.age})
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+              )}
+              {townStateOrigin && (
+                <p className="text-sm md:text-base" style={{ color: textColors.townStateOrigin }}>
+                  <span className="font-medium">Town/State of Origin:</span> {townStateOrigin}
+                </p>
+              )}
+              {nationality && (
+                <p className="text-sm md:text-base" style={{ color: textColors.nationality }}>
+                  <span className="font-medium">Nationality:</span> {nationality}
+                </p>
+              )}
+              {currentPostalAddress && (
+                <p className="text-sm md:text-base" style={{ color: textColors.currentPostalAddress }}>
+                  <span className="font-medium">Current Postal Address:</span> {currentPostalAddress}
+                </p>
+              )}
+              {permanentHomeAddress && (
+                <p className="text-sm md:text-base" style={{ color: textColors.permanentHomeAddress }}>
+                  <span className="font-medium">Permanent Home Address:</span> {permanentHomeAddress}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Work Experience */}
+        {workExperience.length > 0 && (
+          <div className="bg-white/80 p-4 grid grid-cols-1 rounded-xl shadow-lg">
+            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+              Work Experience
+            </h3>
+            {workExperience.map((experience, index) => (
+              <div key={index} className="space-y-2">
+                <p className="font-medium text-base md:text-xl " style={{ color: textColors.companyName }}>
+                  {experience.companyName}
+                </p>
+                <p className="text-sm md:text-2xl font-bold italic" style={{ color: textColors.role }}>
+                  {experience.role}
+                </p>
+                <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
+                  {experience.duration}
+                </p>
+                {experience.jobDescriptions.length > 0 && (
+                  <div className="space-y-1">
+                    <ul className="list-disc pl-5 space-y-2">
+                      {experience.jobDescriptions.map((desc, descIndex) => (
+                        <li key={descIndex} className="text-sm md:text-base" style={{ color: textColors.jobDescriptions }}>
+                          {desc}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-            )}
+            ))}
+          </div>
+        )}
+
+        {/* Education */}
+        {education.length > 0 && (
+          <div className="bg-white/80 p-4 grid grid-cols-2 gap-4 rounded-xl shadow-lg">
+            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+              Academic Qualifications
+            </h3>
+            {education.map((edu, index) => (
+              <div key={index} className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <p className="font-medium text-base md:text-lg" style={{ color: textColors.institution }}>
+                    {edu.institution}
+                  </p>
+                  <p className="text-sm md:text-base" style={{ color: textColors.gradYear }}>
+                    {edu.gradYear}
+                  </p>
+                </div>
+                <p className="text-sm md:text-base italic" style={{ color: textColors.degree }}>
+                  {edu.degree}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Academic Qualifications */}
+        {/* {academicQualifications.length > 0 && (
+          <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.academicQualifications }}>
+              Academic Qualifications
+            </h3>
+            {academicQualifications.map((qualification, index) => (
+              <div key={index} className="space-y-2">
+                <p className="font-medium text-base md:text-lg" style={{ color: textColors.qualification }}>
+                  {qualification.qualification}
+                </p>
+                <p className="text-sm md:text-base" style={{ color: textColors.qualificationDate }}>
+                  {qualification.date}
+                </p>
+              </div>
+            ))}
+          </div>
+        )} */}
+
+        {/* Contact Information */}
+        {(email || gsmNumber) && (
+          <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.contactInfo }}>
+              Contact Information
+            </h3>
+            <div className="space-y-2">
+              {email && (
+                <p className="text-sm md:text-base" style={{ color: textColors.email }}>
+                  <span className="font-medium">Email:</span> {email}
+                </p>
+              )}
+              {gsmNumber && (
+                <p className="text-sm md:text-base" style={{ color: textColors.gsmNumber }}>
+                  <span className="font-medium">GSM Number:</span> {gsmNumber}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Present Employment */}
+        {(presentEmployment.employer || presentEmployment.status || presentEmployment.salary) && (
+          <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.presentEmployment }}>
+              Present Employment
+            </h3>
+            <div className="space-y-2">
+              {presentEmployment.employer && (
+                <p className="text-sm md:text-base" style={{ color: textColors.employer }}>
+                  <span className="font-medium">Employer:</span> {presentEmployment.employer}
+                </p>
+              )}
+              {presentEmployment.status && (
+                <p className="text-sm md:text-base" style={{ color: textColors.status }}>
+                  <span className="font-medium">Status:</span> {presentEmployment.status}
+                </p>
+              )}
+              {presentEmployment.salary && (
+                <p className="text-sm md:text-base" style={{ color: textColors.salary }}>
+                  <span className="font-medium">Salary:</span> {presentEmployment.salary}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Extra Curriculum Activities */}
+        {extraCurriculumActivities.length > 0 && (
+          <div className="bg-white/80 p-4 rounded-xl shadow-lg">
+            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.extraCurriculumActivities }}>
+              Extra Curriculum Activities
+            </h3>
+            <p className="text-sm md:text-base" style={{ color: textColors.extraCurriculumActivities }}>
+              {extraCurriculumActivities.join(', ')}
+            </p>
+          </div>
+        )}
+
+        {/* Referees */}
+        {referees.length > 0 && (
+          <div className="bg-white/80 grid grid-cols-2 gap-4 p-4 rounded-xl shadow-lg">
+            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.referees }}>
+              Referees
+            </h3>
+            {referees.map((referee, index) => (
+              <div key={index} className="space-y-2">
+                <p className="font-medium text-base md:text-lg" style={{ color: textColors.refereeName }}>
+                  {referee.name}
+                </p>
+                <p className="text-sm md:text-base" style={{ color: textColors.refereeAddress }}>
+                  <span className="font-medium">Address:</span> {referee.address}
+                </p>
+                <p className="text-sm md:text-base" style={{ color: textColors.refereeGsmNumber }}>
+                  <span className="font-medium">GSM Number:</span> {referee.gsmNumber}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Resume Card Display End */}
 
@@ -14482,8 +15519,8 @@ const baseLabelStyles = `
                       {formatTime(event.startTime)} – {formatTime(event.endTime)}
                     </time>
                   </div>
-                  <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                    {calculateDuration(event.startTime, event.endTime)} mins
+                  <span className="text-xs flex items-center justify-center font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                    {calculateDuration(event.startTime, event.endTime)}
                   </span>
                 </li>
               ))}
@@ -14706,6 +15743,519 @@ const baseLabelStyles = `
         </article>
       ))}
     </div>
+  </div>
+)}
+
+
+{selectedVariant === 'pricelist' && selectedVariantStyle === 'default' && (
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {/* Header Section */}
+    <div className="text-center mb-12">
+      <h2 className="text-4xl font-extrabold text-gray-900 mb-4">{title}</h2>
+      <div className="flex items-center justify-center space-x-2">
+        <span className="text-lg text-gray-600">{pricelistState.currency}</span>
+        {pricelistState.calculatorLabel && (
+          <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+            {pricelistState.calculatorLabel}
+          </button>
+        )}
+      </div>
+      {pricelistState.calculatorNote && (
+        <p className="mt-2 text-sm text-gray-500">{pricelistState.calculatorNote}</p>
+      )}
+    </div>
+    
+    {/* Pricing Tiers Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {pricelistState.tiers.map((tier) => (
+        <div
+          key={tier.id}
+          className={`relative rounded-2xl ${
+            tier.recommended 
+              ? 'ring-4 ring-blue-500 shadow-xl scale-105 z-10 bg-white' 
+              : 'ring-1 ring-gray-200 shadow-lg hover:shadow-xl bg-white/95'
+          } transition-all duration-300 overflow-hidden`}
+        >
+          {tier.recommended && (
+            <div className="absolute top-0 right-0 mt-4 mr-4">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
+                Popular Choice
+              </span>
+            </div>
+          )}
+
+          <div className="p-8">
+            {/* Tier Header */}
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">{tier.name}</h3>
+              <p className="text-gray-500">{tier.description}</p>
+            </div>
+
+            {/* Price */}
+            <div className="flex items-baseline mb-8">
+              <span className="text-5xl font-bold tracking-tight text-gray-900">
+                {pricelistState.currency} {tier.price.toFixed(2)}
+              </span>
+              <span className="ml-2 text-gray-500">/{tier.billingInterval}</span>
+            </div>
+
+            {/* Discount Badge */}
+            {tier.discount && (
+              <div className="mb-6">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  {tier.discount}
+                </span>
+              </div>
+            )}
+
+            {/* Features List */}
+            <ul className="space-y-4 mb-8">
+              {tier.features.map((feature) => (
+                <li key={feature.id} className="flex items-start">
+                  <svg 
+                    className="h-6 w-6 text-blue-500 mr-3 flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span className="text-gray-600">{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* CTA Button */}
+            <button className={`w-full py-3 px-6 rounded-xl font-medium transition-colors ${
+              tier.recommended
+                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+            }`}>
+              Choose {tier.name}
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Footer Note */}
+    {pricelistState.calculatorNote && (
+      <div className="mt-12 text-center">
+        <p className="text-sm text-gray-500">{pricelistState.calculatorNote}</p>
+      </div>
+    )}
+  </div>
+)}
+
+{selectedVariant === 'pricelist' && selectedVariantStyle === 'style1' && (
+  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-2xl">
+    {/* Header Section */}
+    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold text-slate-900">{title || "Our Pricing"}</h1>
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <CurrencyDollarIcon className="w-4 h-4 text-blue-600" />
+          <span>Currency: {pricelistState.currency}</span>
+          <span className="text-blue-500 mx-1">•</span>
+          <TagIcon className="w-4 h-4 text-blue-600" />
+          <span>{pricelistState.tiers.length} Pricing Tiers</span>
+        </div>
+      </div>
+      <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200">
+        <p className="text-sm font-semibold text-slate-700">
+          Starting from{' '}
+          {Math.min(...pricelistState.tiers.map((t) => t.price))
+            .toLocaleString('en-US', {
+              style: 'currency',
+              currency: pricelistState.currency,
+            })
+            .replace(/^(.{1})(\d{3})/, '$1,$2')}
+        </p>
+      </div>
+    </header>
+
+    {/* Pricing Tiers Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {pricelistState.tiers.map((tier) => (
+        <article
+          key={tier.id}
+          className={`relative border rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-200 ${
+            tier.recommended ? 'border-blue-200 bg-gradient-to-br from-blue-50 to-white' : 'border-slate-200 bg-white'
+          }`}
+        >
+          {/* Recommended Badge */}
+          {tier.recommended && (
+            <div className="absolute top-0 right-6 -translate-y-1/2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+              RECOMMENDED
+            </div>
+          )}
+
+          {/* Tier Header */}
+          <div className="mb-6">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">{tier.name}</h3>
+            <div className="flex items-end gap-2">
+              <span className="text-4xl font-extrabold text-slate-900">
+                {tier.price
+                  .toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: pricelistState.currency,
+                  })
+                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
+              </span>
+              <span className="text-slate-500 font-medium">
+                /{{
+                  monthly: 'mo',
+                  annual: 'yr',
+                  'one-time': 'one-time',
+                }[tier.billingInterval]}
+              </span>
+            </div>
+            {tier.discount && (
+              <p className="text-sm text-green-600 mt-2">
+                🎁 {tier.discount} Discount
+              </p>
+            )}
+          </div>
+
+          {/* Features List */}
+          {tier.description && (
+            <p className="text-slate-600 mb-4">{tier.description}</p>
+          )}
+          <ul className="space-y-3 mb-8">
+            {tier.features.map((feature) => (
+              <li key={feature.id} className="flex items-center gap-3">
+                <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
+                <span className="text-slate-700">{feature.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA Button */}
+          <button
+            className={`w-full py-3 rounded-lg font-semibold transition-all ${
+              tier.recommended
+                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
+            }`}
+          >
+            SELECT {tier.name.toUpperCase()}
+          </button>
+        </article>
+      ))}
+    </div>
+
+    {/* Calculator Widget */}
+    {pricelistState.enableCalculator && (
+      <div className="mt-8 p-6 bg-slate-50 rounded-xl border border-slate-200">
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">
+          {pricelistState.calculatorLabel || "Price Calculator"}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <select className="p-2 rounded-lg border border-slate-300 bg-white w-full">
+            {pricelistState.tiers.map((tier) => (
+              <option key={tier.id} value={tier.id}>
+                {tier.name} -{' '}
+                {tier.price
+                  .toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: pricelistState.currency,
+                  })
+                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
+              </option>
+            ))}
+          </select>
+          <input
+            type="number"
+            placeholder="Enter Quantity"
+            className="p-2 rounded-lg border border-slate-300 bg-white w-full"
+          />
+          <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition w-full">
+            {pricelistState.calculatorLabel || "Calculate Total"}
+          </button>
+        </div>
+        {pricelistState.calculatorNote && (
+          <p className="text-slate-500 text-sm mt-3">
+            * {pricelistState.calculatorNote}
+          </p>
+        )}
+      </div>
+    )}
+  </div>
+)}
+
+{selectedVariant === 'pricelist' && selectedVariantStyle === 'style2' && (
+  <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-2xl overflow-hidden">
+    {/* Animated background effects */}
+    <div className="absolute inset-0 bg-grid-white/[0.05] animate-grid-fade"></div>
+    <div className="absolute inset-0 flex items-center justify-center opacity-10">
+      <div className="w-96 h-96 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-3xl animate-pulse"></div>
+    </div>
+
+    {/* Header */}
+    <div className="relative text-center mb-12">
+      <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+        {title || "Pro Plans"}
+      </h2>
+      <div className="mt-4 flex justify-center gap-4">
+        <span className="px-4 py-2 rounded-full bg-white/10 text-white/80 text-sm">
+          {pricelistState.currency} Pricing
+        </span>
+        {pricelistState.calculatorNote && (
+          <span className="px-4 py-2 rounded-full bg-white/10 text-white/80 text-sm">
+            {pricelistState.calculatorNote}
+          </span>
+        )}
+      </div>
+    </div>
+
+    {/* Pricing Grid */}
+    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {pricelistState.tiers.map((tier) => (
+        <div
+          key={tier.id}
+          className={`${
+            tier.recommended 
+              ? 'bg-gradient-to-br from-blue-600/20 to-purple-600/20 border-blue-500/50' 
+              : 'bg-white/5 border-white/10 hover:border-white/20'
+          } backdrop-blur-xl border rounded-xl p-6 transition-all duration-300`}
+        >
+          {/* Tier Label */}
+          {tier.recommended && (
+            <div className="absolute -top-3 right-4">
+              <span className="px-3 py-1 text-xs font-semibold bg-gradient-to-r from-blue-500 to-purple-500 rounded-full text-white shadow-lg">
+                Most Popular
+              </span>
+            </div>
+          )}
+
+          {/* Tier Content */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-xl font-bold text-white mb-2">{tier.name}</h3>
+              <p className="text-white/60 text-sm">{tier.description}</p>
+            </div>
+
+            {/* Pricing */}
+            <div className="flex items-end gap-2">
+              <span className="text-4xl font-extrabold text-stone-50">
+                {tier.price
+                  .toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: pricelistState.currency,
+                  })
+                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
+              </span>
+              <span className="text-white/60 mb-1">/{tier.billingInterval}</span>
+            </div>
+
+            {/* Features */}
+            <ul className="space-y-3">
+              {tier.features.map((feature) => (
+                <li key={feature.id} className="flex items-start gap-3 text-white/80">
+                  <svg className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Discount Badge */}
+            {tier.discount && (
+              <div className="py-2 px-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                <p className="text-green-400 text-sm font-medium">
+                  {tier.discount}
+                </p>
+              </div>
+            )}
+
+            {/* CTA Button */}
+            <button
+              className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 ${
+                tier.recommended
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg'
+                  : 'bg-white/10 hover:bg-white/20 text-white'
+              }`}
+            >
+              Choose {tier.name}
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Calculator Widget */}
+    {pricelistState.enableCalculator && (
+      <div className="relative mt-12 p-6 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+        <h3 className="text-xl font-semibold text-white mb-6">
+          {pricelistState.calculatorLabel || "Calculate Your Plan"}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <select className="w-full p-3 rounded-lg bg-white/5 border border-white/10 text-white">
+            {pricelistState.tiers.map((tier) => (
+              <option key={tier.id} value={tier.id} className="bg-gray-800">
+                {tier.name} - {pricelistState.currency} {tier.price}
+              </option>
+            ))}
+          </select>
+          <input
+            type="number"
+            placeholder="Quantity"
+            className="w-full p-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/50"
+          />
+          <button className="w-full p-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300">
+            Calculate Total
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
+)}
+
+{selectedVariant === 'pricelist' && selectedVariantStyle === 'style3' && (
+  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-2xl">
+    {/* Header Section */}
+    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold text-slate-900">{title || "Our Pricing"}</h1>
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <CurrencyDollarIcon className="w-4 h-4 text-blue-600" />
+          <span>Currency: {pricelistState.currency}</span>
+          <span className="text-blue-500 mx-1">•</span>
+          <TagIcon className="w-4 h-4 text-blue-600" />
+          <span>{pricelistState.tiers.length} Plans</span>
+        </div>
+      </div>
+      <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200">
+        <p className="text-sm font-semibold text-slate-700">
+          Starting at{' '}
+          {Math.min(...pricelistState.tiers.map((t) => t.price))
+            .toLocaleString('en-US', {
+              style: 'currency',
+              currency: pricelistState.currency,
+            })
+            .replace(/^(.{1})(\d{3})/, '$1,$2')}
+        </p>
+      </div>
+    </header>
+
+    {/* Pricing Tiers Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {pricelistState.tiers.map((tier) => (
+        <article
+          key={tier.id}
+          className={`relative flex flex-col items-center justify-between border rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-200 ${
+            tier.recommended ? 'border-indigo-300 bg-indigo-50' : 'border-slate-200 bg-white'
+          }`}
+        >
+          {/* Recommended Badge */}
+          {tier.recommended && (
+            <div className="absolute top-0 right-6 -translate-y-1/2 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+              BEST VALUE
+            </div>
+          )}
+
+          {/* Tier Image or Icon */}
+          <div className="mb-6">
+            <img
+              src={tier.image || '/12.jpg'}
+              alt={`${tier.name} Plan`}
+              className="w-20 h-20 object-cover rounded-full mb-4"
+            />
+            <h3 className="text-xl font-bold text-slate-900">{tier.name}</h3>
+          </div>
+
+          {/* Price Section */}
+          <div className="mb-6 text-center">
+            <div className="flex items-end justify-center gap-2">
+              <span className="text-4xl font-extrabold text-slate-900">
+                {tier.price
+                  .toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: pricelistState.currency,
+                  })
+                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
+              </span>
+              <span className="text-slate-500 font-medium">
+                /{{
+                  monthly: 'mo',
+                  annual: 'yr',
+                  'one-time': 'one-time',
+                }[tier.billingInterval]}
+              </span>
+            </div>
+            {tier.discount && (
+              <p className="text-sm text-green-600 mt-2">
+                🎁 {tier.discount} Discount
+              </p>
+            )}
+          </div>
+
+          {/* Features List */}
+          <ul className="space-y-3 mb-8 w-full text-left">
+            {tier.features.map((feature) => (
+              <li key={feature.id} className="flex items-center gap-3">
+                <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
+                <span className="text-slate-700">{feature.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA Button */}
+          <button
+            className={`w-full py-3 rounded-lg font-semibold transition-all ${
+              tier.recommended
+                ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
+            }`}
+          >
+            GET {tier.name.toUpperCase()}
+          </button>
+        </article>
+      ))}
+    </div>
+
+    {/* Calculator Widget */}
+    {pricelistState.enableCalculator && (
+      <div className="mt-8 p-6 bg-slate-50 rounded-xl border border-slate-200">
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">
+          {pricelistState.calculatorLabel || "Price Calculator"}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <select className="p-2 rounded-lg border border-slate-300 bg-white w-full">
+            {pricelistState.tiers.map((tier) => (
+              <option key={tier.id} value={tier.id}>
+                {tier.name} -{' '}
+                {tier.price
+                  .toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: pricelistState.currency,
+                  })
+                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
+              </option>
+            ))}
+          </select>
+          <input
+            type="number"
+            placeholder="Enter Quantity"
+            className="p-2 rounded-lg border border-slate-300 bg-white w-full"
+          />
+          <button className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition w-full">
+            {pricelistState.calculatorLabel || "Calculate Total"}
+          </button>
+        </div>
+        {pricelistState.calculatorNote && (
+          <p className="text-slate-500 text-sm mt-3">
+            * {pricelistState.calculatorNote}
+          </p>
+        )}
+      </div>
+    )}
   </div>
 )}
 
