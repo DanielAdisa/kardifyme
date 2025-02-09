@@ -6066,7 +6066,7 @@ const baseLabelStyles = `
 )}
 
 {selectedVariant === 'pricelist' && (
-  <div className="space-y-6">
+  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-4 rounded-2xl transition-all">
   {/* Pricelist Header */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
@@ -6088,7 +6088,7 @@ const baseLabelStyles = `
         }
         className="w-full p-2 rounded-lg border border-slate-300"
       >
-        {(['USD', 'EUR', 'GBP', 'INR'] as Currency[]).map((currency) => (
+        {(['USD', 'EUR', 'GBP', 'INR', 'NGN', 'GHC'] as Currency[]).map((currency) => (
           <option key={currency} value={currency}>
             {currency}
           </option>
