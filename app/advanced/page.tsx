@@ -16163,7 +16163,7 @@ const baseLabelStyles = `
           {/* Tier Image or Icon */}
           <div className="mb-6">
             <img
-              src={tier.image || '/12.jpg'}
+              src={"/12.jpg"}
               alt={`${tier.name} Plan`}
               className="w-20 h-20 object-cover rounded-full mb-4"
             />
