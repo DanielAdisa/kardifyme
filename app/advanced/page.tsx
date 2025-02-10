@@ -533,6 +533,7 @@ const CreateCard = () => {
   const [bio, setBio] = useState('');
   const [gradYear, setGradYear] = useState('');
   const [institution, setInstitution] = useState('');
+  const [columns, setColumns] = useState(1);
   const [degree, setDegree] = useState('');
   const [duration, setDuration] = useState('');
   const [role, setRole] = useState('');
@@ -6067,6 +6068,82 @@ const baseLabelStyles = `
 
 {selectedVariant === 'pricelist' && (
   <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-4 rounded-2xl transition-all">
+
+    <div className="space-y-4 p-4">
+      {/* Background Type Selection */}
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2">Background Type</label>
+      <Switch.Group>
+        <div className="flex items-center space-x-4">
+          <Switch.Label className="mr-2">Solid Color</Switch.Label>
+          <Switch
+            checked={bgType === 'gradient'}
+            onChange={() => setBgType(bgType === 'solid' ? 'gradient' : 'solid')}
+            className={`${
+              bgType === 'gradient' ? 'bg-blue-600' : 'bg-gray-200'
+            } relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out`}
+          >
+            <span
+              className={`${
+                bgType === 'gradient' ? 'translate-x-6' : 'translate-x-1'
+              } inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out`}
+            />
+          </Switch>
+          <Switch.Label className="ml-2">Gradient</Switch.Label>
+        </div>
+      </Switch.Group>
+    </div>
+
+    {/* Background Color Picker */}
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2">
+        {bgType === 'solid' ? 'Solid Color' : 'Gradient Colors'}
+      </label>
+      <button
+        type="button"
+        onClick={() => setShowColorPicker(!showColorPicker)}
+        className="p-2 bg-blue-500 text-white rounded-lg"
+      >
+        {showColorPicker ? 'Hide Color Picker' : 'Show Color Picker'}
+      </button>
+      {showColorPicker && (
+        <div className="mt-4">
+          {bgType === 'solid' ? (
+            <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+            />
+          ) : (
+            <div className=" flex space-x-2 w-full overflow-scroll mx-auto">
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">From</label>
+                <SketchPicker
+                  color={gradientFrom}
+                  onChange={(color) => setGradientFrom(color.hex)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Via</label>
+                <SketchPicker
+                  color={gradientVia}
+                  onChange={(color) => setGradientVia(color.hex)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">To</label>
+                <SketchPicker
+                  color={gradientTo}
+                  onChange={(color) => setGradientTo(color.hex)}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+
+    </div>
+
   {/* Pricelist Header */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
@@ -6095,6 +6172,22 @@ const baseLabelStyles = `
         ))}
       </select>
     </div>
+    <div>
+    <label className="block text-stone-950 mb-2 font-medium">Grid Cols</label>
+    <select
+          value={columns}
+          onChange={(e) => setColumns(Number(e.target.value))}
+          className="w-full p-2 rounded-lg border border-slate-300"
+        >
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+
+        </div>
   </div>
 
   {/* Pricing Tiers */}
@@ -6131,6 +6224,7 @@ const baseLabelStyles = `
             <option value="monthly">Monthly</option>
             <option value="annual">Annual</option>
             <option value="one-time">One-time</option>
+            <option value=" ">Empty</option>
           </select>
         </div>
 
@@ -7396,34 +7490,10 @@ const baseLabelStyles = `
     </div>
   </div>
 </div>
-
-  {/* Style Controls */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-    {/* Card Color Picker1 */}
-    <div className="space-y-2 bg-white p-4 mx-auto rounded-2xl border border-gray-100 shadow-sm">
+    <div className="space-y-2  p-0 rounded-2xl border border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
-        Card Color
-        <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
-      </label>
-      <div className="relative group">
-        <div title="Select card color">
-          <SketchPicker
-            color={cardColor[selectedVariant]}
-            onChange={(color) => setCardColor({ ...cardColor, [selectedVariant]: color.hex })}
-            className="w-full h-fit p-4 cursor-pointer transition-transform duration-200 
-                     "
-          />
-        </div>
-        <div className="absolute inset-0 rounded-xl ring-2 ring-gray-200 pointer-events-none 
-                      transition-opacity opacity-0 group-hover:opacity-100" />
-      </div>
-    </div>
-
-    {/* Template Selector */}
-    <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
-      <label className="block font-medium text-gray-700">
-        Template Style
-        <span className="ml-2 text-sm text-gray-400">Choose Font</span>
+        Font Style
+        <span className="ml-2 text-gray-400 text-sm font-normal">Choose Font</span>
       </label>
       <select
         value={selectedTemplate[selectedVariant]}
@@ -7441,11 +7511,34 @@ const baseLabelStyles = `
           </option>
         ))}
       </select>
+      <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+      <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
     </div>
-  </div>
+    </div>
 
-  {/* Text Color Picker */}
-  <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
+  {/* Style Controls */}
+  <div className=" mx-auto">
+    {/* Card Color Picker1 */}
+    <div className=" p-4  rounded-2xl border border-gray-100 shadow-sm">
+      <label className="block font-medium text-gray-700">
+        Card Color
+        <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
+      </label>
+      <div className="relative group">
+        <div title="Select card color">
+          <SketchPicker
+            color={cardColor[selectedVariant]}
+            onChange={(color) => setCardColor({ ...cardColor, [selectedVariant]: color.hex })}
+            className="w-full h-fit p-4 cursor-pointer transition-transform duration-200 
+                     "
+          />
+        </div>
+        <div className="absolute inset-0 rounded-xl ring-2 ring-gray-200 pointer-events-none 
+                      transition-opacity opacity-0 group-hover:opacity-100" />
+      </div>
+      <div className="space-y-2 bg-white p-0 rounded-2xl border border-gray-100 shadow-sm">
     <label className="block font-medium text-gray-700">
       Text Color
       <span className="ml-2 w-full text-sm text-gray-400">Set font color</span>
@@ -7502,6 +7595,11 @@ const baseLabelStyles = `
       </div>
         
   </div>
+    </div>
+  </div>
+
+  {/* Text Color Picker */}
+  
 </div>
  
    {/* Conditional Inputs based on Variant */}
@@ -10321,6 +10419,82 @@ const baseLabelStyles = `
 
 {selectedVariant === 'pricelist' && (
   <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-4 rounded-2xl transition-all">
+
+    <div className="space-y-4 p-4">
+      {/* Background Type Selection */}
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2">Background Type</label>
+      <Switch.Group>
+        <div className="flex items-center space-x-4">
+          <Switch.Label className="mr-2">Solid Color</Switch.Label>
+          <Switch
+            checked={bgType === 'gradient'}
+            onChange={() => setBgType(bgType === 'solid' ? 'gradient' : 'solid')}
+            className={`${
+              bgType === 'gradient' ? 'bg-blue-600' : 'bg-gray-200'
+            } relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out`}
+          >
+            <span
+              className={`${
+                bgType === 'gradient' ? 'translate-x-6' : 'translate-x-1'
+              } inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out`}
+            />
+          </Switch>
+          <Switch.Label className="ml-2">Gradient</Switch.Label>
+        </div>
+      </Switch.Group>
+    </div>
+
+    {/* Background Color Picker */}
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2">
+        {bgType === 'solid' ? 'Solid Color' : 'Gradient Colors'}
+      </label>
+      <button
+        type="button"
+        onClick={() => setShowColorPicker(!showColorPicker)}
+        className="p-2 bg-blue-500 text-white rounded-lg"
+      >
+        {showColorPicker ? 'Hide Color Picker' : 'Show Color Picker'}
+      </button>
+      {showColorPicker && (
+        <div className="mt-4">
+          {bgType === 'solid' ? (
+            <SketchPicker
+              color={solidColor}
+              onChange={(color) => setSolidColor(color.hex)}
+            />
+          ) : (
+            <div className=" flex space-x-2 w-full overflow-scroll mx-auto">
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">From</label>
+                <SketchPicker
+                  color={gradientFrom}
+                  onChange={(color) => setGradientFrom(color.hex)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Via</label>
+                <SketchPicker
+                  color={gradientVia}
+                  onChange={(color) => setGradientVia(color.hex)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">To</label>
+                <SketchPicker
+                  color={gradientTo}
+                  onChange={(color) => setGradientTo(color.hex)}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+
+    </div>
+
   {/* Pricelist Header */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
@@ -10349,6 +10523,22 @@ const baseLabelStyles = `
         ))}
       </select>
     </div>
+    <div>
+    <label className="block text-stone-950 mb-2 font-medium">Grid Cols</label>
+    <select
+          value={columns}
+          onChange={(e) => setColumns(Number(e.target.value))}
+          className="w-full p-2 rounded-lg border border-slate-300"
+        >
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+
+        </div>
   </div>
 
   {/* Pricing Tiers */}
@@ -10385,6 +10575,7 @@ const baseLabelStyles = `
             <option value="monthly">Monthly</option>
             <option value="annual">Annual</option>
             <option value="one-time">One-time</option>
+            <option value=" ">Empty</option>
           </select>
         </div>
 
@@ -15099,6 +15290,17 @@ const baseLabelStyles = `
         </h2>
       )}
 
+            {bio && (
+              <div className="w-full bg-white/80 p-4 rounded-xl shadow-lg text-left space-y-2">
+                <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.bio }}>
+                    About Me:
+                </h3>
+                <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
+                  {bio}
+                </p>
+              </div>
+            )}
+
       {/* Personal Details */}
       <div className="w-full max-w-9xl text-left space-y-4">
         {/* Date of Birth / Place of Birth */}
@@ -15108,11 +15310,12 @@ const baseLabelStyles = `
               Personal Details
             </h3>
             <div className="space-y-2">
-              {dateOfBirth && (
-                <p className="text-sm md:text-base" style={{ color: textColors.dateOfBirth }}>
-                  <span className="font-medium">Date of Birth:</span> {dateOfBirth}
-                </p>
-              )}
+            {dateOfBirth && (
+              <p className="text-sm md:text-base" style={{ color: textColors.dateOfBirth }}>
+                <span className="font-medium">Date of Birth:</span> {new Date(dateOfBirth).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                <span className="ml-2">({Math.floor((new Date().getTime() - new Date(dateOfBirth).getTime()) / (365.25 * 24 * 60 * 60 * 1000))} years old)</span>
+              </p>
+            )}
               {placeOfBirth && (
                 <p className="text-sm md:text-base" style={{ color: textColors.placeOfBirth }}>
                   <span className="font-medium">Place of Birth:</span> {placeOfBirth}
@@ -15141,7 +15344,9 @@ const baseLabelStyles = `
                     ))}
                   </ul>
                 </div>
-              )}
+              ) || <p className="font-medium text-sm md:text-base" style={{ color: textColors.children }}>
+              Children: No Children
+            </p> }
               {townStateOrigin && (
                 <p className="text-sm md:text-base" style={{ color: textColors.townStateOrigin }}>
                   <span className="font-medium">Town/State of Origin:</span> {townStateOrigin}
@@ -15166,9 +15371,11 @@ const baseLabelStyles = `
           </div>
         )}
 
+            
+
         {/* Work Experience */}
         {workExperience.length > 0 && (
-          <div className="bg-white/80 p-4 grid grid-cols-1 rounded-xl shadow-lg">
+          <div className="bg-white/80 p-4 grid md:grid-cols-2 rounded-xl gap-2 shadow-lg">
             <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
               Work Experience
             </h3>
@@ -15201,7 +15408,7 @@ const baseLabelStyles = `
 
         {/* Education */}
         {education.length > 0 && (
-          <div className="bg-white/80 p-4 grid grid-cols-2 gap-4 rounded-xl shadow-lg">
+          <div className="bg-white/80 p-4 grid md:grid-cols-2 gap-4 rounded-xl shadow-lg">
             <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
               Academic Qualifications
             </h3>
@@ -15321,7 +15528,30 @@ const baseLabelStyles = `
               </div>
             ))}
           </div>
-        )}
+        ) ||
+        <div className="bg-white/80 grid grid-cols-2 gap-4 p-4 rounded-xl shadow-lg">
+        <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.referees }}>
+        Referees Availabe On Request
+      </h3></div>}
+
+        {/* Enhanced QR Code section */}
+      {qrUrl && (
+        <div className="mx-auto w-full ">
+          <div className="p-6 bg-white/65 backdrop-blur-xl rounded-2xl border border-white/20 flex flex-col items-center gap-4 hover:bg-white/20 transition-colors duration-300">
+            <QRCodeSVG 
+              value={qrUrl} 
+              size={150}
+              className="rounded-xl shadow-lg p-2 bg-white"
+            />
+            <p 
+              className="text-sm font-medium tracking-wider uppercase drop-shadow-lg"
+              style={{ color: textColors.qrUrl }}
+            >
+              Scan to Download
+            </p>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   </div>
@@ -15748,17 +15978,20 @@ const baseLabelStyles = `
 
 
 {selectedVariant === 'pricelist' && selectedVariantStyle === 'default' && (
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="max-w-7xl rounded-xl mx-auto px-4 sm:px-6 lg:px-8 " style={{
+    background:
+      bgType === 'gradient'
+        ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : "#f9f9f9",
+  }}>
     {/* Header Section */}
     <div className="text-center mb-12">
       <h2 className="text-4xl font-extrabold text-gray-900 mb-4">{title}</h2>
       <div className="flex items-center justify-center space-x-2">
         <span className="text-lg text-gray-600">{pricelistState.currency}</span>
-        {pricelistState.calculatorLabel && (
-          <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-            {pricelistState.calculatorLabel}
-          </button>
-        )}
+
       </div>
       {pricelistState.calculatorNote && (
         <p className="mt-2 text-sm text-gray-500">{pricelistState.calculatorNote}</p>
@@ -15793,8 +16026,13 @@ const baseLabelStyles = `
 
             {/* Price */}
             <div className="flex items-baseline mb-8">
-              <span className="text-5xl font-bold tracking-tight text-gray-900">
-                {pricelistState.currency} {tier.price.toFixed(2)}
+            <span className="text-4xl font-extrabold   text-stone-950">
+                {tier.price
+                  .toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: pricelistState.currency,
+                  })
+                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
               </span>
               <span className="ml-2 text-gray-500">/{tier.billingInterval}</span>
             </div>
@@ -15853,7 +16091,14 @@ const baseLabelStyles = `
 )}
 
 {selectedVariant === 'pricelist' && selectedVariantStyle === 'style1' && (
-  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-2xl">
+  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-2xl" style={{
+    background:
+      bgType === 'gradient'
+        ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : "#f9f9f9",
+  }}>
     {/* Header Section */}
     <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
       <div className="space-y-2">
@@ -15989,7 +16234,7 @@ const baseLabelStyles = `
 )}
 
 {selectedVariant === 'pricelist' && selectedVariantStyle === 'style2' && (
-  <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-2xl overflow-hidden">
+  <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-2xl overflow-hidden" >
     {/* Animated background effects */}
     <div className="absolute inset-0 bg-grid-white/[0.05] animate-grid-fade"></div>
     <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -16014,7 +16259,7 @@ const baseLabelStyles = `
     </div>
 
     {/* Pricing Grid */}
-    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-2`}>
       {pricelistState.tiers.map((tier) => (
         <div
           key={tier.id}
@@ -16118,7 +16363,14 @@ const baseLabelStyles = `
 )}
 
 {selectedVariant === 'pricelist' && selectedVariantStyle === 'style3' && (
-  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-2xl">
+  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-4 rounded-xl" style={{
+    background:
+      bgType === 'gradient'
+        ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : "#f9f9f9",
+  }}>
     {/* Header Section */}
     <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
       <div className="space-y-2">
@@ -16145,12 +16397,12 @@ const baseLabelStyles = `
     </header>
 
     {/* Pricing Tiers Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-2`}>
       {pricelistState.tiers.map((tier) => (
         <article
           key={tier.id}
-          className={`relative flex flex-col items-center justify-between border rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-200 ${
-            tier.recommended ? 'border-indigo-300 bg-indigo-50' : 'border-slate-200 bg-white'
+          className={`relative flex flex-col items-center justify-between border rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-200 ${
+            tier.recommended ? 'border-indigo-300 bg-indigo-50 scale-100 transition-all duration-200 ' : 'border-slate-200 bg-white scale-95 transition-all duration-200 '
           }`}
         >
           {/* Recommended Badge */}
@@ -16162,12 +16414,14 @@ const baseLabelStyles = `
 
           {/* Tier Image or Icon */}
           <div className="mb-6">
+          <p className="text-stone-950 font-bold font-mono p-2 text-center text-xl">{tier.description}</p>
             <img
               src={"/12.jpg"}
               alt={`${tier.name} Plan`}
-              className="w-20 h-20 object-cover rounded-full mb-4"
+              className="w-20 h-20 mx-auto object-cover rounded-full mb-4"
             />
-            <h3 className="text-xl font-bold text-slate-900">{tier.name}</h3>
+            <h3 className="text-xl font-bold text-center text-slate-900">{tier.name}</h3>
+            
           </div>
 
           {/* Price Section */}
@@ -16182,7 +16436,7 @@ const baseLabelStyles = `
                   .replace(/^(.{1})(\d{3})/, '$1,$2')}
               </span>
               <span className="text-slate-500 font-medium">
-                /{{
+                {{
                   monthly: 'mo',
                   annual: 'yr',
                   'one-time': 'one-time',
@@ -16226,7 +16480,7 @@ const baseLabelStyles = `
         <h3 className="text-lg font-semibold text-slate-900 mb-4">
           {pricelistState.calculatorLabel || "Price Calculator"}
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-4`}>
           <select className="p-2 rounded-lg border border-slate-300 bg-white w-full">
             {pricelistState.tiers.map((tier) => (
               <option key={tier.id} value={tier.id}>
