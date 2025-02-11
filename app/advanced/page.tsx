@@ -6,6 +6,7 @@ interface AcademicQualification {
   date: string;
 }
 
+declare var html2pdf: any;
 
 import { SketchPicker } from 'react-color';
 import { toPng } from 'html-to-image';
@@ -15,6 +16,7 @@ import html2canvas from 'html2canvas';
 import Image from 'next/image';
 import { Switch } from '@headlessui/react';
 import place from "@/public/12.jpg"
+import html2pdf from 'html2pdf.js';
 import domtoimage from 'dom-to-image';
 
 
@@ -723,19 +725,65 @@ const calculateDaysUntilBirthday = (cardDate: string, birthdayDate: string): str
   return differenceInDays > 0 ? `${differenceInDays} days left` : "It's the birthday today!";
 };
 
-const generatePDF = async () => {
+
+
+
+const generatePDF2 = async () => {
   if (!cardRef.current) return;
   setIsLoading1(true);
-  
+
   try {
     const content = cardRef.current;
     const { width, height } = content.getBoundingClientRect();
-    
+    const scale = 4; // Increase resolution
+
+    const opt = {
+      margin: 0,
+      filename: `${title || 'card'}-${Date.now()}.pdf`,
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: {
+        scale: scale,
+        useCORS: true,
+        logging: true,
+        width: width,
+        height: height,
+        windowWidth: width * scale,
+        windowHeight: height * scale,
+        letterRendering: true,
+      },
+      jsPDF: {
+        orientation: width > height ? 'landscape' : 'portrait',
+        unit: 'px',
+        format: [width, height],
+        compress: true,
+        precision: 100,
+      },
+      pagebreak: { mode: 'avoid-all' },
+      enableLinks: true, // Critical for hyperlinks
+    };
+
+    await html2pdf().set(opt).from(content).save();
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    alert('Failed to generate PDF. Please try again.');
+  } finally {
+    setIsLoading1(false);
+  }
+};
+
+const generatePDF = async () => {
+  if (!cardRef.current) return;
+  setIsLoading1(true);
+
+  try {
+    const content = cardRef.current;
+    const { width, height } = content.getBoundingClientRect();
+
     // Increase quality with higher DPI
     const scale = 4; // Increase resolution
     const scaledWidth = width * scale;
     const scaledHeight = height * scale;
-    
+
     const imgData = await domtoimage.toPng(content, {
       width: scaledWidth,
       height: scaledHeight,
@@ -752,9 +800,10 @@ const generatePDF = async () => {
     const pdf = new jsPDF({
       orientation: width > height ? 'landscape' : 'portrait',
       unit: 'px',
-      format: [width, height],
+      format: 'a4',
       compress: true,
-      precision: 100
+      precision: 100,
+      letterRendering: true,
     });
 
     const img = new window.Image();
@@ -762,16 +811,28 @@ const generatePDF = async () => {
 
     await new Promise((resolve) => {
       img.onload = () => {
-        pdf.addImage(
-          img, 
-          'PNG', 
-          0, 
-          0, 
-          width, 
-          height, 
-          undefined, 
-          'FAST'
-        );
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const ratio = pageWidth / width;
+        const scaledPageHeight = height * ratio;
+
+        let y = 0;
+        while (y < height) {
+          pdf.addImage(
+            img,
+            'PNG',
+            0,
+            -y * ratio,
+            pageWidth,
+            scaledPageHeight,
+            undefined,
+            'FAST'
+          );
+          y += pageHeight / ratio;
+          if (y < height) {
+            pdf.addPage();
+          }
+        }
         resolve(null);
       };
     });
@@ -784,7 +845,6 @@ const generatePDF = async () => {
     setIsLoading1(false);
   }
 };
-
 
 
 const [fieldValues, setFieldValues] = useState({
@@ -15261,7 +15321,7 @@ const baseLabelStyles = `
 
 {selectedVariant === 'resume' && selectedVariantStyle === 'style4' && (
   <div
-    className="relative min-h-[600px] p-4 md:p-6 bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
+    className="relative min-h-[600px] p-4  bg-white/90 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
     style={{
       background:
         bgType === 'gradient'
@@ -15295,7 +15355,7 @@ const baseLabelStyles = `
                 <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.bio }}>
                     About Me:
                 </h3>
-                <p className="text-sm md:text-base" style={{ color: textColors.bio }}>
+                <p className="text-sm md:text-base whitespace-pre-wrap" style={{ color: textColors.bio }}>
                   {bio}
                 </p>
               </div>
@@ -15375,17 +15435,18 @@ const baseLabelStyles = `
 
         {/* Work Experience */}
         {workExperience.length > 0 && (
-          <div className="bg-white/80 p-4 grid md:grid-cols-2 rounded-xl gap-2 shadow-lg">
-            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.workExperience }}>
+          <div className="">
+            <h3 className="text-lg md:text-xl pb-0 p-4 font-semibold mb-2" style={{ color: textColors.workExperience }}>
               Work Experience
             </h3>
+          <div className="bg-white/80 p-4 grid md:grid-cols-2 rounded-xl gap-4 shadow-lg">
             {workExperience.map((experience, index) => (
               <div key={index} className="space-y-2">
-                <p className="font-medium text-base md:text-xl " style={{ color: textColors.companyName }}>
-                  {experience.companyName}
-                </p>
                 <p className="text-sm md:text-2xl font-bold italic" style={{ color: textColors.role }}>
                   {experience.role}
+                </p>
+                <p className="font-medium text-base md:text-xl " style={{ color: textColors.companyName }}>
+                  {experience.companyName}
                 </p>
                 <p className="text-sm md:text-base" style={{ color: textColors.duration }}>
                   {experience.duration}
@@ -15404,14 +15465,17 @@ const baseLabelStyles = `
               </div>
             ))}
           </div>
+          </div>
         )}
 
         {/* Education */}
         {education.length > 0 && (
-          <div className="bg-white/80 p-4 grid md:grid-cols-2 gap-4 rounded-xl shadow-lg">
-            <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
+           <div className="">
+             <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.education }}>
               Academic Qualifications
             </h3>
+          <div className="bg-white/80 p-4 grid md:grid-cols-2 gap-4 rounded-xl shadow-lg">
+           
             {education.map((edu, index) => (
               <div key={index} className="space-y-2">
                 <div className="flex justify-between items-center">
@@ -15427,6 +15491,7 @@ const baseLabelStyles = `
                 </p>
               </div>
             ))}
+          </div>
           </div>
         )}
 
@@ -15503,17 +15568,19 @@ const baseLabelStyles = `
               Extra Curriculum Activities
             </h3>
             <p className="text-sm md:text-base" style={{ color: textColors.extraCurriculumActivities }}>
-              {extraCurriculumActivities.join(', ')}
+              {'▪️ '}{extraCurriculumActivities.join(' ▪️ ')}
             </p>
           </div>
         )}
 
         {/* Referees */}
         {referees.length > 0 && (
-          <div className="bg-white/80 grid grid-cols-2 gap-4 p-4 rounded-xl shadow-lg">
+          <div className="">
             <h3 className="text-lg md:text-xl font-semibold mb-2" style={{ color: textColors.referees }}>
               Referees
             </h3>
+             <div className="bg-white/80 grid grid-cols-2 gap-4 p-4 rounded-xl shadow-lg">
+            
             {referees.map((referee, index) => (
               <div key={index} className="space-y-2">
                 <p className="font-medium text-base md:text-lg" style={{ color: textColors.refereeName }}>
@@ -15527,6 +15594,7 @@ const baseLabelStyles = `
                 </p>
               </div>
             ))}
+          </div>
           </div>
         ) ||
         <div className="bg-white/80 grid grid-cols-2 gap-4 p-4 rounded-xl shadow-lg">
