@@ -772,12 +772,13 @@ const generatePDF2 = async () => {
 };
 
 const generatePDF = async () => {
-  if (!cardRef.current) return;
+  if (typeof window === 'undefined' || !cardRef.current) return;
   setIsLoading1(true);
 
   try {
     const content = cardRef.current;
     const { width, height } = content.getBoundingClientRect();
+    const html2pdf = (await import("html2pdf.js")).default;
 
     // Increase quality with higher DPI
     const scale = 4; // Increase resolution
@@ -2480,6 +2481,7 @@ const updatePresentEmployment = (field: keyof PresentEmployment, value: string):
   };
   
   // Add error handling for image generation
+
   const generateImage = async () => {
     if (!cardRef.current) return;
     setIsLoading(true);
