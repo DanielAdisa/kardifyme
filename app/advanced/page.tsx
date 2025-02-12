@@ -6,7 +6,6 @@ interface AcademicQualification {
   date: string;
 }
 
-declare var html2pdf: any;
 
 import { SketchPicker } from 'react-color';
 import { toPng } from 'html-to-image';
@@ -16,7 +15,7 @@ import html2canvas from 'html2canvas';
 import Image from 'next/image';
 import { Switch } from '@headlessui/react';
 import place from "@/public/12.jpg"
-import html2pdf from 'html2pdf.js';
+
 import domtoimage from 'dom-to-image';
 
 
@@ -727,64 +726,19 @@ const calculateDaysUntilBirthday = (cardDate: string, birthdayDate: string): str
 
 
 
-
-const generatePDF2 = async () => {
+const generatePDF = async () => {
   if (!cardRef.current) return;
   setIsLoading1(true);
-
+  
   try {
     const content = cardRef.current;
     const { width, height } = content.getBoundingClientRect();
-    const scale = 4; // Increase resolution
-
-    const opt = {
-      margin: 0,
-      filename: `${title || 'card'}-${Date.now()}.pdf`,
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: {
-        scale: scale,
-        useCORS: true,
-        logging: true,
-        width: width,
-        height: height,
-        windowWidth: width * scale,
-        windowHeight: height * scale,
-        letterRendering: true,
-      },
-      jsPDF: {
-        orientation: width > height ? 'landscape' : 'portrait',
-        unit: 'px',
-        format: [width, height],
-        compress: true,
-        precision: 100,
-      },
-      pagebreak: { mode: 'avoid-all' },
-      enableLinks: true, // Critical for hyperlinks
-    };
-
-    await html2pdf().set(opt).from(content).save();
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    alert('Failed to generate PDF. Please try again.');
-  } finally {
-    setIsLoading1(false);
-  }
-};
-
-const generatePDF = async () => {
-  if (typeof window === 'undefined' || !cardRef.current) return;
-  setIsLoading1(true);
-
-  try {
-    const content = cardRef.current;
-    const { width, height } = content.getBoundingClientRect();
-    const html2pdf = (await import("html2pdf.js")).default;
-
+    
     // Increase quality with higher DPI
     const scale = 4; // Increase resolution
     const scaledWidth = width * scale;
     const scaledHeight = height * scale;
-
+    
     const imgData = await domtoimage.toPng(content, {
       width: scaledWidth,
       height: scaledHeight,
@@ -801,10 +755,9 @@ const generatePDF = async () => {
     const pdf = new jsPDF({
       orientation: width > height ? 'landscape' : 'portrait',
       unit: 'px',
-      format: 'a4',
+      format: [width, height],
       compress: true,
-      precision: 100,
-      letterRendering: true,
+      precision: 100
     });
 
     const img = new window.Image();
@@ -812,28 +765,16 @@ const generatePDF = async () => {
 
     await new Promise((resolve) => {
       img.onload = () => {
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const ratio = pageWidth / width;
-        const scaledPageHeight = height * ratio;
-
-        let y = 0;
-        while (y < height) {
-          pdf.addImage(
-            img,
-            'PNG',
-            0,
-            -y * ratio,
-            pageWidth,
-            scaledPageHeight,
-            undefined,
-            'FAST'
-          );
-          y += pageHeight / ratio;
-          if (y < height) {
-            pdf.addPage();
-          }
-        }
+        pdf.addImage(
+          img, 
+          'PNG', 
+          0, 
+          0, 
+          width, 
+          height, 
+          undefined, 
+          'FAST'
+        );
         resolve(null);
       };
     });
