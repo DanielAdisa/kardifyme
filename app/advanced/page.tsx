@@ -331,6 +331,19 @@ const cardVariants = {
       },
     },
   },
+  biblequote: {
+    templates: {
+      modern: {
+        font: 'font-serif',
+      },
+      classic: {
+        font: 'font-mono',
+      },
+      minimal: {
+        font: 'font-sans',
+      },
+    },
+  },
 };
 
 // Add currency options
@@ -625,7 +638,7 @@ const [productImageState, setProductImageState] = useState<string | null>(null);
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable' | 'pricelist';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable' | 'pricelist' | 'biblequote';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   
   const cardRef = useRef<HTMLDivElement>(null);
@@ -997,6 +1010,7 @@ const [cardColor, setCardColor] = useState({
   resume: '#ffffff',
   timetable: '#ffffff',
   pricelist: '#ffffff',
+  biblequote: '#ffffff',
 });
 // const [education, setEducation] = useState([{ degree: '', institution: '', gradYear: '' }]);
 // const [hobbies, setHobbies] = useState(['']);
@@ -1062,6 +1076,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   resume: 'minimal',
   timetable: 'minimal',
   pricelist: 'minimal',
+  biblequote: 'minimal',
 });
 
 const templateOptions = {
@@ -1085,6 +1100,7 @@ const templateOptions = {
   resume: ['modern', 'classic', 'minimal'],
   timetable: ['modern', 'classic', 'minimal'],
   pricelist: ['modern', 'classic', 'minimal'],
+  biblequote: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -2197,6 +2213,7 @@ const updatePresentEmployment = (field: keyof PresentEmployment, value: string):
       resume: '#ffffff',
       timetable: '#ffffff',
       pricelist: '#ffffff',
+      biblequote: '#ffffff',
 
     },
     footerCardColor: '#000',
@@ -2220,7 +2237,8 @@ const updatePresentEmployment = (field: keyof PresentEmployment, value: string):
       invitation: 'minimal',
       resume: 'minimal',
       timetable: 'minimal',
-      pricelist: 'minimal'
+      pricelist: 'minimal',
+      biblequote: 'minimal',
     }
   });
 
@@ -2647,24 +2665,25 @@ const baseLabelStyles = `
                  hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
       >
         <option value="business">💼 Business Card</option>
-        <option value="event">🎫 Event Ticket</option>
-        <option value="product">🛍️ Product Showcase</option>
-        <option value="invoice">📄 Invoice</option>
-        <option value="receipt">🧾 Receipt</option>
-        <option value="einvoice">📧 E-Invoice</option>
-        <option value="flyer">📜 E-Flyer</option>
-        <option value="recipe">🍲 Recipe</option>
-        <option value="contract">📜 Contract</option>
-        <option value="birthday">🎂 Birthday</option>
-        <option value="budget">💰 Budget</option>
-        <option value="idCard">🆔 ID Card</option>
-        <option value="mood">🌈 Mood Board</option>
-        <option value="affirmations">💬 Affirmations</option>
-        <option value="brand">🏷️ Brand Card</option>
-        <option value="invitation">💌 Invitation</option>
-        <option value="resume">💬 Resume</option>
-        <option value="timetable">💬 Time Table</option>
-        <option value="pricelist">💬 Price List</option>
+<option value="event">🎫 Event Ticket</option>
+<option value="product">🛍️ Product Showcase</option>
+<option value="invoice">📄 Invoice</option>
+<option value="receipt">🧾 Receipt</option>
+<option value="einvoice">📧 E-Invoice</option>
+<option value="flyer">📜 Flyer</option>
+<option value="recipe">🍲 Recipe</option>
+<option value="contract">📝 Contract</option>
+<option value="birthday">🎂 Birthday</option>
+<option value="budget">💰 Budget</option>
+<option value="idCard">🆔 ID Card</option>
+<option value="mood">🎨 Mood Board</option>
+<option value="affirmations">💭 Affirmations</option>
+<option value="brand">🏷️ Brand Card</option>
+<option value="invitation">✉️ Invitation</option>
+<option value="resume">📄 Resume</option>
+<option value="timetable">⏰ Time Table</option>
+<option value="pricelist">🏷️ PriceList</option>
+<option value="biblequote">📖 Bible Quote</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -7437,24 +7456,25 @@ const baseLabelStyles = `
                  hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
       >
         <option value="business">💼 Business Card</option>
-        <option value="event">🎫 Event Ticket</option>
-        <option value="product">🛍️ Product Showcase</option>
-        <option value="invoice">📄 Invoice</option>
-        <option value="receipt">🧾 Receipt</option>
-        <option value="einvoice">📧 E-Invoice</option>
-        <option value="flyer">📜 E-Flyer</option>
-        <option value="recipe">🍲 Recipe</option>
-        <option value="contract">📜 Contract</option>
-        <option value="birthday">🎂 Birthday</option>
-        <option value="budget">💰 Budget</option>
-        <option value="idCard">🆔 ID Card</option>
-        <option value="mood">🌈 Mood Board</option>
-        <option value="affirmations">💬 Affirmations</option>
-        <option value="brand">🏷️ Brand Card</option>
-        <option value="invitation">💌 Invitation</option>
-        <option value="resume">💬 Resume</option>
-        <option value="timetable">💬 Time Table</option>
-        <option value="pricelist"> PriceList</option>
+<option value="event">🎫 Event Ticket</option>
+<option value="product">🛍️ Product Showcase</option>
+<option value="invoice">📄 Invoice</option>
+<option value="receipt">🧾 Receipt</option>
+<option value="einvoice">📧 E-Invoice</option>
+<option value="flyer">📜 Flyer</option>
+<option value="recipe">🍲 Recipe</option>
+<option value="contract">📝 Contract</option>
+<option value="birthday">🎂 Birthday</option>
+<option value="budget">💰 Budget</option>
+<option value="idCard">🆔 ID Card</option>
+<option value="mood">🎨 Mood Board</option>
+<option value="affirmations">💭 Affirmations</option>
+<option value="brand">🏷️ Brand Card</option>
+<option value="invitation">✉️ Invitation</option>
+<option value="resume">📄 Resume</option>
+<option value="timetable">⏰ Time Table</option>
+<option value="pricelist">🏷️ PriceList</option>
+<option value="biblequote">📖 Bible Quote</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
