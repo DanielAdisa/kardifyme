@@ -13,6 +13,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import Image from 'next/image';
+import bibleAPI from 'bible-api';
 import { Switch } from '@headlessui/react';
 import place from "@/public/12.jpg"
 
@@ -27,7 +28,23 @@ import { useLocalStorageState } from '@/hooks/useLocalStorageState';
 
 
 import { ethers } from 'ethers';
-import { ClockIcon, CalendarIcon, GlobeAltIcon, SunIcon, MapPinIcon, CurrencyDollarIcon, TagIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, CalendarIcon, GlobeAltIcon, SunIcon, MapPinIcon, CurrencyDollarIcon, TagIcon, CheckCircleIcon, SparklesIcon, ArrowRightIcon , BuildingOfficeIcon,
+
+  CheckIcon,
+  CheckBadgeIcon,
+  AcademicCapIcon,
+  CodeBracketIcon,
+  ArrowUpRightIcon,
+  CommandLineIcon,
+  CubeIcon,
+  HeartIcon,
+
+ClipboardDocumentListIcon,
+
+  StarIcon,
+  GiftIcon,
+  EnvelopeIcon,
+  PhoneIcon} from '@heroicons/react/24/outline';
 
 
 //niceone
@@ -344,6 +361,19 @@ const cardVariants = {
       },
     },
   },
+  jobvacancy: {
+    templates: {
+      modern: {
+        font: 'font-serif',
+      },
+      classic: {
+        font: 'font-mono',
+      },
+      minimal: {
+        font: 'font-sans',
+      },
+    },
+  }
 };
 
 // Add currency options
@@ -486,6 +516,8 @@ const CreateCard = () => {
     );
     setPricelistState({ ...pricelistState, tiers: updatedTiers });
   };
+
+  
 
   // Function to add a new feature to a tier
   const addFeature = (tierIndex: number) => {
@@ -638,7 +670,7 @@ const [productImageState, setProductImageState] = useState<string | null>(null);
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable' | 'pricelist' | 'biblequote';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable' | 'pricelist' | 'biblequote' | 'jobvacancy';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   
   const cardRef = useRef<HTMLDivElement>(null);
@@ -1011,6 +1043,7 @@ const [cardColor, setCardColor] = useState({
   timetable: '#ffffff',
   pricelist: '#ffffff',
   biblequote: '#ffffff',
+  jobvacancy: '#ffffff',
 });
 // const [education, setEducation] = useState([{ degree: '', institution: '', gradYear: '' }]);
 // const [hobbies, setHobbies] = useState(['']);
@@ -1077,6 +1110,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   timetable: 'minimal',
   pricelist: 'minimal',
   biblequote: 'minimal',
+  jobvacancy: 'minimal',
 });
 
 const templateOptions = {
@@ -1101,6 +1135,7 @@ const templateOptions = {
   timetable: ['modern', 'classic', 'minimal'],
   pricelist: ['modern', 'classic', 'minimal'],
   biblequote: ['modern', 'classic', 'minimal'],
+  jobvacancy: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -1313,6 +1348,19 @@ const calculateDurationPercentage = (start: string, end: string) => {
     events: Event[];
   }
 
+
+const [jobLocation, setJobLocation] = useState('');
+const [employmentType, setEmploymentType] = useState('full-time');
+const [salary, setSalary] = useState('');
+const [experienceLevel, setExperienceLevel] = useState('entry');
+const [applicationDeadline, setApplicationDeadline] = useState('');
+const [responsibilities, setResponsibilities] = useState<string[]>([]);
+const [requirements, setRequirements] = useState<string[]>([]);
+const [benefits, setBenefits] = useState<string[]>([]);
+const [applicationLink, setApplicationLink] = useState('');
+const [contactEmail, setContactEmail] = useState('');
+const [contactPhone, setContactPhone] = useState('');
+
   const handleUpdateEvent = (
     dayOfWeek: string,
     eventIndex: number,
@@ -1448,6 +1496,128 @@ const removeExtraCurriculumActivity = (index: number): void => {
   const newActivities = extraCurriculumActivities.filter((_, i) => i !== index);
   setExtraCurriculumActivities(newActivities);
 };
+
+
+
+
+type BibleBook = {
+  id: string;
+  name: string;
+  chapters: number;
+};
+
+type BibleVerse = {
+  book_id: string;
+  book_name: string;
+  chapter: number;
+  verse: number;
+  text: string;
+};
+
+type BibleTranslation = 'kjv' | 'web' | 'asv' | 'bbe' | 'darby';
+
+
+
+const [books, setBooks] = useState<BibleBook[]>([]);
+const [chapters, setChapters] = useState<number[]>([]);
+const [verses, setVerses] = useState<number[]>([]);
+const [selectedBook, setSelectedBook] = useState<string>('');
+const [selectedChapter, setSelectedChapter] = useState<string>('');
+const [selectedVerse, setSelectedVerse] = useState<string>('');
+const [selectedTranslation, setSelectedTranslation] = useState<BibleTranslation>('kjv');
+const [verseText, setVerseText] = useState<string>('');
+const [loading, setLoading] = useState({
+  books: false,
+  chapters: false,
+  verses: false,
+  verse: false
+});
+const [error, setError] = useState<string>('');
+
+// Fetch Bible books on component mount
+useEffect(() => {
+  const fetchBooks = async () => {
+    setLoading(prev => ({...prev, books: true}));
+    try {
+      const response = await fetch('https://bible-api.com/books');
+      const data = await response.json();
+      setBooks(data);
+    } catch (err) {
+      setError('Failed to load Bible books');
+    } finally {
+      setLoading(prev => ({...prev, books: false}));
+    }
+  };
+
+  fetchBooks();
+}, []);
+
+// Fetch chapters when book changes
+useEffect(() => {
+  const fetchChapters = async () => {
+    if (!selectedBook) return;
+
+    setLoading(prev => ({...prev, chapters: true}));
+    try {
+      const response = await fetch(
+        `https://bible-api.com/book/${selectedBook}?translation=${selectedTranslation}`
+      );
+      const data = await response.json();
+      setChapters(Array.from({length: data.chapters}, (_, i) => i + 1));
+    } catch (err) {
+      setError('Failed to load chapters');
+    } finally {
+      setLoading(prev => ({...prev, chapters: false}));
+    }
+  };
+
+  fetchChapters();
+}, [selectedBook, selectedTranslation]);
+
+// Fetch verses when chapter changes
+useEffect(() => {
+  const fetchVerses = async () => {
+    if (!selectedBook || !selectedChapter) return;
+
+    setLoading(prev => ({...prev, verses: true}));
+    try {
+      const response = await fetch(
+        `https://bible-api.com/${selectedBook}${selectedChapter}?translation=${selectedTranslation}`
+      );
+      const data = await response.json();
+      setVerses(Array.from({length: data.verses.length}, (_, i) => i + 1));
+    } catch (err) {
+      setError('Failed to load verses');
+    } finally {
+      setLoading(prev => ({...prev, verses: false}));
+    }
+  };
+
+  fetchVerses();
+}, [selectedChapter, selectedBook, selectedTranslation]);
+
+// Handle verse fetching
+const handleFetchVerse = async () => {
+  if (!selectedBook || !selectedChapter || !selectedVerse) return;
+
+  setLoading(prev => ({...prev, verse: true}));
+  try {
+    const response = await fetch(
+      `https://bible-api.com/${selectedBook}${selectedChapter}:${selectedVerse}?translation=${selectedTranslation}`
+    );
+    const data: { verses: BibleVerse[] } = await response.json();
+    setVerseText(data.verses[0].text);
+    setError('');
+  } catch (err) {
+    setError('Failed to fetch verse');
+    setVerseText('');
+  } finally {
+    setLoading(prev => ({...prev, verse: false}));
+  }
+};
+
+
+
 
 // Add a new referee entry
 const addReferee = () => {
@@ -2355,6 +2525,7 @@ const updatePresentEmployment = (field: keyof PresentEmployment, value: string):
     jobDescriptions: string[];
   }
 
+
   const updateJobDescription = (expIndex: number, descIndex: number, value: string): void => {
     const newWorkExperience: WorkExperience[] = [...workExperience];
     newWorkExperience[expIndex].jobDescriptions[descIndex] = value;
@@ -2682,8 +2853,9 @@ const baseLabelStyles = `
 <option value="invitation">✉️ Invitation</option>
 <option value="resume">📄 Resume</option>
 <option value="timetable">⏰ Time Table</option>
-<option value="pricelist">🏷️ PriceList</option>
+<option value="pricelist">🏷️ PriceList</option>jobvacancy
 <option value="biblequote">📖 Bible Quote</option>
+<option value="jobvacancy">📖 Vacancy</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -6381,6 +6553,258 @@ const baseLabelStyles = `
 )}
 
 
+{selectedVariant === 'biblequote' && (
+  <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
+  </div>
+)}
+
+
+{selectedVariant === 'jobvacancy' && (
+  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-2xl">
+    {/* Job Title */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Job Title</label>
+      <input
+        type="text"
+        value={jobTitle}
+        onChange={(e) => setJobTitle(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="e.g., Senior Software Engineer"
+      />
+    </div>
+
+    {/* Company Name */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Company Name</label>
+      <input
+        type="text"
+        value={companyName}
+        onChange={(e) => setCompanyName(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter company name"
+      />
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Main Content</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
+        placeholder="Enter flyer details, features, or event information"
+      />
+    </div>
+
+    {/* Location */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Location</label>
+      <input
+        type="text"
+        value={jobLocation}
+        onChange={(e) => setJobLocation(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="e.g., New York, NY (Remote)"
+      />
+    </div>
+
+    {/* Employment Type */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Employment Type</label>
+      <select
+        value={employmentType}
+        onChange={(e) => setEmploymentType(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="full-time">Full-time</option>
+        <option value="part-time">Part-time</option>
+        <option value="contract">Contract</option>
+        <option value="freelance">Freelance</option>
+        <option value="internship">Internship</option>
+      </select>
+    </div>
+
+    {/* Salary Range */}
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <label className="block text-gray-700 font-medium mb-2">Salary</label>
+        <input
+          type="text"
+          value={salary}
+          onChange={(e) => setSalary(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="e.g., $50,000 - $70,000/year"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Currency</label>
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="$">$</option>
+          <option value="€">€</option>
+          <option value="£">£</option>
+          <option value="₦">₦</option>
+          <option value="GH₵">GH₵</option>
+        </select>
+      </div>
+    </div>
+
+    {/* Experience Level */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Experience Level</label>
+      <select
+        value={experienceLevel}
+        onChange={(e) => setExperienceLevel(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="entry">Entry Level</option>
+        <option value="mid">Mid Level</option>
+        <option value="senior">Senior Level</option>
+        <option value="executive">Executive Level</option>
+      </select>
+    </div>
+
+    {/* Application Deadline */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Application Deadline</label>
+      <input
+        type="date"
+        value={applicationDeadline}
+        onChange={(e) => setApplicationDeadline(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    {/* Responsibilities */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Responsibilities</label>
+      {responsibilities.map((responsibility, index) => (
+        <div key={index} className="flex items-center gap-2 mb-2">
+          <input
+            type="text"
+            value={responsibility}
+            onChange={(e) => {
+              const newResponsibilities = [...responsibilities];
+              newResponsibilities[index] = e.target.value;
+              setResponsibilities(newResponsibilities);
+            }}
+            className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter responsibility"
+          />
+          <button
+            onClick={() => setResponsibilities(responsibilities.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >×</button>
+        </div>
+      ))}
+      <button
+        onClick={() => setResponsibilities([...responsibilities, ''])}
+        className="text-blue-600 hover:text-blue-700"
+      >
+        + Add Responsibility
+      </button>
+    </div>
+
+    {/* Requirements */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Requirements</label>
+      {requirements.map((requirement, index) => (
+        <div key={index} className="flex items-center gap-2 mb-2">
+          <input
+            type="text"
+            value={requirement}
+            onChange={(e) => {
+              const newRequirements = [...requirements];
+              newRequirements[index] = e.target.value;
+              setRequirements(newRequirements);
+            }}
+            className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter requirement"
+          />
+          <button
+            onClick={() => setRequirements(requirements.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >×</button>
+        </div>
+      ))}
+      <button
+        onClick={() => setRequirements([...requirements, ''])}
+        className="text-blue-600 hover:text-blue-700"
+      >
+        + Add Requirement
+      </button>
+    </div>
+
+    {/* Benefits */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Benefits</label>
+      {benefits.map((benefit, index) => (
+        <div key={index} className="flex items-center gap-2 mb-2">
+          <input
+            type="text"
+            value={benefit}
+            onChange={(e) => {
+              const newBenefits = [...benefits];
+              newBenefits[index] = e.target.value;
+              setBenefits(newBenefits);
+            }}
+            className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter benefit"
+          />
+          <button
+            onClick={() => setBenefits(benefits.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >×</button>
+        </div>
+      ))}
+      <button
+        onClick={() => setBenefits([...benefits, ''])}
+        className="text-blue-600 hover:text-blue-700"
+      >
+        + Add Benefit
+      </button>
+    </div>
+
+    {/* Application Link */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Application Link</label>
+      <input
+        type="url"
+        value={applicationLink}
+        onChange={(e) => setApplicationLink(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter application URL"
+      />
+    </div>
+
+    {/* Contact Information */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Contact Email</label>
+        <input
+          type="email"
+          value={contactEmail}
+          onChange={(e) => setContactEmail(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter contact email"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Contact Phone</label>
+        <input
+          type="tel"
+          value={contactPhone}
+          onChange={(e) => setContactPhone(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter contact phone"
+        />
+      </div>
+    </div>
+  </div>
+)}
+
 {selectedVariant === "timetable" && (
   <div className="space-y-4 p-4 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl transition-all">
           <h2>Title</h2>
@@ -7475,6 +7899,7 @@ const baseLabelStyles = `
 <option value="timetable">⏰ Time Table</option>
 <option value="pricelist">🏷️ PriceList</option>
 <option value="biblequote">📖 Bible Quote</option>
+<option value="jobvacancy">📖 Vacancy</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -10730,6 +11155,389 @@ const baseLabelStyles = `
     )}
   </div>
 </div>
+)}
+
+
+
+{selectedVariant === 'biblequote' && (
+   <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-xl">
+   {/* Header */}
+   <header className="space-y-2">
+     <h2 className="text-2xl font-bold text-slate-900">Bible Verse Lookup</h2>
+     <p className="text-slate-600">Select a book, chapter, and verse to read</p>
+   </header>
+
+   {/* Error Message */}
+   {error && (
+     <div className="p-3 bg-red-100 text-red-700 rounded-lg">
+       {error}
+     </div>
+   )}
+
+   {/* Selectors Grid */}
+   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+     {/* Book Selector */}
+     <div className="space-y-2">
+       <label htmlFor="book" className="block text-sm font-medium text-slate-700">
+         Book
+       </label>
+       <select 
+         id="book"
+         value={selectedBook}
+         onChange={(e) => setSelectedBook(e.target.value)}
+         className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+         disabled={loading.books}
+       >
+         <option value="">{loading.books ? 'Loading books...' : 'Select a Book'}</option>
+         {books.map((book) => (
+           <option key={book.id} value={book.id}>
+             {book.name}
+           </option>
+         ))}
+       </select>
+     </div>
+
+     {/* Chapter Selector */}
+     <div className="space-y-2">
+       <label htmlFor="chapter" className="block text-sm font-medium text-slate-700">
+         Chapter
+       </label>
+       <select
+         id="chapter"
+         value={selectedChapter}
+         onChange={(e) => setSelectedChapter(e.target.value)}
+         disabled={!selectedBook || loading.chapters}
+         className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+       >
+         <option value="">
+           {loading.chapters ? 'Loading chapters...' : 'Select Chapter'}
+         </option>
+         {chapters.map((chapter) => (
+           <option key={chapter} value={chapter}>
+             {chapter}
+           </option>
+         ))}
+       </select>
+     </div>
+
+     {/* Verse Selector */}
+     <div className="space-y-2">
+       <label htmlFor="verse" className="block text-sm font-medium text-slate-700">
+         Verse
+       </label>
+       <select
+         id="verse"
+         value={selectedVerse}
+         onChange={(e) => setSelectedVerse(e.target.value)}
+         disabled={!selectedChapter || loading.verses}
+         className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+       >
+         <option value="">
+           {loading.verses ? 'Loading verses...' : 'Select Verse'}
+         </option>
+         {verses.map((verse) => (
+           <option key={verse} value={verse}>
+             {verse}
+           </option>
+         ))}
+       </select>
+     </div>
+   </div>
+
+   {/* Translation Selector */}
+   <div className="space-y-2">
+     <label htmlFor="translation" className="block text-sm font-medium text-slate-700">
+       Translation
+     </label>
+     <select
+       id="translation"
+       value={selectedTranslation}
+       onChange={(e) => setSelectedTranslation(e.target.value as BibleTranslation)}
+       className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+     >
+       <option value="kjv">King James Version (KJV)</option>
+       <option value="web">World English Bible (WEB)</option>
+       <option value="asv">American Standard Version (ASV)</option>
+       <option value="bbe">Bible in Basic English (BBE)</option>
+       <option value="darby">Darby Translation (DARBY)</option>
+     </select>
+   </div>
+
+   {/* Fetch Button */}
+   <button
+     onClick={handleFetchVerse}
+     disabled={!selectedVerse || loading.verse}
+     className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 transition-colors"
+   >
+     {loading.verse ? (
+       <span className="flex items-center justify-center gap-2">
+         <span className="animate-spin">🌀</span>
+         Loading...
+       </span>
+     ) : (
+       'Get Verse'
+     )}
+   </button>
+
+   {/* Verse Display */}
+   {verseText && (
+     <div className="mt-6 p-4 bg-slate-50 rounded-lg border-l-4 border-blue-500">
+       <blockquote className="text-slate-800 italic">
+         "{verseText}"
+       </blockquote>
+       <p className="mt-2 text-sm text-slate-600">
+         - {selectedBook} {selectedChapter}:{selectedVerse} ({selectedTranslation.toUpperCase()})
+       </p>
+     </div>
+   )}
+ </div>
+)}
+
+
+{selectedVariant === 'jobvacancy' && (
+  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-2xl">
+    {/* Job Title */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Job Title</label>
+      <input
+        type="text"
+        value={jobTitle}
+        onChange={(e) => setJobTitle(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="e.g., Senior Software Engineer"
+      />
+    </div>
+
+    {/* Company Name */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Company Name</label>
+      <input
+        type="text"
+        value={companyName}
+        onChange={(e) => setCompanyName(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter company name"
+      />
+    </div>
+
+    {/* Location */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Location</label>
+      <input
+        type="text"
+        value={jobLocation}
+        onChange={(e) => setJobLocation(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="e.g., New York, NY (Remote)"
+      />
+    </div>
+
+    <div>
+      <label className="block text-stone-950 mb-2 font-medium">Main Content</label>
+      <textarea
+        value={largeDescription}
+        onChange={(e) => setLargeDescription(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all min-h-[150px]"
+        placeholder="Enter flyer details, features, or event information"
+      />
+    </div>
+
+    {/* Employment Type */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Employment Type</label>
+      <select
+        value={employmentType}
+        onChange={(e) => setEmploymentType(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="full-time">Full-time</option>
+        <option value="part-time">Part-time</option>
+        <option value="contract">Contract</option>
+        <option value="freelance">Freelance</option>
+        <option value="internship">Internship</option>
+      </select>
+    </div>
+
+    {/* Salary Range */}
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <label className="block text-gray-700 font-medium mb-2">Salary</label>
+        <input
+          type="text"
+          value={salary}
+          onChange={(e) => setSalary(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="e.g., $50,000 - $70,000/year"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Currency</label>
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="$">$</option>
+          <option value="€">€</option>
+          <option value="£">£</option>
+          <option value="₦">₦</option>
+          <option value="GH₵">GH₵</option>
+        </select>
+      </div>
+    </div>
+
+    {/* Experience Level */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Experience Level</label>
+      <select
+        value={experienceLevel}
+        onChange={(e) => setExperienceLevel(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="entry">Entry Level</option>
+        <option value="mid">Mid Level</option>
+        <option value="senior">Senior Level</option>
+        <option value="executive">Executive Level</option>
+      </select>
+    </div>
+
+    {/* Application Deadline */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Application Deadline</label>
+      <input
+        type="date"
+        value={applicationDeadline}
+        onChange={(e) => setApplicationDeadline(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    {/* Responsibilities */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Responsibilities</label>
+      {responsibilities.map((responsibility, index) => (
+        <div key={index} className="flex items-center gap-2 mb-2">
+          <input
+            type="text"
+            value={responsibility}
+            onChange={(e) => {
+              const newResponsibilities = [...responsibilities];
+              newResponsibilities[index] = e.target.value;
+              setResponsibilities(newResponsibilities);
+            }}
+            className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter responsibility"
+          />
+          <button
+            onClick={() => setResponsibilities(responsibilities.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >×</button>
+        </div>
+      ))}
+      <button
+        onClick={() => setResponsibilities([...responsibilities, ''])}
+        className="text-blue-600 hover:text-blue-700"
+      >
+        + Add Responsibility
+      </button>
+    </div>
+
+    {/* Requirements */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Requirements</label>
+      {requirements.map((requirement, index) => (
+        <div key={index} className="flex items-center gap-2 mb-2">
+          <input
+            type="text"
+            value={requirement}
+            onChange={(e) => {
+              const newRequirements = [...requirements];
+              newRequirements[index] = e.target.value;
+              setRequirements(newRequirements);
+            }}
+            className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter requirement"
+          />
+          <button
+            onClick={() => setRequirements(requirements.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >×</button>
+        </div>
+      ))}
+      <button
+        onClick={() => setRequirements([...requirements, ''])}
+        className="text-blue-600 hover:text-blue-700"
+      >
+        + Add Requirement
+      </button>
+    </div>
+
+    {/* Benefits */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Benefits</label>
+      {benefits.map((benefit, index) => (
+        <div key={index} className="flex items-center gap-2 mb-2">
+          <input
+            type="text"
+            value={benefit}
+            onChange={(e) => {
+              const newBenefits = [...benefits];
+              newBenefits[index] = e.target.value;
+              setBenefits(newBenefits);
+            }}
+            className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter benefit"
+          />
+          <button
+            onClick={() => setBenefits(benefits.filter((_, i) => i !== index))}
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+          >×</button>
+        </div>
+      ))}
+      <button
+        onClick={() => setBenefits([...benefits, ''])}
+        className="text-blue-600 hover:text-blue-700"
+      >
+        + Add Benefit
+      </button>
+    </div>
+
+    {/* Application Link */}
+    <div>
+      <label className="block text-gray-700 font-medium mb-2">Application Link</label>
+      <input
+        type="url"
+        value={applicationLink}
+        onChange={(e) => setApplicationLink(e.target.value)}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter application URL"
+      />
+    </div>
+
+    {/* Contact Information */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Contact Email</label>
+        <input
+          type="email"
+          value={contactEmail}
+          onChange={(e) => setContactEmail(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter contact email"
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 font-medium mb-2">Contact Phone</label>
+        <input
+          type="tel"
+          value={contactPhone}
+          onChange={(e) => setContactPhone(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter contact phone"
+        />
+      </div>
+    </div>
+  </div>
 )}
 
 
@@ -15590,6 +16398,871 @@ const baseLabelStyles = `
 
       {/* Resume Card Display End */}
 
+
+      {selectedVariant === 'jobvacancy' && selectedVariantStyle === 'default' && (
+  <div className="relative bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-white/20">
+  {/* Header Section */}
+  <header className="mb-8">
+    <div className="flex items-center justify-between">
+      {logo && (
+        <div className="w-16 h-16 bg-white p-2 rounded-xl shadow-sm">
+          <Image 
+            src={logo} 
+            alt="Company Logo" 
+            width={64} 
+            height={64} 
+            className="object-contain w-full h-full"
+          />
+        </div>
+      )}
+      <div className="flex items-center gap-2">
+        <span className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded-full border border-blue-100">
+          {employmentType}
+        </span>
+        <span className="px-3 py-1 text-sm font-medium text-green-600 bg-green-50 rounded-full border border-green-100">
+          {experienceLevel}
+        </span>
+      </div>
+    </div>
+    
+    <div className="mt-6 space-y-2">
+      <h1 className="text-3xl font-bold text-gray-900">{jobTitle}</h1>
+      <div className="flex items-center gap-4 text-gray-600">
+        <div className="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clipRule="evenodd" />
+          </svg>
+          <span className="font-medium">{companyName}</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+          </svg>
+          <span>{jobLocation}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {/* Main Content */}
+  <div className="space-y-8">
+  <div className="bg-white/5 backdrop-blur-sm p- rounded-lg">
+          <p className="text-stone-950 whitespace-pre-wrap">{largeDescription}</p>
+        </div>
+    {/* Responsibilities */}
+    <section className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Key Responsibilities
+      </h2>
+      <ul className="space-y-2.5">
+        {responsibilities.map((item, index) => (
+          <li key={index} className="flex items-start gap-2 text-gray-700">
+            <div className="w-5 h-5 flex-shrink-0 mt-1 text-blue-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span className="flex-1">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {/* Requirements */}
+    <section className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        Requirements
+      </h2>
+      <ul className="space-y-2.5">
+        {requirements.map((item, index) => (
+          <li key={index} className="flex items-start gap-2 text-gray-700">
+            <div className="w-5 h-5 flex-shrink-0 mt-1 text-blue-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <span className="flex-1">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {/* Benefits */}
+    <section className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+        </svg>
+        What We Offer
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {benefits.map((benefit, index) => (
+          <div key={index} className="flex items-center gap-3 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <div className="w-8 h-8 flex-shrink-0 bg-blue-50 rounded-lg flex items-center justify-center text-blue-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <span className="text-gray-700 font-medium">{benefit}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* Salary & Application */}
+    <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-6 border-t border-gray-200">
+      <div className="space-y-1">
+        <p className="text-sm text-gray-500">Annual Salary Range</p>
+        <p className="text-2xl font-bold text-gray-900">
+          {currency} {salary}
+        </p>
+      </div>
+
+      <div className="flex flex-col md:flex-row items-center gap-4">
+        <p className="text-sm text-gray-500 text-center">
+          <span className="block md:inline">Apply before:</span>{' '}
+          <span className="font-medium text-gray-900">{applicationDeadline}</span>
+        </p>
+        {/* <a 
+          href={applicationLink} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium rounded-lg hover:from-blue-700 hover:to-blue-600 transition-all shadow-sm flex items-center gap-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          Apply Now
+        </a> */}
+      </div>
+    </div>
+
+    {/* Contact Information */}
+    <footer className="flex flex-col md:flex-row items-center justify-between pt-6 border-t border-gray-200 text-sm text-gray-600 gap-4">
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          <a href={`mailto:${contactEmail}`} className="hover:text-blue-600">{contactEmail}</a>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+          <a href={`tel:${contactPhone}`} className="hover:text-blue-600">{contactPhone}</a>
+        </div>
+      </div>
+      
+      {qrUrl && (
+        <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-100">
+          <QRCodeSVG 
+            value={qrUrl} 
+            size={64}
+            bgColor="#ffffff"
+            fgColor="#1f2937"
+            level="Q"
+            includeMargin={false}
+          />
+        </div>
+      )}
+    </footer>
+  </div>
+</div>
+)}
+
+{selectedVariant === 'jobvacancy' && selectedVariantStyle === 'style1' && (
+  <div className="relative bg-gradient-to-br from-slate-50 to-blue-50 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 overflow-hidden">
+    {/* Decorative Background Elements */}
+    <div className="absolute inset-0 bg-grid-slate-200 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
+    <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+    <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+
+    {/* Header Section */}
+    <header className="relative mb-12">
+      <div className="flex items-center justify-between">
+        {logo && (
+          <div className="w-20 h-20 bg-white p-3 rounded-2xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <Image 
+              src={logo} 
+              alt="Company Logo" 
+              width={80} 
+              height={80} 
+              className="object-contain w-full h-full"
+            />
+          </div>
+        )}
+        <div className="flex items-center gap-3">
+          <span className="px-4 py-2 text-sm font-semibold text-blue-600 bg-blue-50 rounded-full border border-blue-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+            {employmentType}
+          </span>
+          <span className="px-4 py-2 text-sm font-semibold text-emerald-600 bg-emerald-50 rounded-full border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+            {experienceLevel}
+          </span>
+        </div>
+      </div>
+      
+      <div className="mt-8 space-y-3">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 bg-clip-text text-transparent">
+          {jobTitle}
+        </h1>
+        <div className="flex flex-wrap items-center gap-6 text-gray-600">
+          <div className="flex items-center gap-2 bg-white/50 px-4 py-2 rounded-full shadow-sm">
+            <BuildingOfficeIcon className="h-5 w-5 text-blue-500" />
+            <span className="font-medium">{companyName}</span>
+          </div>
+          <div className="flex items-center gap-2 bg-white/50 px-4 py-2 rounded-full shadow-sm">
+            <MapPinIcon className="h-5 w-5 text-blue-500" />
+            <span>{jobLocation}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {/* Main Content */}
+    <div className="relative space-y-10">
+      {/* Job Description */}
+      <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-gray-100">
+        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{largeDescription}</p>
+      </div>
+
+      {/* Responsibilities Section */}
+      <section className="bg-gradient-to-br from-blue-50 to-blue-100/50 p-6 rounded-2xl border border-blue-100">
+        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-6">
+          <CheckCircleIcon className="h-7 w-7 text-blue-500" />
+          Key Responsibilities
+        </h2>
+        <ul className="space-y-4">
+          {responsibilities.map((item, index) => (
+            <li key={index} className="flex items-start gap-3 group">
+              <div className="w-6 h-6 flex-shrink-0 mt-1 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-300">
+                <CheckIcon className="h-4 w-4 text-blue-600" />
+              </div>
+              <span className="flex-1 text-gray-700">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Requirements Section */}
+      <section className="bg-gradient-to-br from-purple-50 to-purple-100/50 p-6 rounded-2xl border border-purple-100">
+        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-6">
+          <AcademicCapIcon className="h-7 w-7 text-purple-500" />
+          Requirements
+        </h2>
+        <ul className="space-y-4">
+          {requirements.map((item, index) => (
+            <li key={index} className="flex items-start gap-3 group">
+              <div className="w-6 h-6 flex-shrink-0 mt-1 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors duration-300">
+                <StarIcon className="h-4 w-4 text-purple-600" />
+              </div>
+              <span className="flex-1 text-gray-700">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Benefits Grid */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+          <GiftIcon className="h-7 w-7 text-emerald-500" />
+          What We Offer
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {benefits.map((benefit, index) => (
+            <div 
+              key={index} 
+              className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group"
+            >
+              <div className="w-10 h-10 flex-shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center group-hover:bg-emerald-100 transition-colors duration-300">
+                <SparklesIcon className="h-6 w-6 text-emerald-500" />
+              </div>
+              <span className="text-gray-700 font-medium">{benefit}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer Info */}
+      <div className="mt-12 space-y-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 p-6 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl text-white">
+          <div className="space-y-1 text-center md:text-left">
+            <p className="text-blue-100">Annual Salary Range</p>
+            <p className="text-3xl font-bold">{currency} {salary}</p>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <div className="text-center md:text-right">
+              <p className="text-blue-100">Apply before</p>
+              <p className="font-semibold">{applicationDeadline}</p>
+            </div>
+            <a 
+              href={applicationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+            >
+              Apply Now
+              <ArrowRightIcon className="h-5 w-5" />
+            </a>
+          </div>
+        </div>
+
+        <footer className="flex flex-col md:flex-row items-center justify-between py-6 border-t border-gray-200 text-sm text-gray-600 gap-4">
+          <div className="flex flex-wrap items-center gap-6">
+            <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 hover:text-blue-600 transition-colors duration-300">
+              <EnvelopeIcon className="h-5 w-5" />
+              {contactEmail}
+            </a>
+            <a href={`tel:${contactPhone}`} className="flex items-center gap-2 hover:text-blue-600 transition-colors duration-300">
+              <PhoneIcon className="h-5 w-5" />
+              {contactPhone}
+            </a>
+          </div>
+          
+          {qrUrl && (
+            <div className="p-3 bg-white rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+              <QRCodeSVG 
+                value={qrUrl} 
+                size={80}
+                bgColor="#ffffff"
+                fgColor="#1f2937"
+                level="Q"
+                includeMargin={false}
+              />
+            </div>
+          )}
+        </footer>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'jobvacancy' && selectedVariantStyle === 'style2' && (
+  <div className="relative bg-[#0D1117] rounded-3xl p-8 shadow-2xl overflow-hidden border border-[#1F2937]/20">
+    {/* Animated Background Effects */}
+    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0icmdiYSg2OCwgODgsIDExMiwgMC4yKSIvPjwvc3ZnPg==')] opacity-20"></div>
+    <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] animate-pulse"></div>
+    <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] animate-pulse delay-1000"></div>
+
+    {/* Header Section */}
+    <header className="relative mb-12">
+      <div className="flex items-center justify-between">
+        {logo && (
+          <div className="w-20 h-20 bg-[#1F2937] p-4 rounded-2xl border border-[#374151] shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <Image 
+              src={logo} 
+              alt="Company Logo" 
+              width={80} 
+              height={80} 
+              className="object-contain w-full h-full"
+            />
+          </div>
+        )}
+        <div className="flex items-center gap-3">
+          <span className="px-4 py-2 text-sm font-medium text-cyan-400 bg-cyan-900/30 rounded-xl border border-cyan-800/50">
+            {employmentType}
+          </span>
+          <span className="px-4 py-2 text-sm font-medium text-purple-400 bg-purple-900/30 rounded-xl border border-purple-800/50">
+            {experienceLevel}
+          </span>
+        </div>
+      </div>
+      
+      <div className="mt-8">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+          {jobTitle}
+        </h1>
+        <div className="flex flex-wrap items-center gap-6 text-gray-400">
+          <div className="flex items-center gap-2 bg-[#1F2937]/50 px-4 py-2 rounded-xl border border-[#374151]/50">
+            <BuildingOfficeIcon className="h-5 w-5 text-blue-400" />
+            <span className="font-medium">{companyName}</span>
+          </div>
+          <div className="flex items-center gap-2 bg-[#1F2937]/50 px-4 py-2 rounded-xl border border-[#374151]/50">
+            <MapPinIcon className="h-5 w-5 text-blue-400" />
+            <span>{jobLocation}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {/* Main Content */}
+    <div className="relative space-y-10">
+      {/* Job Description */}
+      <div className="bg-[#1F2937]/50 backdrop-blur-xl p-6 rounded-xl border border-[#374151]/50">
+        <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{largeDescription}</p>
+      </div>
+
+      {/* Key Responsibilities */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+          <CodeBracketIcon className="h-6 w-6 text-cyan-400" />
+          Key Responsibilities
+        </h2>
+        <ul className="space-y-4 bg-[#1F2937]/50 p-6 rounded-xl border border-[#374151]/50">
+          {responsibilities.map((item, index) => (
+            <li key={index} className="flex items-start gap-3 group">
+              <div className="w-6 h-6 flex-shrink-0 mt-1 rounded-full bg-cyan-900/50 flex items-center justify-center">
+                <CheckIcon className="h-4 w-4 text-cyan-400" />
+              </div>
+              <span className="flex-1 text-gray-300">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Requirements */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+          <CommandLineIcon className="h-6 w-6 text-purple-400" />
+          Requirements
+        </h2>
+        <ul className="space-y-4 bg-[#1F2937]/50 p-6 rounded-xl border border-[#374151]/50">
+          {requirements.map((item, index) => (
+            <li key={index} className="flex items-start gap-3 group">
+              <div className="w-6 h-6 flex-shrink-0 mt-1 rounded-full bg-purple-900/50 flex items-center justify-center">
+                <CubeIcon className="h-4 w-4 text-purple-400" />
+              </div>
+              <span className="flex-1 text-gray-300">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Benefits */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+          <SparklesIcon className="h-6 w-6 text-blue-400" />
+          Web3 Benefits
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {benefits.map((benefit, index) => (
+            <div key={index} className="flex items-center gap-4 bg-[#1F2937]/50 p-4 rounded-xl border border-[#374151]/50 hover:border-blue-500/50 transition-colors">
+              <div className="w-10 h-10 flex-shrink-0 bg-blue-900/30 rounded-xl flex items-center justify-center">
+                <CurrencyDollarIcon className="h-6 w-6 text-blue-400" />
+              </div>
+              <span className="text-gray-300 font-medium">{benefit}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Compensation */}
+      <div className="mt-12 space-y-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 p-6 bg-gradient-to-r from-cyan-900/50 to-purple-900/50 rounded-xl border border-[#374151]/50">
+          <div className="space-y-1">
+            <p className="text-gray-400">Annual Compensation</p>
+            <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+              {currency} {salary}
+            </p>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <div className="text-center md:text-right">
+              <p className="text-gray-400">Application Deadline</p>
+              <p className="font-semibold text-white">{applicationDeadline}</p>
+            </div>
+            {/* <a 
+              href={applicationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold rounded-xl hover:from-cyan-600 hover:to-purple-600 transition-all duration-300 flex items-center gap-2 group"
+            >
+              Apply Now
+              <ArrowRightIcon className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </a> */}
+          </div>
+        </div>
+
+        {/* Contact & QR */}
+        <footer className="flex flex-col md:flex-row items-center justify-between py-6 border-t border-[#374151]/50">
+          <div className="flex flex-wrap items-center gap-6">
+            <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors">
+              <EnvelopeIcon className="h-5 w-5" />
+              {contactEmail}
+            </a>
+            <a href={`tel:${contactPhone}`} className="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors">
+              <PhoneIcon className="h-5 w-5" />
+              {contactPhone}
+            </a>
+          </div>
+          
+          {qrUrl && (
+            <div className="p-3 bg-[#1F2937] rounded-xl border border-[#374151] hover:border-cyan-500/50 transition-colors">
+              <QRCodeSVG 
+                value={qrUrl} 
+                size={80}
+                bgColor="#1F2937"
+                fgColor="#38BDF8"
+                level="Q"
+                includeMargin={false}
+              />
+            </div>
+          )}
+        </footer>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'jobvacancy' && selectedVariantStyle === 'style3' && (
+  <div className="relative bg-gradient-to-br from-pink-50 to-rose-50 rounded-3xl p-8 shadow-2xl overflow-hidden border border-rose-200">
+    {/* Floral Background Elements */}
+    <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMGgyMHYyMEgweiIgZmlsbD0ibm9uZSIvPjxjaXJjbGUgY3g9IjMiIGN5PSIyIiByPSIxIiBmaWxsPSIjZmY4ODk5Ii8+PGNpcmNsZSBjeD0iMTgiIGN5PSIxNiIgcj0iMS41IiBmaWxsPSIjZmY4ODk5Ii8+PGNpcmNsZSBjeD0iMTQiIGN5PSI1IiByPSIxIiBmaWxsPSIjZmY4ODk5Ii8+PC9zdmc+')]"></div>
+    <div className="absolute top-0 right-0 w-64 h-64 bg-rose-100 rounded-full opacity-20 blur-[80px]"></div>
+    <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-100 rounded-full opacity-20 blur-[80px]"></div>
+
+    {/* Header Section */}
+    <header className="relative mb-12">
+      <div className="flex items-center justify-between">
+        {logo && (
+          <div className="w-20 h-20 bg-white p-4 rounded-2xl border-2 border-rose-200 shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <Image 
+              src={logo} 
+              alt="Company Logo" 
+              width={80} 
+              height={80} 
+              className="object-contain w-full h-full"
+            />
+          </div>
+        )}
+        <div className="flex items-center gap-3">
+          <span className="px-4 py-2 text-sm font-medium text-rose-600 bg-rose-100 rounded-xl border border-rose-200 flex items-center gap-2">
+            <SparklesIcon className="h-4 w-4" />
+            {employmentType}
+          </span>
+          <span className="px-4 py-2 text-sm font-medium text-pink-600 bg-pink-100 rounded-xl border border-pink-200 flex items-center gap-2">
+            <HeartIcon className="h-4 w-4" />
+            {experienceLevel}
+          </span>
+        </div>
+      </div>
+      
+      <div className="mt-8">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-rose-600 to-pink-500 bg-clip-text text-transparent mb-4">
+          {jobTitle}
+        </h1>
+        <div className="flex flex-wrap items-center gap-6 text-rose-800">
+          <div className="flex items-center gap-2 bg-white/80 px-4 py-2 rounded-xl border border-rose-200 backdrop-blur-sm">
+            <div className="p-1.5 bg-rose-100 rounded-lg">
+              <BuildingOfficeIcon className="h-5 w-5 text-rose-600" />
+            </div>
+            <span className="font-medium">{companyName}</span>
+          </div>
+          <div className="flex items-center gap-2 bg-white/80 px-4 py-2 rounded-xl border border-rose-200 backdrop-blur-sm">
+            <div className="p-1.5 bg-rose-100 rounded-lg">
+              <MapPinIcon className="h-5 w-5 text-rose-600" />
+            </div>
+            <span>{jobLocation}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {/* Main Content */}
+    <div className="relative space-y-10">
+      {/* Job Description */}
+      <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl border border-rose-200">
+        <p className="text-rose-800 leading-relaxed whitespace-pre-wrap">{largeDescription}</p>
+      </div>
+
+      {/* Key Responsibilities */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold text-rose-700 flex items-center gap-2">
+          <div className="p-1.5 bg-rose-100 rounded-lg">
+            <ClipboardDocumentListIcon className="h-6 w-6 text-rose-600" />
+          </div>
+          Key Responsibilities
+        </h2>
+        <ul className="space-y-4 bg-white/80 p-6 rounded-xl border border-rose-200 backdrop-blur-sm">
+          {responsibilities.map((item, index) => (
+            <li key={index} className="flex items-start gap-3 group">
+              <div className="w-6 h-6 flex-shrink-0 mt-1 rounded-full bg-rose-100 flex items-center justify-center">
+                <CheckCircleIcon className="h-4 w-4 text-rose-600" />
+              </div>
+              <span className="flex-1 text-rose-800">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Requirements */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold text-rose-700 flex items-center gap-2">
+          <div className="p-1.5 bg-rose-100 rounded-lg">
+            <CheckBadgeIcon className="h-6 w-6 text-rose-600" />
+          </div>
+          Requirements
+        </h2>
+        <ul className="space-y-4 bg-white/80 p-6 rounded-xl border border-rose-200 backdrop-blur-sm">
+          {requirements.map((item, index) => (
+            <li key={index} className="flex items-start gap-3 group">
+              <div className="w-6 h-6 flex-shrink-0 mt-1 rounded-full bg-rose-100 flex items-center justify-center">
+                <StarIcon className="h-4 w-4 text-rose-600" />
+              </div>
+              <span className="flex-1 text-rose-800">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Benefits */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold text-rose-700 flex items-center gap-2">
+          <div className="p-1.5 bg-rose-100 rounded-lg">
+            <GiftIcon className="h-6 w-6 text-rose-600" />
+          </div>
+          Sweet Benefits
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {benefits.map((benefit, index) => (
+            <div key={index} className="flex items-center gap-4 bg-white/80 p-4 rounded-xl border border-rose-200 backdrop-blur-sm hover:border-rose-300 transition-colors">
+              <div className="w-10 h-10 flex-shrink-0 bg-rose-100 rounded-xl flex items-center justify-center">
+                <HeartIcon className="h-6 w-6 text-rose-600" />
+              </div>
+              <span className="text-rose-800 font-medium">{benefit}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Compensation */}
+      <div className="mt-12 space-y-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 p-6 bg-gradient-to-r from-rose-100 to-pink-100 rounded-xl border border-rose-200">
+          <div className="space-y-1">
+            <p className="text-rose-600">Annual Compensation</p>
+            <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-500">
+              {currency} {salary}
+            </p>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <div className="text-center md:text-right">
+              <p className="text-rose-600">Application Deadline</p>
+              <p className="font-semibold text-rose-700">{applicationDeadline}</p>
+            </div>
+            <a 
+              href={applicationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-400 text-white font-semibold rounded-xl hover:from-rose-600 hover:to-pink-500 transition-all duration-300 flex items-center gap-2 group"
+            >
+              Apply Now
+              <ArrowRightIcon className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
+        </div>
+
+        {/* Contact & QR */}
+        <footer className="flex flex-col md:flex-row items-center justify-between py-6 border-t border-rose-200">
+          <div className="flex flex-wrap items-center gap-6">
+            <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 text-rose-600 hover:text-rose-700 transition-colors">
+              <EnvelopeIcon className="h-5 w-5" />
+              {contactEmail}
+            </a>
+            <a href={`tel:${contactPhone}`} className="flex items-center gap-2 text-rose-600 hover:text-rose-700 transition-colors">
+              <PhoneIcon className="h-5 w-5" />
+              {contactPhone}
+            </a>
+          </div>
+          
+          {qrUrl && (
+            <div className="p-3 bg-white rounded-xl border border-rose-200 hover:border-rose-300 transition-colors">
+              <QRCodeSVG 
+                value={qrUrl} 
+                size={80}
+                bgColor="#ffffff"
+                fgColor="#e11d48"
+                level="Q"
+                includeMargin={false}
+              />
+            </div>
+          )}
+        </footer>
+      </div>
+    </div>
+
+    {/* Floral Accents */}
+    <div className="absolute top-0 right-0 w-32 h-32 bg-[url('/floral-pattern.png')] opacity-20"></div>
+    <div className="absolute bottom-0 left-0 w-32 h-32 bg-[url('/floral-pattern.png')] opacity-20 rotate-180"></div>
+  </div>
+)}
+
+{selectedVariant === 'jobvacancy' && selectedVariantStyle === 'style4' && (
+  <div className="relative bg-white rounded-2xl p-8 shadow-xl border border-gray-100 overflow-hidden">
+    {/* Subtle Grid Background */}
+    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMGgyMHYyMEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0xMCAwVjIwTTAgMTBoMjAiIHN0cm9rZT0iI2VlZWVlZSIgb3BhY2l0eT0iMC4zIiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=')] opacity-10"></div>
+
+    {/* Header Section */}
+    <header className="mb-10">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="flex items-center gap-6">
+          {logo && (
+            <div className="w-16 h-16 bg-gray-50 p-3 rounded-xl border border-gray-200">
+              <Image 
+                src={logo} 
+                alt="Company Logo" 
+                width={64} 
+                height={64} 
+                className="object-contain w-full h-full"
+              />
+            </div>
+          )}
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{jobTitle}</h1>
+            <div className="flex items-center gap-3">
+              <span className="text-lg text-gray-600 font-medium">{companyName}</span>
+              <span className="text-gray-400">•</span>
+              <div className="flex items-center gap-1 text-gray-500">
+                <MapPinIcon className="w-5 h-5 text-gray-400" />
+                <span>{jobLocation}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-2">
+          <span className="px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg border border-blue-100">
+            {employmentType}
+          </span>
+          <span className="px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg border border-gray-200">
+            {experienceLevel}
+          </span>
+        </div>
+      </div>
+    </header>
+
+    {/* Main Content */}
+    <div className="space-y-10">
+    <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl border border-gray-200">
+        <p className="text-gray-900 leading-relaxed whitespace-pre-wrap">{largeDescription}</p>
+      </div>
+
+      {/* Job Details */}
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Responsibilities */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
+            Key Responsibilities
+          </h2>
+          <ul className="space-y-3">
+            {responsibilities.map((item, index) => (
+              <li key={index} className="flex items-start gap-2 text-gray-600">
+                <div className="w-5 h-5 flex-shrink-0 mt-1 text-blue-500">
+                  <CheckCircleIcon className="w-full h-full" />
+                </div>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Requirements */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
+            Requirements
+          </h2>
+          <ul className="space-y-3">
+            {requirements.map((item, index) => (
+              <li key={index} className="flex items-start gap-2 text-gray-600">
+                <div className="w-5 h-5 flex-shrink-0 mt-1 text-blue-500">
+                  <AcademicCapIcon className="w-full h-full" />
+                </div>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+
+      {/* Benefits & Compensation */}
+      <div className="grid lg:grid-cols-3 gap-8">
+        {/* Benefits */}
+        <section className="lg:col-span-2 space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">
+            Employee Benefits
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <GiftIcon className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="font-medium text-gray-700">{benefit}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Compensation */}
+        <section className="space-y-6">
+          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-gray-500">Annual Salary Range</h3>
+              <p className="text-2xl font-bold text-gray-900">
+                {currency} {salary}
+              </p>
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <h3 className="text-sm font-medium text-gray-500">Application Deadline</h3>
+              <p className="font-medium text-gray-700">{applicationDeadline}</p>
+            </div>
+          </div>
+          <a 
+            href={applicationLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Apply Now
+            <ArrowUpRightIcon className="w-4 h-4" />
+          </a>
+        </section>
+      </div>
+
+      {/* Contact Information */}
+      <footer className="pt-8 border-t border-gray-200">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-gray-500">Contact Information</h3>
+            <div className="flex flex-wrap gap-4">
+              <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 text-gray-600 hover:text-blue-600">
+                <EnvelopeIcon className="w-5 h-5 text-gray-400" />
+                {contactEmail}
+              </a>
+              <a href={`tel:${contactPhone}`} className="flex items-center gap-2 text-gray-600 hover:text-blue-600">
+                <PhoneIcon className="w-5 h-5 text-gray-400" />
+                {contactPhone}
+              </a>
+            </div>
+          </div>
+          
+          {qrUrl && (
+            <div className="p-2 bg-white rounded-lg border border-gray-200">
+              <QRCodeSVG 
+                value={qrUrl} 
+                size={80}
+                bgColor="#ffffff"
+                fgColor="#1f2937"
+                level="Q"
+              />
+            </div>
+          )}
+        </div>
+      </footer>
+    </div>
+  </div>
+)}
+
+
+
+
+
       {selectedVariant === 'timetable' && selectedVariantStyle === 'default' && (
   <div className="space-y-6 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-xl rounded-2xl p-4 shadow-lg shadow-blue-100/50">
     {/* Header Section */}
@@ -16540,6 +18213,186 @@ const baseLabelStyles = `
           </p>
         )}
       </div>
+    )}
+  </div>
+)}
+
+{selectedVariant === 'pricelist' && selectedVariantStyle === 'style4' && (
+  <div className="relative space-y-8 p-8 rounded-3xl" style={{
+    background: 
+      bgType === 'gradient'
+        ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
+        : bgType === 'solid'
+        ? solidColor
+        : "#ffffff",
+  }}>
+    {/* Floating decorative elements */}
+    <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute -top-24 -right-24 w-56 h-56 bg-indigo-100/20 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-24 -left-24 w-56 h-56 bg-purple-100/20 rounded-full blur-3xl"></div>
+    </div>
+    {/* Animated header section */}
+    <header className="text-center max-w-4xl mx-auto mb-10 relative">
+      <motion.h1 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-5xl font-bold text-slate-900 mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
+      >
+        {title || "Simple Pricing"}
+      </motion.h1>
+      
+      <div className="flex items-center justify-center gap-6">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center gap-2 backdrop-blur-sm bg-white/50 px-6 py-3 rounded-3xl shadow-sm border border-slate-100"
+        >
+          <CurrencyDollarIcon className="w-6 h-6 text-indigo-600" />
+          <span className="text-slate-700 font-medium">
+            Currency: <span className="text-indigo-600">{pricelistState.currency}</span>
+          </span>
+        </motion.div>
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center gap-2 backdrop-blur-sm bg-white/50 px-6 py-3 rounded-3xl shadow-sm border border-slate-100"
+        >
+          <TagIcon className="w-6 h-6 text-indigo-600" />
+          <span className="text-slate-700 font-medium">
+            <span className="text-indigo-600">{pricelistState.tiers.length}</span> Plans Available
+          </span>
+        </motion.div>
+      </div>
+    </header>
+    {/* Pricing grid with staggered animation */}
+    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-8 relative`}>
+      {pricelistState.tiers.map((tier, index) => (
+        <motion.article
+          key={tier.id}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1, duration: 0.5 }}
+          className={`group relative flex flex-col h-full border rounded-3xl p-10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${
+            tier.recommended 
+              ? 'border-indigo-200 bg-white shadow-xl ring-2 ring-indigo-100' 
+              : 'border-slate-100 bg-white/50 backdrop-blur-sm hover:border-indigo-100'
+          }`}
+        >
+          {/* Diagonal recommended ribbon */}
+          {tier.recommended && (
+            <div className="absolute -right-8 -top-8 rotate-45 bg-indigo-600 text-white px-10 py-2 text-sm font-bold tracking-wide shadow-md">
+              POPULAR
+            </div>
+          )}
+          {/* Tier header with animated icon */}
+          <div className="mb-8 text-center">
+            <div className="relative inline-block">
+              <motion.div 
+                whileHover={{ scale: 1.1 }}
+                className="w-24 h-24 mx-auto mb-6 bg-indigo-100 rounded-3xl p-6 shadow-lg"
+              >
+                <SparklesIcon className="w-full h-full text-indigo-600" />
+              </motion.div>
+            </div>
+            <h3 className="text-3xl font-bold text-slate-900 mb-4">{tier.name}</h3>
+            <p className="text-slate-600 text-balance">{tier.description}</p>
+          </div>
+          {/* Price section with gradient */}
+          <div className="mb-8 text-center">
+            <div className="flex items-baseline justify-center gap-2">
+              <span className="text-6xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                {tier.price.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: pricelistState.currency,
+                })}
+              </span>
+              <span className="text-slate-500 font-medium">
+                /{{
+                  monthly: 'mo',
+                  annual: 'yr',
+                  'one-time': ''
+                }[tier.billingInterval]}
+              </span>
+            </div>
+          </div>
+          {/* Interactive features list */}
+          <ul className="space-y-4 mb-10">
+            {tier.features.map((feature) => (
+              <motion.li 
+                key={feature.id} 
+                whileHover={{ x: 5 }}
+                className="flex items-start gap-3 p-4 rounded-lg hover:bg-indigo-50/50 transition-colors"
+              >
+                <CheckCircleIcon className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
+                <span className="text-slate-700">{feature.text}</span>
+              </motion.li>
+            ))}
+          </ul>
+          {/* Animated CTA button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className={`mt-auto w-full py-4 rounded-3xl font-semibold transition-colors ${
+              tier.recommended
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-200/50 hover:shadow-indigo-200'
+                : 'bg-slate-900 text-white hover:bg-slate-800'
+            }`}
+          >
+            Get {tier.name}
+            <ArrowRightIcon className="w-5 h-5 inline-block ml-2 transition-transform group-hover:translate-x-1" />
+          </motion.button>
+        </motion.article>
+      ))}
+    </div>
+    {/* Enhanced calculator with result preview */}
+    {pricelistState.enableCalculator && (
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="mt-16 p-10 bg-white/50 backdrop-blur-sm rounded-3xl border border-slate-100 shadow-sm"
+      >
+        <h3 className="text-2xl font-semibold text-slate-900 mb-8">
+          {pricelistState.calculatorLabel || "Estimate Your Costs"}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <select className="p-4 rounded-3xl border-2 border-slate-100 bg-white/80 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 transition-all">
+            {pricelistState.tiers.map((tier) => (
+              <option key={tier.id} value={tier.id}>
+                {tier.name} - {tier.price.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: pricelistState.currency,
+                })}
+              </option>
+            ))}
+          </select>
+          <input
+            type="number"
+            placeholder="Quantity"
+            className="p-4 rounded-3xl border-2 border-slate-100 bg-white/80 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 transition-all"
+          />
+          <motion.button 
+            whileHover={{ scale: 1.02 }}
+            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 px-8 rounded-3xl hover:shadow-lg transition-all"
+          >
+            Calculate Now
+          </motion.button>
+        </div>
+        
+        {/* Result preview */}
+        <div className="mt-8 p-6 bg-indigo-50/50 rounded-3xl">
+          <div className="flex items-center justify-between">
+            <span className="text-slate-600">Estimated Total:</span>
+            <span className="text-3xl font-bold text-indigo-600">
+              {pricelistState.currency}0.00
+            </span>
+          </div>
+        </div>
+        {pricelistState.calculatorNote && (
+          <p className="text-slate-500 text-sm mt-6 italic">
+            {pricelistState.calculatorNote}
+          </p>
+        )}
+      </motion.div>
     )}
   </div>
 )}

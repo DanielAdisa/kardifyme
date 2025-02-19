@@ -16,6 +16,7 @@
     "@types/html2canvas": "^0.5.35",
     "@types/jspdf": "^1.3.3",
     "@types/qrcode.react": "^1.0.5",
+    "bible-api": "^1.0.6",
     "bible.js": "^4.0.2",
     "dom-to-image": "^2.6.0",
     "ethers": "^6.13.5",
@@ -28,7 +29,9 @@
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-color": "^2.19.3",
+    "react-datepicker": "^8.1.0",
     "react-dom": "^19.0.0",
+    "react-quill": "^2.0.0",
     "react-signature-canvas": "^1.0.7",
     "web3": "^4.16.0"
   },

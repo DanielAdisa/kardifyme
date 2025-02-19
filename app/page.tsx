@@ -37,7 +37,7 @@ const LandingPage = () => {
             transition={{ delay: 0.4 }}
             className="max-w-3xl mx-auto"
           >
-            <p className="text-xl text-slate-400 font-light font-sans">
+            <p className="text-xl text-stone-50 font-light font-sans">
               Next-generation digital cards powered by AI-driven design and blockchain-verified authenticity.
             </p>
           </motion.div>
