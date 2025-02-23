@@ -49,7 +49,7 @@ const Footer = () => (
               </Link>
             </li>
             {/* Uncomment if needed */}
-            {/* <li>
+            <li>
               <Link href="/pricing" className="text-gray-400 text-lg font-medium hover:text-teal-400 transition-colors duration-300">
                 <motion.span
                   whileHover={{ x: 8, color: '#14b8a6' }}
@@ -58,13 +58,13 @@ const Footer = () => (
                   Pricing
                 </motion.span>
               </Link>
-            </li> */}
+            </li>
           </ul>
         </div>
 
         {/* Uncomment and Enhance Additional Sections */}
         {/* Company Section */}
-        {/* <div className="relative group">
+        <div className="relative group">
           <motion.h3
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -106,10 +106,10 @@ const Footer = () => (
               </Link>
             </li>
           </ul>
-        </div> */}
+        </div>
 
         {/* Legal Section */}
-        {/* <div className="relative group">
+        <div className="relative group">
           <motion.h3
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -141,10 +141,10 @@ const Footer = () => (
               </Link>
             </li>
           </ul>
-        </div> */}
+        </div>
 
         {/* Connect Section */}
-        {/* <div className="relative group">
+        <div className="relative group">
           <motion.h3
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -176,7 +176,7 @@ const Footer = () => (
               </a>
             </li>
           </ul>
-        </div> */}
+        </div>
       </div>
 
       {/* Footer Bottom */}
@@ -233,8 +233,5 @@ const styles = `
     box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
   }
 `;
-const styleSheet = document.createElement("style");
-styleSheet.textContent = styles;
-document.head.appendChild(styleSheet);
 
 export default Footer;
