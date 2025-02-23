@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const Footer = () => (
+  
   <footer className="bg-black text-gray-300 relative overflow-hidden py-20">
     {/* Futuristic Background Layers */}
     <div className="absolute inset-0 bg-[url('/cyber-grid.png')] opacity-20 pointer-events-none animate-float" />
@@ -206,32 +207,6 @@ const Footer = () => (
   </footer>
 );
 
-// CSS for Animations
-const styles = `
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-  }
-  .animate-float {
-    animation: float 6s infinite ease-in-out;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 0.4; }
-  }
-  .animate-pulse {
-    animation: pulse 3s infinite ease-in-out;
-  }
-  @keyframes gradient-flow {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-  .animate-gradient-flow {
-    animation: gradient-flow 10s infinite linear;
-  }
-  .shadow-glow {
-    box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
-  }
-`;
+
 
 export default Footer;
