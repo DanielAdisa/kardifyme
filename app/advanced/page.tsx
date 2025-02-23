@@ -3040,10 +3040,10 @@ const baseLabelStyles = `
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        setState(prev => ({
-          ...prev,
-          digitalSignature: reader.result
-        }));
+        // setState(prev => ({
+        //   ...prev,
+        //   digitalSignature: reader.result
+        // }));
       };
       reader.readAsDataURL(file);
     }
