@@ -223,8 +223,5 @@ const styles = `
     animation: holo-shift 8s infinite ease-in-out;
   }
 `;
-const styleSheet = document.createElement("style");
-styleSheet.textContent = styles;
-document.head.appendChild(styleSheet);
 
 export default LandingPage;
