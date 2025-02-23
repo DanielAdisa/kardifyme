@@ -21263,11 +21263,11 @@ const baseLabelStyles = `
                       {/* Item Image */}
                       {item.image && (
                         <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm">
-                          <img
+                          {/* <img
                             src={URL.createObjectURL(item.image)}
                             alt={item.name}
                             className="w-full h-full object-cover"
-                          />
+                          /> */}
                         </div>
                       )}
                       
