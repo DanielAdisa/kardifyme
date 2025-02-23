@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, ChangeEvent } from 'react';
 
 interface AcademicQualification {
   qualification: string;
@@ -12,12 +12,14 @@ import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
 import html2canvas from 'html2canvas';
+
 import Image from 'next/image';
 import bibleAPI from 'bible-api';
 import { Switch } from '@headlessui/react';
 import place from "@/public/12.jpg"
 
 import domtoimage from 'dom-to-image';
+import { Heart, Sparkles, ArrowRight, CheckCircle } from "lucide-react"
 
 
 import jsPDF from 'jspdf';
@@ -28,7 +30,7 @@ import { useLocalStorageState } from '@/hooks/useLocalStorageState';
 
 
 import { ethers } from 'ethers';
-import { ClockIcon, CalendarIcon, GlobeAltIcon, SunIcon, MapPinIcon, CurrencyDollarIcon, TagIcon, CheckCircleIcon, SparklesIcon, ArrowRightIcon , BuildingOfficeIcon,
+import { ClockIcon, CalendarIcon, GlobeAltIcon, UsersIcon, LightBulbIcon, SunIcon, MapPinIcon, CurrencyDollarIcon, TagIcon, CheckCircleIcon, SparklesIcon, ArrowRightIcon , BuildingOfficeIcon,
 
   CheckIcon,
   CheckBadgeIcon,
@@ -40,11 +42,15 @@ import { ClockIcon, CalendarIcon, GlobeAltIcon, SunIcon, MapPinIcon, CurrencyDol
   HeartIcon,
 
 ClipboardDocumentListIcon,
-
+UserIcon,
+  DocumentTextIcon,
+  ShieldCheckIcon,
+  PaintBrushIcon,
   StarIcon,
   GiftIcon,
   EnvelopeIcon,
-  PhoneIcon} from '@heroicons/react/24/outline';
+  PhoneIcon,
+  CalculatorIcon} from '@heroicons/react/24/outline';
 
 
 //niceone
@@ -65,6 +71,28 @@ interface BudgetCategory {
   expenses: { id: string; name: string; amount: number }[];
 }
 
+interface ECertificateState {
+  institutionLogo: string;
+  recipientName: string;
+  recipientEmail: string;
+  studentId: string;
+  certificateId: string;
+  courseTitle: string;
+  credentialType: 'certificate' | 'diploma' | 'professional' | 'achievement';
+  issuedDate: string;
+  validUntil: string;
+  accreditationBody: string;
+  verificationUrl: string;
+  verificationCode: string;
+  digitalSignature: File | null;
+  template: 'classic' | 'modern' | 'seal';
+  customSeal: File | null;
+}
+
+
+interface FileUploadEvent {
+  target: HTMLInputElement & EventTarget;
+}
 interface Event {
   id: string;
   name: string;
@@ -373,6 +401,19 @@ const cardVariants = {
         font: 'font-sans',
       },
     },
+  },
+  ecertificate: {
+    templates: {
+      modern: {
+        font: 'font-serif',
+      },
+      classic: {
+        font: 'font-mono',
+      },
+      minimal: {
+        font: 'font-sans',
+      },
+    },
   }
 };
 
@@ -608,6 +649,55 @@ const CreateCard = () => {
   const [inviterName, setInviterName] = useState('');
   const [inviteeName, setInviteeName] = useState<string>('');
   const [textColors, setTextColors] = useState<{ [key: string]: string }>({});
+
+  const [state, setState] = useState<ECertificateState>({
+    institutionLogo: '',
+    recipientName: '',
+    recipientEmail: '',
+    studentId: '',
+    certificateId: '',
+    courseTitle: '',
+    credentialType: 'certificate',
+    issuedDate: new Date().toISOString().split('T')[0],
+    validUntil: '',
+    accreditationBody: '',
+    verificationUrl: '',
+    verificationCode: '',
+    digitalSignature: null,
+    template: 'classic',
+    customSeal: null
+  });
+
+
+  // Form validation
+  const validateForm = (): boolean => {
+    const requiredFields: (keyof ECertificateState)[] = [
+      'recipientName',
+      'recipientEmail',
+      'certificateId',
+      'courseTitle',
+      'issuedDate'
+    ];
+
+    for (const field of requiredFields) {
+      if (!state[field]) {
+        alert(`Please fill in the required field: ${field}`);
+        return false;
+      }
+    }
+    return true;
+  };
+  
+  interface FileReaderEventTarget extends EventTarget {
+    result: string;
+  }
+  
+  interface FileReaderEvent extends ProgressEvent {
+    target: FileReaderEventTarget;
+    readAsDataURL: (blob: Blob) => void;
+  }  
+  
+  
   interface TextColors {
     facebook: string;
     twitter: string;
@@ -670,7 +760,7 @@ const [productImageState, setProductImageState] = useState<string | null>(null);
   const [eventDate, setEventDate] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventType, setEventType] = useState('General Admission');
-  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable' | 'pricelist' | 'biblequote' | 'jobvacancy';
+  type VariantType = 'business' | 'event' | 'product' | 'invoice' | 'receipt' | 'einvoice' | 'flyer' | 'recipe' | 'contract' | 'birthday' | 'budget' | 'idCard' | 'mood' | 'affirmations'| 'menu' | 'brand' | 'invitation' | 'resume' | 'timetable' | 'pricelist' | 'biblequote' | 'jobvacancy' | 'ecertificate';
   const [selectedVariant, setSelectedVariant] = useState<VariantType>('business');
   
   const cardRef = useRef<HTMLDivElement>(null);
@@ -725,6 +815,39 @@ const [menuTitleColor, setMenuTitleColor] = useState('#333');
 const [menuSubtitleColor, setMenuSubtitleColor] = useState('#666');
 const [menuDateColor, setMenuDateColor] = useState('#666');
 const [innerCardColor, setInnerCardColor] = useState('#ffffff');
+const generateCertificateId = () => {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 10000);
+  const newId = `CERT-${timestamp}-${random}`;
+  setCertificateId(newId);
+};
+
+const generateVerificationCode = () => {
+  const verificationCode = Math.random().toString(36).substring(2, 15);
+  setVerificationUrl(`https://verify.your-institution.com/${verificationCode}`);
+};
+
+const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, type: string) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (type === 'institutionLogo') {
+        setInstitutionLogo(reader.result as string);
+      } else if (type === 'digitalSignature') {
+        setDigitalSignature(reader.result as string);
+      } else if (type === 'customSeal') {
+        setCustomSeal(reader.result as string);
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+// const handleSignatureUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+//   handleFileUpload(event, 'digitalSignature');
+// };
+
 
 const [message, setMessage] = useState('');
 const [wishType, setWishType] = useState('Happy Birthday');
@@ -926,6 +1049,19 @@ const [menuTitle, setMenuTitle] = useState('');
 const [heroImage, setHeroImage] = useState<string | null>(null);
 const [eventImage, seteventImage] = useState<string | null>(null);
 const [flyerImage, setflyerImage] = useState<string | null>(null);
+const [recipientName, setRecipientName] = useState('');
+const [recipientEmail, setRecipientEmail] = useState('');
+const [studentId, setStudentId] = useState('');
+const [certificateId, setCertificateId] = useState('');
+const [courseTitle, setCourseTitle] = useState('');
+const [credentialType, setCredentialType] = useState<'certificate' | 'diploma' | 'professional' | 'achievement'>('certificate');
+const [issuedDate, setIssuedDate] = useState('');
+const [accreditationBody, setAccreditationBody] = useState('');
+const [verificationUrl, setVerificationUrl] = useState('');
+const [template, setTemplate] = useState<'classic' | 'modern' | 'seal'>('classic');
+const [digitalSignature, setDigitalSignature] = useState<string | null>(null);
+const [customSeal, setCustomSeal] = useState<string | null>(null);
+const [institutionLogo, setInstitutionLogo] = useState<string | null>(null);
 const [menuSubtitle, setMenuSubtitle] = useState('');
 const formatCurrency = (value: number, currency: string) => {
   return new Intl.NumberFormat('en-NG', {
@@ -1044,6 +1180,7 @@ const [cardColor, setCardColor] = useState({
   pricelist: '#ffffff',
   biblequote: '#ffffff',
   jobvacancy: '#ffffff',
+  ecertificate: '#ffffff'
 });
 // const [education, setEducation] = useState([{ degree: '', institution: '', gradYear: '' }]);
 // const [hobbies, setHobbies] = useState(['']);
@@ -1111,6 +1248,7 @@ const [selectedTemplate, setSelectedTemplate] = useState({
   pricelist: 'minimal',
   biblequote: 'minimal',
   jobvacancy: 'minimal',
+  ecertificate: 'minimal'
 });
 
 const templateOptions = {
@@ -1136,6 +1274,7 @@ const templateOptions = {
   pricelist: ['modern', 'classic', 'minimal'],
   biblequote: ['modern', 'classic', 'minimal'],
   jobvacancy: ['modern', 'classic', 'minimal'],
+  ecertificate: ['modern', 'classic', 'minimal'],
 };
 
 
@@ -1173,7 +1312,29 @@ const saveSignature = (
   }
 };
 
+const colors = {
+  pastel: {
+    pink: '#FFD1DC',
+    blue: '#ADD8E6',
+    yellow: '#FFFACD',
+    purple: '#E6E6FA',
+    green: '#98FF98'
+  }
+};
 
+// Easter egg patterns for background
+const easterPatterns = [
+  "🥚", "🐰", "🌸", "🐣", "🪺", "🌷"
+];
+
+const floatingAnimation = {
+  y: [-10, 10, -10],
+  transition: {
+    duration: 4,
+    repeat: Infinity,
+    ease: "easeInOut"
+  }
+};
 
   // const CURRENT_PASSWORD = 'epicgamesandgames';
   // const PASSWORD_VERSION = '7'; // Increment this version whenever the password changes
@@ -1926,148 +2087,8 @@ const updatePresentEmployment = (field: keyof PresentEmployment, value: string):
     }
   }, [dummyState]);
   
-  useEffect(() => {
-    const pageState = {
-      selectedVariant,
-      selectedVariantStyle,
-      title,
-      description,
-      largeDescription,
-      qrUrl,
-      price,
-      currency,
-      logo,
-      backgroundImage,
-      bgType,
-      gradientFrom,
-      gradientVia,
-      gradientTo,
-      solidColor,
-      textColors,
-      showfooterPart,
-      fullName,
-      jobTitle,
-      email,
-      phone,
-      location,
-      skills,
-      workExperience,
-      education,
-      hobbies,
-      footerColor,
-      productImage,
-      cardProduct,
-      ageBorderColor,
-      ageBackground,
-      ageColor,
-      celebrantNameBackground,
-      celebrantNameColor,
-      birthdayDate,
-      cardDate,
-      occasion,
-      inviterName,
-      inviteeName,
-      affirmationTitle,
-      brandName,
-      tagline,
-      orderPolicies,
-      contactInfo,
-      socialMediaLinks,
-      includeBottomPart,
-      invoiceNumber,
-      items,
-      taxRate,
-      dueDate,
-      eventName,
-      eventTime,
-      productImageState,
-      showBottomPart,
-      eventDate,
-      eventLocation,
-      eventType,
-      cookingTime,
-      servings,
-      ingredients,
-      instructions,
-      difficulty,
-      profilePicture,
-      contractAddress,
-      network,
-      // bio,
-      contractType,
-      validUntil,
-      contractDetails,
-      witnesses,
-      party1Name,
-      party2Name,
-      party1Sign,
-      party2Sign,
-      contractTerms,
-      contractDate,
-      contractValue,
-      celebrantName,
-      age,
-      menuTitleColor,
-      menuSubtitleColor,
-      menuDateColor,
-      innerCardColor,
-      message,
-      wishType,
-      budgetCategories,
-      totalBudget,
-      remainingBudget,
-      showTopPart,
-      moodPicture,
-      moodSmiley,
-      date,
-      name,
-      titleColor,
-      menuDate,
-      isDateOptional,
-      subtitleColor,
-      descriptionColor,
-      dateNameColor,
-      fieldValues,
-      fieldColors,
-      backgroundColor,
-      affirmationText,
-      affirmationTime,
-      affirmationDate,
-      tips,
-      chefTips,
-      affirmationTextColor,
-      cardBackgroundColor,
-      categoryName,
-      categoryDescription,
-      menuItemName,
-      menuItemDescription,
-      menuItemPrice,
-      menuItemTags,
-      inputStyles,
-      menuItemImage,
-      menuTitle,
-      heroImage,
-      eventImage,
-      flyerImage,
-      menuSubtitle,
-      menuCategories,
-      specialItemDescription,
-      menuBackgroundColor,
-      categoryTextColor,
-      itemTitleColor,
-      itemDescriptionColor,
-      showIDCard,
-      idCardDetails,
-      party1Signature,
-      party2Signature,
-      budgetState,
-      cardColor,
-      footerCardColor,
-      selectedTemplate,
-    };
-  
-    localStorage.setItem('pageState', JSON.stringify(pageState));
-  }, [
+useEffect(() => {
+  const pageState = {
     selectedVariant,
     selectedVariantStyle,
     title,
@@ -2077,8 +2098,6 @@ const updatePresentEmployment = (field: keyof PresentEmployment, value: string):
     price,
     currency,
     logo,
-    // bio,
-    bgType, solidColor, gradientFrom, gradientVia, gradientTo, fullName, jobTitle, email, phone, location, skills, workExperience, education, hobbies,
     backgroundImage,
     bgType,
     gradientFrom,
@@ -2196,7 +2215,240 @@ const updatePresentEmployment = (field: keyof PresentEmployment, value: string):
     cardColor,
     footerCardColor,
     selectedTemplate,
-  ]);
+    // Add missing states here
+    pricelistState,
+    scheduleType,
+    timetableState,
+    bio,
+    gradYear,
+    institution,
+    columns,
+    degree,
+    duration,
+    role,
+    companyName,
+    skills,
+    location,
+    phone,
+    email,
+    jobTitle,
+    fullName,
+    workExperience,
+    education,
+    hobbies,
+    isAuthenticated,
+    password,
+    timeZone,
+    employmentType,
+    salary,
+    experienceLevel,
+    applicationDeadline,
+    responsibilities,
+    requirements,
+    benefits,
+    applicationLink,
+    contactEmail,
+    contactPhone,
+    dateOfBirth,
+    placeOfBirth,
+    sex,
+    maritalStatus,
+    children,
+    townStateOrigin,
+    nationality,
+    currentPostalAddress,
+    permanentHomeAddress,
+    gsmNumber,
+    presentEmployment,
+    extraCurriculumActivities,
+    referees,
+    academicQualifications,
+    state, // Includes institutionLogo, recipientName, etc.
+    isLoading,
+    isLoading1,
+  };
+
+  localStorage.setItem('pageState', JSON.stringify(pageState));
+}, [
+  // Add all dependencies here
+  selectedVariant,
+  selectedVariantStyle,
+  title,
+  description,
+  largeDescription,
+  qrUrl,
+  price,
+  currency,
+  logo,
+  backgroundImage,
+  bgType,
+  gradientFrom,
+  gradientVia,
+  gradientTo,
+  solidColor,
+  textColors,
+  showfooterPart,
+  footerColor,
+  productImage,
+  cardProduct,
+  ageBorderColor,
+  ageBackground,
+  ageColor,
+  celebrantNameBackground,
+  celebrantNameColor,
+  birthdayDate,
+  cardDate,
+  occasion,
+  inviterName,
+  inviteeName,
+  affirmationTitle,
+  brandName,
+  tagline,
+  orderPolicies,
+  contactInfo,
+  socialMediaLinks,
+  includeBottomPart,
+  invoiceNumber,
+  items,
+  taxRate,
+  dueDate,
+  eventName,
+  eventTime,
+  productImageState,
+  showBottomPart,
+  eventDate,
+  eventLocation,
+  eventType,
+  cookingTime,
+  servings,
+  ingredients,
+  instructions,
+  difficulty,
+  profilePicture,
+  contractAddress,
+  network,
+  contractType,
+  validUntil,
+  contractDetails,
+  witnesses,
+  party1Name,
+  party2Name,
+  party1Sign,
+  party2Sign,
+  contractTerms,
+  contractDate,
+  contractValue,
+  celebrantName,
+  age,
+  menuTitleColor,
+  menuSubtitleColor,
+  menuDateColor,
+  innerCardColor,
+  message,
+  wishType,
+  budgetCategories,
+  totalBudget,
+  remainingBudget,
+  showTopPart,
+  moodPicture,
+  moodSmiley,
+  date,
+  name,
+  titleColor,
+  menuDate,
+  isDateOptional,
+  subtitleColor,
+  descriptionColor,
+  dateNameColor,
+  fieldValues,
+  fieldColors,
+  backgroundColor,
+  affirmationText,
+  affirmationTime,
+  affirmationDate,
+  tips,
+  chefTips,
+  affirmationTextColor,
+  cardBackgroundColor,
+  categoryName,
+  categoryDescription,
+  menuItemName,
+  menuItemDescription,
+  menuItemPrice,
+  menuItemTags,
+  inputStyles,
+  menuItemImage,
+  menuTitle,
+  heroImage,
+  eventImage,
+  flyerImage,
+  menuSubtitle,
+  menuCategories,
+  specialItemDescription,
+  menuBackgroundColor,
+  categoryTextColor,
+  itemTitleColor,
+  itemDescriptionColor,
+  showIDCard,
+  idCardDetails,
+  party1Signature,
+  party2Signature,
+  budgetState,
+  cardColor,
+  footerCardColor,
+  selectedTemplate,
+  // Add missing dependencies here
+  pricelistState,
+  scheduleType,
+  timetableState,
+  bio,
+  gradYear,
+  institution,
+  columns,
+  degree,
+  duration,
+  role,
+  companyName,
+  skills,
+  location,
+  phone,
+  email,
+  jobTitle,
+  fullName,
+  workExperience,
+  education,
+  hobbies,
+  isAuthenticated,
+  password,
+  timeZone,
+  employmentType,
+  salary,
+  experienceLevel,
+  applicationDeadline,
+  responsibilities,
+  requirements,
+  benefits,
+  applicationLink,
+  contactEmail,
+  contactPhone,
+  dateOfBirth,
+  placeOfBirth,
+  sex,
+  maritalStatus,
+  children,
+  townStateOrigin,
+  nationality,
+  currentPostalAddress,
+  permanentHomeAddress,
+  gsmNumber,
+  presentEmployment,
+  extraCurriculumActivities,
+  referees,
+  academicQualifications,
+  state,
+  isLoading,
+  isLoading1,
+]);
 
   const [cardState, setCardState] = useLocalStorageState('cardState', {
     selectedVariant: 'business',
@@ -2451,6 +2703,29 @@ const updatePresentEmployment = (field: keyof PresentEmployment, value: string):
     setWorkExperience(newWorkExperience);
   };
 
+  
+
+  const FloatingHeart = ({ delay = 0 }) => {
+    return (
+      <motion.div
+        initial={{ y: 0, opacity: 0 }}
+        animate={{
+          y: [-20, 20],
+          opacity: [0, 1, 0],
+        }}
+        transition={{
+          duration: 3,
+          delay,
+          repeat: Number.POSITIVE_INFINITY,
+          repeatType: "reverse",
+        }}
+        className="absolute"
+      >
+        <Heart className="text-pink-300/30 w-8 h-8" fill="currentColor" />
+      </motion.div>
+    )
+  }
+  const [isHovered, setIsHovered] = useState(null)
   // const addEducation = () => setEducation([...education, { degree: '', institution: '', gradYear: '' }]);
   // interface Education {
   //   degree: string;
@@ -2760,6 +3035,20 @@ const baseLabelStyles = `
     setPricelistState({ ...pricelistState, tiers: updatedTiers });
   }
 
+  function handleSignatureUpload(event: ChangeEvent<HTMLInputElement>): void {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setState(prev => ({
+          ...prev,
+          digitalSignature: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   return (
     <div className="flex w-full md flex-col-reverse md:flex-row bg-gradient-to-r from-blue-400 via-blue-600 to-blue-800 h-screen justify-center items-center p-3">
 
@@ -2847,15 +3136,17 @@ const baseLabelStyles = `
 <option value="birthday">🎂 Birthday</option>
 <option value="budget">💰 Budget</option>
 <option value="idCard">🆔 ID Card</option>
+<option value="menu">🆔 Menu</option>
 <option value="mood">🎨 Mood Board</option>
 <option value="affirmations">💭 Affirmations</option>
 <option value="brand">🏷️ Brand Card</option>
 <option value="invitation">✉️ Invitation</option>
-<option value="resume">📄 Resume</option>
+<option value="resume">📄 Resume</option> 
 <option value="timetable">⏰ Time Table</option>
 <option value="pricelist">🏷️ PriceList</option>jobvacancy
 <option value="biblequote">📖 Bible Quote</option>
 <option value="jobvacancy">📖 Vacancy</option>
+<option value="ecertificate">📖 E-Certificate</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -7891,6 +8182,7 @@ const baseLabelStyles = `
 <option value="birthday">🎂 Birthday</option>
 <option value="budget">💰 Budget</option>
 <option value="idCard">🆔 ID Card</option>
+<option value="menu">🆔 Menu</option>
 <option value="mood">🎨 Mood Board</option>
 <option value="affirmations">💭 Affirmations</option>
 <option value="brand">🏷️ Brand Card</option>
@@ -7900,6 +8192,7 @@ const baseLabelStyles = `
 <option value="pricelist">🏷️ PriceList</option>
 <option value="biblequote">📖 Bible Quote</option>
 <option value="jobvacancy">📖 Vacancy</option>
+<option value="ecertificate">📖 E-Certificate</option>
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
         <svg className="w-5 h-5 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -7969,7 +8262,7 @@ const baseLabelStyles = `
   {/* Style Controls */}
   <div className=" mx-auto">
     {/* Card Color Picker1 */}
-    <div className=" p-4  rounded-2xl border border-gray-100 shadow-sm">
+    <div className=" p-4  rounded-2xl border grid border-gray-100 shadow-sm">
       <label className="block font-medium text-gray-700">
         Card Color
         <span className="ml-2 text-sm text-gray-400">Customize appearance</span>
@@ -11539,6 +11832,250 @@ const baseLabelStyles = `
     </div>
   </div>
 )}
+
+{selectedVariant === 'ecertificate' && (
+        <div className="space-y-8 bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-100">
+          {/* Institution Branding */}
+          <div className="pb-6 border-b-2 border-blue-600">
+            <div className="flex items-center gap-4 mb-6">
+              <AcademicCapIcon className="w-10 h-10 text-blue-600" />
+              <h2 className="text-2xl font-bold text-gray-900">Academic Credentials Manager</h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="col-span-full">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Institution Logo (Recommended 300x100px)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, "institutionLogo")}
+                  className="w-full p-2 rounded-lg border border-gray-300"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Recipient Information */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <UserIcon className="w-6 h-6 text-blue-600" />
+              Recipient Details
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={recipientName}
+                  onChange={(e) => setRecipientName(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={recipientEmail}
+                  onChange={(e) => setRecipientEmail(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Student/Employee ID
+                </label>
+                <input
+                  type="text"
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  placeholder="Optional institutional ID"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Certificate Details */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <DocumentTextIcon className="w-6 h-6 text-blue-600" />
+              Certificate Details
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Certificate ID <span className="text-red-500">*</span>
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={certificateId}
+                    onChange={(e) => setCertificateId(e.target.value)}
+                    className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                    placeholder="Auto-generated"
+                    readOnly
+                  />
+                  <button
+                    onClick={generateCertificateId}
+                    className="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"
+                    type="button"
+                  >
+                    Generate
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Course/Program <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={courseTitle}
+                  onChange={(e) => setCourseTitle(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Credential Type <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={credentialType}
+                  onChange={(e) => setCredentialType(e.target.value as 'certificate' | 'diploma' | 'professional' | 'achievement')}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500" 
+                >
+                  <option value="Certificate of Completion">Certificate of Completion</option>
+                  <option value="Diploma">Diploma</option>
+                  <option value="Professional Certification">Professional Certification</option>
+                  <option value="Achievement Award">Achievement Award</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Issue Date <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={issuedDate}
+                  onChange={(e) => setIssuedDate(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Expiration Date
+                </label>
+                <input
+                  type="date"
+                  value={validUntil}
+                  min={issuedDate}
+                  onChange={(e) => setValidUntil(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Accreditation Body
+                </label>
+                <input
+                  type="text"
+                  value={accreditationBody}
+                  onChange={(e) => setAccreditationBody(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g., ANSI, IACET"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Security Features */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <ShieldCheckIcon className="w-6 h-6 text-blue-600" />
+              Security Features
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Verification URL
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={verificationUrl}
+                    onChange={(e) => setVerificationUrl(e.target.value)}
+                    className="flex-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                    placeholder="https://verify.your-institution.com/"
+                  />
+                  <button
+                    onClick={generateVerificationCode}
+                    className="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"
+                    type="button"
+                  >
+                    Generate Code
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Digital Signature
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleSignatureUpload}
+                  className="w-full p-2 rounded-lg border border-gray-300"
+                  placeholder="Upload authorized signature"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Certificate Design */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <PaintBrushIcon className="w-6 h-6 text-blue-600" />
+              Design Customization
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Certificate Template
+                </label>
+                <select
+                  value={template}
+                  onChange={(e) => setTemplate(e.target.value as 'classic' | 'modern' | 'seal')}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="classic">Classic Design</option>
+                  <option value="modern">Modern Design</option>
+                  <option value="seal">Official Seal Design</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Custom Border Seal
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, 'customSeal')}
+                  className="w-full p-2 rounded-lg border border-gray-300"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
 
             {/* Resume specific fields */}
@@ -15334,7 +15871,7 @@ const baseLabelStyles = `
 {/* Budget Card Display End */}
 
     {/* Recipe Display */}
-        {selectedVariant === 'recipe' && (
+        {selectedVariant === 'recipe' && selectedVariantStyle === 'default' && (
           <div 
             className="relative p-4 md:p-6 rounded-2xl rounded-b-none shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl"
             style={{
@@ -15461,6 +15998,146 @@ const baseLabelStyles = `
             </div>
           </div>
         )}
+
+        {selectedVariant === 'recipe' && selectedVariantStyle === 'style1' && (
+          <div 
+            className="relative p-6 md:p-8 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-2xl"
+          >
+            {/* Subtle background texture */}
+            <div 
+              className="absolute inset-0 opacity-10 bg-[url('/path/to/chef-pattern.png')] bg-repeat"
+              style={{ backgroundColor: '#f8fafc' }} // Light gray background for texture
+            />
+
+            <div className="relative z-10 grid gap-8 md:grid-cols-[2fr,1fr]">
+              {/* Left Column - Main Content */}
+              <div className="space-y-6">
+                {/* Header Section */}
+                <div className="p-6 bg-navy-900 text-white rounded-lg shadow-inner">
+                  <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-wide">
+                    {title || 'Culinary Lesson: Recipe Name'}
+                  </h2>
+                  <div className="flex flex-wrap justify-start gap-6 mt-4 text-gold-200">
+                    <span className="flex items-center gap-2 bg-navy-800 px-4 py-2 rounded-md">
+                      <ClockIcon className="w-5 h-5" />
+                      {cookingTime} mins
+                    </span>
+                    <span className="flex items-center gap-2 bg-navy-800 px-4 py-2 rounded-md">
+                      <UsersIcon className="w-5 h-5" />
+                      Serves {servings}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Description Section */}
+                {description && (
+                  <div className="p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <h3 className="text-2xl font-semibold text-navy-900 mb-4">Lesson Overview</h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {description}
+                    </p>
+                  </div>
+                )}
+
+                {/* Ingredients Section */}
+                <div className="p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
+                  <h3 className="text-2xl font-semibold text-navy-900 mb-4">Ingredients List</h3>
+                  <ul className="space-y-3">
+                    {ingredients.map((ing, idx) => (
+                      <li 
+                        key={idx} 
+                        className="flex justify-between items-center p-3 bg-gray-50 rounded-md border-l-4 border-navy-600"
+                      >
+                        <span className="text-gray-800 font-medium">{ing.item}</span>
+                        <span className="text-navy-700 text-sm font-semibold bg-gold-100 px-3 py-1 rounded-full">
+                          {ing.amount}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Instructions Section */}
+                <div className="p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
+                  <h3 className="text-2xl font-semibold text-navy-900 mb-4">Step-by-Step Instructions</h3>
+                  <ol className="space-y-4">
+                    {instructions.map((inst, idx) => (
+                      <motion.li 
+                        key={idx} 
+                        className="flex gap-4 p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                      >
+                        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-navy-600 text-white rounded-full font-semibold">
+                          {idx + 1}
+                        </span>
+                        <span className="text-gray-700">{inst.step}</span>
+                      </motion.li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+
+              {/* Right Column - Visuals & Extras */}
+              <div className="space-y-6">
+                {heroImage && (
+                  <div className="rounded-lg overflow-hidden shadow-lg border border-gray-200">
+                    <Image 
+                      src={heroImage} 
+                      alt={title} 
+                      width={400} 
+                      height={500} 
+                      className="w-full h-[300px] object-cover hover:scale-105 transition-transform duration-500" 
+                    />
+                  </div>
+                )}
+
+                {/* Difficulty & Info */}
+                <div className="p-6 bg-navy-900 text-white rounded-lg shadow-inner text-center">
+                  <span className={`px-4 py-2 rounded-md text-sm font-medium inline-block ${getDifficultyColor(difficulty)} bg-white text-navy-900`}>
+                    {difficulty.toUpperCase()}
+                  </span>
+                </div>
+
+                {logo && (
+                  <div className="flex justify-center">
+                    <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-gold-200 shadow-md">
+                      <Image 
+                        src={typeof logo === 'string' ? logo : URL.createObjectURL(logo)} 
+                        alt="Chef Logo" 
+                        fill 
+                        className="object-cover" 
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Chef's Tips */}
+                {chefTips && chefTips.length > 0 && (
+                  <div className="p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <h3 className="text-2xl font-semibold text-navy-900 mb-4 flex items-center gap-2">
+                      <LightBulbIcon className="w-6 h-6 text-gold-500" />
+                      Instructor’s Tips
+                    </h3>
+                    <ul className="space-y-3">
+                      {chefTips.map((tip, index) => (
+                        <li key={index} className="text-gray-700 italic text-sm leading-relaxed">
+                          <span className="font-semibold text-navy-700">Tip {index + 1}:</span> {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        
+
+
+    {/* Recipe Card Display End */}
+    
 
       {/* Resume Card Display Start */}
         
@@ -16399,7 +17076,7 @@ const baseLabelStyles = `
       {/* Resume Card Display End */}
 
 
-      {selectedVariant === 'jobvacancy' && selectedVariantStyle === 'default' && (
+{selectedVariant === 'jobvacancy' && selectedVariantStyle === 'default' && (
   <div className="relative bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-white/20">
   {/* Header Section */}
   <header className="mb-8">
@@ -16446,7 +17123,7 @@ const baseLabelStyles = `
 
   {/* Main Content */}
   <div className="space-y-8">
-  <div className="bg-white/5 backdrop-blur-sm p- rounded-lg">
+  <div className=" backdrop-blur-sm p-2 rounded-lg">
           <p className="text-stone-950 whitespace-pre-wrap">{largeDescription}</p>
         </div>
     {/* Responsibilities */}
@@ -17260,7 +17937,815 @@ const baseLabelStyles = `
 )}
 
 
+{selectedVariant === 'ecertificate' && selectedVariantStyle === 'default' && (
+  <div className="relative bg-gradient-to-b from-blue-100 via-blue-50 to-white py-12 px-8 rounded-3xl shadow-2xl overflow-hidden min-h-[1200px] border-[14px] border-double border-blue-300 transform hover:scale-[1.005] transition-transform duration-700">
+    {/* Enhanced Background Elements */}
+    <div className="absolute inset-0 bg-[url('/modern-grid.svg')] opacity-15 pointer-events-none"></div>
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-200/10 via-transparent to-blue-200/10 pointer-events-none"></div>
+    <div className="absolute top-0 left-0 w-32 h-32 bg-blue-300/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+    <div className="absolute bottom-0 right-0 w-32 h-32 bg-blue-300/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
 
+    {/* Certificate Content */}
+    <div className="relative flex flex-col items-center text-center space-y-16">
+      {/* Header Section */}
+      <div className="mb-20 space-y-10">
+        {institutionLogo ? (
+          <motion.img
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            src={institutionLogo}
+            alt="Institution Logo"
+            className="h-28 mx-auto drop-shadow-2xl rounded-full hover:scale-110 transition-transform duration-500"
+          />
+        ) : (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="w-28 h-28 mx-auto bg-gradient-to-br from-blue-200 to-blue-100 rounded-full flex items-center justify-center border-4 border-blue-400 shadow-xl hover:shadow-blue-300/50 transition-all duration-500"
+          >
+            <AcademicCapIcon className="w-18 h-18 text-blue-700" />
+          </motion.div>
+        )}
+        <div className="relative py-8">
+          <h1 className="text-7xl font-serif font-extrabold text-blue-900 tracking-wide drop-shadow-md">
+            {credentialType}
+          </h1>
+          <p className="text-2xl font-sans text-gray-600 italic mt-2 tracking-wide">
+            Presented with Distinguished Honor To
+          </p>
+          <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-1/3 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+        </div>
+      </div>
+
+      {/* Recipient Details */}
+      <motion.div
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+        className="space-y-10 max-w-5xl"
+      >
+        <h2 className="text-5xl font-serif font-bold text-blue-900 relative">
+          <span className="relative whitespace-nowrap">
+            {recipientName || "Recipient Name"}
+            <span className="absolute -bottom-3 left-0 right-0 h-1 bg-blue-500 rounded-full shadow-md"></span>
+          </span>
+        </h2>
+        <p className="text-2xl text-gray-600 font-sans italic tracking-wide">
+          For exemplary completion of the esteemed program in
+        </p>
+        <h3 className="text-4xl font-serif font-semibold text-blue-800 bg-blue-50/50 px-6 py-2 rounded-lg shadow-inner border border-blue-200">
+          «{courseTitle || "Course Title"}»
+        </h3>
+        {studentId && (
+          <p className="text-xl text-gray-600 font-sans italic tracking-wide">
+            Student/Employee ID: <span className="font-medium text-blue-700">{studentId}</span>
+          </p>
+        )}
+        {recipientEmail && (
+          <p className="text-xl text-gray-600 font-sans italic tracking-wide">
+            Email: <span className="font-medium text-blue-700">{recipientEmail}</span>
+          </p>
+        )}
+      </motion.div>
+
+      {/* Dates and Signatures */}
+      <div className="mt-20 w-full grid grid-cols-3 gap-12 items-start px-16">
+        <div className="text-left space-y-4">
+          <div className="space-y-3 bg-blue-100/50 p-6 rounded-xl border border-blue-300 shadow-sm">
+            <p className="text-lg text-gray-800 font-sans">
+              <span className="font-semibold text-blue-900">Issued On:</span><br/>
+              <span className="font-medium text-blue-700 tracking-wide">
+                {new Date(issuedDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </span>
+            </p>
+            {validUntil && (
+              <p className="text-lg text-gray-800 pt-3 border-t border-blue-300 font-sans">
+                <span className="font-semibold text-blue-900">Valid Until:</span><br/>
+                <span className="font-medium text-blue-700 tracking-wide">
+                  {new Date(validUntil).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </span>
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="text-center transform hover:scale-110 transition-transform duration-500">
+          {customSeal && (
+            <div className="relative">
+              <img
+                src={customSeal}
+                alt="Official Seal"
+                className="w-28 h-28 mx-auto drop-shadow-2xl border-2 border-blue-300 rounded-full p-2 bg-white"
+              />
+            </div>
+          )}
+          <p className="mt-6 text-sm font-mono text-blue-800 bg-blue-100 px-6 py-3 rounded-full inline-block border border-blue-300 shadow-sm hover:bg-blue-200 transition-colors duration-300">
+            Certificate ID: <span className="font-bold">{certificateId}</span>
+          </p>
+        </div>
+        <div className="text-right space-y-6">
+          {digitalSignature && (
+            <div className="space-y-6">
+              <img
+                src={digitalSignature}
+                alt="Authorized Signature"
+                className="h-18 ml-auto hover:scale-110 transition-transform duration-500 drop-shadow-md"
+              />
+              <div className="border-t-2 border-blue-500 w-40 ml-auto pt-3">
+                <p className="text-sm text-gray-800 font-sans tracking-wide">
+                  Dr. Elizabeth Windsor
+                  <span className="block text-gray-700 text-xs italic">Academic Dean</span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer Section */}
+      <div className="mt-20 w-full border-t-4 border-blue-300 pt-10">
+        <div className="flex justify-between items-center px-16">
+          {accreditationBody && (
+            <div className="text-left bg-blue-100/50 p-6 rounded-xl border border-blue-300 shadow-sm">
+              <p className="text-gray-800 font-sans">
+                <span className="text-sm font-medium text-blue-900">Accredited by</span><br/>
+                <span className="text-lg font-serif font-semibold text-blue-800">{accreditationBody}</span>
+              </p>
+            </div>
+          )}
+          <div className="flex items-center gap-8 bg-blue-100/50 p-6 rounded-xl border border-blue-300 shadow-sm">
+            {qrUrl && (
+              <div className="p-3 bg-white rounded-lg shadow-inner border border-blue-200">
+                <QRCodeSVG
+                  value={verificationUrl || qrUrl}
+                  size={90}
+                  level="H"
+                  bgColor="#ffffff"
+                  fgColor="#1e3a8a"
+                />
+              </div>
+            )}
+            <div className="text-right">
+              <p className="text-sm text-gray-800 font-sans">
+                <span className="block font-medium text-blue-900">Verify authenticity at</span>
+                <span className="font-mono text-blue-700 text-xs underline hover:text-blue-900 transition-colors duration-300">
+                  {verificationUrl}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'ecertificate' && selectedVariantStyle === 'style1' && (
+  <div className="relative bg-white p-12 rounded-3xl shadow-2xl overflow-hidden min-h-[1100px] border-8 border-double border-orange-300">
+    {/* Culinary Background Elements */}
+    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCI+PHBhdGggZD0iTTAgMGg2MHY2MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0zMCAzMGMtOCAwLTE1IDctMTUgMTVzNyAxNSAxNSAxNSAxNS03IDE1LTE1LTctMTUtMTUtMTV6IiBzdHJva2U9IiNmZGJhNzQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMiIvPjwvc3ZnPg==')] opacity-10"></div>
+    <div className="absolute top-0 right-0 w-64 h-64 bg-orange-100 rounded-full blur-3xl opacity-40"></div>
+    <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-40"></div>
+
+    {/* Certificate Content */}
+    <div className="relative flex flex-col items-center text-center space-y-12">
+      {/* Header Section */}
+      <div className="mb-16 space-y-8">
+        {institutionLogo ? (
+          <motion.img
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            src={institutionLogo}
+            alt="Institution Logo"
+            className="h-40 mx-auto drop-shadow-xl hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-40 h-40 mx-auto bg-gradient-to-br from-orange-100 to-amber-50 rounded-full flex items-center justify-center border-4 border-orange-200 shadow-lg"
+          >
+            <svg className="w-24 h-24 text-orange-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z" stroke="currentColor" strokeWidth="2"/>
+              <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" strokeWidth="2"/>
+              <path d="M12 7V5M17 12H19M12 19V17M5 12H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </motion.div>
+        )}
+        
+        <div className="relative py-6">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-200 to-transparent h-[1px] top-0"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-200 to-transparent h-[1px] bottom-0"></div>
+          <h1 className="text-7xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-800 via-amber-700 to-orange-800 tracking-tight">
+            {credentialType}
+          </h1>
+          <p className="text-3xl font-serif text-orange-700 italic mt-4">Excellence in Culinary Arts</p>
+        </div>
+      </div>
+
+      {/* Rest of your existing certificate content structure, but with updated styling */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.7 }}
+        className="space-y-8 max-w-4xl"
+      >
+        <h2 className="text-5xl font-bold text-orange-900 font-serif">
+          <span className="relative whitespace-nowrap">
+            {recipientName || "Recipient Name"}
+            <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-300 to-transparent"></span>
+          </span>
+        </h2>
+        <p className="text-3xl text-orange-700 font-serif italic">
+          Has mastered the culinary arts in
+        </p>
+        <h3 className="text-4xl font-semibold text-orange-800 font-serif">
+          «{courseTitle || "Course Title"}»
+        </h3>
+        {/* Additional details with culinary styling */}
+        {studentId && (
+          <p className="text-xl text-orange-700 font-serif">
+            Student ID: {studentId}
+          </p>
+        )}
+        {recipientEmail && (
+          <p className="text-xl text-orange-700 font-serif">
+            Email: {recipientEmail}
+          </p>
+        )}
+      </motion.div>
+
+      {/* Dates and Signatures with culinary-themed styling */}
+      <div className="mt-16 w-full grid grid-cols-3 gap-8 items-start px-12">
+        <div className="text-left space-y-3">
+          <div className="space-y-2 bg-orange-50 p-6 rounded-xl border border-orange-200">
+          <p className="text-lg text-orange-700">
+              <span className="font-semibold">Issued On:</span><br/>
+              <span className="font-serif">{new Date(issuedDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="text-center">
+          {customSeal && (
+            <div className="relative">
+              <img
+                src={customSeal}
+                alt="Official Seal"
+                className="w-48 h-48 mx-auto drop-shadow-xl"
+              />
+            </div>
+          )}
+          <p className="mt-4 text-sm font-mono text-orange-700 bg-orange-50 px-4 py-2 rounded-full inline-block border border-orange-200">
+            Certificate ID: {certificateId}
+          </p>
+        </div>
+
+        {/* Signature section */}
+        <div className="text-right space-y-4">
+          {digitalSignature && (
+            <div className="space-y-4">
+              <img
+                src={digitalSignature}
+                alt="Authorized Signature"
+                className="h-24 ml-auto"
+              />
+              <div className="border-t-2 border-orange-300 w-48 ml-auto pt-2">
+                <p className="text-sm text-orange-800 font-serif">
+                  Master Chef Instructor
+                  <span className="block text-orange-600 text-xs">Culinary Director</span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer Section */}
+      <div className="mt-16 w-full border-t-4 border-orange-200 pt-8">
+        <div className="flex justify-between items-center px-12">
+          {accreditationBody && (
+            <div className="text-left bg-orange-50 p-4 rounded-xl border border-orange-200">
+              <p className="text-orange-800">
+                <span className="text-sm font-medium">Accredited by</span><br/>
+                <span className="text-lg font-serif font-semibold">{accreditationBody}</span>
+              </p>
+            </div>
+          )}
+          <div className="flex items-center gap-6 bg-orange-50 p-4 rounded-xl border border-orange-200">
+            {qrUrl && (
+              <div className="p-2 bg-white rounded-lg shadow-inner">
+                <QRCodeSVG
+                  value={verificationUrl || qrUrl}
+                  size={100}
+                  level="H"
+                  bgColor="#ffffff"
+                  fgColor="#9a3412"
+                />
+              </div>
+            )}
+            <div className="text-right">
+              <p className="text-sm text-orange-800">
+                <span className="block font-medium">Verify authenticity at</span>
+                <span className="font-mono text-orange-700 text-xs">{verificationUrl}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'ecertificate' && selectedVariantStyle === 'style2' && (
+  <div className="relative bg-white p-12 rounded-3xl shadow-2xl overflow-hidden min-h-[1100px] border-4 border-gray-300 transform hover:scale-[1.002] transition-transform duration-700">
+    {/* Background Elements */}
+    <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 opacity-50 pointer-events-none"></div>
+    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl"></div>
+    <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-100 rounded-full blur-3xl"></div>
+
+    {/* Certificate Content */}
+    <div className="relative flex flex-col items-center text-center space-y-12">
+      {/* Header Section */}
+      <div className="mb-16 space-y-8">
+        {institutionLogo ? (
+          <motion.img
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            src={institutionLogo}
+            alt="Institution Logo"
+            className="h-40 mx-auto drop-shadow-xl hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-40 h-40 mx-auto bg-gradient-to-br from-blue-100 to-green-100 rounded-full flex items-center justify-center border-4 border-gray-300 shadow-lg hover:shadow-gray-200/50 transition-shadow duration-300"
+          >
+            <AcademicCapIcon className="w-24 h-24 text-blue-600" />
+          </motion.div>
+        )}
+        <div className="relative py-6">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-300/50 to-transparent h-[1px] top-0"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-300/50 to-transparent h-[1px] bottom-0"></div>
+          <h1 className="text-8xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-green-800 to-blue-900 tracking-tight">
+            {credentialType}
+          </h1>
+          <p className="text-3xl font-serif text-gray-700 italic">Presented with Distinction To</p>
+        </div>
+      </div>
+      {/* Recipient Details */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.7 }}
+        className="space-y-8 max-w-4xl"
+      >
+        <h2 className="text-5xl font-bold text-gray-900 font-serif">
+          <span className="relative whitespace-nowrap">
+            {recipientName || "Recipient Name"}
+            <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></span>
+          </span>
+        </h2>
+        <p className="text-3xl text-gray-700 font-serif italic">
+          For successfully completing the course of study in
+        </p>
+        <h3 className="text-5xl font-semibold text-gray-800 font-serif">
+          «{courseTitle || "Course Title"}»
+        </h3>
+        {studentId && (
+          <p className="text-3xl text-gray-700 font-serif italic">
+            Student/Employee ID: {studentId}
+          </p>
+        )}
+        {recipientEmail && (
+          <p className="text-3xl text-gray-700 font-serif italic">
+            Email: {recipientEmail}
+          </p>
+        )}
+      </motion.div>
+      {/* Dates and Signatures */}
+      <div className="mt-16 w-full grid grid-cols-3 gap-8 items-start px-12">
+        <div className="text-left space-y-3">
+          <div className="space-y-2 bg-gray-50 p-4 rounded-xl backdrop-blur-sm border border-gray-200">
+            <p className="text-lg text-gray-800">
+              <span className="font-semibold">Issued On:</span><br/>
+              <span className="font-serif">{new Date(issuedDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</span>
+            </p>
+            {validUntil && (
+              <p className="text-lg text-gray-800 pt-2 border-t border-gray-200">
+                <span className="font-semibold">Valid Until:</span><br/>
+                <span className="font-serif">{new Date(validUntil).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}</span>
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="text-center transform hover:scale-105 transition-transform duration-300">
+          {customSeal && (
+            <div className="relative">
+              <img
+                src={customSeal}
+                alt="Official Seal"
+                className="w-48 h-48 mx-auto drop-shadow-xl"
+              />
+            </div>
+          )}
+          <p className="mt-4 text-sm font-mono text-gray-700 bg-gray-50 px-4 py-2 rounded-full inline-block border border-gray-200">
+            Certificate ID: {certificateId}
+          </p>
+        </div>
+        <div className="text-right space-y-4">
+          {digitalSignature && (
+            <div className="space-y-4">
+              <img
+                src={digitalSignature}
+                alt="Authorized Signature"
+                className="h-24 ml-auto hover:scale-105 transition-transform duration-300"
+              />
+              <div className="border-t-2 border-gray-400 w-48 ml-auto pt-2">
+                <p className="text-sm text-gray-800 font-serif">
+                  Dr. Elizabeth Windsor
+                  <span className="block text-gray-700 text-xs">Academic Dean</span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Footer Section */}
+      <div className="mt-16 w-full border-t-4 border-gray-200 pt-8">
+        <div className="flex justify-between items-center px-12">
+          {accreditationBody && (
+            <div className="text-left bg-gray-50 p-4 rounded-xl backdrop-blur-sm border border-gray-200">
+              <p className="text-gray-800">
+                <span className="text-sm font-medium">Accredited by</span><br/>
+                <span className="text-lg font-serif font-semibold">{accreditationBody}</span>
+              </p>
+            </div>
+          )}
+          <div className="flex items-center gap-6 bg-gray-50 p-4 rounded-xl backdrop-blur-sm border border-gray-200">
+            {qrUrl && (
+              <div className="p-2 bg-white rounded-lg shadow-inner">
+                <QRCodeSVG
+                  value={verificationUrl || qrUrl}
+                  size={100}
+                  level="H"
+                  bgColor="#ffffff"
+                  fgColor="#000000"
+                />
+              </div>
+            )}
+            <div className="text-right">
+              <p className="text-sm text-gray-800">
+                <span className="block font-medium">Verify authenticity at</span>
+                <span className="font-mono text-gray-700 text-xs">{verificationUrl}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'ecertificate' && selectedVariantStyle === 'style3' && (
+  <div className="relative bg-gradient-to-b from-blue-50 to-white p-16 rounded-3xl shadow-2xl overflow-hidden min-h-[1100px] border-[12px] border-double border-blue-200 transform hover:scale-[1.002] transition-transform duration-700">
+    {/* Modern Background Elements */}
+    <div className="absolute inset-0 bg-[url('/modern-grid.svg')] opacity-10 pointer-events-none"></div>
+    {/* Certificate Content */}
+    <div className="relative flex flex-col items-center text-center space-y-12">
+      {/* Header Section */}
+      <div className="mb-16 space-y-8">
+        {institutionLogo ? (
+          <motion.img
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            src={institutionLogo}
+            alt="Institution Logo"
+            className="h-24 mx-auto drop-shadow-xl hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-100 to-blue-50 rounded-full flex items-center justify-center border-4 border-blue-300 shadow-lg hover:shadow-blue-200/50 transition-shadow duration-300"
+          >
+            <AcademicCapIcon className="w-16 h-16 text-blue-600" />
+          </motion.div>
+        )}
+        <div className="relative py-6">
+          <h1 className="text-6xl font-sans font-bold text-blue-800 tracking-tight">
+            {credentialType}
+          </h1>
+          <p className="text-2xl font-sans text-gray-700 italic">Presented with Distinction To</p>
+        </div>
+      </div>
+      {/* Recipient Details */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.7 }}
+        className="space-y-8 max-w-4xl"
+      >
+        <h2 className="text-4xl font-bold text-blue-800 font-sans">
+          <span className="relative whitespace-nowrap">
+            {recipientName || "Recipient Name"}
+            <span className="absolute -bottom-2 left-0 right-0 h-1 bg-blue-400"></span>
+          </span>
+        </h2>
+        <p className="text-2xl text-gray-700 font-sans italic">
+          For successfully completing the course of study in
+        </p>
+        <h3 className="text-4xl font-semibold text-blue-700 font-sans">
+          «{courseTitle || "Course Title"}»
+        </h3>
+        {studentId && (
+          <p className="text-2xl text-gray-700 font-sans italic">
+            Student/Employee ID: {studentId}
+          </p>
+        )}
+        {recipientEmail && (
+          <p className="text-2xl text-gray-700 font-sans italic">
+            Email: {recipientEmail}
+          </p>
+        )}
+      </motion.div>
+      {/* Dates and Signatures */}
+      <div className="mt-16 w-full grid grid-cols-3 gap-8 items-start px-12">
+        <div className="text-left space-y-3">
+          <div className="space-y-2 bg-blue-50 p-4 rounded-xl border border-blue-200">
+            <p className="text-lg text-gray-800">
+              <span className="font-semibold">Issued On:</span><br/>
+              <span className="font-sans">{new Date(issuedDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</span>
+            </p>
+            {validUntil && (
+              <p className="text-lg text-gray-800 pt-2 border-t border-blue-200">
+                <span className="font-semibold">Valid Until:</span><br/>
+                <span className="font-sans">{new Date(validUntil).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}</span>
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="text-center transform hover:scale-105 transition-transform duration-300">
+          {customSeal && (
+            <div className="relative">
+              <img
+                src={customSeal}
+                alt="Official Seal"
+                className="w-24 h-24 mx-auto drop-shadow-xl"
+              />
+            </div>
+          )}
+          <p className="mt-4 text-sm font-mono text-blue-700 bg-blue-50 px-4 py-2 rounded-full inline-block border border-blue-200">
+            Certificate ID: {certificateId}
+          </p>
+        </div>
+        <div className="text-right space-y-4">
+          {digitalSignature && (
+            <div className="space-y-4">
+              <img
+                src={digitalSignature}
+                alt="Authorized Signature"
+                className="h-16 ml-auto hover:scale-105 transition-transform duration-300"
+              />
+              <div className="border-t-2 border-blue-400 w-32 ml-auto pt-2">
+                <p className="text-sm text-gray-800 font-sans">
+                  Dr. Elizabeth Windsor
+                  <span className="block text-gray-700 text-xs">Academic Dean</span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Footer Section */}
+      <div className="mt-16 w-full border-t-4 border-blue-200 pt-8">
+        <div className="flex justify-between items-center px-12">
+          {accreditationBody && (
+            <div className="text-left bg-blue-50 p-4 rounded-xl border border-blue-200">
+              <p className="text-gray-800">
+                <span className="text-sm font-medium">Accredited by</span><br/>
+                <span className="text-lg font-sans font-semibold">{accreditationBody}</span>
+              </p>
+            </div>
+          )}
+          <div className="flex items-center gap-6 bg-blue-50 p-4 rounded-xl border border-blue-200">
+            {qrUrl && (
+              <div className="p-2 bg-white rounded-lg shadow-inner">
+                <QRCodeSVG
+                  value={verificationUrl || qrUrl}
+                  size={80}
+                  level="H"
+                  bgColor="#ffffff"
+                  fgColor="#0d47a1"
+                />
+              </div>
+            )}
+            <div className="text-right">
+              <p className="text-sm text-gray-800">
+                <span className="block font-medium">Verify authenticity at</span>
+                <span className="font-mono text-blue-700 text-xs">{verificationUrl}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{selectedVariant === 'ecertificate' && selectedVariantStyle === 'style4' && (
+  <div className="relative bg-gradient-to-b from-amber-50 to-amber-100/90 p-16 rounded-3xl shadow-2xl overflow-hidden min-h-[1100px] border-[12px] border-double border-amber-200 transform hover:scale-[1.002] transition-transform duration-700">
+    {/* Animated Background Elements */}
+    <div className="absolute inset-0 bg-[url('/parchment-texture.svg')] opacity-20 pointer-events-none"></div>
+    {/* Certificate Content */}
+    <div className="relative flex flex-col items-center text-center space-y-12">
+      {/* Header Section */}
+      <div className="mb-16 space-y-8">
+        {institutionLogo ? (
+          <motion.img
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            src={institutionLogo}
+            alt="Institution Logo"
+            className="h-40 mx-auto drop-shadow-xl hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-40 h-40 mx-auto bg-gradient-to-br from-amber-100 to-amber-50 rounded-full flex items-center justify-center border-4 border-amber-300 shadow-lg hover:shadow-amber-200/50 transition-shadow duration-300"
+          >
+            <AcademicCapIcon className="w-24 h-24 text-amber-600" />
+          </motion.div>
+        )}
+        <div className="relative py-6">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-300/50 to-transparent h-[1px] top-0"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-300/50 to-transparent h-[1px] bottom-0"></div>
+          <h1 className="text-8xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-900 via-amber-800 to-amber-900 tracking-tight">
+            {credentialType}
+          </h1>
+          <p className="text-3xl font-serif text-amber-700 italic">Presented with Distinction To</p>
+        </div>
+      </div>
+      {/* Recipient Details */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.7 }}
+        className="space-y-8 max-w-4xl"
+      >
+        <h2 className="text-5xl font-bold text-amber-900 font-serif">
+          <span className="relative whitespace-nowrap">
+            {recipientName || "Recipient Name"}
+            <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></span>
+          </span>
+        </h2>
+        <p className="text-3xl text-amber-700 font-serif italic">
+          For successfully completing the course of study in
+        </p>
+        <h3 className="text-5xl font-semibold text-amber-800 font-serif">
+          «{courseTitle || "Course Title"}»
+        </h3>
+        {studentId && (
+          <p className="text-3xl text-amber-700 font-serif italic">
+            Student/Employee ID: {studentId}
+          </p>
+        )}
+        {recipientEmail && (
+          <p className="text-3xl text-amber-700 font-serif italic">
+            Email: {recipientEmail}
+          </p>
+        )}
+      </motion.div>
+      {/* Dates and Signatures */}
+      <div className="mt-16 w-full grid grid-cols-3 gap-8 items-start px-12">
+        <div className="text-left space-y-3">
+          <div className="space-y-2 bg-amber-50/50 p-4 rounded-xl backdrop-blur-sm border border-amber-200/50">
+            <p className="text-lg text-amber-800">
+              <span className="font-semibold">Issued On:</span><br/>
+              <span className="font-serif">{new Date(issuedDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</span>
+            </p>
+            {validUntil && (
+              <p className="text-lg text-amber-800 pt-2 border-t border-amber-200/30">
+                <span className="font-semibold">Valid Until:</span><br/>
+                <span className="font-serif">{new Date(validUntil).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}</span>
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="text-center transform hover:scale-105 transition-transform duration-300">
+          {customSeal && (
+            <div className="relative">
+              <img
+                src={customSeal}
+                alt="Official Seal"
+                className="w-48 h-48 mx-auto drop-shadow-xl"
+              />
+            </div>
+          )}
+          <p className="mt-4 text-sm font-mono text-amber-700 bg-amber-50/50 px-4 py-2 rounded-full inline-block border border-amber-200/50">
+            Certificate ID: {certificateId}
+          </p>
+        </div>
+        <div className="text-right space-y-4">
+          {digitalSignature && (
+            <div className="space-y-4">
+              <img
+                src={digitalSignature}
+                alt="Authorized Signature"
+                className="h-24 ml-auto hover:scale-105 transition-transform duration-300"
+              />
+              <div className="border-t-2 border-amber-400/50 w-48 ml-auto pt-2">
+                <p className="text-sm text-amber-800 font-serif">
+                  Dr. Elizabeth Windsor
+                  <span className="block text-amber-700 text-xs">Academic Dean</span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Footer Section */}
+      <div className="mt-16 w-full border-t-4 border-amber-200/50 pt-8">
+        <div className="flex justify-between items-center px-12">
+          {accreditationBody && (
+            <div className="text-left bg-amber-50/50 p-4 rounded-xl backdrop-blur-sm border border-amber-200/50">
+              <p className="text-amber-800">
+                <span className="text-sm font-medium">Accredited by</span><br/>
+                <span className="text-lg font-serif font-semibold">{accreditationBody}</span>
+              </p>
+            </div>
+          )}
+          <div className="flex items-center gap-6 bg-amber-50/50 p-4 rounded-xl backdrop-blur-sm border border-amber-200/50">
+            {qrUrl && (
+              <div className="p-2 bg-white rounded-lg shadow-inner">
+                <QRCodeSVG
+                  value={verificationUrl || qrUrl}
+                  size={100}
+                  level="H"
+                  bgColor="#ffffff"
+                  fgColor="#92400e"
+                />
+              </div>
+            )}
+            <div className="text-right">
+              <p className="text-sm text-amber-800">
+                <span className="block font-medium">Verify authenticity at</span>
+                <span className="font-mono text-amber-700 text-xs">{verificationUrl}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
 
       {selectedVariant === 'timetable' && selectedVariantStyle === 'default' && (
@@ -17795,147 +19280,202 @@ const baseLabelStyles = `
 )}
 
 {selectedVariant === 'pricelist' && selectedVariantStyle === 'style1' && (
-  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-6 rounded-2xl" style={{
-    background:
-      bgType === 'gradient'
-        ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-        : bgType === 'solid'
-        ? solidColor
-        : "#f9f9f9",
-  }}>
-    {/* Header Section */}
-    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-slate-900">{title || "Our Pricing"}</h1>
-        <div className="flex items-center gap-2 text-sm text-slate-600">
-          <CurrencyDollarIcon className="w-4 h-4 text-blue-600" />
-          <span>Currency: {pricelistState.currency}</span>
-          <span className="text-blue-500 mx-1">•</span>
-          <TagIcon className="w-4 h-4 text-blue-600" />
-          <span>{pricelistState.tiers.length} Pricing Tiers</span>
-        </div>
-      </div>
-      <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200">
-        <p className="text-sm font-semibold text-slate-700">
-          Starting from{' '}
-          {Math.min(...pricelistState.tiers.map((t) => t.price))
-            .toLocaleString('en-US', {
-              style: 'currency',
-              currency: pricelistState.currency,
-            })
-            .replace(/^(.{1})(\d{3})/, '$1,$2')}
-        </p>
-      </div>
-    </header>
+   <div className="relative rounded-2xl p-4 overflow-hidden">
+   {/* Animated background pattern */}
+   <div className="fixed inset-0 overflow-hidden opacity-10">
+     {Array.from({ length: 20 }).map((_, i) => (
+       <motion.div
+         key={i}
+         className="absolute text-3xl"
+         animate={floatingAnimation}
+         style={{
+           left: `${Math.random() * 100}%`,
+           top: `${Math.random() * 100}%`,
+           animationDelay: `${i * 0.5}s`
+         }}
+       >
+         {easterPatterns[i % easterPatterns.length]}
+       </motion.div>
+     ))}
+   </div>
 
-    {/* Pricing Tiers Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {pricelistState.tiers.map((tier) => (
-        <article
-          key={tier.id}
-          className={`relative border rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-200 ${
-            tier.recommended ? 'border-blue-200 bg-gradient-to-br from-blue-50 to-white' : 'border-slate-200 bg-white'
-          }`}
-        >
-          {/* Recommended Badge */}
-          {tier.recommended && (
-            <div className="absolute top-0 right-6 -translate-y-1/2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-              RECOMMENDED
-            </div>
-          )}
+   {/* Main content */}
+   <div className="relative z-10">
+     {/* Header */}
+     <motion.header 
+       className="text-center mb-16"
+       initial={{ opacity: 0, y: -20 }}
+       animate={{ opacity: 1, y: 0 }}
+       transition={{ duration: 0.8 }}
+     >
+       <div className="relative inline-block mb-6">
+         <motion.span 
+           className="text-7xl block"
+           animate={{ rotate: [0, 10, -10, 0] }}
+           transition={{ duration: 2, repeat: Infinity }}
+         >
+           🐣
+         </motion.span>
+         <motion.div 
+           className="absolute -right-4 -top-4 text-4xl"
+           animate={{ y: [-5, 5, -5] }}
+           transition={{ duration: 1.5, repeat: Infinity }}
+         >
+           🌸
+         </motion.div>
+       </div>
+       
+       <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
+         {title}
+       </h1>
+       <p className="text-2xl text-purple-600">
+         Celebrate Spring with Special Savings
+       </p>
+     </motion.header>
 
-          {/* Tier Header */}
-          <div className="mb-6">
-            <h3 className="text-xl font-bold text-slate-900 mb-2">{tier.name}</h3>
-            <div className="flex items-end gap-2">
-              <span className="text-4xl font-extrabold text-slate-900">
-                {tier.price
-                  .toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: pricelistState.currency,
-                  })
-                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
-              </span>
-              <span className="text-slate-500 font-medium">
-                /{{
-                  monthly: 'mo',
-                  annual: 'yr',
-                  'one-time': 'one-time',
-                }[tier.billingInterval]}
-              </span>
-            </div>
-            {tier.discount && (
-              <p className="text-sm text-green-600 mt-2">
-                🎁 {tier.discount} Discount
-              </p>
-            )}
-          </div>
+     {/* Pricing Grid */}
+     <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-8 max-w-7xl mx-auto`}>
+       {pricelistState.tiers.map((tier, index) => (
+         <motion.div
+           key={tier.id}
+           className="relative"
+           initial={{ opacity: 0, y: 50 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ delay: index * 0.2 }}
+           whileHover={{ scale: 1.02 }}
+         >
+           <div className={`
+             h-full rounded-3xl p-8
+             ${tier.recommended 
+               ? 'bg-gradient-to-br from-purple-50 to-pink-50 shadow-xl' 
+               : 'bg-white shadow-lg'}
+           `}>
+             {/* Recommended badge */}
+             {tier.recommended && (
+               <motion.div
+                 className="absolute -top-4 left-1/2 transform -translate-x-1/2"
+                 animate={{ y: [-5, 5, -5] }}
+                 transition={{ duration: 2, repeat: Infinity }}
+               >
+                 <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full font-semibold flex items-center gap-2">
+                   <span>🥚</span> Best Value
+                 </div>
+               </motion.div>
+             )}
 
-          {/* Features List */}
-          {tier.description && (
-            <p className="text-slate-600 mb-4">{tier.description}</p>
-          )}
-          <ul className="space-y-3 mb-8">
-            {tier.features.map((feature) => (
-              <li key={feature.id} className="flex items-center gap-3">
-                <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
-                <span className="text-slate-700">{feature.text}</span>
-              </li>
-            ))}
-          </ul>
+             {/* Tier content */}
+             <div className="text-center mb-8">
+               <motion.div
+                 className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center"
+                 style={{ background: colors.pastel.purple }}
+                 whileHover={{ rotate: 360 }}
+                 transition={{ duration: 0.8 }}
+               >
+                 <span className="text-5xl">{tier.recommended ? '🐰' : '🥚'}</span>
+               </motion.div>
+               <h3 className="text-2xl font-bold text-purple-800 mb-2">{tier.name}</h3>
+               <p className="text-purple-600">{tier.description}</p>
+             </div>
 
-          {/* CTA Button */}
-          <button
-            className={`w-full py-3 rounded-lg font-semibold transition-all ${
-              tier.recommended
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
-            }`}
-          >
-            SELECT {tier.name.toUpperCase()}
-          </button>
-        </article>
-      ))}
-    </div>
+             {/* Price */}
+             <div className="text-center mb-8">
+               <div className="flex items-baseline justify-center">
+                 <span className="text-5xl font-bold text-purple-700">
+                   {new Intl.NumberFormat('en-US', {
+                     style: 'currency',
+                     currency: pricelistState.currency
+                   }).format(tier.price)}
+                 </span>
+                 <span className="text-purple-500 ml-2">
+                   /{tier.billingInterval === 'monthly' ? 'mo' : 'yr'}
+                 </span>
+               </div>
+             </div>
 
-    {/* Calculator Widget */}
-    {pricelistState.enableCalculator && (
-      <div className="mt-8 p-6 bg-slate-50 rounded-xl border border-slate-200">
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">
-          {pricelistState.calculatorLabel || "Price Calculator"}
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <select className="p-2 rounded-lg border border-slate-300 bg-white w-full">
-            {pricelistState.tiers.map((tier) => (
-              <option key={tier.id} value={tier.id}>
-                {tier.name} -{' '}
-                {tier.price
-                  .toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: pricelistState.currency,
-                  })
-                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            placeholder="Enter Quantity"
-            className="p-2 rounded-lg border border-slate-300 bg-white w-full"
-          />
-          <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition w-full">
-            {pricelistState.calculatorLabel || "Calculate Total"}
-          </button>
-        </div>
-        {pricelistState.calculatorNote && (
-          <p className="text-slate-500 text-sm mt-3">
-            * {pricelistState.calculatorNote}
-          </p>
-        )}
-      </div>
-    )}
-  </div>
+             {/* Features */}
+             <ul className="space-y-4 mb-8">
+               {tier.features.map((feature, idx) => (
+                 <motion.li
+                   key={feature.id}
+                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-50"
+                   whileHover={{ x: 5 }}
+                 >
+                   <span className="text-xl">
+                     {easterPatterns[idx % easterPatterns.length]}
+                   </span>
+                   <span className="text-purple-700">{feature.text}</span>
+                 </motion.li>
+               ))}
+             </ul>
+
+             {/* CTA Button */}
+             <motion.button
+               className={`
+                 w-full py-4 rounded-full font-semibold text-lg
+                 ${tier.recommended
+                   ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                   : 'bg-purple-100 text-purple-700 hover:bg-purple-200'}
+               `}
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+             >
+               Get Started
+               <span className="ml-2">🐰</span>
+             </motion.button>
+           </div>
+         </motion.div>
+       ))}
+     </div>
+
+     {/* Calculator Section */}
+     {pricelistState.enableCalculator && (
+       <motion.div
+         className="mt-16 max-w-3xl mx-auto"
+         initial={{ opacity: 0, y: 50 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ delay: 0.6 }}
+       >
+         <div className="bg-white rounded-3xl p-8 shadow-xl border-2 border-purple-100">
+           <h3 className="text-2xl font-bold text-purple-700 mb-6 text-center">
+             Easter Bundle Calculator 🐣
+           </h3>
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+             <select className="p-4 rounded-full border-2 border-purple-200 focus:border-purple-400 bg-white text-purple-700">
+               {pricelistState.tiers.map(tier => (
+                 <option key={tier.id} value={tier.id}>{tier.name}</option>
+               ))}
+             </select>
+             <input
+               type="number"
+               placeholder="Quantity"
+               className="p-4 rounded-full border-2 border-purple-200 focus:border-purple-400 bg-white text-purple-700"
+               min="1"
+             />
+             <motion.button
+               className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 px-8 rounded-full font-semibold"
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+             >
+               Calculate Total 🐰
+             </motion.button>
+           </div>
+
+           <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl">
+             <div className="flex items-center justify-between">
+               <span className="text-purple-700 font-medium">Total:</span>
+               <span className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                 {pricelistState.currency}0.00
+               </span>
+             </div>
+           </div>
+         </div>
+       </motion.div>
+     )}
+   </div>
+ </div>
 )}
+
+
 
 {selectedVariant === 'pricelist' && selectedVariantStyle === 'style2' && (
   <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-2xl overflow-hidden" >
@@ -18067,334 +19607,417 @@ const baseLabelStyles = `
 )}
 
 {selectedVariant === 'pricelist' && selectedVariantStyle === 'style3' && (
-  <div className="space-y-6 bg-white/80 backdrop-blur-md shadow-lg p-4 rounded-xl" style={{
-    background:
-      bgType === 'gradient'
-        ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-        : bgType === 'solid'
-        ? solidColor
-        : "#f9f9f9",
-  }}>
-    {/* Header Section */}
-    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-slate-900">{title || "Our Pricing"}</h1>
-        <div className="flex items-center gap-2 text-sm text-slate-600">
-          <CurrencyDollarIcon className="w-4 h-4 text-blue-600" />
-          <span>Currency: {pricelistState.currency}</span>
-          <span className="text-blue-500 mx-1">•</span>
-          <TagIcon className="w-4 h-4 text-blue-600" />
-          <span>{pricelistState.tiers.length} Plans</span>
-        </div>
+  <div className="relative p-8 rounded-3xl bg-gradient-to-br from-red-50 via-pink-50 to-rose-50">
+    {/* Animated Floating Hearts Background */}
+    <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-full">
+        {[...Array(30)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute"
+            initial={{ 
+              x: Math.random() * 100 + "%",
+              y: -20,
+              scale: Math.random() * 0.5 + 0.5,
+              rotate: Math.random() * 360
+            }}
+            animate={{ 
+              y: "120%",
+              rotate: [0, 360],
+              scale: [0.5, 1, 0.5]
+            }}
+            transition={{
+              duration: Math.random() * 15 + 10,
+              repeat: Infinity,
+              ease: "linear",
+              times: [0, 0.5, 1]
+            }}
+          >
+            {["❤️", "💝", "💖", "💕"][Math.floor(Math.random() * 4)]}
+          </motion.div>
+        ))}
       </div>
-      <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200">
-        <p className="text-sm font-semibold text-slate-700">
-          Starting at{' '}
-          {Math.min(...pricelistState.tiers.map((t) => t.price))
-            .toLocaleString('en-US', {
-              style: 'currency',
-              currency: pricelistState.currency,
-            })
-            .replace(/^(.{1})(\d{3})/, '$1,$2')}
-        </p>
+    </div>
+
+    {/* Header Section */}
+    <header className="relative text-center max-w-4xl mx-auto mb-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
+        <div className="inline-block relative">
+          <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-red-600 via-pink-500 to-rose-500 bg-clip-text text-transparent">
+          {title || "Valentine's Special"}
+        </h1>
+          <div className="absolute -top-6 -right-6 text-4xl animate-bounce">💝</div>
+          <div className="absolute -bottom-4 -left-6 text-4xl animate-bounce delay-150">💖</div>
+        </div>
+        <p className="text-red-600 text-xl mt-4 font-dancing">Spread the love with our special offers</p>
+      </motion.div>
+
+      {/* Price Info Cards */}
+      <div className="flex flex-wrap items-center justify-center gap-4">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center gap-2 bg-white/80 backdrop-blur px-8 py-4 rounded-2xl border-2 border-pink-200 shadow-lg"
+        >
+          <span className="text-2xl">💝</span>
+          <span className="text-gray-800 font-medium">
+            Currency: <span className="text-red-600 font-bold">{pricelistState.currency}</span>
+          </span>
+        </motion.div>
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center gap-2 bg-white/80 backdrop-blur px-8 py-4 rounded-2xl border-2 border-pink-200 shadow-lg"
+        >
+          <span className="text-2xl">💖</span>
+          <span className="text-gray-800 font-medium">
+            <span className="text-red-600 font-bold">{pricelistState.tiers.length}</span> Love Plans
+          </span>
+        </motion.div>
       </div>
     </header>
 
-    {/* Pricing Tiers Grid */}
-    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-2`}>
-      {pricelistState.tiers.map((tier) => (
-        <article
+    {/* Pricing Cards */}
+    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-8 relative`}>
+      {pricelistState.tiers.map((tier, index) => (
+        <motion.div
           key={tier.id}
-          className={`relative flex flex-col items-center justify-between border rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-200 ${
-            tier.recommended ? 'border-indigo-300 bg-indigo-50 scale-100 transition-all duration-200 ' : 'border-slate-200 bg-white scale-95 transition-all duration-200 '
-          }`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.2 }}
+          className="relative group"
         >
-          {/* Recommended Badge */}
-          {tier.recommended && (
-            <div className="absolute top-0 right-6 -translate-y-1/2 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-              BEST VALUE
+          <motion.div
+            whileHover={{ y: -5 }}
+            className={`h-full rounded-3xl p-8 transition-all duration-300 ${
+              tier.recommended
+                ? 'bg-gradient-to-b from-red-100 via-pink-50 to-rose-100 border-2 border-red-300 shadow-2xl'
+                : 'bg-white/90 backdrop-blur border-2 border-pink-200'
+            }`}
+          >
+            {tier.recommended && (
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-8 py-2 rounded-full text-sm font-medium shadow-xl">
+                Most Romantic 💝
+              </div>
+            )}
+
+            {/* Price Card Content */}
+            <div className="text-center mb-8">
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: [0, -10, 10, -10, 0] }}
+                className={`w-24 h-24 mx-auto mb-6 rounded-full p-4 flex items-center justify-center ${
+                  tier.recommended 
+                    ? 'bg-gradient-to-br from-red-200 to-pink-200'
+                    : 'bg-gradient-to-br from-pink-100 to-rose-100'
+                }`}
+              >
+                <span className="text-4xl">{tier.recommended ? '💝' : '💖'}</span>
+              </motion.div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-3">{tier.name}</h3>
+              <p className="text-pink-600">{tier.description}</p>
             </div>
-          )}
 
-          {/* Tier Image or Icon */}
-          <div className="mb-6">
-          <p className="text-stone-950 font-bold font-mono p-2 text-center text-xl">{tier.description}</p>
-            <img
-              src={"/12.jpg"}
-              alt={`${tier.name} Plan`}
-              className="w-20 h-20 mx-auto object-cover rounded-full mb-4"
-            />
-            <h3 className="text-xl font-bold text-center text-slate-900">{tier.name}</h3>
-            
-          </div>
-
-          {/* Price Section */}
-          <div className="mb-6 text-center">
-            <div className="flex items-end justify-center gap-2">
-              <span className="text-4xl font-extrabold text-slate-900">
-                {tier.price
-                  .toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: pricelistState.currency,
-                  })
-                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
+            {/* Price Display */}
+            <div className="text-center mb-8">
+              <span className="text-5xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                {tier.price.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: pricelistState.currency,
+                })}
               </span>
-              <span className="text-slate-500 font-medium">
-                {{
-                  monthly: 'mo',
-                  annual: 'yr',
-                  'one-time': 'one-time',
+              <span className="text-gray-600 ml-2">
+                /{{
+                  monthly: 'month',
+                  annual: 'year',
+                  'one-time': ''
                 }[tier.billingInterval]}
               </span>
             </div>
-            {tier.discount && (
-              <p className="text-sm text-green-600 mt-2">
-                🎁 {tier.discount} Discount
-              </p>
-            )}
-          </div>
 
-          {/* Features List */}
-          <ul className="space-y-3 mb-8 w-full text-left">
-            {tier.features.map((feature) => (
-              <li key={feature.id} className="flex items-center gap-3">
-                <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
-                <span className="text-slate-700">{feature.text}</span>
-              </li>
-            ))}
-          </ul>
+            {/* Features List */}
+            <ul className="space-y-4 mb-8">
+              {tier.features.map((feature, idx) => (
+                <motion.li
+                  key={feature.id}
+                  whileHover={{ x: 4 }}
+                  className="flex items-center gap-3 text-gray-700"
+                >
+                  <span className="text-red-500">{
+                    ["💝", "💖", "💕", "❤️"][idx % 4]
+                  }</span>
+                  {feature.text}
+                </motion.li>
+              ))}
+            </ul>
 
-          {/* CTA Button */}
-          <button
-            className={`w-full py-3 rounded-lg font-semibold transition-all ${
-              tier.recommended
-                ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-                : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
-            }`}
-          >
-            GET {tier.name.toUpperCase()}
-          </button>
-        </article>
+            {/* CTA Button */}
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              className={`w-full py-4 rounded-full font-semibold transition-all ${
+                tier.recommended
+                  ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-xl hover:shadow-pink-200'
+                  : 'bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:shadow-lg'
+              }`}
+            >
+              Choose This Plan 
+              <span className="ml-2">{"💘"}</span>
+            </motion.button>
+          </motion.div>
+        </motion.div>
       ))}
     </div>
 
-    {/* Calculator Widget */}
+    {/* Calculator Section */}
     {pricelistState.enableCalculator && (
-      <div className="mt-8 p-6 bg-slate-50 rounded-xl border border-slate-200">
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">
-          {pricelistState.calculatorLabel || "Price Calculator"}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mt-16 p-8 bg-white/90 backdrop-blur rounded-3xl border-2 border-pink-200 shadow-xl"
+      >
+        <h3 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Calculate Your Love Package 💕
         </h3>
-        <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-4`}>
-          <select className="p-2 rounded-lg border border-slate-300 bg-white w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <select className="p-4 rounded-full border-2 border-pink-200 bg-white focus:border-pink-300 focus:ring focus:ring-pink-100">
             {pricelistState.tiers.map((tier) => (
               <option key={tier.id} value={tier.id}>
-                {tier.name} -{' '}
-                {tier.price
-                  .toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: pricelistState.currency,
-                  })
-                  .replace(/^(.{1})(\d{3})/, '$1,$2')}
+                {tier.name}
               </option>
             ))}
           </select>
           <input
             type="number"
-            placeholder="Enter Quantity"
-            className="p-2 rounded-lg border border-slate-300 bg-white w-full"
+            placeholder="How much love? ❤️"
+            className="p-4 rounded-full border-2 border-pink-200 bg-white focus:border-pink-300 focus:ring focus:ring-pink-100"
           />
-          <button className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition w-full">
-            {pricelistState.calculatorLabel || "Calculate Total"}
-          </button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="bg-gradient-to-r from-red-500 to-pink-500 text-white py-4 px-8 rounded-full font-semibold shadow-lg hover:shadow-pink-200"
+          >
+            Calculate Total 💝
+          </motion.button>
         </div>
-        {pricelistState.calculatorNote && (
-          <p className="text-slate-500 text-sm mt-3">
-            * {pricelistState.calculatorNote}
-          </p>
-        )}
+
+        <div className="mt-8 p-6 bg-gradient-to-r from-red-50 to-pink-50 rounded-2xl border-2 border-pink-100">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-700 font-medium">Total Love Investment:</span>
+            <span className="text-3xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+              {pricelistState.currency}0.00
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    )}
+
+    {/* QR Code */}
+    {qrUrl && (
+      <div className="mt-8 flex justify-center">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="bg-white/90 p-4 rounded-2xl shadow-lg border-2 border-pink-200"
+        >
+          <QRCodeSVG value={qrUrl} size={90} />
+        </motion.div>
       </div>
     )}
   </div>
 )}
 
 {selectedVariant === 'pricelist' && selectedVariantStyle === 'style4' && (
-  <div className="relative space-y-8 p-8 rounded-3xl" style={{
-    background: 
-      bgType === 'gradient'
-        ? `linear-gradient(135deg, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-        : bgType === 'solid'
-        ? solidColor
-        : "#ffffff",
-  }}>
-    {/* Floating decorative elements */}
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute -top-24 -right-24 w-56 h-56 bg-indigo-100/20 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-24 -left-24 w-56 h-56 bg-purple-100/20 rounded-full blur-3xl"></div>
+  <div className="relative p-8 rounded-3xl bg-gradient-to-br from-rose-50 to-pink-50">
+  {/* Floating Hearts Background */}
+  <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute top-0 left-0 w-full h-full">
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-8 h-8 text-rose-200/30"
+          initial={{ 
+            x: Math.random() * 100 + "%",
+            y: -20,
+            rotate: 0
+          }}
+          animate={{ 
+            y: "120%",
+            rotate: 360
+          }}
+          transition={{
+            duration: Math.random() * 10 + 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        >
+          ❤️
+        </motion.div>
+      ))}
     </div>
-    {/* Animated header section */}
-    <header className="text-center max-w-4xl mx-auto mb-10 relative">
-      <motion.h1 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-5xl font-bold text-slate-900 mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
-      >
-        {title || "Simple Pricing"}
-      </motion.h1>
-      
-      <div className="flex items-center justify-center gap-6">
-        <motion.div 
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center gap-2 backdrop-blur-sm bg-white/50 px-6 py-3 rounded-3xl shadow-sm border border-slate-100"
-        >
-          <CurrencyDollarIcon className="w-6 h-6 text-indigo-600" />
-          <span className="text-slate-700 font-medium">
-            Currency: <span className="text-indigo-600">{pricelistState.currency}</span>
-          </span>
-        </motion.div>
-        <motion.div 
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center gap-2 backdrop-blur-sm bg-white/50 px-6 py-3 rounded-3xl shadow-sm border border-slate-100"
-        >
-          <TagIcon className="w-6 h-6 text-indigo-600" />
-          <span className="text-slate-700 font-medium">
-            <span className="text-indigo-600">{pricelistState.tiers.length}</span> Plans Available
-          </span>
-        </motion.div>
+  </div>
+
+  {/* Header Section */}
+  <header className="relative text-center max-w-4xl mx-auto mb-12">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-8"
+    >
+      <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+        {title || "Love Our Pricing"}
+      </h1>
+      <p className="text-rose-600 text-lg">Find the perfect plan for your heart's desire</p>
+    </motion.div>
+
+    <div className="flex flex-wrap items-center justify-center gap-4">
+      <div className="flex items-center gap-2 bg-white/80 backdrop-blur px-6 py-3 rounded-full border border-rose-100 shadow-sm">
+        <span className="text-rose-600">💝</span>
+        <span className="text-gray-700">
+          Currency: <span className="text-rose-600 font-semibold">{pricelistState.currency}</span>
+        </span>
       </div>
-    </header>
-    {/* Pricing grid with staggered animation */}
-    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-8 relative`}>
-      {pricelistState.tiers.map((tier, index) => (
-        <motion.article
-          key={tier.id}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1, duration: 0.5 }}
-          className={`group relative flex flex-col h-full border rounded-3xl p-10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${
-            tier.recommended 
-              ? 'border-indigo-200 bg-white shadow-xl ring-2 ring-indigo-100' 
-              : 'border-slate-100 bg-white/50 backdrop-blur-sm hover:border-indigo-100'
-          }`}
-        >
-          {/* Diagonal recommended ribbon */}
+      <div className="flex items-center gap-2 bg-white/80 backdrop-blur px-6 py-3 rounded-full border border-rose-100 shadow-sm">
+        <span className="text-rose-600">💖</span>
+        <span className="text-gray-700">
+          <span className="text-rose-600 font-semibold">{pricelistState.tiers.length}</span> Plans
+        </span>
+      </div>
+    </div>
+  </header>
+
+  {/* Pricing Cards */}
+  <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-8 relative`}>
+    {pricelistState.tiers.map((tier, index) => (
+      <motion.div
+        key={tier.id}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.1 }}
+        className={`relative group ${
+          tier.recommended ? 'z-10' : 'z-0'
+        }`}
+      >
+        <div className={`h-full rounded-3xl p-8 transition-all duration-300 ${
+          tier.recommended
+            ? 'bg-gradient-to-b from-rose-50 to-pink-50 border-2 border-rose-200 shadow-xl'
+            : 'bg-white/80 backdrop-blur border border-rose-100'
+        }`}>
           {tier.recommended && (
-            <div className="absolute -right-8 -top-8 rotate-45 bg-indigo-600 text-white px-10 py-2 text-sm font-bold tracking-wide shadow-md">
-              POPULAR
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-rose-500 to-pink-500 text-white px-6 py-1 rounded-full text-sm font-medium shadow-lg">
+              Most Loved
             </div>
           )}
-          {/* Tier header with animated icon */}
-          <div className="mb-8 text-center">
-            <div className="relative inline-block">
-              <motion.div 
-                whileHover={{ scale: 1.1 }}
-                className="w-24 h-24 mx-auto mb-6 bg-indigo-100 rounded-3xl p-6 shadow-lg"
-              >
-                <SparklesIcon className="w-full h-full text-indigo-600" />
-              </motion.div>
-            </div>
-            <h3 className="text-3xl font-bold text-slate-900 mb-4">{tier.name}</h3>
-            <p className="text-slate-600 text-balance">{tier.description}</p>
-          </div>
-          {/* Price section with gradient */}
-          <div className="mb-8 text-center">
-            <div className="flex items-baseline justify-center gap-2">
-              <span className="text-6xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                {tier.price.toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: pricelistState.currency,
-                })}
+
+          <div className="text-center mb-8">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-100 to-pink-100 rounded-full p-4"
+            >
+              <span className="text-3xl">
+                {tier.recommended ? '💝' : '💖'}
               </span>
-              <span className="text-slate-500 font-medium">
-                /{{
-                  monthly: 'mo',
-                  annual: 'yr',
-                  'one-time': ''
-                }[tier.billingInterval]}
-              </span>
-            </div>
+            </motion.div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">{tier.name}</h3>
+            <p className="text-gray-600">{tier.description}</p>
           </div>
-          {/* Interactive features list */}
-          <ul className="space-y-4 mb-10">
+
+          <div className="text-center mb-8">
+            <span className="text-4xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+              {tier.price.toLocaleString('en-US', {
+                style: 'currency',
+                currency: pricelistState.currency,
+              })}
+            </span>
+            <span className="text-gray-500 ml-2">
+              /{{
+                monthly: 'mo',
+                annual: 'yr',
+                'one-time': ''
+              }[tier.billingInterval]}
+            </span>
+          </div>
+
+          <ul className="space-y-4 mb-8">
             {tier.features.map((feature) => (
-              <motion.li 
-                key={feature.id} 
-                whileHover={{ x: 5 }}
-                className="flex items-start gap-3 p-4 rounded-lg hover:bg-indigo-50/50 transition-colors"
+              <motion.li
+                key={feature.id}
+                whileHover={{ x: 4 }}
+                className="flex items-center gap-3 text-gray-700"
               >
-                <CheckCircleIcon className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
-                <span className="text-slate-700">{feature.text}</span>
+                <span className="text-rose-500">❤️</span>
+                {feature.text}
               </motion.li>
             ))}
           </ul>
-          {/* Animated CTA button */}
+
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className={`mt-auto w-full py-4 rounded-3xl font-semibold transition-colors ${
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className={`w-full py-3 rounded-full font-semibold transition-all ${
               tier.recommended
-                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-200/50 hover:shadow-indigo-200'
-                : 'bg-slate-900 text-white hover:bg-slate-800'
+                ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg'
+                : 'bg-gray-800 text-white hover:bg-gray-700'
             }`}
           >
-            Get {tier.name}
-            <ArrowRightIcon className="w-5 h-5 inline-block ml-2 transition-transform group-hover:translate-x-1" />
-          </motion.button>
-        </motion.article>
-      ))}
-    </div>
-    {/* Enhanced calculator with result preview */}
-    {pricelistState.enableCalculator && (
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="mt-16 p-10 bg-white/50 backdrop-blur-sm rounded-3xl border border-slate-100 shadow-sm"
-      >
-        <h3 className="text-2xl font-semibold text-slate-900 mb-8">
-          {pricelistState.calculatorLabel || "Estimate Your Costs"}
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <select className="p-4 rounded-3xl border-2 border-slate-100 bg-white/80 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 transition-all">
-            {pricelistState.tiers.map((tier) => (
-              <option key={tier.id} value={tier.id}>
-                {tier.name} - {tier.price.toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: pricelistState.currency,
-                })}
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            placeholder="Quantity"
-            className="p-4 rounded-3xl border-2 border-slate-100 bg-white/80 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 transition-all"
-          />
-          <motion.button 
-            whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 px-8 rounded-3xl hover:shadow-lg transition-all"
-          >
-            Calculate Now
+            Choose Plan 
+            <span className="ml-2">💘</span>
           </motion.button>
         </div>
-        
-        {/* Result preview */}
-        <div className="mt-8 p-6 bg-indigo-50/50 rounded-3xl">
-          <div className="flex items-center justify-between">
-            <span className="text-slate-600">Estimated Total:</span>
-            <span className="text-3xl font-bold text-indigo-600">
-              {pricelistState.currency}0.00
-            </span>
-          </div>
-        </div>
-        {pricelistState.calculatorNote && (
-          <p className="text-slate-500 text-sm mt-6 italic">
-            {pricelistState.calculatorNote}
-          </p>
-        )}
       </motion.div>
-    )}
+    ))}
   </div>
+
+  {/* Calculator Section */}
+  {pricelistState.enableCalculator && (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mt-16 p-8 bg-white/80 backdrop-blur rounded-3xl border border-rose-100"
+    >
+      <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        Calculate Your Love Match
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <select className="p-3 rounded-full border border-rose-200 bg-white focus:border-rose-300 focus:ring focus:ring-rose-100">
+          {pricelistState.tiers.map((tier) => (
+            <option key={tier.id} value={tier.id}>
+              {tier.name}
+            </option>
+          ))}
+        </select>
+        <input
+          type="number"
+          placeholder="Quantity"
+          className="p-3 rounded-full border border-rose-200 bg-white focus:border-rose-300 focus:ring focus:ring-rose-100"
+        />
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          className="bg-gradient-to-r from-rose-500 to-pink-500 text-white py-3 px-6 rounded-full"
+        >
+          Calculate 💝
+        </motion.button>
+      </div>
+
+      <div className="mt-6 p-4 bg-rose-50 rounded-full">
+        <div className="flex items-center justify-between px-4">
+          <span className="text-gray-600">Total Love Investment:</span>
+          <span className="text-2xl font-bold text-rose-600">
+            {pricelistState.currency}0.00
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  )}
+
+  {qrUrl && (
+    <div className="mt-8 flex justify-center">
+      <div className="bg-white/90 p-4 rounded-2xl shadow-lg border border-rose-100">
+      <QRCodeSVG value={qrUrl} size={90} />
+      </div>
+    </div>
+  )}
+</div>
 )}
 
 
@@ -19445,11 +21068,11 @@ const baseLabelStyles = `
 )}
 
     {/* Add Menu card display */}
-    {selectedVariant === 'menu' && (
+    {selectedVariant === 'menu' && selectedVariantStyle === 'default' && (
   <div
     className="space-y-4 p-4 bg-white shadow-2xl rounded-b-none rounded-2xl relative"
     style={{
-      backgroundColor: menuBackgroundColor || '#FFFFFF',
+      backgroundColor: innerCardColor || '#FFFFFF',
     }}
   >
     {/* Menu Header */}
@@ -19570,6 +21193,157 @@ const baseLabelStyles = `
     <QRCodeSVG value={qrUrl} size={40} />
   </div>
 )}
+  </div>
+)}
+
+{selectedVariant === 'menu' && selectedVariantStyle === 'style1' && (
+    <div className="relative p-6 bg-gradient-to-br from-rose-50 to-pink-50 shadow-xl rounded-2xl">
+    {/* Decorative Elements */}
+    <div className="absolute inset-0 overflow-hidden rounded-3xl">
+      <div className="absolute -top-4 -right-4 w-24 h-24 bg-red-100/50 rounded-full blur-2xl" />
+      <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-pink-100/50 rounded-full blur-2xl" />
+    </div>
+
+    {/* Menu Header */}
+    <div className="relative text-center space-y-3 mb-8">
+      <div className="flex justify-center mb-4">
+        <span className="text-3xl">💝</span>
+      </div>
+      <h1 
+        className="text-4xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent"
+        style={{ color: menuTitleColor }}
+      >
+        {menuTitle || 'Valentine\'s Special Menu'}
+      </h1>
+      {menuSubtitle && (
+        <p className="text-lg text-rose-700" style={{ color: menuSubtitleColor }}>
+          {menuSubtitle}
+        </p>
+      )}
+      {menuDate && !isDateOptional && (
+        <p className="text-sm text-rose-500" style={{ color: menuDateColor }}>
+          {new Date(menuDate).toLocaleDateString()}
+        </p>
+      )}
+    </div>
+
+    {/* Menu Categories */}
+    <div className="space-y-8 relative">
+      {menuCategories && menuCategories.length > 0 ? (
+        menuCategories.map((category, catIndex) => (
+          <div key={catIndex} className="relative">
+            {/* Category Header */}
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">❤️</span>
+                <h2 
+                  className="text-2xl font-semibold text-gray-800"
+                  style={{ color: category.textColor }}
+                >
+                  {category.name || `Category ${catIndex + 1}`}
+                </h2>
+              </div>
+              {category.description && (
+                <p className="text-rose-600 text-sm ml-9">
+                  {category.description}
+                </p>
+              )}
+            </div>
+
+            {/* Menu Items Grid */}
+            <div className="grid gap-6">
+              {category.items && category.items.length > 0 ? (
+                category.items.map((item, itemIndex) => (
+                  <div
+                    key={itemIndex}
+                    className="group relative bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-rose-100 hover:shadow-lg hover:border-rose-200 transition-all duration-300"
+                    style={{ backgroundColor: innerCardColor }}
+                  >
+                    <div className="flex gap-4">
+                      {/* Item Image */}
+                      {item.image && (
+                        <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm">
+                          <img
+                            src={URL.createObjectURL(item.image)}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      
+                      {/* Item Details */}
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 
+                            className="text-lg font-semibold text-gray-800"
+                            style={{ color: item.textColor }}
+                          >
+                            {item.name || `Item ${itemIndex + 1}`}
+                          </h3>
+                          <span className="font-medium text-rose-600">
+                            {item.price ? formatCurrency(parseFloat(item.price), item.currency || 'USD') : formatCurrency(0, item.currency || 'USD')}
+                          </span>
+                        </div>
+                        
+                        {item.description && (
+                          <p 
+                            className="text-sm text-gray-600"
+                            style={{ color: item.descriptionColor }}
+                          >
+                            {item.description}
+                          </p>
+                        )}
+                        
+                        {item.tags && (
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            {item.tags.split(',').map((tag, tagIndex) => (
+                              <span
+                                key={tagIndex}
+                                className="px-3 py-1 text-xs font-medium text-rose-600 bg-rose-50 rounded-full"
+                              >
+                                {tag.trim()}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-rose-500 italic">No items available in this category.</p>
+              )}
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-center text-rose-500 italic">No categories to display.</p>
+      )}
+    </div>
+
+    {/* Special Section */}
+    {specialItemDescription && (
+      <div className="mt-8 p-6 bg-gradient-to-r from-rose-100 to-pink-100 rounded-2xl shadow-sm">
+        <div className="flex justify-center mb-2">
+          <span className="text-2xl">💖</span>
+        </div>
+        <h3 className="text-xl font-semibold text-center text-rose-700 mb-2">
+          Valentine's Special
+        </h3>
+        <p className="text-center text-rose-600">
+          {specialItemDescription}
+        </p>
+      </div>
+    )}
+
+    {/* QR Code */}
+    {qrUrl && (
+      <div className="flex justify-end mt-6">
+        <div className="bg-white/90 p-2 rounded-xl shadow-sm border border-rose-100">
+        <QRCodeSVG value={qrUrl} size={100} />
+        </div>
+      </div>
+    )}
   </div>
 )}
 
