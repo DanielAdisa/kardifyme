@@ -1,151 +1,224 @@
 'use client';
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, useScroll } from 'framer-motion';
+import { useRef } from 'react';
+import Image from 'next/image';
 
 const LandingPage = () => {
-  const [activeFeature, setActiveFeature] = useState(0);
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: containerRef });
 
   const features = [
     {
       title: 'Neural Design',
-      description: 'AI-powered layouts that adapt to your brand.',
-      icon: '/icons/ai-icon.svg',
-      color: 'from-violet-500 to-fuchsia-500',
+      description: 'AI-powered layouts that adapt to your brand',
+      icon: '/cyber-ai.png',
+      color: 'from-violet-600 to-fuchsia-500',
+      bg: '/hologram-bg-1.png'
     },
     {
       title: 'Quantum Security',
-      description: 'Next-gen encryption for your digital identity.',
-      icon: '/icons/security-icon.svg',
-      color: 'from-blue-500 to-cyan-500',
+      description: 'Next-gen encryption for your identity',
+      icon: '/quantum-lock.png',
+      color: 'from-cyan-500 to-blue-500',
+      bg: '/hologram-bg-2.png'
     },
     {
       title: 'Dynamic Content',
-      description: 'Real-time updates and interactive elements.',
-      icon: '/icons/dynamic-content.svg',
-      color: 'from-orange-500 to-amber-500',
-    },
+      description: 'Real-time interactive elements',
+      icon: '/dynamic-core.png',
+      color: 'from-amber-500 to-orange-500',
+      bg: '/hologram-bg-3.png'
+    }
   ];
 
   return (
-    <div className="relative bg-gray-900 text-white">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800"></div>
+    <div ref={containerRef} className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-950/80 to-gray-900/90" />
+      <div className="absolute inset-0 opacity-20">
+        <Image
+          src="/cyber-grid.png"
+          alt="Grid pattern"
+          fill
+          className="object-cover"
+        />
+      </div>
 
-      {/* Navbar */}
-      <nav className="fixed top-0 left-0 w-full bg-transparent z-50 px-8 py-4 flex justify-between items-center backdrop-blur-md">
-        <h1 className="text-2xl font-bold text-indigo-400">KardifyMe</h1>
-        <ul className="flex space-x-6">
-          {['Features', 'About', 'Pricing'].map((item) => (
-            <li key={item}>
-              <Link href={`#${item.toLowerCase()}`} className="hover:text-indigo-400 transition">
+      {/* Floating particles */}
+      <motion.div 
+        className="absolute inset-0 bg-[url('/particles.png')] opacity-30"
+        animate={{ opacity: [0.2, 0.3, 0.2] }}
+        transition={{ duration: 4, repeat: Infinity }}
+      />
+
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 backdrop-blur-xl border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+            KardifyMe
+          </span>
+          <div className="flex gap-8 items-center">
+            {['Features', 'Solutions', 'Enterprise'].map((item) => (
+              <button key={item} className="text-sm font-medium hover:text-cyan-300 transition-colors">
                 {item}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <button className="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-md shadow-md">Sign In</button>
+              </button>
+            ))}
+            <button className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg hover:opacity-90 transition-opacity">
+              Get Started
+            </button>
+          </div>
+        </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-8 text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400"
-        >
-          Elevate Your Digital Identity
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-lg md:text-xl max-w-lg mt-4 text-gray-300"
-        >
-          Seamlessly create, manage, and share secure digital identity cards powered by AI and quantum-resistant encryption.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-6 flex space-x-4"
-        >
-          <button className="bg-indigo-500 hover:bg-indigo-600 px-6 py-3 rounded-md shadow-lg">
-            Get Started
-          </button>
-          <button className="border border-indigo-500 hover:border-indigo-600 text-indigo-500 px-6 py-3 rounded-md">
-            Learn More
-          </button>
-        </motion.div>
+      <section className="relative min-h-[80vh] flex items-center px-6">
+        <div className="max-w-7xl mx-auto text-center space-y-12 z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-8"
+          >
+            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                Next-Gen Digital
+              </span>
+              <br />
+              Identity Solutions
+            </h1>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Enterprise-grade identity management powered by AI and quantum-resistant blockchain technology
+            </p>
+            <div className="flex gap-4 justify-center">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl font-medium shadow-lg hover:shadow-cyan-500/30 transition-all"
+              >
+                Schedule Demo
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                className="px-8 py-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all"
+              >
+                White Paper
+              </motion.button>
+            </div>
+          </motion.div>
 
-        {/* Hero Image */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="absolute -bottom-24 md:-bottom-16 w-4/5 max-w-lg"
-        >
-          <img src="/images/futuristic-id.png" alt="Futuristic Digital Identity" className="rounded-xl shadow-lg" />
-        </motion.div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 px-8">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl font-bold text-center"
-        >
-          Next-Gen Features
-        </motion.h2>
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2, duration: 0.6 }}
-              className={`p-6 rounded-xl shadow-md bg-gradient-to-br ${feature.color}`}
-            >
-              <img src={feature.icon} alt={feature.title} className="w-12 h-12 mb-4" />
-              <h3 className="text-xl font-bold">{feature.title}</h3>
-              <p className="text-gray-100">{feature.description}</p>
-            </motion.div>
-          ))}
+          {/* Holographic Card Preview */}
+          <motion.div 
+            className="relative mx-auto mt-20 w-full max-w-2xl"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 rounded-3xl blur-3xl" />
+            <div className="relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-cyan-400/20 p-8 shadow-2xl">
+              <div className="flex gap-6 items-center">
+                <div className="relative w-24 h-24 rounded-2xl overflow-hidden">
+                  <Image
+                    src="/biometric-scan.png"
+                    alt="Biometric scan"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="text-left space-y-2">
+                  <h3 className="text-2xl font-bold">Enterprise ID</h3>
+                  <p className="text-gray-400">Multi-Factor Authentication</p>
+                  <div className="flex gap-2">
+                    <span className="px-3 py-1 text-sm bg-cyan-500/10 rounded-full">Blockchain</span>
+                    <span className="px-3 py-1 text-sm bg-cyan-500/10 rounded-full">Quantum</span>
+                  </div>
+                </div>
+                <div className="ml-auto self-start p-3 bg-cyan-500/10 rounded-xl">
+                  <div className="w-24 h-24 relative">
+                    <Image
+                      src="/qr-hologram.png"
+                      alt="Holographic QR"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8 pt-8 border-t border-cyan-400/10 flex justify-between">
+                <div className="space-y-2">
+                  <p className="text-gray-400">Security Level</p>
+                  <p className="font-mono text-cyan-400">Quantum-9</p>
+                </div>
+                <div className="text-right space-y-2">
+                  <p className="text-gray-400">Network Status</p>
+                  <p className="font-mono text-green-400">Secure</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Call To Action */}
-      <section className="py-20 px-8 bg-gradient-to-r from-indigo-500 to-purple-500 text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl font-bold text-white"
-        >
-          Ready to Transform Your Digital Identity?
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-lg mt-4 text-gray-200"
-        >
-          Join thousands of professionals already using KardifyMe.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-6"
-        >
-          <button className="bg-white text-indigo-500 hover:bg-indigo-600 hover:text-white px-8 py-4 rounded-md shadow-md">
-            Start Free Trial
-          </button>
-        </motion.div>
+      {/* Features Section */}
+      <section className="relative py-32 px-6">
+        <div className="max-w-7xl mx-auto space-y-20">
+          <motion.div 
+            className="text-center space-y-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+          >
+            <h2 className="text-4xl font-bold">Enterprise Features</h2>
+            <p className="text-gray-400 max-w-xl mx-auto">
+              Designed for global organizations requiring military-grade security
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                className="relative group p-8 rounded-3xl bg-gray-800/50 backdrop-blur-xl border border-white/10 hover:border-cyan-400/30 transition-all h-96"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div className="absolute inset-0 opacity-30">
+                  <Image
+                    src={feature.bg}
+                    alt="Feature background"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="relative z-10 space-y-6 h-full flex flex-col items-center justify-center">
+                  <div className="w-20 h-20 relative">
+                    <Image
+                      src={feature.icon}
+                      alt={feature.title}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-center">{feature.title}</h3>
+                  <p className="text-gray-400 text-center">{feature.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="relative py-32 px-6">
+        <div className="max-w-4xl mx-auto text-center space-y-8 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-3xl p-12 backdrop-blur-xl border border-cyan-400/20">
+          <h2 className="text-4xl font-bold">Ready for Quantum-Safe Identity?</h2>
+          <p className="text-gray-300 text-xl">Join Fortune 500 companies securing their future</p>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl font-medium shadow-lg hover:shadow-cyan-500/30 transition-all"
+          >
+            Contact Sales
+          </motion.button>
+        </div>
       </section>
     </div>
   );
