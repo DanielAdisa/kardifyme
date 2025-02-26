@@ -1,100 +1,63 @@
 'use client';
 
 import Link from 'next/link';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import Image from 'next/image';
 
 const LandingPage = () => {
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: containerRef });
   const [activeFeature, setActiveFeature] = useState(0);
 
   const features = [
     {
       title: 'Neural Design',
       description: 'AI-powered layouts that adapt to your brand',
-      icon: '🧠',
-      color: 'from-violet-400 to-fuchsia-400'
+      icon: '/icons/ai-design.svg',
+      svg: '/svgs/neural-design.svg',
+      color: 'from-violet-500 to-fuchsia-500'
     },
     {
       title: 'Quantum Security',
       description: 'Next-gen encryption for your digital identity',
-      icon: '🔐',
-      color: 'from-cyan-400 to-blue-400'
+      icon: '/icons/security.svg',
+      svg: '/svgs/quantum-security.svg',
+      color: 'from-cyan-500 to-blue-500'
     },
     {
       title: 'Dynamic Content',
       description: 'Real-time updates and interactive elements',
-      icon: '⚡',
-      color: 'from-amber-400 to-orange-400'
+      icon: '/icons/dynamic.svg',
+      svg: '/svgs/dynamic-content.svg',
+      color: 'from-amber-500 to-orange-500'
     }
   ];
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#030712] text-white font-sans relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 to-slate-800/50" />
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
-      <div className="absolute inset-0 bg-noise opacity-10" />
-
-      {/* Floating blobs */}
-      <motion.div 
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-violet-500/20 rounded-full blur-3xl opacity-30"
-        animate={{
-          scale: [1, 1.2, 1],
-          translateX: [-50, 50, -50],
-          translateY: [-30, 30, -30]
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div 
-        className="absolute top-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/20 rounded-full blur-3xl opacity-30"
-        animate={{
-          scale: [1, 1.1, 1],
-          translateX: [50, -50, 50],
-          translateY: [30, -30, 30]
-        }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Navigation */}
-      {/* <nav className="sticky top-0 z-50 backdrop-blur-xl border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <span className="text-xl font-bold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-            KardifyMe
-          </span>
-          <div className="flex gap-8 items-center">
-            {['Features', 'About', 'Pricing'].map((item) => (
-              <Link key={item} href={`#${item.toLowerCase()}`} className="hover:text-violet-300 transition-colors">
-                {item}
-              </Link>
-            ))}
-            <Link href="/login" className="px-4 py-2 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
-              Sign In
-            </Link>
-          </div>
-        </div>
-      </nav> */}
+    <div ref={containerRef} className="min-h-screen bg-[#020617] text-white font-sans relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1f] to-[#020617]" />
+      <div className="absolute inset-0 bg-noise opacity-5" />
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center px-6">
-        <div className="max-w-7xl mx-auto text-center space-y-12 z-10">
+      <section className="relative min-h-[85vh] flex items-center px-6">
+        <div className="max-w-6xl mx-auto text-center space-y-12 z-10">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="space-y-8"
           >
-            <h1 className="text-6xl md:text-8xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
-              Redefining Digital
+            <h1 className="text-6xl md:text-7xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
+              The Future of  
               <br />
               <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-                Identity
+                Digital Identity
               </span>
             </h1>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Create, manage, and share secure digital identity cards powered by AI and quantum-resistant encryption.
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              Secure, AI-powered identity cards with quantum-resistant encryption.  
+              Manage and share your identity with confidence.
             </p>
             <div className="flex gap-4 justify-center">
               <motion.button
@@ -105,54 +68,28 @@ const LandingPage = () => {
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                className="px-8 py-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all"
+                className="px-8 py-4 bg-white/10 rounded-xl border border-white/10 hover:bg-white/20 transition-all"
               >
                 Learn More
               </motion.button>
             </div>
           </motion.div>
 
-          {/* Interactive Card Preview */}
+          {/* Hero SVG (Instead of Image) */}
           <motion.div 
-            className="relative mx-auto mt-20 w-full max-w-3xl"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            className="relative mx-auto mt-12 w-full max-w-2xl"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-500/30 to-fuchsia-500/30 rounded-3xl blur-3xl" />
-            <div className="relative bg-slate-900/50 backdrop-blur-xl rounded-3xl border border-white/10 p-8 shadow-2xl">
-              <div className="flex gap-6 items-center">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500" />
-                <div className="text-left space-y-2">
-                  <h3 className="text-2xl font-bold">John Carter</h3>
-                  <p className="text-slate-400">Senior Developer</p>
-                  <div className="flex gap-2">
-                    <span className="px-3 py-1 text-sm bg-white/5 rounded-full">Blockchain</span>
-                    <span className="px-3 py-1 text-sm bg-white/5 rounded-full">AI/ML</span>
-                  </div>
-                </div>
-                <div className="ml-auto self-start p-3 bg-white/5 rounded-xl">
-                  <div className="w-24 h-24 bg-gradient-to-r from-cyan-400 to-blue-400" />
-                </div>
-              </div>
-              <div className="mt-8 pt-8 border-t border-white/10 flex justify-between">
-                <div className="space-y-2">
-                  <p className="text-slate-400">Last Updated</p>
-                  <p className="font-mono">2025.08.01</p>
-                </div>
-                <div className="text-right space-y-2">
-                  <p className="text-slate-400">Security Level</p>
-                  <p className="font-mono text-cyan-400">Quantum-9</p>
-                </div>
-              </div>
-            </div>
+            <Image src="/svgs/hero-identity.svg" width={600} height={400} alt="Digital Identity Illustration" />
           </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
       <section className="relative py-32 px-6">
-        <div className="max-w-7xl mx-auto space-y-20">
+        <div className="max-w-7xl mx-auto space-y-16">
           <motion.div 
             className="text-center space-y-4"
             initial={{ opacity: 0 }}
@@ -160,11 +97,11 @@ const LandingPage = () => {
           >
             <h2 className="text-4xl font-bold">Next-Gen Features</h2>
             <p className="text-slate-400 max-w-xl mx-auto">
-              Built with cutting-edge technology to revolutionize digital identity management
+              Built with cutting-edge technology to redefine digital identity
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-12">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -176,9 +113,10 @@ const LandingPage = () => {
               >
                 <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} rounded-3xl opacity-0 group-hover:opacity-30 transition-opacity`} />
                 <div className="relative z-10 space-y-4">
-                  <span className="text-4xl">{feature.icon}</span>
+                  <Image src={feature.icon} width={40} height={40} alt={feature.title} />
                   <h3 className="text-2xl font-semibold">{feature.title}</h3>
                   <p className="text-slate-400">{feature.description}</p>
+                  <Image src={feature.svg} width={300} height={200} alt={feature.title} className="rounded-xl" />
                 </div>
               </motion.div>
             ))}
@@ -186,58 +124,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Dynamic Demo Section */}
-      <section className="relative py-32 px-6">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          <div className="space-y-8">
-            <h2 className="text-4xl font-bold">Smart Identity Management</h2>
-            <p className="text-slate-400">
-              Our AI-powered system continuously optimizes your digital identity presentation
-              based on context and audience. Real-time analytics help you understand how your
-              information is being accessed and utilized.
-            </p>
-            <div className="grid grid-cols-2 gap-8">
-              {['99.99% Uptime', '256-bit Encryption', '50+ Integrations', '24/7 Support'].map((item) => (
-                <div key={item} className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 flex items-center justify-center">
-                    ✓
-                  </div>
-                  <span className="font-medium">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="relative h-96 bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-3xl backdrop-blur-xl border border-white/10 p-8">
-            <motion.div
-              className="absolute w-64 h-64 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-2xl shadow-2xl"
-              animate={{
-                y: [0, -20, 0],
-                rotate: [0, 2, -2, 0]
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            <motion.div
-              className="absolute w-64 h-64 bg-gradient-to-r from-violet-400 to-fuchsia-400 rounded-2xl shadow-2xl"
-              animate={{
-                y: [0, 20, 0],
-                rotate: [0, -2, 2, 0]
-              }}
-              transition={{
-                duration: 10,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1
-              }}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
+      {/* Call to Action */}
       <section className="relative py-32 px-6">
         <div className="max-w-4xl mx-auto text-center space-y-8 bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-3xl p-12 backdrop-blur-xl border border-white/10">
           <h2 className="text-4xl font-bold">Ready to Transform Your Digital Identity?</h2>
